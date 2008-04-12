@@ -1,0 +1,208 @@
+%If (!wxUSE_HOTKEY)
+%ModuleHeaderCode
+#define wxEVT_HOTKEY -9999
+%End
+%End
+
+enum {
+wxEVT_NULL,
+wxEVT_FIRST,
+wxEVT_USER_FIRST,
+
+wxEVT_COMMAND_BUTTON_CLICKED,
+wxEVT_COMMAND_CHECKBOX_CLICKED,
+wxEVT_COMMAND_CHOICE_SELECTED,
+wxEVT_COMMAND_LISTBOX_SELECTED,
+wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
+wxEVT_COMMAND_CHECKLISTBOX_TOGGLED,
+
+wxEVT_COMMAND_MENU_SELECTED,
+wxEVT_COMMAND_TOOL_CLICKED,
+wxEVT_COMMAND_SLIDER_UPDATED,
+wxEVT_COMMAND_RADIOBOX_SELECTED,
+wxEVT_COMMAND_RADIOBUTTON_SELECTED,
+
+wxEVT_COMMAND_SCROLLBAR_UPDATED,
+wxEVT_COMMAND_VLBOX_SELECTED,
+wxEVT_COMMAND_COMBOBOX_SELECTED,
+wxEVT_COMMAND_TOOL_RCLICKED,
+wxEVT_COMMAND_TOOL_ENTER,
+
+wxEVT_LEFT_DOWN,
+wxEVT_LEFT_UP,
+wxEVT_MIDDLE_DOWN,
+wxEVT_MIDDLE_UP,
+wxEVT_RIGHT_DOWN,
+wxEVT_RIGHT_UP,
+wxEVT_MOTION,
+wxEVT_ENTER_WINDOW,
+wxEVT_LEAVE_WINDOW,
+wxEVT_LEFT_DCLICK,
+wxEVT_MIDDLE_DCLICK,
+wxEVT_RIGHT_DCLICK,
+wxEVT_SET_FOCUS,
+wxEVT_KILL_FOCUS,
+wxEVT_CHILD_FOCUS,
+wxEVT_MOUSEWHEEL,
+
+wxEVT_NC_LEFT_DOWN,
+wxEVT_NC_LEFT_UP,
+wxEVT_NC_MIDDLE_DOWN,
+wxEVT_NC_MIDDLE_UP,
+wxEVT_NC_RIGHT_DOWN,
+wxEVT_NC_RIGHT_UP,
+wxEVT_NC_MOTION,
+wxEVT_NC_ENTER_WINDOW,
+wxEVT_NC_LEAVE_WINDOW,
+wxEVT_NC_LEFT_DCLICK,
+wxEVT_NC_MIDDLE_DCLICK,
+wxEVT_NC_RIGHT_DCLICK,
+
+wxEVT_CHAR,
+wxEVT_CHAR_HOOK,
+wxEVT_NAVIGATION_KEY,
+wxEVT_KEY_DOWN,
+wxEVT_KEY_UP,
+
+wxEVT_SET_CURSOR,
+
+wxEVT_SCROLL_TOP,
+wxEVT_SCROLL_BOTTOM,
+wxEVT_SCROLL_LINEUP,
+wxEVT_SCROLL_LINEDOWN,
+wxEVT_SCROLL_PAGEUP,
+wxEVT_SCROLL_PAGEDOWN,
+wxEVT_SCROLL_THUMBTRACK,
+wxEVT_SCROLL_THUMBRELEASE,
+wxEVT_SCROLL_CHANGED,
+
+wxEVT_SCROLLWIN_TOP,
+wxEVT_SCROLLWIN_BOTTOM,
+wxEVT_SCROLLWIN_LINEUP,
+wxEVT_SCROLLWIN_LINEDOWN,
+wxEVT_SCROLLWIN_PAGEUP,
+wxEVT_SCROLLWIN_PAGEDOWN,
+wxEVT_SCROLLWIN_THUMBTRACK,
+wxEVT_SCROLLWIN_THUMBRELEASE,
+
+wxEVT_SIZE,
+wxEVT_MOVE,
+wxEVT_CLOSE_WINDOW,
+wxEVT_END_SESSION,
+wxEVT_QUERY_END_SESSION,
+wxEVT_ACTIVATE_APP,
+wxEVT_ACTIVATE,
+wxEVT_CREATE,
+wxEVT_DESTROY,
+wxEVT_SHOW,
+wxEVT_ICONIZE,
+wxEVT_MAXIMIZE,
+wxEVT_MOUSE_CAPTURE_CHANGED,
+wxEVT_MOUSE_CAPTURE_LOST,
+wxEVT_PAINT,
+wxEVT_ERASE_BACKGROUND,
+wxEVT_NC_PAINT,
+wxEVT_PAINT_ICON,
+wxEVT_MENU_OPEN,
+wxEVT_MENU_CLOSE,
+wxEVT_MENU_HIGHLIGHT,
+
+wxEVT_CONTEXT_MENU,
+wxEVT_SYS_COLOUR_CHANGED,
+wxEVT_DISPLAY_CHANGED,
+wxEVT_SETTING_CHANGED,
+wxEVT_QUERY_NEW_PALETTE,
+wxEVT_PALETTE_CHANGED,
+wxEVT_DROP_FILES,
+wxEVT_DRAW_ITEM,
+wxEVT_MEASURE_ITEM,
+wxEVT_COMPARE_ITEM,
+wxEVT_INIT_DIALOG,
+wxEVT_IDLE,
+wxEVT_UPDATE_UI,
+wxEVT_SIZING,
+wxEVT_MOVING,
+wxEVT_HIBERNATE,
+
+wxEVT_COMMAND_TEXT_COPY,
+wxEVT_COMMAND_TEXT_CUT,
+wxEVT_COMMAND_TEXT_PASTE,
+
+wxEVT_COMMAND_LEFT_CLICK,
+wxEVT_COMMAND_LEFT_DCLICK,
+wxEVT_COMMAND_RIGHT_CLICK,
+wxEVT_COMMAND_RIGHT_DCLICK,
+wxEVT_COMMAND_SET_FOCUS,
+wxEVT_COMMAND_KILL_FOCUS,
+wxEVT_COMMAND_ENTER,
+};
+
+
+
+class wxEvent : wxObject  {
+public:
+    wxEventType GetEventType() const;
+    wxObject* GetEventObject() const;
+    void SetEventObject(wxObject* obj);
+    
+    long GetTimestamp() const;
+    void SetTimestamp(long ts = 0);
+    
+    int GetId() const;
+    void SetId(int Id);
+    
+    bool IsCommandEvent() const;
+    void Skip(bool skip = true);
+    bool GetSkipped() const;
+    
+    ~wxEvent();
+    
+private:
+    wxEvent();
+};
+
+class wxSysColourChangedEvent: wxEvent  {
+public:
+    wxSysColourChangedEvent();
+};
+
+class wxInitDialogEvent: wxEvent  {
+public:
+    wxInitDialogEvent();
+};
+
+class wxMouseEvent: wxEvent  {
+public:
+    wxMouseEvent();
+};
+
+class wxKeyEvent: wxEvent {
+public:
+    wxKeyEvent();
+};
+
+class wxCommandEvent : wxEvent {
+public:
+    wxCommandEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
+    int GetSelection() const;
+    wxString GetString() const;
+    bool IsChecked() const;
+    bool IsSelection() const;
+    long GetExtraLong() const;
+    void SetInt(int i);
+    int GetInt() const;
+};
+
+class wxNotifyEvent : wxCommandEvent {
+public:
+    wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
+    void Veto();
+    void Allow();
+    void IsAllowed();
+};
+
+class wxActivateEvent: wxEvent {
+public:
+    wxActivateEvent(wxEventType eventType = 0, bool active = true, int id = 0);
+    bool GetActive() const;
+};
