@@ -56,4 +56,8 @@ def test_Rect():
     assert r2.GetBottomRight() == wx.Point(3, 5)
     
     assert r2 == (1, 2, 3, 4)
+
+def test_Colour():
+	c = wx.Colour(33, 66, 99)
+	assert c.Red() == 33
     
