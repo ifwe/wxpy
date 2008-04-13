@@ -2,7 +2,7 @@
 // wxValidator
 //
 
-class wxValidator : wxEvtHandler /PyName=Validator/
+class wxValidator : wxEvtHandler
 {
 
 %TypeHeaderCode

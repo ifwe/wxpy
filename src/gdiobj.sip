@@ -1,5 +1,5 @@
 
-class wxGDIObject : wxObject  /PyName=GDIObject/ {
+class wxGDIObject : wxObject {
 public:
 
     bool IsNull();

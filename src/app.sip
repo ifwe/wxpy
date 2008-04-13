@@ -15,7 +15,7 @@ void wxpyEntry() {
 }
 %End
 
-class wxApp : wxEvtHandler /PyName=App/
+class wxApp : wxEvtHandler
 {
 
 public:

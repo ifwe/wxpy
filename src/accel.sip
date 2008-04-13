@@ -6,13 +6,13 @@ enum {
     wxACCEL_CMD,
 };
 
-class wxAcceleratorEntry /PyName=AcceleratorEntry/ {
+class wxAcceleratorEntry {
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmdID = 0/*, wxMenuItem *menuitem = NULL*/);
     
 };
 
-class wxAcceleratorTable : wxObject /PyName=wxAcceleratorTable/ {
+class wxAcceleratorTable : wxObject {
 public:
     wxAcceleratorTable();
 };

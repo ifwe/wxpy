@@ -22,7 +22,7 @@ enum wxDragResult
 
 bool wxIsDragResultOk(wxDragResult res);
 
-class wxDropTarget /PyName=Name/ {
+class wxDropTarget {
     wxDropTarget(wxDataObject* = NULL) /Transfer/;
     ~wxDropTarget();
 };

@@ -1,4 +1,4 @@
-class wxPalette: wxGDIObject /PyName=Palette/ {
+class wxPalette: wxGDIObject {
     wxPalette();
     ~wxPalette();
     int GetPixel(byte red, byte green, byte blue);

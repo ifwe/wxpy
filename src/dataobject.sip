@@ -1,6 +1,6 @@
 
 
-class wxDataFormat /PyName=DataFormat/ {
+class wxDataFormat {
     wxDataFormat(wxDataFormatId type);
     wxDataFormat(const wxString& format);
     ~wxDataFormat();
@@ -11,7 +11,7 @@ class wxDataFormat /PyName=DataFormat/ {
     bool operator!=(const wxDataFormat& format) const;    
 };
 
-class wxDataObject /PyName=DataObject/ {
+class wxDataObject {
 public:
     enum Direction {
         Get  = 0x01,    // format is supported by GetDataHere()

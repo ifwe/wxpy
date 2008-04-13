@@ -1,4 +1,4 @@
-class wxMenu /PyName=Menu/ {
+class wxMenu {
     wxMenu();
     ~wxMenu();
 };

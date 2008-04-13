@@ -2,7 +2,7 @@
 // wxButton
 //
 
-class wxButton : wxControl /PyName=Button/
+class wxButton : wxControl
 {
 
 %TypeHeaderCode
