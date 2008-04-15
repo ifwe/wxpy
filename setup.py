@@ -52,30 +52,41 @@ def manage_cache(gendir):
 
 def build():
     cxxflags = [f for f in wxpyconfig.cxxflags if not f.startswith('-O')]
-    cxxflags.append('-O3')
+    #cxxflags.append('-O3')
     
     wxpy_ext = Extension("wx", 
         wxpyinterfaces.interface_files,
-        extra_compile_args = wxpyconfig.cxxflags + ['-O3'],
+        extra_compile_args = wxpyconfig.cxxflags + ['-g'],
         extra_link_args = wxpyconfig.lflags,
     )
     
     features = wxpyfeatures.emit_features_file(wxpyinterfaces.SIP_DIR / 'features.sip')
 
     class wxpy_build_ext(sipdistutils.build_ext):
+        def generate_args_file(self, args):
+            argsfile = path(self.build_temp) / 'sipargs.txt'
+            
+            argtext = []
+            for opt, arg in zip(args[::2], args[1::2]):
+                argtext.append(' '.join([opt, arg]))
+            argtext = '\n'.join(argtext)
+            
+            if not argsfile.exists() or argsfile.text() != argtext:
+                argsfile.write_bytes(argtext)
+            
+            return str(argsfile)
+        
         def _sip_compile(self, sip_bin, source, sbf):
             feature_args = itertools.chain(*(('-x', feature) 
                 for feature, enabled in features.iteritems() if not enabled))
-            args = (
-                [sip_bin, 
+                
+            argsfile = self.generate_args_file([
                 "-c", self.build_temp, 
                 "-b", sbf,
-                '-t', wxpyconfig.sip_platform] + 
-                list(feature_args) + 
-                [source]
-            )
-            self.spawn(args)
-            
+                '-t', wxpyconfig.sip_platform] + list(feature_args))
+
+            self.spawn([sip_bin, '-z', argsfile, source])
+
         def swig_sources (self, sources, extension=None):
             sources = sipdistutils.build_ext.swig_sources(self, sources, extension)
             
