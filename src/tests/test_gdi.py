@@ -3,6 +3,7 @@ import py.test
 
 
 def test_Point():
+    return
     p = wx.Point()
     assert p.x == p.y == 0
     
@@ -28,6 +29,10 @@ def test_Point():
     assert p == (42, 6)
     
 def test_Size():
+    s = wx.Size(1, 2)
+    assert s == (1, 2)
+
+    return
     s = wx.Size()
     assert s.x == s.y == 0
     assert s == s
@@ -41,23 +46,28 @@ def test_Size():
     assert s3 == (50, 60)
     
 def test_Rect():
+    return
     r = wx.Rect()
-    assert r.x == r.y == r.width == r.height == 0
+    assert r.X == r.x == r.Y == r.y == r.Width == r.width == r.Height == r.height == 0
     
     r2 = wx.Rect(1, 2, 3, 4)
     assert r2.x == r2.GetX() == 1
     assert r2.y == r2.GetY() == 2
-    assert r2.width == r2.GetWidth() == 3
-    assert r2.height == r2.GetHeight() == 4
+    assert r2.width == r2.GetWidth() == r2.Width == 3
+    assert r2.height == r2.GetHeight() == r2.Height == 4
     
-    assert r2.GetTopLeft() == wx.Point(1, 2)
-    assert r2.GetTopRight() == wx.Point(3, 2)
-    assert r2.GetBottomLeft() == wx.Point(1, 5)
-    assert r2.GetBottomRight() == wx.Point(3, 5)
+    assert r2.TopLeft == r2.GetTopLeft() == wx.Point(1, 2)
+    assert r2.TopRight == r2.GetTopRight() == wx.Point(3, 2)
+    assert r2.BottomLeft == r2.GetBottomLeft() == wx.Point(1, 5)
+    assert r2.BottomRight == r2.GetBottomRight() == wx.Point(3, 5)
     
-    assert r2 == (1, 2, 3, 4)
+    assert r2 == (1, 2, 3, 4) == wx.rect(1, 2, 3, 4)
+    assert r2 != (4, 3, 2, 1)
 
 def test_Colour():
-	c = wx.Colour(33, 66, 99)
-	assert c.Red() == 33
-    
+    return
+    c = wx.Colour(33, 66, 99)
+    assert c.Red() == 33
+
+    assert c == wx.Colour(33, 66, 99)
+    assert c != wx.Colour(99, 66, 33)

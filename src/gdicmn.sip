@@ -53,9 +53,27 @@ public:
 %MethodCode
     sipRes = PyString_FromFormat("<wx.Point (%d, %d)>", sipCpp->x, sipCpp->y);
 %End
+    /*
+    bool operator==(const wxPoint&, const wxPoint&);
+%MethodCode
+    if (sipCanConvertToInstance(a0, sipClass_wxPoint, SIP_NOT_NONE) &&
+        sipCanConvertToInstance(a1, sipClass_wxPoint, SIP_NOT_NONE)))
+    {
+        int state;
+        int err;
+        wxPoint* p0 = reinterpret_cast<wxPoint*>(sipConvertToInstance(a0, sipClass_wxPoint, NULL, SIP_NOT_NONE, &state, &err));
+        wxPoint* p1 = reinterpret_cast<wxPoint*>(sipConvertToInstance(a1, sipClass_wxPoint, NULL, SIP_NOT_NONE, &state, &err));
+            
+        if (p0->x == p1->x)
+            sipRes = PyInt_FromLong(1);
+    }
+    
+    sipRes = PyInt_FromLong(0);
+%End
+*/
     
     bool operator==(const wxPoint&);
-    bool operator!=(const wxPoint &);
+    //bool operator!=(const wxPoint &);
     wxPoint operator+(const wxPoint& pt);
     wxPoint operator-(const wxPoint& pt);
     wxPoint& operator+=(const wxPoint& pt);
@@ -91,11 +109,16 @@ public:
 // Convert from tuples of two integers
 %ConvertToTypeCode
     if (!sipIsErr)
-        return sequence_2_ints_check(sipPy)
+    {
+        int val = sequence_2_ints_check(sipPy)
             || sipCanConvertToInstance(sipPy, sipClass_wxSize, SIP_NO_CONVERTORS);
+        printf("type checking conversion for wxSize: %d\n", val);
+        return val;
+    }
 
     int _x, _y;
     if (sequence_2_ints(sipPy, &_x, &_y)) {
+    	printf("returning new size from 2 ints: %d, %d\n", _x, _y);
         *sipCppPtr = new wxSize(_x, _y);
         return sipGetState(sipTransferObj);
     }

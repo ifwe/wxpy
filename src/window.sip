@@ -100,8 +100,8 @@ public:
     void MoveBeforeInTabOrder(wxWindow *win);
     void MoveAfterInTabOrder(wxWindow *win);
 
-    const wxWindowList& GetChildren() const;
-    const wxWindowList& GetWindowChildren() const;
+    //const wxWindowList& GetChildren() const;
+    //const wxWindowList& GetWindowChildren() const;
 
     wxWindow *GetPrevSibling() const;
     wxWindow *GetNextSibling() const;

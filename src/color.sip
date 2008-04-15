@@ -14,6 +14,15 @@ public:
     wxColour(byte red = 0, byte green = 0, byte blue = 0, byte alpha = 0);
     ~wxColour();
     
+    wxString GetAsString(int flags);
+    
+    bool operator ==(const wxColour& colour);
+    
+    unsigned Red() const;
+    unsigned Blue() const;
+    unsigned Green() const;
+    unsigned Alpha() const;
+    
     SIP_PYOBJECT __repr__();
 %MethodCode
     sipRes = PyString_FromFormat("<wx.Colour (%d, %d, %d, %d)>", 

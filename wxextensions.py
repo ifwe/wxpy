@@ -4,7 +4,7 @@ _old_bind = wx.EvtHandler.Bind
 def Bind(self, event, cb, source = None, id = -1, id2 = -1):
     print self, type(self)
     return _old_bind(self, event, cb, source, id, id2)
-#wx.EvtHandler.Bind = Bind
+wx.EvtHandler.Bind = Bind
 del Bind
 
 _old_Dialog = wx.Dialog.__init__

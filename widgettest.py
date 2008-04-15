@@ -15,7 +15,7 @@ def main():
       if hasattr(wx, 'pyEntry'):
           wx.pyEntry()
 
-      f = wx.Frame(None, -1, u'wxpy frame', (40, 40), (800, 800))
+      f = wx.Frame(None, -1, u'wxpy frame', (40, 40), (400, 300))
       f.Bind(wx.EVT_ACTIVATE, lambda e: p('frame activate:', f.GetActive()))      
       
       s = wx.BoxSizer(wx.VERTICAL)
@@ -28,8 +28,7 @@ def main():
 
           import gc
           print 'collect', gc.collect()
-          
-                            
+                                      
              #print diag
           #print diag.GetSize()
           
@@ -93,8 +92,8 @@ def main():
       s.Add(checkbox, 0, wx.ALL, 6)
       s.Add(wx.TextCtrl(f, -1, 'Text Control'))
       
-      for x in xrange(20):
-          s.Add(wx.Button(f, -1, 'another button'))
+      #for x in xrange(20):
+      #    s.Add(wx.Button(f, -1, 'another button'))
 
       f.SetSizer(s)
       f.Layout()

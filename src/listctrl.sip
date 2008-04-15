@@ -179,7 +179,7 @@ public:
     long GetId();
     int GetColumn();
     long GetState();
-    const wxString& GetText();
+    //const wxString& GetText();
     int GetImage();
     long GetData();
 
@@ -202,12 +202,13 @@ public:
     long GetIndex();
     int GetColumn();
     wxPoint GetPoint();
-    const wxString& GetLabel();
-    const wxString& GetText();
+    // TODO: resolve const property issues
+    // const wxString& GetLabel();
+    // const wxString& GetText();
     int GetImage();
     long GetData();
     long GetMask();
-    const wxListItem& GetItem();
+    // const wxListItem& GetItem();
 
     long GetCacheFrom();
     long GetCacheTo();

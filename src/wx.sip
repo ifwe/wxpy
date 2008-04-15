@@ -2,6 +2,8 @@
 
 %Module wx
 
+%SIPOptions (RenameWx, AutoProperties)
+
 %Include core.sip
 %Include gdi.sip
 %Include controls.sip

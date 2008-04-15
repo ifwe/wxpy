@@ -27,7 +27,7 @@ public:
 
     wxPoint GetPosition();
     wxSize GetSize();
-
+    
     wxWindow *GetWindow();
     void Move(const wxPoint& pt);
     void SetSize(const wxSize& size);

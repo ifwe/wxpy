@@ -11,8 +11,8 @@ class wxControl : wxWindow
 
 public:
     //void Command(wxCommandEvent&);
-    const wxString& GetLabel() const;
-    const wxString& GetLabelText() const;
+    //const wxString& GetLabel() const;
+    //const wxString& GetLabelText() const;
     void SetLabel(const wxString&);
     
 private:
