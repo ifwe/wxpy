@@ -1,3 +1,6 @@
+
+void wxInitAllImageHandlers();
+
 enum {
     wxIMAGE_ALPHA_TRANSPARENT,
     wxIMAGE_ALPHA_THRESHOLD,

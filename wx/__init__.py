@@ -21,6 +21,20 @@ def __init__(self, parent = None, id = -1, title = "", pos = wx.DefaultPosition,
 
 wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
 
+wx.FrameNameStr  = 'Frame'
+wx.DialogNameStr = 'Dialog'
+    
+_frame_init = wx.Frame.__init__
+def _new_frame_init(self, parent, id = -1, title = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE, name = wx.FrameNameStr):
+    _frame_init(self, parent, id, title, pos, size, style, name)
+wx.Frame.__init__ = _new_frame_init
+del _new_frame_init
+
+_dialog_init = wx.Dialog.__init__
+def _new_dialog_init(self, parent, id = -1, title = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE, name = wx.DialogNameStr):
+    _dialog_init(self, parent, id, title, pos, size, style, name)
+wx.Dialog.__init__ = _new_dialog_init
+del _new_dialog_init
 
 class CallLater:
     """
@@ -125,10 +139,23 @@ class CallLater:
 class PyDeadObjectError(Exception):
     pass
 
+
+
+'''
+wxDialog(wxWindow* parent,
+         const wxWindowID id = -1,
+         const wxString& title = wxEmptyString,
+         const wxPoint& pos = wxDefaultPosition,
+         const wxSize& size = wxDefaultSize,
+         long style = wxDEFAULT_DIALOG_STYLE,
+         const wxString& name = wxDialogNameStr) /Transfer/;
+'''
+
 wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
 
 Color = wx.Colour
 NamedColor = wx.NamedColour
 PyBitmapDataObject = wx.BitmapDataObject
 PyDropTarget = wx.DropTarget
+PyValidator = wx.Validator
 del wx

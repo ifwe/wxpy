@@ -73,4 +73,4 @@ def test_Colour():
     assert c != wx.Colour(99, 66, 33)
 
 def test_Point2DDouble():
-    p = wx.Point2DDouble()
+    p = wx.Point2DDouble(10, 20)

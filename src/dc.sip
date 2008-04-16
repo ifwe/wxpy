@@ -318,3 +318,39 @@ public:
     void SelectObjectAsSource(const wxBitmap& bmp);
     
 };
+
+
+class wxBufferedDC : wxMemoryDC
+{
+%TypeHeaderCode
+    #include <wx/dcbuffer.h>
+%End
+
+public:
+    wxBufferedDC(wxDC* dc,
+                 wxBitmap& buffer=wxNullBitmap,
+                 int style = wxBUFFER_CLIENT_AREA );
+    wxBufferedDC(wxDC* dc,
+                 const wxSize& area,
+                 int style = wxBUFFER_CLIENT_AREA );
+
+    ~wxBufferedDC();
+    void UnMask();
+
+    void SetStyle(int style);
+    int GetStyle() const;    
+};
+
+class wxBufferedPaintDC : wxBufferedDC
+{
+%TypeHeaderCode
+    #include <wx/dcbuffer.h>
+%End
+
+public:
+    // TODO: ownership of wxBitmap argument?
+    wxBufferedPaintDC( wxWindow *window,
+                       wxBitmap &buffer = wxNullBitmap,
+                       int style = wxBUFFER_CLIENT_AREA);
+
+};

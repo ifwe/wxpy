@@ -32,22 +32,26 @@ static void add_event(PyObject* module_dict, const char* name, ...)
 
 %PostInitialisationCode
 
+#define AddItem(name, obj, class) \
+    PyDict_SetItemString(sipModuleDict, name, sipConvertFromInstance((void*)obj, class, NULL));
+    
 
-PyDict_SetItemString(sipModuleDict, "DefaultSize", sipConvertFromInstance((void*)&wxDefaultSize, sipClass_wxSize, NULL));
-PyDict_SetItemString(sipModuleDict, "DefaultPosition", sipConvertFromInstance((void*)&wxDefaultPosition, sipClass_wxPoint, NULL));
-PyDict_SetItemString(sipModuleDict, "DefaultValidator", sipConvertFromInstance((void*)&wxDefaultValidator, sipClass_wxValidator, NULL));
+AddItem("DefaultSize",      &wxDefaultSize,      sipClass_wxSize);
+AddItem("DefaultPosition",  &wxDefaultPosition,  sipClass_wxPoint);
+AddItem("DefaultValidator", &wxDefaultValidator, sipClass_wxValidator);
+
 
 PyDict_SetItemString(sipModuleDict, "BLACK", sipConvertFromInstance((void*)wxBLACK, sipClass_wxColour, NULL));
 PyDict_SetItemString(sipModuleDict, "RED", sipConvertFromInstance((void*)wxRED, sipClass_wxColour, NULL));
 PyDict_SetItemString(sipModuleDict, "WHITE", sipConvertFromInstance((void*)wxWHITE, sipClass_wxColour, NULL));
 PyDict_SetItemString(sipModuleDict, "BLUE", sipConvertFromInstance((void*)wxBLUE, sipClass_wxColour, NULL));
 
-#define AddItem(name, obj, class) \
-    PyDict_SetItemString(sipModuleDict, name, sipConvertFromInstance((void*)obj, class, NULL));
 
-    AddItem("TRANSPARENT_PEN", wxTRANSPARENT_PEN, sipClass_wxPen);
+    AddItem("TRANSPARENT_PEN",   wxTRANSPARENT_PEN,   sipClass_wxPen);
     AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
-    AddItem("NullBitmap", &wxNullBitmap, sipClass_wxBitmap);
+    AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
+    AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
+    AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
 
 add_event(sipModuleDict, "EVT_CLOSE", wxEVT_CLOSE_WINDOW, 0);
 

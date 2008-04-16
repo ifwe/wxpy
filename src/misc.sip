@@ -6,6 +6,8 @@
 %Include sound.sip
 %Include settings.sip
 %Include taskbar.sip
+%Include config.sip
+%Include log.sip
 
 class wxToolTip : wxObject {
 public:

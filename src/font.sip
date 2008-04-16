@@ -183,15 +183,79 @@ enum wxFontEncoding
         // Japanese (see http://zsigri.tripod.com/fontboard/cjk/jis.html)
     wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932 // Shift JIS
 };
+/*
+struct wxNativeFontInfo
+{
+public:
+    wxNativeFontInfo();
+    ~wxNativeFontInfo();
 
+    void Init();
+    void InitFromFont(const wxFont& font);
+    int GetPointSize() const;
+%If (WXMSW)
+    wxSize GetPixelSize() const;
+%End
+    wxFontStyle GetStyle() const;
+    wxFontWeight GetWeight() const;
+    bool GetUnderlined() const;
+    wxString GetFaceName() const;
+    wxFontFamily GetFamily() const;
+    wxFontEncoding GetEncoding() const;
 
+    void SetPointSize(int pointsize);
+%If (WXMSW)
+    void SetPixelSize(const wxSize& pixelSize);
+%End
+    void SetStyle(wxFontStyle style);
+    void SetWeight(wxFontWeight weight);
+    void SetUnderlined(bool underlined);
+    bool SetFaceName(wxString facename);
+    void SetFamily(wxFontFamily family);
+    void SetEncoding(wxFontEncoding encoding);
+
+    bool FromString(const wxString& s);
+    wxString ToString() const;
+    bool FromUserString(const wxString& s);
+    wxString ToUserString() const;
+};
+*/
 class wxFont : wxGDIObject
 {
 public:
     wxFont();
     ~wxFont();
     
-    void SetPointSize(int);
-    void SetWeight(int weight);
+    int GetPointSize() const;
+    wxSize GetPixelSize() const;
+    bool IsUsingSizeInPixels() const;
+    int GetFamily() const;
+    int GetStyle() const;
     int GetWeight() const;
+    bool GetUnderlined() const;
+    wxString GetFaceName() const;
+    wxFontEncoding GetEncoding() const;
+    //const wxNativeFontInfo* GetNativeFontInfo() const;
+    bool IsFixedWidth() const;
+    wxString GetNativeFontInfoDesc() const;
+    wxString GetNativeFontInfoUserDesc() const;
+    void SetPointSize( int pointSize );
+    void SetPixelSize( const wxSize& pixelSize );
+    void SetFamily( int family );
+    void SetStyle( int style );
+    void SetWeight( int weight );
+    bool SetFaceName( const wxString& faceName );
+    void SetUnderlined( bool underlined );
+    void SetEncoding(wxFontEncoding encoding);
+    //void SetNativeFontInfo(const wxNativeFontInfo& info);
+    bool SetNativeFontInfo(const wxString& info);
+    bool SetNativeFontInfoUserDesc(const wxString& info);
+    wxString GetFamilyString() const;
+    wxString GetStyleString() const;
+    wxString GetWeightString() const;
+
+    void SetNoAntiAliasing( bool no = true );
+    bool GetNoAntiAliasing() const;
+    static wxFontEncoding GetDefaultEncoding();
+    static void SetDefaultEncoding(wxFontEncoding encoding);
 };
