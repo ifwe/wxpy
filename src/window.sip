@@ -292,7 +292,7 @@ public:
 %End 
 
 %If (wxUSE_TOOLTIPS)
-    void SetToolTip( const wxString &tip );
+    void SetToolTip( const wxString &tip ) /PyName=SetToolTipString/;
     void SetToolTip( wxToolTip *tip );
     wxToolTip* GetToolTip() const;
     //wxString GetToolTipText() const;

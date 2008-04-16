@@ -295,6 +295,21 @@ public:
     wxInitDialogEvent();
 };
 
+
+class wxScrollWinEvent : wxEvent
+{
+public:
+    wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
+                     int pos = 0, int orient = 0);
+
+    int GetOrientation() const;
+    int GetPosition() const;
+
+    void SetOrientation(int orient);
+    void SetPosition(int pos);
+};
+
+
 class wxMouseEvent: wxEvent  {
 public:
     wxMouseEvent();

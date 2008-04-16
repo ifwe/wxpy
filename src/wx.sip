@@ -30,9 +30,22 @@ static void add_event(PyObject* module_dict, const char* name, ...)
 
 %PostInitialisationCode
 
+
 PyDict_SetItemString(sipModuleDict, "DefaultSize", sipConvertFromInstance((void*)&wxDefaultSize, sipClass_wxSize, NULL));
 PyDict_SetItemString(sipModuleDict, "DefaultPosition", sipConvertFromInstance((void*)&wxDefaultPosition, sipClass_wxPoint, NULL));
 PyDict_SetItemString(sipModuleDict, "DefaultValidator", sipConvertFromInstance((void*)&wxDefaultValidator, sipClass_wxValidator, NULL));
+
+PyDict_SetItemString(sipModuleDict, "BLACK", sipConvertFromInstance((void*)wxBLACK, sipClass_wxColour, NULL));
+PyDict_SetItemString(sipModuleDict, "RED", sipConvertFromInstance((void*)wxRED, sipClass_wxColour, NULL));
+PyDict_SetItemString(sipModuleDict, "WHITE", sipConvertFromInstance((void*)wxWHITE, sipClass_wxColour, NULL));
+PyDict_SetItemString(sipModuleDict, "BLUE", sipConvertFromInstance((void*)wxBLUE, sipClass_wxColour, NULL));
+
+#define AddItem(name, obj, class) \
+    PyDict_SetItemString(sipModuleDict, name, sipConvertFromInstance((void*)obj, class, NULL));
+
+    AddItem("TRANSPARENT_PEN", wxTRANSPARENT_PEN, sipClass_wxPen);
+    AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
+    AddItem("NullBitmap", &wxNullBitmap, sipClass_wxBitmap);
 
 add_event(sipModuleDict, "EVT_CLOSE", wxEVT_CLOSE_WINDOW, 0);
 
@@ -122,6 +135,32 @@ add_event(sipModuleDict, "EVT_CHECKLISTBOX", wxEVT_COMMAND_CHECKLISTBOX_TOGGLED,
 add_event(sipModuleDict, "EVT_TEXT_CUT",    wxEVT_COMMAND_TEXT_CUT, 0);
 add_event(sipModuleDict, "EVT_TEXT_COPY",   wxEVT_COMMAND_TEXT_COPY, 0);
 add_event(sipModuleDict, "EVT_TEXT_PASTE",  wxEVT_COMMAND_TEXT_PASTE, 0);
+
+
+
+/*
+
+%constant wxEventType wxEVT_TASKBAR_MOVE;
+%constant wxEventType wxEVT_TASKBAR_LEFT_DOWN;
+%constant wxEventType wxEVT_TASKBAR_LEFT_UP;
+%constant wxEventType wxEVT_TASKBAR_RIGHT_DOWN;
+%constant wxEventType wxEVT_TASKBAR_RIGHT_UP;
+%constant wxEventType wxEVT_TASKBAR_LEFT_DCLICK;
+%constant wxEventType wxEVT_TASKBAR_RIGHT_DCLICK;
+%constant wxEventType wxEVT_TASKBAR_CLICK;
+
+
+%pythoncode {
+EVT_TASKBAR_MOVE = wx.PyEventBinder (         wxEVT_TASKBAR_MOVE )
+EVT_TASKBAR_LEFT_DOWN = wx.PyEventBinder (    wxEVT_TASKBAR_LEFT_DOWN )
+EVT_TASKBAR_LEFT_UP = wx.PyEventBinder (      wxEVT_TASKBAR_LEFT_UP )
+EVT_TASKBAR_RIGHT_DOWN = wx.PyEventBinder (   wxEVT_TASKBAR_RIGHT_DOWN )
+EVT_TASKBAR_RIGHT_UP = wx.PyEventBinder (     wxEVT_TASKBAR_RIGHT_UP )
+EVT_TASKBAR_LEFT_DCLICK = wx.PyEventBinder (  wxEVT_TASKBAR_LEFT_DCLICK )
+EVT_TASKBAR_RIGHT_DCLICK = wx.PyEventBinder ( wxEVT_TASKBAR_RIGHT_DCLICK )
+EVT_TASKBAR_CLICK =  wx.PyEventBinder (       wxEVT_TASKBAR_CLICK )
+}
+*/
 
 
 #ifdef __WXMOTIF__

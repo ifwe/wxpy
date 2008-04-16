@@ -309,3 +309,12 @@ public:
 private:
     wxPaintDC(const wxPaintDC&);
 };
+
+class wxMemoryDC: wxWindowDC
+{
+public:
+    wxMemoryDC(wxBitmap& bitmap = wxNullBitmap);
+    void SelectObject(wxBitmap& bitmap);
+    void SelectObjectAsSource(const wxBitmap& bmp);
+    
+};

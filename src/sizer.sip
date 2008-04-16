@@ -1,3 +1,4 @@
+
 class wxSizerItem: wxObject {
 public:
     wxSizerItem( wxWindow *window,

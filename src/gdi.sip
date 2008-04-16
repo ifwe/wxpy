@@ -14,3 +14,7 @@
 %Include bitmap.sip
 %Include icon.sip
 %Include dc.sip
+
+%Include display.sip
+
+%Include graphics.sip

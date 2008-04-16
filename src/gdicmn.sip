@@ -286,3 +286,121 @@ enum wxBitmapType
 
     wxBITMAP_TYPE_ANY = 50
 };
+
+class wxPoint2D
+{
+public:
+    wxPoint2D( double x=0.0 , double y=0.0 );
+    wxPoint2D( const wxPoint2D &pt );
+    wxPoint2D( const wxPoint &pt );
+    ~wxPoint2D();
+    void GetFloor( int *x , int *y ) const;
+    void GetRounded( int *x , int *y ) const;
+    double GetVectorLength() const;
+    double GetVectorAngle() const ;
+    void SetVectorLength( double length );
+    void SetVectorAngle( double degrees );
+
+    // LinkError: void SetPolarCoordinates( double angle , double length );
+    // LinkError: void Normalize();
+/*    %pythoncode {
+    def SetPolarCoordinates(self, angle, length):
+        self.SetVectorLength(length)
+        self.SetVectorAngle(angle)
+    def Normalize(self):
+        self.SetVectorLength(1.0)
+    }
+*/
+    double GetDistance( const wxPoint2D &pt ) const;
+    double GetDistanceSquare( const wxPoint2D &pt ) const;
+    double GetDotProduct( const wxPoint2D &vec ) const;
+    double GetCrossProduct( const wxPoint2D &vec ) const;
+
+    wxPoint2D operator-();
+
+    wxPoint2D& operator+=(const wxPoint2D& pt);
+    wxPoint2D& operator-=(const wxPoint2D& pt);
+
+    wxPoint2D& operator*=(const wxPoint2D& pt);
+    wxPoint2D& operator/=(const wxPoint2D& pt);
+};
+
+
+enum wxOutCode
+{
+    wxInside = 0x00 ,
+    wxOutLeft = 0x01 ,
+    wxOutRight = 0x02 ,
+    wxOutTop = 0x08 ,
+    wxOutBottom = 0x04
+};
+
+
+class wxRect2D
+{
+public:
+    wxRect2D(wxDouble x=0.0, wxDouble y=0.0, wxDouble w=0.0, wxDouble h=0.0);
+    ~wxRect2D();
+
+    wxPoint2D GetPosition();
+    wxSize GetSize();
+
+    wxDouble GetLeft() const;
+    void SetLeft( wxDouble n );
+    void MoveLeftTo( wxDouble n );
+    wxDouble GetTop() const;
+    void SetTop( wxDouble n );
+    void MoveTopTo( wxDouble n );
+    wxDouble GetBottom() const;
+    void SetBottom( wxDouble n );
+    void MoveBottomTo( wxDouble n );
+    wxDouble GetRight() const;
+    void SetRight( wxDouble n );
+    void MoveRightTo( wxDouble n );
+
+    wxPoint2D GetLeftTop() const;
+    void SetLeftTop( const wxPoint2D &pt );
+    void MoveLeftTopTo( const wxPoint2D &pt );
+    wxPoint2D GetLeftBottom() const;
+    void SetLeftBottom( const wxPoint2D &pt );
+    void MoveLeftBottomTo( const wxPoint2D &pt );
+    wxPoint2D GetRightTop() const;
+    void SetRightTop( const wxPoint2D &pt );
+    void MoveRightTopTo( const wxPoint2D &pt );
+    wxPoint2D GetRightBottom() const;
+    void SetRightBottom( const wxPoint2D &pt );
+    void MoveRightBottomTo( const wxPoint2D &pt );
+    wxPoint2D GetCentre() const;
+    void SetCentre( const wxPoint2D &pt );
+    void MoveCentreTo( const wxPoint2D &pt );
+    wxOutCode GetOutcode(const wxPoint2D &pt) const;
+    bool Contains( const wxPoint2D &pt ) const;
+    bool Contains( const wxRect2D &rect ) const;
+    bool IsEmpty() const;
+    bool HaveEqualSize( const wxRect2D &rect ) const;
+    void Inset( wxDouble x , wxDouble y );
+    void Inset( wxDouble left , wxDouble top ,wxDouble right , wxDouble bottom  );
+    void Offset( const wxPoint2D &pt );
+
+    void ConstrainTo( const wxRect2D &rect );
+
+    wxPoint2D Interpolate( wxInt32 widthfactor , wxInt32 heightfactor );
+
+    //static void Intersect( const wxRect2D &src1 , const wxRect2D &src2 , wxRect2D *dest );
+
+    void Intersect( const wxRect2D &otherRect );
+    wxRect2D CreateIntersection( const wxRect2D &otherRect ) const;
+    bool Intersects( const wxRect2D &rect ) const;
+
+    // static void Union( const wxRect2D &src1 , const wxRect2D &src2 , wxRect2D *dest );
+
+    void Union( const wxRect2D &otherRect );
+    //void Union( const wxPoint2D &pt );
+    
+    wxRect2D CreateUnion( const wxRect2D &otherRect ) const;
+
+    void Scale( wxDouble f );
+    void Scale( int num , int denum );
+};
+
+//---------------------------------------------------------------------------

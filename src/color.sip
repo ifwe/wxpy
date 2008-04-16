@@ -9,6 +9,11 @@ enum {
     wxALPHA_OPAQUE
 };
 
+wxColour NamedColour(const wxString& name);
+%MethodCode
+    sipRes = new wxColour(*a0);
+%End
+
 class wxColour : wxGDIObject {
 public:
     wxColour(byte red = 0, byte green = 0, byte blue = 0, byte alpha = 0);
@@ -31,4 +36,18 @@ public:
         sipCpp->Blue(),
         sipCpp->Alpha());
 %End
+};
+
+
+class wxColourDatabase {
+public:
+    wxColourDatabase();
+    ~wxColourDatabase();
+
+    // find colour by name or name for the given colour
+    wxColour Find(const wxString& name) const;
+    wxString FindName(const wxColour& colour) const;
+    //%pythoncode { FindColour = Find }
+    
+    void AddColour(const wxString& name, const wxColour& colour);
 };

@@ -2,6 +2,70 @@
 // wxTopLevelWindow
 //
 
+
+enum
+{
+    wxSTAY_ON_TOP,
+    wxICONIZE,
+    wxMINIMIZE,
+    wxMAXIMIZE,
+    wxCLOSE_BOX,
+    wxTHICK_FRAME,
+    wxSYSTEM_MENU,
+    wxMINIMIZE_BOX,
+    wxMAXIMIZE_BOX,
+    wxTINY_CAPTION_HORIZ,
+    wxTINY_CAPTION_VERT,
+    wxRESIZE_BOX,
+    wxRESIZE_BORDER,
+
+    wxDIALOG_NO_PARENT,
+    
+    wxDEFAULT_FRAME_STYLE,
+    wxDEFAULT_DIALOG_STYLE,
+
+    wxFRAME_TOOL_WINDOW,
+    wxFRAME_FLOAT_ON_PARENT,
+    wxFRAME_NO_WINDOW_MENU,
+    wxFRAME_NO_TASKBAR,
+    wxFRAME_SHAPED,
+    wxFRAME_DRAWER,
+
+    wxFRAME_EX_METAL,
+    wxDIALOG_EX_METAL,
+    wxWS_EX_CONTEXTHELP,
+    
+    // Obsolete
+    wxDIALOG_MODAL,
+    wxDIALOG_MODELESS,
+    wxUSER_COLOURS,
+    wxNO_3D,
+
+    wxFRAME_EX_CONTEXTHELP,
+    wxDIALOG_EX_CONTEXTHELP,
+};    
+
+
+enum
+{
+    wxFULLSCREEN_NOMENUBAR,
+    wxFULLSCREEN_NOTOOLBAR,
+    wxFULLSCREEN_NOSTATUSBAR,
+    wxFULLSCREEN_NOBORDER,
+    wxFULLSCREEN_NOCAPTION,
+    wxFULLSCREEN_ALL,
+
+    wxTOPLEVEL_EX_DIALOG,
+};
+
+// Styles for RequestUserAttention
+enum
+{
+    wxUSER_ATTENTION_INFO = 1,
+    wxUSER_ATTENTION_ERROR = 2
+};
+
+
 class wxTopLevelWindow : wxWindow
 {
 
