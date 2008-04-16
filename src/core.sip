@@ -26,7 +26,9 @@
 %Include accel.sip
 
 %Include sizer.sip
+%Include gbsizer.sip
 %Include event.sip
+%Include timer.sip
 
 %Include window.sip
 %Include control.sip
@@ -40,3 +42,4 @@
 %Include listctrl.sip
 
 %Include functions.sip
+%Include stdpaths.sip

@@ -29,5 +29,11 @@ private:
     wxApp(const wxApp &);
 };
 
+wxApp* GetApp();
+%MethodCode
+    // wrap the global wxApp pointer
+    sipRes = wxTheApp;//sipConvertFromInstance(wxTheApp, sipClass_wxApp, NULL);
+%End
+
 
 void wxpyEntry();

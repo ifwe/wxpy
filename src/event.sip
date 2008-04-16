@@ -4,6 +4,130 @@
 %End
 %End
 
+%ModuleHeaderCode
+
+/* a linked list node holding a PyObject* callable */
+typedef struct _callAfterCb
+{
+    PyObject* cb;
+    struct _callAfterCb* next;
+} callAfterCb;
+
+/* holds the head and tail to a linked list of PyObject* callables */
+typedef struct _callAfterCbList
+{
+    struct _callAfterCb* head;
+    struct _callAfterCb* tail;
+} callAfterCbList;
+
+class CallAfterCallback: public wxObject
+{
+public:
+    CallAfterCallback() {}
+    ~CallAfterCallback() {}
+
+    void EventThunker(wxEvent& event);
+};
+%End
+
+%ModuleCode
+
+/* the global CallAfter callable object list */
+static callAfterCbList g_callAfterCbs;
+
+/* All wx.CallAfter calls are routed through here. */
+void CallAfterCallback::EventThunker(wxEvent& event) {
+    SIP_BLOCK_THREADS
+    
+    callAfterCb* cbnode = g_callAfterCbs.head;
+    callAfterCb* oldnode;
+    
+    while(cbnode)
+    {
+        oldnode = cbnode;
+        PyObject* func = cbnode->cb;
+        PyObject* result = PyObject_CallObject(func, NULL);
+        if (result)
+        {
+            Py_DECREF(result);
+
+            if (PyErr_Occurred())
+                PyErr_Print();
+        } else
+            PyErr_Print();
+            
+        Py_DECREF(func);
+        
+        cbnode = cbnode->next;
+        sipFree(oldnode);        
+    }
+    
+    g_callAfterCbs.head = g_callAfterCbs.tail = NULL;
+    SIP_UNBLOCK_THREADS
+}
+%End
+
+%PreInitialisationCode
+
+g_callAfterCbs.head = NULL;
+g_callAfterCbs.tail = NULL;
+
+%End
+
+
+// may be called from any thread
+void CallAfter(SIP_PYCALLABLE);
+%MethodCode
+    static int callAfterId = 0;
+    static CallAfterCallback g_callafterEvent;
+
+    if (!wxTheApp)
+    {
+        SIP_BLOCK_THREADS
+        PyErr_SetString(PyExc_AssertionError, "No wx.App created yet");
+        SIP_UNBLOCK_THREADS
+        sipIsErr = 1;
+    }
+    else
+    {
+        if (!callAfterId)
+        {        
+            callAfterId = wxNewEventType();
+            wxTheApp->Connect(-1, -1, callAfterId,
+                (wxObjectEventFunction)&CallAfterCallback::EventThunker, &g_callafterEvent, NULL);
+        }
+    
+        /* append the callable to the end of our list */
+        callAfterCb* new_cb = (callAfterCb*)sipMalloc(sizeof(callAfterCb));
+        
+        /* assert callable? */
+        new_cb->cb = a0;                
+        new_cb->next = NULL;
+    
+        SIP_BLOCK_THREADS
+        Py_INCREF(a0);
+        callAfterCb* tail = g_callAfterCbs.tail;
+        
+        /* add the callback to the end of the linked list of
+           call after callbacks */
+        if (tail == NULL)
+        {
+            g_callAfterCbs.head = g_callAfterCbs.tail = new_cb;
+        }
+        else
+        {
+            g_callAfterCbs.tail->next = new_cb;
+            g_callAfterCbs.tail = new_cb;
+        }
+        SIP_UNBLOCK_THREADS
+        
+        wxCommandEvent e(callAfterId, -1);
+        wxTheApp->AddPendingEvent(e);
+    }
+%End
+
+int wxNewEventType();
+
 enum {
 wxEVT_NULL,
 wxEVT_FIRST,
@@ -206,3 +330,15 @@ public:
     wxActivateEvent(wxEventType eventType = 0, bool active = true, int id = 0);
     bool GetActive() const;
 };
+
+class wxContextMenuEvent : wxCommandEvent
+{
+public:
+    wxContextMenuEvent(wxEventType type = wxEVT_NULL,
+                       wxWindowID winid = 0,
+                       const wxPoint& pt = wxDefaultPosition);
+    
+    //const wxPoint& GetPosition() const;
+    void SetPosition(const wxPoint& pos);
+};
+

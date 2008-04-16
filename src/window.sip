@@ -21,6 +21,8 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = wxPanelNameStr);
+             
+    void Raise();
 
     void Destroy();
     void GetSize( int *w, int *h ) const;
@@ -303,7 +305,7 @@ public:
     void SetDropTarget( wxDropTarget *dropTarget );
     wxDropTarget *GetDropTarget() const;
 %End 
-
+/*
 %If (wxUSE_CONSTRAINTS)
 
     void SetConstraints( wxLayoutConstraints *constraints );
@@ -328,7 +330,7 @@ public:
     void GetPositionConstraint(int *x, int *y) const;
 
 %End 
-
+*/
     void SetAutoLayout( bool autoLayout );
     bool GetAutoLayout() const;
 
@@ -354,9 +356,6 @@ public:
     void OnSysColourChanged( wxSysColourChangedEvent& event );
     void OnInitDialog( wxInitDialogEvent &event );
     void OnMiddleClick( wxMouseEvent& event );
-%If (wxUSE_HELP)
-    void OnHelp(wxHelpEvent& event);
-%End 
 
 
 %If (wxUSE_PALETTE)

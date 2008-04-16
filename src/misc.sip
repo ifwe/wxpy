@@ -3,6 +3,8 @@
 #include <wx/caret.h>
 %End
 
+%Include sound.sip
+
 class wxToolTip : wxObject {
 public:
     wxToolTip(const wxString &tip);

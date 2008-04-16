@@ -109,3 +109,12 @@ public:
     int GetOrientation() const;
     void SetOrientation(int orient);
 };
+
+
+class wxFlexGridSizer : wxSizer
+{
+public:
+    wxFlexGridSizer(int rows, int cols, int vgap, int hgap);
+private:
+    wxFlexGridSizer(const wxFlexGridSizer&);
+};

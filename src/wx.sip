@@ -1,7 +1,6 @@
+%Module _wxcore
+
 %Platforms {WXMSW WXCOCOA WXMAC WXGTK}
-
-%Module wx
-
 %SIPOptions (RenameWx, AutoProperties)
 
 %Include core.sip
@@ -22,8 +21,9 @@ static void add_event(PyObject* module_dict, const char* name, ...)
         PyList_Append(list, PyInt_FromLong(i));        
         i = va_arg(argp, int);
     }
-
-    PyDict_SetItemString(module_dict, name, list);
+    
+    PyObject *tuple = PyList_AsTuple(list);
+    PyDict_SetItemString(module_dict, name, tuple);
     Py_DECREF(list);
 }
 %End
@@ -32,7 +32,7 @@ static void add_event(PyObject* module_dict, const char* name, ...)
 
 PyDict_SetItemString(sipModuleDict, "DefaultSize", sipConvertFromInstance((void*)&wxDefaultSize, sipClass_wxSize, NULL));
 PyDict_SetItemString(sipModuleDict, "DefaultPosition", sipConvertFromInstance((void*)&wxDefaultPosition, sipClass_wxPoint, NULL));
-
+PyDict_SetItemString(sipModuleDict, "DefaultValidator", sipConvertFromInstance((void*)&wxDefaultValidator, sipClass_wxValidator, NULL));
 
 add_event(sipModuleDict, "EVT_CLOSE", wxEVT_CLOSE_WINDOW, 0);
 
@@ -122,6 +122,89 @@ add_event(sipModuleDict, "EVT_CHECKLISTBOX", wxEVT_COMMAND_CHECKLISTBOX_TOGGLED,
 add_event(sipModuleDict, "EVT_TEXT_CUT",    wxEVT_COMMAND_TEXT_CUT, 0);
 add_event(sipModuleDict, "EVT_TEXT_COPY",   wxEVT_COMMAND_TEXT_COPY, 0);
 add_event(sipModuleDict, "EVT_TEXT_PASTE",  wxEVT_COMMAND_TEXT_PASTE, 0);
+
+
+#ifdef __WXMOTIF__
+#define wxPlatform "__WXMOTIF__"
+#define wxPlatName "wxMotif"
+#endif
+#ifdef __WXX11__
+#define wxPlatform "__WXX11__"
+#define wxPlatName "wxX11"
+#endif
+#ifdef __WXGTK__
+#define wxPlatform "__WXGTK__"
+#define wxPlatName "wxGTK"
+#endif
+#ifdef __WXMSW__
+#define wxPlatform "__WXMSW__"
+#define wxPlatName "wxMSW"
+#endif
+#ifdef __WXMAC__
+#define wxPlatform "__WXMAC__"
+#define wxPlatName "wxMac"
+#endif
+
+
+#ifdef __WXDEBUG__
+    int wxdebug = 1;
+#else
+    int wxdebug = 0;
+#endif
+
+
+        // These should be deprecated in favor of the PlatformInfo tuple built below...
+        PyDict_SetItemString(sipModuleDict, "Platform", PyString_FromString(wxPlatform));
+        PyDict_SetItemString(sipModuleDict, "USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
+        PyDict_SetItemString(sipModuleDict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
+
+        // Make a tuple of strings that gives more info about the platform.
+        PyObject* PlatInfo = PyList_New(0);
+        PyObject* obj;
+
+    #define _AddInfoString(st) \
+        obj = PyString_FromString(st); \
+        PyList_Append(PlatInfo, obj); \
+        Py_DECREF(obj)
+
+        _AddInfoString(wxPlatform);
+        _AddInfoString(wxPlatName);
+    #if wxUSE_UNICODE
+        _AddInfoString("unicode");
+    #else
+        _AddInfoString("ansi");
+    #endif
+    #ifdef __WXGTK__
+    #ifdef __WXGTK20__
+        _AddInfoString("gtk2");
+    #else
+        _AddInfoString("gtk1");
+    #endif
+    #endif
+    #ifdef __WXDEBUG__
+        _AddInfoString("wx-assertions-on");
+    #else
+        _AddInfoString("wx-assertions-off");
+    #endif
+//        _AddInfoString(wxPy_SWIG_VERSION);    
+    #ifdef __WXMAC__
+        #if wxMAC_USE_CORE_GRAPHICS
+            _AddInfoString("mac-cg");
+        #else
+            _AddInfoString("mac-qd");
+        #endif
+        #if wxMAC_USE_NATIVE_TOOLBAR
+            _AddInfoString("mac-native-tb");
+        #else
+            _AddInfoString("mac-no-native-tb");
+        #endif
+    #endif
+
+    #undef _AddInfoString
+
+        PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
+        Py_DECREF(PlatInfo);
+        PyDict_SetItemString(sipModuleDict, "PlatformInfo", PlatInfoTuple);
 
 
 %End
