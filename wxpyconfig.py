@@ -20,7 +20,7 @@ elif 'Darwin' in platform.platform():
 wxconfig = 'wx-config'
 
 if platform_name in ('mac',):
-    wxconfig = path('/Users/kevin/src/wxWebKitBranch-2.8/macbuild/wx-config')
+    wxconfig = path('~/wxpython-2.8/bin/wx-config').expand()
     
     print 'using wxconfig:', str(wxconfig)
     

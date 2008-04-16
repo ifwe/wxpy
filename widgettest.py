@@ -12,7 +12,7 @@ def p(*args):
 
 def main():
       a = wx.App()
-      if hasattr(wx, 'pyEntry'):
+      if hasattr(wx, 'pyEntry'): # so we can test on regular wxPython
           wx.pyEntry()
 
       f = wx.Frame(None, -1, u'wxpy frame', (40, 40), (400, 300))

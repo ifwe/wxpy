@@ -1,105 +1,46 @@
+'''
+
+build the wxpy extension
+
+'''
+
 from __future__ import with_statement
 
-import itertools
-import os
-import re
-import shutil
-import sys
-
-from distutils.core import setup, Extension
 import sipconfig
 import sipdistutils
+import wxpysetup
+
+from distutils.core import setup
 from path import path
 
-import wxpyconfig
-import wxpyinterfaces
-import wxpyfeatures
-
-VERBOSE = True
-
-def different(file1, file2, start = 0):
-    if not file1.exists() or not file2.exists():
-        return True
-    
-    if file1.size != file2.size:
-        return True
-
-    return file1.bytes() != file2.bytes()
-
-def manage_cache(gendir):
-    """
-    This function keeps a cache of all sip-generated *.cpp and *.h files
-    and restores the stats of the newly generated set whenever the content
-    is unchanged
-    """
-    sipconfig.inform("Managing the module cache: %s" % gendir)
-    
-    gendir = path(gendir)
-    cache = gendir / 'cache'
-    cache.ensure_exists()
-    
-    if 'clean' in sys.argv:
-        cache.rmtree()
-    
-    for newfile in gendir.files('*.cpp') + gendir.files('*.h'):
-        oldfile = cache / newfile.name
-        if different(newfile, oldfile):
-            shutil.copy2(newfile, oldfile)
-            if VERBOSE:
-                sipconfig.inform("--> changed: %s" % newfile.name)
-        else:
-            shutil.copystat(oldfile, newfile)
-
 def build():
-    cxxflags = [f for f in wxpyconfig.cxxflags if not f.startswith('-O')]
-    #cxxflags.append('-O3')
+    extensions = [
+        wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip']),
+        wxpysetup.make_sip_ext('_wxhtml', ['src/html.sip']),
+    ]
+            
+    setup(name = 'wxpy',
+          version = '1.0',
+          ext_modules = extensions,
+          cmdclass = {'build_ext': wxpysetup.wxpy_build_ext})
     
-    wxpy_ext = Extension("wx", 
-        wxpyinterfaces.interface_files,
-        extra_compile_args = wxpyconfig.cxxflags + ['-g'],
-        extra_link_args = wxpyconfig.lflags,
-    )
+    install()
+          
+def install():
+    # TODO: figure out how to make distutils do this for us
     
-    features = wxpyfeatures.emit_features_file(wxpyinterfaces.SIP_DIR / 'features.sip')
-
-    class wxpy_build_ext(sipdistutils.build_ext):
-        def generate_args_file(self, args):
-            argsfile = path(self.build_temp) / 'sipargs.txt'
-            
-            argtext = []
-            for opt, arg in zip(args[::2], args[1::2]):
-                argtext.append(' '.join([opt, arg]))
-            argtext = '\n'.join(argtext)
-            
-            if not argsfile.exists() or argsfile.text() != argtext:
-                argsfile.write_bytes(argtext)
-            
-            return str(argsfile)
-        
-        def _sip_compile(self, sip_bin, source, sbf):
-            feature_args = itertools.chain(*(('-x', feature) 
-                for feature, enabled in features.iteritems() if not enabled))
-                
-            argsfile = self.generate_args_file([
-                "-c", self.build_temp, 
-                "-b", sbf,
-                '-t', wxpyconfig.sip_platform] + list(feature_args))
-
-            self.spawn([sip_bin, '-z', argsfile, source])
-
-        def swig_sources (self, sources, extension=None):
-            sources = sipdistutils.build_ext.swig_sources(self, sources, extension)
-            
-            sipconfig.inform('build_temp is %s' % self.build_temp)
-            manage_cache(self.build_temp)
-            return sources
-
-    setup(
-        name = 'wxpy',
-        version = '1.0',
-        ext_modules = [wxpy_ext],
-        cmdclass = {'build_ext': wxpy_build_ext},
-    )
+    # copy the finished shared libraries into the "wx" directory
+    # directly under this one
+    build_dir = './build/lib.macosx-10.5-i386-2.5/'
+    built_files = ['_wxcore.so', '_wxhtml.so']
+    
+    for f in built_files:
+        (path(build_dir) / f).copy('./wx')
+    
+    # write some build statistics
+    import os.path, time
+    with open('buildstats.txt', 'a') as f:
+        f.write('%s %s\n' % (time.time(), os.path.getsize(build_dir + '_wxcore.so')))
 
 if __name__ == '__main__':
     build()
