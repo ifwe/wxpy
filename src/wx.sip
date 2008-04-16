@@ -3,6 +3,8 @@
 %Platforms {WXMSW WXCOCOA WXMAC WXGTK}
 %SIPOptions (RenameWx, AutoProperties)
 
+%Include vector.sip
+
 %Include core.sip
 %Include gdi.sip
 %Include controls.sip

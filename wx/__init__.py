@@ -125,5 +125,10 @@ class CallLater:
 class PyDeadObjectError(Exception):
     pass
 
+wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
 
+Color = wx.Colour
+NamedColor = wx.NamedColour
+PyBitmapDataObject = wx.BitmapDataObject
+PyDropTarget = wx.DropTarget
 del wx

@@ -286,7 +286,7 @@ enum wxBitmapType
 
     wxBITMAP_TYPE_ANY = 50
 };
-
+/*
 class wxPoint2D
 {
 public:
@@ -303,14 +303,7 @@ public:
 
     // LinkError: void SetPolarCoordinates( double angle , double length );
     // LinkError: void Normalize();
-/*    %pythoncode {
-    def SetPolarCoordinates(self, angle, length):
-        self.SetVectorLength(length)
-        self.SetVectorAngle(angle)
-    def Normalize(self):
-        self.SetVectorLength(1.0)
-    }
-*/
+
     double GetDistance( const wxPoint2D &pt ) const;
     double GetDistanceSquare( const wxPoint2D &pt ) const;
     double GetDotProduct( const wxPoint2D &vec ) const;
@@ -324,8 +317,9 @@ public:
     wxPoint2D& operator*=(const wxPoint2D& pt);
     wxPoint2D& operator/=(const wxPoint2D& pt);
 };
+*/
 
-
+/*
 enum wxOutCode
 {
     wxInside = 0x00 ,
@@ -404,3 +398,4 @@ public:
 };
 
 //---------------------------------------------------------------------------
+*/

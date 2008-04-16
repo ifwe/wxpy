@@ -7,7 +7,7 @@ import platform
 import shlex
 from path import path
 
-
+wxpy_dir         = path('~/src/wxpy').expand()
 possible_wx_libs = 'xrc stc aui html qa adv core xml net base'.split()
 use_wx_libs      = 'core base adv'.split()
 

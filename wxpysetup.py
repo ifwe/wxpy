@@ -75,8 +75,12 @@ class wxpy_build_ext(sipdistutils.build_ext):
 
         argsfile = self.generate_args_file([
             "-c", self.build_temp, 
+            '-I', wxpyconfig.wxpy_dir / 'src',
             "-b", sbf,
-            '-t', wxpyconfig.sip_platform] + list(feature_args))
+            '-t', wxpyconfig.sip_platform] + 
+            list(feature_args) +
+            list(getattr(self, 'extra_sip_includes', []))
+        )
 
         self.spawn([sip_bin, '-z', argsfile, source])
 
@@ -87,11 +91,20 @@ class wxpy_build_ext(sipdistutils.build_ext):
         manage_cache(self.build_temp)
         return sources
 
-def make_sip_ext(name, iface_files):
+def make_sip_ext(name, iface_files, include = None):
     cxxflags = [f for f in wxpyconfig.cxxflags if not f.startswith('-O')]
     #cxxflags.append('-O3')
-    
     cargs = list(wxpyconfig.cxxflags) + ['-g']
+    
+    includes = []
+    if include is not None:
+        if isinstance(include, basestring): include = [include]
+        for inc in include:
+            includes.extend(['-I', inc])
+            cargs.append('-I%s'  % inc)
+    
     largs = list(wxpyconfig.lflags)
 
-    return Extension(name, iface_files, extra_compile_args = cargs, extra_link_args = largs)
+    ext = Extension(name, iface_files, extra_compile_args = cargs, extra_link_args = largs)
+    ext.extra_sip_includes = includes
+    return ext

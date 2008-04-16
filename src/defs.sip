@@ -2,7 +2,7 @@
 #include <wx/wx.h>
 #include <wx/tooltip.h>
 %End
-typedef unsigned int    wxInt32;
+typedef int    wxInt32;
 typedef unsigned int    size_t;
 typedef int             wxEventType;
 typedef unsigned long   wxUIntPtr;
