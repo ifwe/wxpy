@@ -10,6 +10,10 @@
 %Include controls.sip
 
 %ModuleHeaderCode
+static void add_event(PyObject* module_dict, const char* name, ...);
+%End
+
+%ModuleCode
 static void add_event(PyObject* module_dict, const char* name, ...)
 {
     // todo: build tuples, not lists
@@ -42,10 +46,10 @@ AddItem("DefaultSize",      &wxDefaultSize,      sipClass_wxSize);
 AddItem("DefaultPosition",  &wxDefaultPosition,  sipClass_wxPoint);
 AddItem("DefaultValidator", &wxDefaultValidator, sipClass_wxValidator);
 
-AddItem("BLACK", wxBLACK, sipClass_wxColour, NULL);
-AddItem("WHITE", wxWHITE, sipClass_wxColour, NULL);
-AddItem("RED", wxRED, sipClass_wxColour, NULL);
-AddItem("BLUE", wxBLUE, sipClass_wxColour, NULL);
+AddItem("BLACK", wxBLACK, sipClass_wxColour);
+AddItem("WHITE", wxWHITE, sipClass_wxColour);
+AddItem("RED",   wxRED,   sipClass_wxColour);
+AddItem("BLUE",  wxBLUE,  sipClass_wxColour);
 
 AddItem("TRANSPARENT_PEN",   wxTRANSPARENT_PEN,   sipClass_wxPen);
 AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);

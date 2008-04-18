@@ -357,3 +357,53 @@ public:
     void SetPosition(const wxPoint& pos);
 };
 
+class wxMenuEvent : wxEvent
+{
+public:
+    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = NULL);
+    int GetMenuId() const;
+    bool IsPopup() const;
+    wxMenu* GetMenu() const;
+};
+
+class wxCloseEvent : wxEvent
+{
+public:
+    wxCloseEvent(wxEventType type = wxEVT_NULL, int winid = 0);
+    void SetLoggingOff(bool logOff);
+    bool GetLoggingOff() const;
+    void Veto(bool veto = true);
+    bool GetVeto() const;
+    void SetCanVeto(bool canVeto);
+    bool CanVeto() const;
+};
+
+class wxShowEvent : wxEvent
+{
+public:
+    wxShowEvent(int winid = 0, bool show = false);
+
+    void SetShow(bool show);
+    bool GetShow() const;
+};
+
+class wxIconizeEvent: wxEvent
+{
+public:
+    wxIconizeEvent(int id = 0, bool iconized = true);
+    bool Iconized();
+};
+
+class wxMaximizeEvent: wxEvent
+{
+public:
+    wxMaximizeEvent(int id = 0);
+};
+
+class wxDropFilesEvent: wxEvent
+{
+public:
+    wxPoint GetPosition();
+    int GetNumberOfFiles();
+};
+

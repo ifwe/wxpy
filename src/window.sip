@@ -145,8 +145,8 @@ public:
     void InitDialog();
 
 %If (wxUSE_ACCEL)
-    void SetAcceleratorTable( const wxAcceleratorTable& accel );
-    wxAcceleratorTable *GetAcceleratorTable();
+//    void SetAcceleratorTable( const wxAcceleratorTable& accel );
+//    wxAcceleratorTable *GetAcceleratorTable();
 %End 
 
 %If (wxUSE_HOTKEY)
@@ -284,7 +284,7 @@ public:
 /*    wxString GetHelpTextAtPoint(const wxPoint& pt,
                                         wxHelpEvent::Origin origin) const;
 */
-    wxString GetHelpText() const;
+//    wxString GetHelpText() const;
 %End
 %If (!wxUSE_HELP)
     void SetHelpText(const wxString& text);
@@ -293,8 +293,8 @@ public:
 
 %If (wxUSE_TOOLTIPS)
     void SetToolTip( const wxString &tip ) /PyName=SetToolTipString/;
-    void SetToolTip( wxToolTip *tip );
-    wxToolTip* GetToolTip() const;
+    //void SetToolTip( wxToolTip *tip );
+    //wxToolTip* GetToolTip() const;
     //wxString GetToolTipText() const;
 %End
 %If (!wxUSE_TOOLTIPS)

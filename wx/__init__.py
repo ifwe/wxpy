@@ -1,7 +1,7 @@
 import _wxcore as wx
 from _wxcore import *
 
-def PyEventBinder(evttype, n):
+def PyEventBinder(evttype, n = None):
     return (evttype, )
     
 
@@ -158,4 +158,6 @@ NamedColor = wx.NamedColour
 PyBitmapDataObject = wx.BitmapDataObject
 PyDropTarget = wx.DropTarget
 PyValidator = wx.Validator
+PyEvent = wx.Event
+PyControl = wx.Control
 del wx

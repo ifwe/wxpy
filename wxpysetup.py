@@ -94,7 +94,7 @@ class wxpy_build_ext(sipdistutils.build_ext):
 def make_sip_ext(name, iface_files, include = None):
     cxxflags = [f for f in wxpyconfig.cxxflags if not f.startswith('-O')]
     #cxxflags.append('-O3')
-    cargs = list(wxpyconfig.cxxflags) + ['-g']
+    cargs = list(wxpyconfig.cxxflags) + ['-g', '-Wall']
     
     includes = []
     if include is not None:
