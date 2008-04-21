@@ -10,25 +10,33 @@ def message(e):
 def p(*args):
     print ' '.join(str(a) for a in args)
 
-
 class MyApp(wx.App):
     def __init__(self):
-        print 'MyApp.__init__'
+        print 'App.__init__'
         wx.App.__init__(self)
+        self.SetExitOnFrameDelete(False)
+
+        wx.EntryStart()
         
     def OnInit(self):
         print 'MyApp.OnInit'
         return True
 
+    def MacOpenFile(self, filename):
+        print 'Python MacOpenFile', filename
+    
+    def MacPrintFile(self, filename):
+        print 'Python MacPrintFile', filename
+        
+    def MacNewFile(self):
+        print 'Python MacNewFile'
+        
+    def MacReopenApp(self):
+        print 'Python MacReopenApp'
+
 def main():
-      #a = wx.App()
-     # if hasattr(wx, 'pyEntry'): # so we can test on regular wxPython
       a = MyApp()
-      wx.pyEntry()
       
-      import sip
-      sip.dump(a)
-      sip.dump(wx.GetApp())
 
       f = wx.Frame(None, -1, u'wxpy frame', (40, 40), (400, 300))
       f.Bind(wx.EVT_ACTIVATE, lambda e: p('frame activate:', f.GetActive()))      
@@ -39,33 +47,14 @@ def main():
           for x in xrange(1000):
               diag = wx.Dialog(f, -1, 'test modal dialog', size = (400, 300))
               diag.Destroy()
-
-
+              
           import gc
           print 'collect', gc.collect()
-                                      
-             #print diag
-          #print diag.GetSize()
-          
-          #print 'before modal:'
-          #sip.dump(diag)
-          #try:
-          #    diag.ShowModal()
-          #finally:
-
-              
-          #print 'after modal:'
-          #sip.dump(diag)
-          
-          #print 'test attribute lookup'
-          #print diag.GetSize()
       
       button = wx.Button(f, -1, 'Show Modal Dialog')
       button.Bind(wx.EVT_BUTTON, show_modal)
 
       print 'button id is', id(button)
-      
-      
       
       def on_paint(e):
           dc = wx.PaintDC(f)
@@ -83,10 +72,6 @@ def main():
               #print 'id of brush', id(b)
               dc.SetBrush(b)
               b = dc.GetBrush()
-              #print 'id of brush after in DC', id(b)
-              #print 'brush', b
-              #print 'brush color', b.GetColour()
-              #raise Exception('test')
               
               dc.DrawRectangle(420, 500, 60, 30)
           else:
@@ -119,9 +104,14 @@ def main():
       a.SetTopWindow(f)
       f.Show()
       
-      print 'MainLoop'
-
+      # 
+      # sys.a=a
+      
+      print '--> calling MainLoop'
+      import sip
+      sip.dump(wx.GetApp())
       a.MainLoop()
+      print '--> MainLoop returned'
       
 if __name__ == '__main__':
     main()

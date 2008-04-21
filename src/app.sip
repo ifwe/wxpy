@@ -1,44 +1,98 @@
-//
-// wxEvtHandler
-//
 %ModuleHeaderCode
 #include <wx/app.h>
-void wxpyEntry();
 %End
 
-%ModuleCode
-void wxpyEntry() {
+int EntryStart();
+%MethodCode
     int argc = 0;
-    wxChar** argv = 0;
+    char** argv = NULL;
     
-    printf("calling wxEntryStart...wxTheApp is %p\n", wxTheApp);
-    wxEntryStart(argc, argv);
-}
-%End
+    printf("calling wxEntryStart\n");
+    sipRes = wxEntryStart(argc, argv);
+    printf("wxEntryStart result: %d\n", sipRes);
+%End    
+
 
 class wxApp : wxEvtHandler
 {
 public:
-    wxApp() /Transfer/;
-    virtual ~wxApp();
-    virtual int MainLoop();
-    virtual bool OnInit();    
-    void ExitMainLoop();
+    wxApp();
+    ~wxApp();
     
-    void SetTopWindow(wxTopLevelWindow* f);
+    virtual bool OnInit();
 
-private:
-    wxApp(const wxApp &);
+    wxString GetAppName() const;
+    void SetAppName(const wxString& name);
+    wxString GetClassName() const;
+    void SetClassName(const wxString& name);
+    const wxString& GetVendorName() const;
+    void SetVendorName(const wxString& name);
+//  wxAppTraits*, GetTraits(),
+    void ProcessPendingEvents();
+    bool Yield(bool onlyIfNeeded = false);
+    void WakeUpIdle();
+    static bool IsMainLoopRunning() const;
+    int MainLoop();
+    void Exit();
+    wxLayoutDirection GetLayoutDirection() const;
+    void ExitMainLoop();
+    bool Pending();
+    bool Dispatch();
+    bool ProcessIdle();
+//  virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
+    virtual bool IsActive() const;
+    void SetTopWindow(wxWindow *win);
+    virtual wxWindow* GetTopWindow() const;
+    void SetExitOnFrameDelete(bool flag);
+    bool GetExitOnFrameDelete() const;
+    void SetUseBestVisual( bool flag, bool forceTrueColour = false  );
+    bool GetUseBestVisual() const;
+    virtual void SetPrintMode(int mode);
+    int GetPrintMode() const;
+/*    
+%If (WXMAC)
+    virtual void         MacOpenFile(const wxString &fileName) ;
+    virtual void         MacPrintFile(const wxString &fileName) ;
+    virtual void         MacNewFile() ;
+    virtual void         MacReopenApp() ;
+    void MacHideApp();
+%End
+*/
+/*
+
+    static bool GetMacSupportPCMenuShortcuts();  // TODO, deprecate this
+    static long GetMacAboutMenuItemId();
+    static long GetMacPreferencesMenuItemId();
+    static long GetMacExitMenuItemId();
+    static wxString GetMacHelpMenuTitleName();
+
+    static void SetMacSupportPCMenuShortcuts(bool val);  // TODO, deprecate this
+    static void SetMacAboutMenuItemId(long val);
+    static void SetMacPreferencesMenuItemId(long val);
+    static void SetMacExitMenuItemId(long val);
+    static void SetMacHelpMenuTitleName(const wxString& val);
+*/
 };
+
+
+
 
 wxApp* GetApp();
 %MethodCode
-    // wrap the global wxApp pointer
-    sipRes = wxTheApp;//sipConvertFromInstance(wxTheApp, sipResipClass_wxApp, NULL);
+    sipRes = wxTheApp;
 %End
 
+/*
+wxApp* GetAppInstance();
+%MethodCode
+    sipRes = reinterpret_cast<wxApp*>(wxApp::GetInstance());
+%End
 
-void wxpyEntry();
+    
+
+
+
+int wxpyEntry();
 %MethodCode
     static bool hasbeencalled = false;
     if (hasbeencalled)
@@ -54,6 +108,7 @@ void wxpyEntry();
     else
     {
         hasbeencalled = true;
-        wxpyEntry();
+        sipRes = wxpyEntry();
     }
 %End
+*/
