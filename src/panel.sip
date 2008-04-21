@@ -10,8 +10,8 @@ public:
 
     void InitDialog();
 
-    virtual void SetFocus();
-    virtual void SetFocusIgnoringChildren();
+    void SetFocus();
+    void SetFocusIgnoringChildren();
 };
 
 class wxScrolledWindow : wxPanel
@@ -24,12 +24,12 @@ public:
                      long style = wxHSCROLL | wxVSCROLL,
                      const wxString& name = wxPanelNameStr);
 
-    virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+    void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
                                bool noRefresh = false );
 
-    virtual void Scroll(int x, int y);
+    void Scroll(int x, int y);
 
     int GetScrollPageSize(int orient) const;
     void SetScrollPageSize(int orient, int pageSize);

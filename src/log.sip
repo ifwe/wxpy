@@ -42,7 +42,7 @@ public:
     static void FlushActive();
     static wxLog *GetActiveTarget();
 
-    static wxLog *SetActiveTarget(wxLog *pLogger /TransferBack/);
+    static wxLog *SetActiveTarget(wxLog *pLogger /Transfer/);
     static void Suspend();
     static void Resume();
 

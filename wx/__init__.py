@@ -151,6 +151,9 @@ wxDialog(wxWindow* parent,
          const wxString& name = wxDialogNameStr) /Transfer/;
 '''
 
+# wxPySimpleApp -- calls wxpEntry function
+
+
 wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
 
 Color = wx.Colour

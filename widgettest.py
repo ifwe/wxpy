@@ -10,10 +10,25 @@ def message(e):
 def p(*args):
     print ' '.join(str(a) for a in args)
 
+
+class MyApp(wx.App):
+    def __init__(self):
+        print 'MyApp.__init__'
+        wx.App.__init__(self)
+        
+    def OnInit(self):
+        print 'MyApp.OnInit'
+        return True
+
 def main():
-      a = wx.App()
-      if hasattr(wx, 'pyEntry'): # so we can test on regular wxPython
-          wx.pyEntry()
+      #a = wx.App()
+     # if hasattr(wx, 'pyEntry'): # so we can test on regular wxPython
+      a = MyApp()
+      wx.pyEntry()
+      
+      import sip
+      sip.dump(a)
+      sip.dump(wx.GetApp())
 
       f = wx.Frame(None, -1, u'wxpy frame', (40, 40), (400, 300))
       f.Bind(wx.EVT_ACTIVATE, lambda e: p('frame activate:', f.GetActive()))      
@@ -100,7 +115,12 @@ def main():
       
       a.Bind(wx.EVT_MENU, lambda e: a.ExitMainLoop(), id = wx.ID_EXIT)
 
+
+      a.SetTopWindow(f)
       f.Show()
+      
+      print 'MainLoop'
+
       a.MainLoop()
       
 if __name__ == '__main__':

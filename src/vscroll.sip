@@ -40,7 +40,7 @@ protected:
     virtual wxCoord EstimateTotalHeight() const;
 };
 
-/*
+
 
 class wxVListBox : wxVScrolledWindow
 {
@@ -84,9 +84,9 @@ protected:
 
     virtual ~wxVListBox();
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
+    virtual wxCoord OnMeasureItem(size_t n) const = 0;
 private:
     wxVListBox();
     wxVListBox(const wxVListBox&);
 };
 
-*/

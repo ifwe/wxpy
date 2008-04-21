@@ -21,12 +21,15 @@ public:
     
     wxString GetAsString(int flags);
     
+    void Set(unsigned red, unsigned blue, unsigned green, unsigned alpha);
+    
     bool operator ==(const wxColour& colour);
     
     unsigned Red() const;
     unsigned Blue() const;
     unsigned Green() const;
     unsigned Alpha() const;
+    bool Ok() const;
     
     SIP_PYOBJECT __repr__();
 %MethodCode

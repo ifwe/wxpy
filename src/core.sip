@@ -10,6 +10,7 @@
 %Include windowlist.sip
 
 %Include string.sip
+%Include arraystring.sip
 %Include object.sip
 
 %Include dataobject.sip

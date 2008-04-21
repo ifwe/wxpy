@@ -210,7 +210,7 @@ class wxDataObjectComposite : wxDataObject
 public:
     wxDataObjectComposite();
 
-    void Add(wxDataObjectSimple *dataObject /TransferBack/, bool preferred = false);
+    void Add(wxDataObjectSimple *dataObject /Transfer/, bool preferred = false);
     wxDataFormat GetReceivedFormat() const;
 private:
     wxDataObjectComposite(const wxDataObjectComposite&);

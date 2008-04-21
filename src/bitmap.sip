@@ -32,7 +32,7 @@ public:
     
     wxImage ConvertToImage() const;
     wxMask* GetMask() const;
-    void SetMask(wxMask* mask /TransferBack/);
+    void SetMask(wxMask* mask /Transfer/);
     
     wxBitmap GetSubBitmap(const wxRect& rect) const;
 //    bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);

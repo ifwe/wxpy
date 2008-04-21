@@ -26,7 +26,7 @@ public:
         Type_Float
     };
 
-    static wxConfigBase* Set(wxConfigBase *config /TransferBack/);
+    static wxConfigBase* Set(wxConfigBase *config /Transfer/);
     static wxConfigBase* Get(bool createOnDemand = true);
     static wxConfigBase* Create();
     static void DontCreateOnDemand();
