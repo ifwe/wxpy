@@ -3,6 +3,83 @@
 typedef long wxTextPos;
 typedef long wxTextCoord;
 
+enum {
+    // Style flags
+    wxTE_NO_VSCROLL,
+    wxTE_AUTO_SCROLL,
+
+    wxTE_READONLY,
+    wxTE_MULTILINE,
+    wxTE_PROCESS_TAB,
+
+    // alignment flags
+    wxTE_LEFT,
+    wxTE_CENTER,
+    wxTE_RIGHT,
+    wxTE_CENTRE,
+
+    // this style means to use RICHEDIT control and does something only under
+    // wxMSW and Win32 and is silently ignored under all other platforms
+    wxTE_RICH,
+
+    wxTE_PROCESS_ENTER,
+    wxTE_PASSWORD,
+
+    // automatically detect the URLs and generate the events when mouse is
+    // moved/clicked over an URL
+    //
+    // this is for Win32 richedit controls only so far
+    wxTE_AUTO_URL,
+
+    // by default, the Windows text control doesn't show the selection when it
+    // doesn't have focus - use this style to force it to always show it
+    wxTE_NOHIDESEL,
+
+    // use wxHSCROLL (wxTE_DONTWRAP) to not wrap text at all, wxTE_CHARWRAP to
+    // wrap it at any position and wxTE_WORDWRAP to wrap at words boundary
+    //
+    // if no wrapping style is given at all, the control wraps at word boundary
+    wxTE_DONTWRAP,
+    wxTE_CHARWRAP,
+    wxTE_WORDWRAP,
+    wxTE_BESTWRAP,
+
+    // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
+    // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
+    wxTE_RICH2,
+
+    wxTE_CAPITALIZE,
+};
+
+// %pythoncode { TE_LINEWRAP = TE_CHARWRAP }
+
+
+
+enum wxTextAttrAlignment
+{
+    wxTEXT_ALIGNMENT_DEFAULT,
+    wxTEXT_ALIGNMENT_LEFT,
+    wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_RIGHT,
+    wxTEXT_ALIGNMENT_JUSTIFIED
+};
+
+enum {
+    // Flags to indicate which attributes are being applied
+    wxTEXT_ATTR_TEXT_COLOUR,
+    wxTEXT_ATTR_BACKGROUND_COLOUR,
+    wxTEXT_ATTR_FONT_FACE,
+    wxTEXT_ATTR_FONT_SIZE,
+    wxTEXT_ATTR_FONT_WEIGHT,
+    wxTEXT_ATTR_FONT_ITALIC,
+    wxTEXT_ATTR_FONT_UNDERLINE,
+    wxTEXT_ATTR_FONT,
+    wxTEXT_ATTR_ALIGNMENT,
+    wxTEXT_ATTR_LEFT_INDENT,
+    wxTEXT_ATTR_RIGHT_INDENT,
+    wxTEXT_ATTR_TABS
+};
 
 enum wxTextCtrlHitTestResult
 {
@@ -13,14 +90,12 @@ enum wxTextCtrlHitTestResult
     wxTE_HT_BEYOND          // after [the end of line]
 };
 
-enum wxTextAttrAlignment
-{
-    wxTEXT_ALIGNMENT_DEFAULT,
-    wxTEXT_ALIGNMENT_LEFT,
-    wxTEXT_ALIGNMENT_CENTRE,
-    wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
-    wxTEXT_ALIGNMENT_RIGHT,
-    wxTEXT_ALIGNMENT_JUSTIFIED
+
+enum {
+    wxOutOfRangeTextCoord,
+    wxInvalidTextCoord,
+
+    wxTEXT_TYPE_ANY
 };
 
 class wxTextAttr
@@ -76,7 +151,7 @@ public:
 class wxTextCtrl: wxControl
 {
 public:
-    wxTextCtrl(wxWindow *parent /TransferThis/, wxWindowID id,
+    wxTextCtrl(wxWindow *parent /TransferThis/, wxWindowID id = wxID_ANY,
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,

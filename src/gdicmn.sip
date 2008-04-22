@@ -127,6 +127,14 @@ public:
     return 0;
 %End
 
+    int __getitem__(int i);
+%MethodCode
+    if (a0 == 0) sipRes = sipCpp->x;
+    else if (a0 == 1) sipRes = sipCpp->y;
+    else PyErr_SetString(PyExc_ValueError, "index out of range");
+%End
+
+
     int __len__();
 %MethodCode
     return 2;

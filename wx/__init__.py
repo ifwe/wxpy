@@ -1,5 +1,5 @@
-import _wxcore as wx
 from _wxcore import *
+import _wxcore as wx
 
 def PyEventBinder(evttype, n = None):
     return (evttype, )
@@ -23,26 +23,32 @@ wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__nam
 
 wx.FrameNameStr  = 'Frame'
 wx.DialogNameStr = 'Dialog'
-    
-_frame_init = wx.Frame.__init__
-def _new_frame_init(self, parent, id = -1, title = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE, name = wx.FrameNameStr):
-    _frame_init(self, parent, id, title, pos, size, style, name)
-wx.Frame.__init__ = _new_frame_init
-del _new_frame_init
 
-_dialog_init = wx.Dialog.__init__
-def _new_dialog_init(self, parent, id = -1, title = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE, name = wx.DialogNameStr):
-    _dialog_init(self, parent, id, title, pos, size, style, name)
-wx.Dialog.__init__ = _new_dialog_init
-del _new_dialog_init
+wxFrame = wx.Frame
+class Frame(wxFrame):
+    def __init__(self, parent, id = -1, title = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE, name = wx.FrameNameStr):
+        wxFrame.__init__(self, parent, id, title, pos, size, style, name)
 
-_textctrl_init = wx.TextCtrl.__init__
-def _new_textctrl_init(self, parent, id = -1, value = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0, validator = wx.DefaultValidator, name = 'text control'):
-    _textctrl_init_(self, parent, id, value, pos, size, style, validator, name)
-wx.TextCtrl.__init__ = _new_textctrl_init
-assert wx.TextCtrl.__init__ is _new_textctrl_init
-#del _new_textctrl_init
+wxDialog = wx.Dialog
+class Dialog(wxDialog):
+    def __init__(self, parent, id = -1, title = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE, name = wx.DialogNameStr):
+        wxDialog.__init__(self, parent, id, title, pos, size, style, name)
 
+wxTextCtrl = wx.TextCtrl
+class TextCtrl(wxTextCtrl):
+    def __init__(self, parent, id = -1, value = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0, validator = wx.DefaultValidator, name = 'text control'):
+        wxTextCtrl.__init__(self, parent, id, value, pos, size, style, validator, name)
+
+wxStaticText = wx.StaticText
+class StaticText(wxStaticText):
+    def __init__(self, parent, id = -1, label = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0, name = 'static text'):
+        wxStaticText.__init__(self, parent, id, label, pos, size, style, name)
+
+def Sizer_AddMany(self, seq):
+    for item in seq:
+        if type(item) != type(()) or (len(item) == 2 and type(item[0]) == type(1)):
+            item = (item, )
+wx.Sizer.AddMany = Sizer_AddMany
 
 class CallLater:
     """

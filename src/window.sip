@@ -25,7 +25,11 @@ public:
     void Raise();
 
     void Destroy();
-    void GetSize( int *w, int *h ) const;
+    
+    wxSize GetSize() const;
+//    void GetSize( int *w, int *h ) const;
+    
+    
              
     void CacheBestSize(const wxSize& size) const;
     

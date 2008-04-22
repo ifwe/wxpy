@@ -90,7 +90,8 @@ def main():
       s.Add(static_text, 0, wx.ALL, 6)
       s.Add(button, 0, wx.ALL, 6)
       s.Add(checkbox, 0, wx.ALL, 6)
-      s.Add(wx.TextCtrl(f, -1, 'Text Control'))
+      
+      s.Add(wx.TextCtrl(f, -1, 'Text Control', name = 'Username'))
       
       #for x in xrange(20):
       #    s.Add(wx.Button(f, -1, 'another button'))

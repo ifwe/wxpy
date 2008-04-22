@@ -91,6 +91,41 @@ public:
     wxSizerItem* Add(wxSizer*, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL);
 
     wxSizerItem* AddSpacer(int size);
+    
+    wxSizerItem* AddSpacer(SIP_PYTUPLE);
+%MethodCode
+    static const char* AddSpacerMsg = "AddSpacer expects an integer or a sequence of 2 integers";
+
+    PyObject* fast = PySequence_Fast(a0, AddSpacerMsg);
+    if (fast == NULL)
+    {
+        sipIsErr = 1;
+    }
+    else
+    {
+        if (PySequence_Fast_GET_SIZE(fast) != 2)
+        {
+            PyErr_SetString(PyExc_TypeError, AddSpacerMsg);
+            sipIsErr = 1;
+        }
+        else
+        {            
+            int width  = PyInt_AsLong(PySequence_Fast_GET_ITEM(fast, 0));
+            int height = PyInt_AsLong(PySequence_Fast_GET_ITEM(fast, 1));
+            if (width == -1 || height == -1 && PyErr_Occurred())
+            {
+                PyErr_SetString(PyExc_TypeError, AddSpacerMsg);
+                sipIsErr = 1;
+            }
+            else
+            {                
+                sipRes = sipCpp->Add(width, height, 0);
+            }
+        }
+        Py_DECREF(fast);
+    }     
+%End
+    
     wxSizerItem* AddStretchSpacer(int prop = 1);
     
     void RecalcSizes() = 0;

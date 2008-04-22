@@ -101,16 +101,19 @@ public:
         id = source->GetId();
     
     int event;
-    if (PyList_Check(events)) {
-        for(int i = 0; i < PyList_GET_SIZE(events); ++i) {
-            event = PyInt_AsLong(PyList_GET_ITEM(events, i));
+    if (PyTuple_Check(events)) {
+        for(int i = 0; i < PyTuple_GET_SIZE(events); ++i) {
+            event = PyInt_AsLong(PyTuple_GET_ITEM(events, i));
             sipCpp->Connect(id, id2, event,
                 (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
         }
     } else {
         event = PyInt_AsLong(events);
-        sipCpp->Connect(id, id2, event,
-            (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
+        if (event == -1 && PyErr_Occurred())
+            sipIsErr = 1;
+        else        
+            sipCpp->Connect(id, id2, event,
+                (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
     }
 %End    
 
