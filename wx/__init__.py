@@ -36,6 +36,14 @@ def _new_dialog_init(self, parent, id = -1, title = '', pos = wx.DefaultPosition
 wx.Dialog.__init__ = _new_dialog_init
 del _new_dialog_init
 
+_textctrl_init = wx.TextCtrl.__init__
+def _new_textctrl_init(self, parent, id = -1, value = '', pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0, validator = wx.DefaultValidator, name = 'text control'):
+    _textctrl_init_(self, parent, id, value, pos, size, style, validator, name)
+wx.TextCtrl.__init__ = _new_textctrl_init
+assert wx.TextCtrl.__init__ is _new_textctrl_init
+#del _new_textctrl_init
+
+
 class CallLater:
     """
     A convenience class for `wx.Timer`, that calls the given callable

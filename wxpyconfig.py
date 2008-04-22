@@ -20,11 +20,16 @@ elif 'Darwin' in platform.platform():
 wxconfig = 'wx-config'
 
 if platform_name in ('mac',):
+    #wxconfig = path('~/src/wxWebKitBranch-2.8/macbuild/wx-config').expand()
     wxconfig = path('~/wxpython-2.8/bin/wx-config').expand()
     
     print 'using wxconfig:', str(wxconfig)
     
-    cxxflags = shlex.split(wxconfig.run('--cxxflags').strip())
+    if not wxconfig.exists():
+        raise AssertionError('cannot find wx-config at: "%s"' % wxconfig)
+        
+    
+    cxxflags = shlex.split(wxconfig.run('--cxxflags').strip()) + ['-Wall', '-ggdb']
     lflags   = shlex.split(wxconfig.run('--libs %s' % ','.join(use_wx_libs)).strip())
     
     # passed as -t argument

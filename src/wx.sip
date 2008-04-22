@@ -3,6 +3,10 @@
 %Platforms {WXMSW WXCOCOA WXMAC WXGTK}
 %SIPOptions (RenameWx, AutoProperties)
 
+%ModuleHeaderCode
+#define WXSIP 1
+%End
+
 %Include vector.sip
 
 %Include core.sip
@@ -147,6 +151,10 @@ add_event(sipModuleDict, "EVT_TEXT_COPY",   wxEVT_COMMAND_TEXT_COPY, 0);
 add_event(sipModuleDict, "EVT_TEXT_PASTE",  wxEVT_COMMAND_TEXT_PASTE, 0);
 
 
+add_event(sipModuleDict, "EVT_TEXT", wxEVT_COMMAND_TEXT_UPDATED, 0);
+add_event(sipModuleDict, "EVT_TEXT_ENTER", wxEVT_COMMAND_TEXT_ENTER, 0);
+add_event(sipModuleDict, "EVT_TEXT_URL", wxEVT_COMMAND_TEXT_URL, 0);
+add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
 
 /*
 
