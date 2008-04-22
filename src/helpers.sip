@@ -61,9 +61,6 @@ bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
         Py_DECREF(o2);
     }
 
-    *i1 = PyInt_AsLong(o1);
-    *i2 = PyInt_AsLong(o2);
-
     if (PyErr_Occurred()) {
         // fprintf(stderr, "Exception in sequence_2_ints:\n");
         PyErr_Print();

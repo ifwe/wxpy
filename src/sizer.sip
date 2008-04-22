@@ -127,8 +127,78 @@ public:
 %End
     
     wxSizerItem* AddStretchSpacer(int prop = 1);
-    
-    void RecalcSizes() = 0;
+    void SetDimension( int x, int y, int width, int height );
+    void SetMinSize( const wxSize &size );
+    wxSize GetSize();
+    wxPoint GetPosition();
+    wxSize GetMinSize();
+    virtual void RecalcSizes() = 0;
+    wxSize CalcMin();
+    void Layout();
+    wxSize ComputeFittingClientSize(wxWindow *window);
+    wxSize ComputeFittingWindowSize(wxWindow *window);
+    wxSize Fit( wxWindow *window );
+    void FitInside( wxWindow *window );
+    void SetSizeHints( wxWindow *window );
+    void SetVirtualSizeHints( wxWindow *window );
+    void Clear( bool deleteWindows=false );
+    void DeleteWindows();
+    //wxSizerItemList& GetChildren();
+
+/*
+    %extend {
+        DocAStr(Show,
+                "Show(self, item, bool show=True, bool recursive=false) -> bool",
+                "Shows or hides an item managed by the sizer.  To make a sizer item
+disappear or reappear, use Show followed by `Layout`.  The *item*
+parameter can be either a window, a sizer, or the zero-based index of
+the item.  Use the recursive parameter to show or hide an item in a
+subsizer.  Returns True if the item was found.", "");
+        bool Show(PyObject* item, bool show = true, bool recursive=false) {
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
+            wxPyEndBlockThreads(blocked);
+            if ( info.window )
+                return self->Show(info.window, show, recursive);
+            else if ( info.sizer )
+                return self->Show(info.sizer, show, recursive);
+            else if ( info.gotPos )
+                return self->Show(info.pos, show);
+            else
+                return false;
+        }
+
+        DocAStr(IsShown,
+                "IsShown(self, item)",
+                "Determines if the item is currently shown. To make a sizer
+item disappear or reappear, use Show followed by `Layout`.  The *item*
+parameter can be either a window, a sizer, or the zero-based index of
+the item.", "");
+        bool IsShown(PyObject* item) {
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
+            wxPyEndBlockThreads(blocked);
+            if ( info.window )
+                return self->IsShown(info.window);
+            else if ( info.sizer )
+                return self->IsShown(info.sizer);
+            else if ( info.gotPos )
+                return self->IsShown(info.pos);
+            else
+                return false;
+        }
+    }
+
+    %pythoncode {
+    def Hide(self, item, recursive=False):
+        """
+        A convenience method for `Show` (item, False, recursive).
+        """
+        return self.Show(item, False, recursive)
+    }
+*/
+
+    void ShowItems(bool show);
 
 private:
     wxSizer(); // abstract

@@ -33,19 +33,27 @@ public:
 %MethodCode
     if (a0 == 0) sipRes = sipCpp->x;
     else if (a0 == 1) sipRes = sipCpp->y;
-    else PyErr_SetString(PyExc_ValueError, "index out of range");
+    else
+    {
+        PyErr_Format(PyExc_IndexError, "index out of range: %d", a0);
+        sipIsErr = 1;
+    }
 %End
 
     void __setitem__(int i, int val);
 %MethodCode
     if (a0 == 0) sipCpp->x = a1;
     else if (a0 == 1) sipCpp->y = a1;
-    else PyErr_SetString(PyExc_ValueError, "index out of range");
+    else
+    {
+        PyErr_SetString(PyExc_IndexError, "index out of range");
+        sipIsErr = 1;
+    }
 %End
 
     int __len__();
 %MethodCode
-    return 2;
+    sipRes = 2;
 %End
 
 
@@ -112,13 +120,11 @@ public:
     {
         int val = sequence_2_ints_check(sipPy)
             || sipCanConvertToInstance(sipPy, sipClass_wxSize, SIP_NO_CONVERTORS);
-        printf("type checking conversion for wxSize: %d\n", val);
         return val;
     }
 
     int _x, _y;
     if (sequence_2_ints(sipPy, &_x, &_y)) {
-    	printf("returning new size from 2 ints: %d, %d\n", _x, _y);
         *sipCppPtr = new wxSize(_x, _y);
         return sipGetState(sipTransferObj);
     }
@@ -131,13 +137,17 @@ public:
 %MethodCode
     if (a0 == 0) sipRes = sipCpp->x;
     else if (a0 == 1) sipRes = sipCpp->y;
-    else PyErr_SetString(PyExc_ValueError, "index out of range");
+    else
+    {
+        PyErr_SetString(PyExc_IndexError, "index out of range");
+        sipIsErr = 1;
+    }
 %End
 
 
     int __len__();
 %MethodCode
-    return 2;
+    sipRes = 2;
 %End
 
     SIP_PYOBJECT __repr__();
@@ -225,7 +235,29 @@ public:
 
     int __len__();
 %MethodCode
-    return 4;
+    sipRes = 4;
+%End
+
+    int __getitem__(int i);
+%MethodCode
+    switch (a0)
+    {
+        case 0: 
+            sipRes = sipCpp->x;
+            break;
+        case 1: 
+            sipRes = sipCpp->y;
+            break;
+        case 2: 
+            sipRes = sipCpp->width;
+            break;
+        case 3:
+            sipRes = sipCpp->height;
+            break;
+        default:
+            PyErr_SetString(PyExc_IndexError, "index out of range");
+            sipIsErr = 1;
+    }
 %End
 
     int x;

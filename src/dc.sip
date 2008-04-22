@@ -57,7 +57,7 @@ public:
 */
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 //        void DrawRectangle(const wxPoint& pt, const wxSize& sz);
-    void DrawRectangle(const wxRect& rect);
+    void DrawRectangle(const wxRect& rect) /PyName=DrawRectangleRect/;
     void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height,
     double radius);
     void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz,

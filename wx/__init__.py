@@ -1,5 +1,6 @@
 from _wxcore import *
 import _wxcore as wx
+from operator import attrgetter
 
 def PyEventBinder(evttype, n = None):
     return (evttype, )
@@ -8,16 +9,6 @@ def PyEventBinder(evttype, n = None):
 _old_callafter = wx.CallAfter
 def CallAfter(func, *a, **k):
     return _old_callafter(lambda: func(*a, **k))
-
-_old_bind = wx.EvtHandler.Bind
-def Bind(self, event, cb, source = None, id = -1, id2 = -1):
-    print self, type(self)
-    return _old_bind(self, event, cb, source, id, id2)
-
-_old_Dialog = wx.Dialog.__init__
-def __init__(self, parent = None, id = -1, title = "", pos = wx.DefaultPosition,
-             size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE, name = 'dialogBox'):
-    return _old_Dialog(self, parent, id, title, pos, size, style, name)
 
 wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
 
@@ -49,6 +40,11 @@ def Sizer_AddMany(self, seq):
         if type(item) != type(()) or (len(item) == 2 and type(item[0]) == type(1)):
             item = (item, )
 wx.Sizer.AddMany = Sizer_AddMany
+
+
+wx.Size.width  = property(attrgetter('x'), lambda s, val: setattr(s, 'x', val))
+wx.Size.height = property(attrgetter('y'), lambda s, val: setattr(s, 'y', val))
+
 
 class CallLater:
     """
@@ -170,6 +166,8 @@ wxDialog(wxWindow* parent,
 
 wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
 
+FindWindowByName = wx.Window.FindWindowByName
+
 Color = wx.Colour
 NamedColor = wx.NamedColour
 PyBitmapDataObject = wx.BitmapDataObject
@@ -178,3 +176,5 @@ PyValidator = wx.Validator
 PyEvent = wx.Event
 PyControl = wx.Control
 del wx
+
+WXPY = True

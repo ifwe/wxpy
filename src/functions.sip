@@ -172,6 +172,3 @@ public:
 
 
 wxMouseState wxGetMouseState();
-
-void wxInitialize();
-void wxUninitialize();

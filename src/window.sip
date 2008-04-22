@@ -23,6 +23,7 @@ public:
              const wxString& name = wxPanelNameStr);
              
     void Raise();
+    void Lower();
 
     void Destroy();
     
@@ -95,6 +96,7 @@ public:
     void SetThemeEnabled(bool enableTheme);
     bool GetThemeEnabled() const;
 
+    void SetFocus();
     void SetFocusFromKbd();
     static wxWindow *FindFocus();
 
@@ -372,6 +374,31 @@ public:
 %End 
     void InheritAttributes();
     bool ShouldInheritColours() const;
+    
+    void SetName(const wxString& name);
+    wxString GetName() const;
+    void SetLabel(const wxString& label);
+    wxString GetLabel() const;
+
+    wxWindowID GetId() const;
+    static int NewControlId();
+    void SetSize(const wxSize& size);
+    void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO);
+    void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING);
+    
+    wxPoint GetPosition() const;
+    void SetPosition(const wxPoint& pos);
+%MethodCode
+    sipCpp->Move(*a0);
+%End
+    
+    
+    wxPoint GetScreenPosition() const;
+    wxRect  GetScreenRect() const;
+    wxRect  GetRect() const;
+    wxSize  GetClientSize() const;
+    wxRect  GetClientRect() const;
+        
 
 private:
     wxWindow(const wxWindow&);
