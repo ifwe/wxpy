@@ -21,6 +21,7 @@ class wxBitmap : wxGDIObject
 {
 public:
     wxBitmap();
+    wxBitmap(const wxString& filename, long type = wxBITMAP_TYPE_ANY);
     //wxBitmap(const wxIcon& icon) /PyName=BitmapFromIcon/;
     //wxBitmap(const wxImage& image, int depth = -1) /PyName=BitmapFromImage/;
     

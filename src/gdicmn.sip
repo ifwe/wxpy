@@ -14,7 +14,8 @@ public:
     ~wxPoint();
 
 %ConvertToTypeCode
-    if (!sipIsErr) {
+    if (sipIsErr == NULL)
+    {
         return sequence_2_ints_check(sipPy)
             || sipCanConvertToInstance(sipPy, sipClass_wxPoint, SIP_NO_CONVERTORS);
     }
@@ -61,25 +62,7 @@ public:
 %MethodCode
     sipRes = PyString_FromFormat("<wx.Point (%d, %d)>", sipCpp->x, sipCpp->y);
 %End
-    /*
-    bool operator==(const wxPoint&, const wxPoint&);
-%MethodCode
-    if (sipCanConvertToInstance(a0, sipClass_wxPoint, SIP_NOT_NONE) &&
-        sipCanConvertToInstance(a1, sipClass_wxPoint, SIP_NOT_NONE)))
-    {
-        int state;
-        int err;
-        wxPoint* p0 = reinterpret_cast<wxPoint*>(sipConvertToInstance(a0, sipClass_wxPoint, NULL, SIP_NOT_NONE, &state, &err));
-        wxPoint* p1 = reinterpret_cast<wxPoint*>(sipConvertToInstance(a1, sipClass_wxPoint, NULL, SIP_NOT_NONE, &state, &err));
-            
-        if (p0->x == p1->x)
-            sipRes = PyInt_FromLong(1);
-    }
-    
-    sipRes = PyInt_FromLong(0);
-%End
-*/
-    
+
     bool operator==(const wxPoint&);
     //bool operator!=(const wxPoint &);
     wxPoint operator+(const wxPoint& pt);
@@ -104,8 +87,8 @@ public:
 
     wxSize operator+(const wxSize&);
     wxSize operator-(const wxSize&);
-    bool operator==(const wxSize &);
-    bool operator!=(const wxSize &);
+
+    bool operator==(const wxSize&);
 
     void IncTo(const wxSize& sz);
     void DecTo(const wxSize& sz);
@@ -143,7 +126,6 @@ public:
         sipIsErr = 1;
     }
 %End
-
 
     int __len__();
 %MethodCode

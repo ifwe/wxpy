@@ -73,9 +73,34 @@ class wxTopLevelWindow : wxWindow
 #include <wx/toplevel.h>
 %End
 public:
+    void Maximize(bool maximize = true);
+    void Restore();
+    void Iconize(bool iconize = true);
+    bool IsMaximized() const;
+    bool IsAlwaysMaximized() const;
+    bool IsIconized() const;
 
-    wxString GetTitle() const;
+    wxIcon GetIcon() const;
+    void SetIcon(const wxIcon& icon);
+
+    void SetIcons(const wxIconBundle& icons);
+
+    bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+    bool IsFullScreen() const;
+
     void SetTitle(const wxString& title);
+    wxString GetTitle() const;
+
+    bool EnableCloseButton(bool enable );
+
+    bool SetShape(const wxRegion& region);
+    void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
+
+    bool IsActive();
+
+    void CenterOnScreen(int dir = wxBOTH);
+    wxWindow* GetDefaultItem() const;
+    wxWindow* SetDefaultItem(wxWindow * child);
 
 private:
     wxTopLevelWindow();

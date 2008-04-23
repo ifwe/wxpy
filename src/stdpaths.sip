@@ -12,11 +12,11 @@ public:
         ResourceCat_Max
     };
 
-    
     static wxStandardPaths* Get();
 %MethodCode
     // manual cast is necessary because of the singleton subclass
-    sipRes = (wxStandardPaths*)&wxStandardPaths::Get();
+    wxStandardPaths& stdpaths = (wxStandardPaths&)wxStandardPaths::Get();
+    sipRes = &stdpaths;
 %End
 
 

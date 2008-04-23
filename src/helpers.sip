@@ -7,18 +7,16 @@ bool sequence_2_ints(PyObject* source, int* i1, int* i2);
 %ModuleCode
 bool sequence_2_ints_check(PyObject* obj)
 {
-    // printf("sequence_2_ints check: ");
     bool is_ints = false;
     
     if (!PySequence_Check(obj))
  	{
-        // printf(" FAILED, was not a sequence\n");
- 		PyObject_Print(obj, stdout, 0);
+        PyObject_Print(obj, stdout, 0);
+        printf("\n");
  		return false;
  	}
  	else if (PySequence_Length(obj) != 2)
     {
-        // printf(" FAILED, was not a sequence of length 2\n");
         return false;
     }
 
@@ -33,11 +31,6 @@ bool sequence_2_ints_check(PyObject* obj)
     if (PyErr_Occurred())
         PyErr_Print();
 
-    // if (is_ints)
-    //     printf(" SUCCEEDED, was two integers %d, %d\n", (int)PyInt_AsLong(o1), (int)PyInt_AsLong(o2));
-    // else
-    //     printf(" FAILED, was not two integer\n");
-        
     return is_ints;
 }
 
@@ -62,7 +55,7 @@ bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
     }
 
     if (PyErr_Occurred()) {
-        // fprintf(stderr, "Exception in sequence_2_ints:\n");
+        fprintf(stderr, "Exception in sequence_2_ints:\n");
         PyErr_Print();
         return false;
     }

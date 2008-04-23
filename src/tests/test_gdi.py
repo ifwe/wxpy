@@ -1,6 +1,18 @@
 import wx
 import py.test
 
+def setup_module(module):
+    if not wx.GetApp():
+        app = wx.GetApp()
+        wx.EntryStart()
+        wx.InitAllImageHandlers()
+        
+    assert wx.GetApp()
+
+def test_Image():
+    img = wx.Image('src/tests/digsby_ascii_popup.png')
+    assert bool(img)
+    assert img.GetSize() == (362, 324)
 
 def test_Point():
     return

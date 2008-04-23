@@ -3,18 +3,17 @@
 %End
 
 %PreInitialisationCode
-printf("setting wxApp::sm_isEmbedded = true\n");    
+
+/* disables Mac events (they are crashing atm)*/
 wxApp::sm_isEmbedded = true;
+
 %End
 
 int EntryStart();
 %MethodCode
     int argc = 0;
     char** argv = NULL;
-    
-    printf("calling wxEntryStart\n");
     sipRes = wxEntryStart(argc, argv);
-    printf("wxEntryStart result: %d\n", sipRes);
 %End
 
 
@@ -109,40 +108,7 @@ public:
 };
 
 
-
-
 wxApp* GetApp();
 %MethodCode
     sipRes = wxTheApp;
 %End
-
-/*
-wxApp* GetAppInstance();
-%MethodCode
-    sipRes = reinterpret_cast<wxApp*>(wxApp::GetInstance());
-%End
-
-    
-
-
-
-int wxpyEntry();
-%MethodCode
-    static bool hasbeencalled = false;
-    if (hasbeencalled)
-    {
-        PyErr_SetString(PyExc_AssertionError, "call wxpyEntry only once");
-        sipIsErr = 1;
-    }
-    else if (wxTheApp == NULL)
-    {
-        PyErr_SetString(PyExc_AssertionError, "wxApp was not created yet");
-        sipIsErr = 1;        
-    }
-    else
-    {
-        hasbeencalled = true;
-        sipRes = wxpyEntry();
-    }
-%End
-*/
