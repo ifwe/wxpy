@@ -14,11 +14,11 @@
 %Include controls.sip
 
 %ModuleHeaderCode
-static void add_event(PyObject* module_dict, const char* name, ...);
+void add_event(PyObject* module_dict, const char* name, ...);
 %End
 
 %ModuleCode
-static void add_event(PyObject* module_dict, const char* name, ...)
+void add_event(PyObject* module_dict, const char* name, ...)
 {
     // todo: build tuples, not lists
     va_list argp;

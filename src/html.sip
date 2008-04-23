@@ -6,8 +6,16 @@
 
 %ModuleHeaderCode
 #include <wx/html/htmlwin.h>
+void add_event(PyObject* module_dict, const char* name, ...);
 %End
 
+%PostInitialisationCode
+
+add_event(sipModuleDict, "EVT_HTML_CELL_CLICKED", wxEVT_COMMAND_HTML_CELL_CLICKED, 0);
+add_event(sipModuleDict, "EVT_HTML_CELL_HOVER",   wxEVT_COMMAND_HTML_CELL_HOVER, 0);
+add_event(sipModuleDict, "EVT_HTML_LINK_CLICKED", wxEVT_COMMAND_HTML_LINK_CLICKED, 0);
+
+%End
 
 enum {
     wxHTML_ALIGN_LEFT,

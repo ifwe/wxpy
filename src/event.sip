@@ -317,7 +317,21 @@ public:
 
 class wxKeyEvent: wxEvent {
 public:
-    wxKeyEvent();
+    wxKeyEvent(wxEventType eventType = wxEVT_NULL);
+    int GetModifiers() const;
+    bool ControlDown() const;
+    bool MetaDown() const;
+    bool AltDown() const;
+    bool ShiftDown() const;
+    bool CmdDown() const;
+    bool HasModifiers() const;
+    int  GetKeyCode() const;
+    int  GetUnicodeKey() const;
+    wxUint32 GetRawKeyCode() const;
+    wxUint32 GetRawKeyFlags() const;
+    wxPoint GetPosition();
+    wxCoord GetX() const;
+    wxCoord GetY() const;
 };
 
 class wxCommandEvent : wxEvent {

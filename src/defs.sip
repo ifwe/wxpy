@@ -2,6 +2,7 @@
 #include <wx/wx.h>
 #include <wx/tooltip.h>
 %End
+typedef unsigned int wxUint32;
 typedef int    wxInt32;
 
 // TODO: not 64 bit compatible!

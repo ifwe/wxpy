@@ -45,6 +45,17 @@ wx.Sizer.AddMany = Sizer_AddMany
 wx.Size.width  = property(attrgetter('x'), lambda s, val: setattr(s, 'x', val))
 wx.Size.height = property(attrgetter('y'), lambda s, val: setattr(s, 'y', val))
 
+_wxtimer = wx.Timer
+class PyTimer(_wxtimer):
+    def __init__(self, notify):
+        _wxtimer.__init__(self)
+
+        assert callable(notify)
+        self.notify = notify
+
+    def Notify(self):
+        if self.notify:
+            self.notify()
 
 class CallLater:
     """
@@ -175,6 +186,12 @@ PyDropTarget = wx.DropTarget
 PyValidator = wx.Validator
 PyEvent = wx.Event
 PyControl = wx.Control
+
+wxEVT_MOTION = wx.EVT_MOTION
+assert isinstance(wxEVT_MOTION, int)
+
+FindWindowAtPointer = lambda: wx.Window.FindWindowAtPoint(wx.GetMousePosition())
+
 del wx
 
 WXPY = True
