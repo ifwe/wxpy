@@ -22,9 +22,7 @@ class wxBitmap : wxGDIObject
 public:
     wxBitmap();
     wxBitmap(const wxString& filename, long type = wxBITMAP_TYPE_ANY);
-    //wxBitmap(const wxIcon& icon) /PyName=BitmapFromIcon/;
-    //wxBitmap(const wxImage& image, int depth = -1) /PyName=BitmapFromImage/;
-    
+
     bool IsOk();
     int GetWidth();
     int GetHeight();
@@ -36,8 +34,8 @@ public:
     void SetMask(wxMask* mask /Transfer/);
     
     wxBitmap GetSubBitmap(const wxRect& rect) const;
-//    bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
-//    bool LoadFile(const wxString& name, wxBitmapType type);
+//  bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
+//  bool LoadFile(const wxString& name, wxBitmapType type);
     
     wxPalette* GetPalette() const;
     

@@ -22,7 +22,36 @@ enum wxDragResult
 
 bool wxIsDragResultOk(wxDragResult res);
 
-class wxDropTarget {
+class wxDropTarget
+{
     wxDropTarget(wxDataObject* = NULL) /Transfer/;
     ~wxDropTarget();
+};
+
+class wxDropSource
+{
+public:
+
+//%If (WXGTK)
+     wxDropSource(wxWindow *win,
+                    const wxCursor &copy = wxNullCursor,
+                    const wxCursor &move = wxNullCursor,
+                    const wxCursor &none = wxNullCursor);
+/*
+%End
+%If (!WXGTK)
+    wxDropSource(wxWindow *win,
+                   const wxIcon& copy = wxNullIcon,
+                   const wxIcon& move = wxNullIcon,
+                   const wxIcon& none = wxNullIcon);
+%End
+*/
+    ~wxDropSource();
+
+    void SetData(wxDataObject& data);
+    wxDataObject *GetDataObject();
+    void SetCursor(wxDragResult res, const wxCursor& cursor);
+    virtual bool GiveFeedback(wxDragResult effect);
+private:
+    wxDropSource(const wxDropSource&);
 };

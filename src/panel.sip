@@ -47,3 +47,4 @@ public:
     void SetTargetWindow(wxWindow *target);
     wxWindow *GetTargetWindow() const;
 };
+

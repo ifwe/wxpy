@@ -354,3 +354,24 @@ public:
                        int style = wxBUFFER_CLIENT_AREA);
 
 };
+
+
+class wxAutoBufferedPaintDC : wxDC
+{
+%TypeHeaderCode
+    #include <wx/dcbuffer.h>
+%End
+public:
+    wxAutoBufferedPaintDC(wxWindow* win);
+};
+
+class wxDCClipper
+{
+public:
+    wxDCClipper(wxDC& dc, const wxRegion& r);
+    wxDCClipper(wxDC& dc, const wxRect& r);
+    wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
+    ~wxDCClipper();
+private:
+    wxDCClipper(const wxDCClipper&);
+};

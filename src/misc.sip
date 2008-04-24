@@ -8,6 +8,7 @@
 %Include taskbar.sip
 %Include config.sip
 %Include popup.sip
+%Include stock.sip  
 // %Include log.sip
 
 class wxToolTip : wxObject {

@@ -324,6 +324,52 @@ enum wxBitmapType
 
     wxBITMAP_TYPE_ANY = 50
 };
+
+enum wxStockCursor
+{
+    wxCURSOR_NONE,          // should be 0
+    wxCURSOR_ARROW,
+    wxCURSOR_RIGHT_ARROW,
+    wxCURSOR_BULLSEYE,
+    wxCURSOR_CHAR,
+    wxCURSOR_CROSS,
+    wxCURSOR_HAND,
+    wxCURSOR_IBEAM,
+    wxCURSOR_LEFT_BUTTON,
+    wxCURSOR_MAGNIFIER,
+    wxCURSOR_MIDDLE_BUTTON,
+    wxCURSOR_NO_ENTRY,
+    wxCURSOR_PAINT_BRUSH,
+    wxCURSOR_PENCIL,
+    wxCURSOR_POINT_LEFT,
+    wxCURSOR_POINT_RIGHT,
+    wxCURSOR_QUESTION_ARROW,
+    wxCURSOR_RIGHT_BUTTON,
+    wxCURSOR_SIZENESW,
+    wxCURSOR_SIZENS,
+    wxCURSOR_SIZENWSE,
+    wxCURSOR_SIZEWE,
+    wxCURSOR_SIZING,
+    wxCURSOR_SPRAYCAN,
+    wxCURSOR_WAIT,
+    wxCURSOR_WATCH,
+    wxCURSOR_BLANK,
+    wxCURSOR_DEFAULT, // standard X11 cursor
+    wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
+    
+// #ifdef __X__
+//     // Not yet implemented for Windows
+//     wxCURSOR_CROSS_REVERSE,
+//     wxCURSOR_DOUBLE_ARROW,
+//     wxCURSOR_BASED_ARROW_UP,
+//     wxCURSOR_BASED_ARROW_DOWN,
+// #endif // X11
+
+    wxCURSOR_ARROWWAIT,
+
+    wxCURSOR_MAX
+};
+
 /*
 class wxPoint2D
 {
