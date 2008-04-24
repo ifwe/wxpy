@@ -207,6 +207,8 @@ StockCursor = wx.StockGDI.GetCursor
 
 SystemSettings_GetColour = wx.SystemSettings.GetColour
 
+VERSION = (1, 0, 0, 0)
+
 del wx
 
 WXPY = True

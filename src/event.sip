@@ -265,6 +265,33 @@ wxEVT_COMMAND_ENTER,
 
 class wxEvent : wxObject  {
 public:
+    
+%ConvertToSubClassCode
+    // QEvent sub-classes provide a unique type ID.
+    wxClassInfo* c = sipCpp -> GetClassInfo();
+
+    /* TODO: automate this :( */
+    if(0) ;
+    #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+            
+        C(wxKeyEvent)
+        C(wxMouseEvent)
+        C(wxTimerEvent)
+        C(wxShowEvent)
+        C(wxMenuEvent)
+        C(wxShowEvent)
+        C(wxMaximizeEvent)
+        C(wxIconizeEvent)
+        C(wxHyperlinkEvent)
+        C(wxInitDialogEvent)
+        C(wxNotifyEvent)        
+        C(wxListEvent)
+        C(wxTaskBarIconEvent)
+            
+    else
+        sipClass = NULL;
+%End
+    
     wxEventType GetEventType() const;
     wxObject* GetEventObject() const;
     void SetEventObject(wxObject* obj);
