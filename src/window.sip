@@ -398,7 +398,8 @@ public:
     wxRect  GetRect() const;
     wxSize  GetClientSize() const;
     wxRect  GetClientRect() const;
-        
+
+    void Close(bool force = false);
 
 private:
     wxWindow(const wxWindow&);

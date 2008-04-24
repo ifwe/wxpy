@@ -8,8 +8,12 @@
 %Include taskbar.sip
 %Include config.sip
 %Include popup.sip
-%Include stock.sip  
-// %Include log.sip
+%Include stock.sip
+
+%If (!WXMAC)
+%Include power.sip
+%End
+
 
 class wxToolTip : wxObject {
 public:

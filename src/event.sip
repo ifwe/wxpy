@@ -421,3 +421,32 @@ public:
     int GetNumberOfFiles();
 };
 
+enum wxUpdateUIMode
+{
+    wxUPDATE_UI_PROCESS_ALL,
+    wxUPDATE_UI_PROCESS_SPECIFIED
+};
+
+class wxUpdateUIEvent : wxCommandEvent
+{
+public:
+    wxUpdateUIEvent(wxWindowID commandId = 0);
+    bool GetChecked() const;
+    bool GetEnabled() const;
+    bool GetShown() const;
+    wxString GetText() const;
+    bool GetSetText() const;
+    bool GetSetChecked() const;
+    bool GetSetEnabled() const;
+    bool GetSetShown() const;
+    void Check(bool check);
+    void Enable(bool enable);
+    void Show(bool show);
+    void SetText(const wxString& text);
+    static void SetUpdateInterval(long updateInterval);
+    static long GetUpdateInterval();
+    static bool CanUpdate(wxWindow *win);
+    static void ResetUpdateTime();
+    static void SetMode(wxUpdateUIMode mode);
+    static wxUpdateUIMode GetMode();
+};

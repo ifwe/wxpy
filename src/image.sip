@@ -20,18 +20,80 @@ wxImage ImageFromBitmap(const wxBitmap& bitmap);
 
 wxImage ImageFromDataWithAlpha(int width, 
                                int height,
-                               SIP_PYOBJECT buffer,
-                               int DATASIZE,
-                               SIP_PYOBJECT buffer,
-                               int ALPHASIZE);
+                               SIP_PYOBJECT rgb,
+                               SIP_PYOBJECT alpha);
 %MethodCode
-    fprintf(stderr, "NOT IMPLEMENTED: ImageFromDataWithAlpha\n");
-    sipRes = new wxImage(a0, a1);
+    int width = a0;
+    int height = a1;
+    PyObject* rgb = a2;
+    PyObject* alpha = a3;
+
+    if (!PyString_Check(rgb) || !PyString_Check(alpha))
+    {
+        PyErr_SetString(PyExc_TypeError, "rgb and alpha must be a strings with image data");
+        goto err;
+    }
+
+    int DATASIZE  = PyString_GET_SIZE(rgb);
+    int ALPHASIZE = PyString_GET_SIZE(alpha);
+
+    if (DATASIZE != width * height * 3)
+    {
+        PyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+        goto err;
+    }
+    else if (ALPHASIZE != width*height)
+    {
+        PyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+        goto err;
+    }
+    
+    // Copy the source data so the wxImage can clean it up later
+    unsigned char* dcopy = (unsigned char*)sipMalloc(DATASIZE);
+    if (dcopy == NULL)
+    {
+        PyErr_NoMemory();
+        goto err;
+    }
+    memcpy(dcopy, PyString_AsString(rgb), DATASIZE);
+
+    unsigned char* acopy = (unsigned char*)malloc(ALPHASIZE);
+    if (acopy == NULL)
+    {
+        PyErr_NoMemory();
+        goto err;
+    }
+    memcpy(acopy, PyString_AsString(alpha), ALPHASIZE);
+
+    sipRes = new wxImage(width, height, dcopy, acopy, false);
+    goto done;
+err:
+    sipIsErr = 1;
+done:
+
 %End
 
 class wxImage: wxObject
 {
 public:
+
+    SIP_PYOBJECT GetData();
+%MethodCode
+        unsigned char* data = sipCpp->GetData();
+        int len = sipCpp->GetWidth() * sipCpp->GetHeight() * 3;
+        sipRes = PyString_FromStringAndSize((char*)data, len);
+%End
+
+    SIP_PYOBJECT GetAlphaData();
+%MethodCode
+        unsigned char* data = sipCpp->GetAlpha();
+        if (data == NULL)
+            Py_RETURN_NONE;
+
+        int len = sipCpp->GetWidth() * sipCpp->GetHeight();
+        sipRes = PyString_FromStringAndSize((char*)data, len);
+%End
+    
     // from file
     wxImage(const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1);
 

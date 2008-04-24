@@ -41,6 +41,11 @@ def Sizer_AddMany(self, seq):
             item = (item, )
 wx.Sizer.AddMany = Sizer_AddMany
 
+_evthandler_bind = wx.EvtHandler.Bind
+def EvtHandler_Bind(self, event, func, source = None, id = wx.ID_ANY, id2 = wx.ID_ANY):
+    return _evthandler_bind(self, event, func, source, id, id2)
+wx.EvtHandler.Bind = EvtHandler_Bind
+del EvtHandler_Bind
 
 wx.Size.width  = property(attrgetter('x'), lambda s, val: setattr(s, 'x', val))
 wx.Size.height = property(attrgetter('y'), lambda s, val: setattr(s, 'y', val))
@@ -185,12 +190,22 @@ PyBitmapDataObject = wx.BitmapDataObject
 PyDropTarget = wx.DropTarget
 PyValidator = wx.Validator
 PyEvent = wx.Event
+PyCommandEvent = wx.CommandEvent
 PyControl = wx.Control
+PyScrolledWindow = wx.ScrolledWindow
 
 wxEVT_MOTION = wx.EVT_MOTION
 assert isinstance(wxEVT_MOTION, int)
 
+wxEVT_MENU_OPEN = wx.EVT_MENU_OPEN
+wxEVT_COMMAND_MENU_SELECTED = wx.EVT_COMMAND_MENU_SELECTED
+wxEVT_MOUSE_CAPTURE_LOST = wx.EVT_MOUSE_CAPTURE_LOST
+
 FindWindowAtPointer = lambda: wx.Window.FindWindowAtPoint(wx.GetMousePosition())
+
+StockCursor = wx.StockGDI.GetCursor
+
+SystemSettings_GetColour = wx.SystemSettings.GetColour
 
 del wx
 
