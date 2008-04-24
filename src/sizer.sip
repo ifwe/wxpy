@@ -89,6 +89,29 @@ public:
     
     wxSizerItem* Add(wxWindow*, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL);
     wxSizerItem* Add(wxSizer*, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL);
+    wxSizerItem* Add(SIP_PYTUPLE spacerSize, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL);
+%MethodCode
+    if (PySequence_Fast_GET_SIZE(a0) != 2)
+    {
+        PyErr_SetString(PyExc_TypeError, "wx.Sizer.Add: first argument size must be 2 integers");
+        sipIsErr = 1;
+    }
+    else
+    {
+        int w = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 0));
+        int h = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 1));
+        
+        if ((w == -1 || h == -1) && PyErr_Occurred())
+        {
+            sipIsErr = 1;
+        }
+        else
+        {
+            //wxSizerItem* Add(int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL)
+            sipRes = sipCpp->Add(w, h, a1, a2, a3, a4);
+        }
+    }
+%End
 
     wxSizerItem* AddSpacer(int size);
     

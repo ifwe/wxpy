@@ -1,4 +1,5 @@
 from _wxcore import *
+import sys as _sys
 import _wxcore as wx
 from operator import attrgetter
 
@@ -39,6 +40,13 @@ def Sizer_AddMany(self, seq):
     for item in seq:
         if type(item) != type(()) or (len(item) == 2 and type(item[0]) == type(1)):
             item = (item, )
+        
+        try:
+            self.Add(*item)
+        except Exception:
+            print >> _sys.stderr, 'Bad item:', item
+            raise
+
 wx.Sizer.AddMany = Sizer_AddMany
 
 _evthandler_bind = wx.EvtHandler.Bind
@@ -179,6 +187,18 @@ wxDialog(wxWindow* parent,
 
 # wxPySimpleApp -- calls wxpEntry function
 
+_app = wx.App
+class App(_app):
+    def __init__(self, *a):
+        _app.__init__(self, *a)
+
+        try:
+            # Fixes Ctrl+C for apps started by a console.
+            import signal
+            signal.signal(signal.SIGINT, signal.SIG_DFL)
+        except Exception:
+            pass
+    
 
 wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
 

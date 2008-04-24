@@ -263,3 +263,21 @@ public:
     static wxFontEncoding GetDefaultEncoding();
     static void SetDefaultEncoding(wxFontEncoding encoding);
 };
+
+
+class wxFontEnumerator {
+%TypeHeaderCode
+#include <wx/fontenum.h>
+%End
+
+public:
+    wxFontEnumerator();
+    ~wxFontEnumerator();
+    
+    wxArrayString GetEncodings();
+    wxArrayString GetFacenames();
+
+    static bool IsValidFacename(const wxString &str);
+private:
+    wxFontEnumerator(const wxFontEnumerator&);
+};
