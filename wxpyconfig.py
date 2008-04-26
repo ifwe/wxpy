@@ -13,7 +13,6 @@ use_wx_libs      = 'core base adv'.split()
 
 if os.name == 'nt':
     platform_name = 'msw'
-    raise NotImplementedError('TODO: build setup on wxMSW')
 elif 'Darwin' in platform.platform():
     platform_name = 'mac'
     
@@ -34,3 +33,26 @@ if platform_name in ('mac',):
     
     # passed as -t argument
     sip_platform = 'WXMAC'
+
+elif platform_name == 'msw':
+    wxdir = path(os.environ['WXDIR'])
+    assert wxdir.exists()
+    
+    print 'using wxwidgets dir:', wxdir
+    
+    # TODO: how to infer these without a wx-config binary?    
+    cxxflags = '/W4 /MD /DWIN32 /O2 /D__NO_VC_CRTDBG__ /D__WXMSW__ /D__WXDEBUG__ /D_UNICODE /DwxUSE_UNICODE_MSLU=1 /DwxUSE_GRAPHICS_CONTEXT=1'.split()
+    
+    # TODO: these too ;)
+    cxxflags.extend(['/I%s' % (wxdir / 'lib/vc_dll/mswuh'),
+                     '/I%s' % (wxdir / 'include')])
+    
+    lflags = '/LIBPATH:%s' % (wxdir / 'lib/vc_dll')
+    
+    sip_platform = 'WXMSW'
+    
+    
+    
+assert 'sip_platform' in locals(), "Must set sip_platform"
+assert 'cxxflags' in locals(),     "Must set cxxflags"
+assert 'lflags' in locals(),       "Must set lflags"

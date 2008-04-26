@@ -41,8 +41,10 @@ public:
     void SetItemToolTip(unsigned int item, const wxString& text);
     wxToolTip *GetItemToolTip(unsigned int item) const;
 
+%If (wxUSE_HELP)
     void SetItemHelpText(unsigned int n, const wxString& helpText);
     wxString GetItemHelpText(unsigned int n) const;
+%End
 };
 
 class wxRadioButton : wxControl

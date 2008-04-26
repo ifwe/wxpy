@@ -37,8 +37,8 @@ public:
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
 
-    void SetType(wxDataFormatId format);
-    wxDataFormatId GetType() const;
+    void SetType(int format);
+    int GetType() const;
 
     wxString GetId() const;
     void SetId(const wxString& format);

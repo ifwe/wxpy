@@ -2,13 +2,6 @@
 #include <wx/app.h>
 %End
 
-%PreInitialisationCode
-
-/* disables Mac events (they are crashing atm)*/
-wxApp::sm_isEmbedded = true;
-
-%End
-
 int EntryStart();
 %MethodCode
     int argc = 0;

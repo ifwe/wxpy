@@ -15,4 +15,6 @@ class wxSound : wxObject
 public:
     bool Play(unsigned flags = wxSOUND_ASYNC) const;
     static bool Play(const wxString& filename, unsigned flags = wxSOUND_ASYNC) /PyName=PlaySound/;
+private:
+    wxSound(const wxSound&);
 };

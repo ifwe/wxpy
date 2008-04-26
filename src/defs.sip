@@ -8,7 +8,12 @@ typedef int    wxInt32;
 // TODO: not 64 bit compatible!
 // automate size_t detection w/ code here: 
 //   http://article.gmane.org/gmane.comp.python.pyqt-pykde/5446/match=sip+size%5ft
+%If (WXMAC)
 typedef unsigned long    size_t;
+%End
+%If (!WXMAC)
+typedef unsigned int size_t;
+%End
 
 typedef int             wxEventType;
 typedef unsigned long   wxUIntPtr;

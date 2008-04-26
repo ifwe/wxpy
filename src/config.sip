@@ -2,6 +2,12 @@
     #include <wx/confbase.h>
     #include <wx/fileconf.h>
 %End
+    
+%If (WXMSW)
+%ModuleHeaderCode
+    #include <wx/msw/regconf.h>
+%End
+%End
 
 enum
 {

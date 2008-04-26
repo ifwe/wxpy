@@ -27,6 +27,8 @@ public:
 
     static void Enable(bool flag);
     static void SetDelay(long milliseconds);
+private:
+    wxToolTip(const wxToolTip&);
 };
 
 class wxCaret {

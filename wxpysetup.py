@@ -12,7 +12,6 @@ import sipconfig
 import sipdistutils
 import sys
 import wxpyconfig
-import wxpyinterfaces
 import wxpyfeatures
 
 from distutils.core import Extension
@@ -51,6 +50,7 @@ def manage_cache(gendir):
             if VERBOSE:
                 sipconfig.inform("--> changed: %s" % newfile.name)
         else:
+            sipconfig.inform("--> same:    %s" % newfile.name)
             shutil.copystat(oldfile, newfile)
 
 
@@ -69,7 +69,7 @@ class wxpy_build_ext(sipdistutils.build_ext):
         return str(argsfile)
 
     def _sip_compile(self, sip_bin, source, sbf):
-        features = wxpyfeatures.emit_features_file(wxpyinterfaces.SIP_DIR / 'features.sip')
+        features = wxpyfeatures.emit_features_file('src/features.sip')
         feature_args = itertools.chain(*(('-x', feature) 
             for feature, enabled in features.iteritems() if not enabled))
 
