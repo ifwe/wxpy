@@ -6,10 +6,17 @@
 
 %ModuleHeaderCode
 #include <wx/html/htmlwin.h>
-void add_event(PyObject* module_dict, const char* name, ...);
+%End
+
+
+%PreInitialisationCode
+
 %End
 
 %PostInitialisationCode
+typedef void (*add_event_type)(PyObject* module_dict, const char* name, ...);
+
+add_event_type add_event = (add_event_type)sipImportSymbol("wxpy_add_event");
 
 add_event(sipModuleDict, "EVT_HTML_CELL_CLICKED", wxEVT_COMMAND_HTML_CELL_CLICKED, 0);
 add_event(sipModuleDict, "EVT_HTML_CELL_HOVER",   wxEVT_COMMAND_HTML_CELL_HOVER, 0);
@@ -90,7 +97,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  int style = wxHW_DEFAULT_STYLE,
                  const wxString& name = wxT("HtmlWindow"));
-    
+
     bool SetPage(const wxString& source);
     bool LoadPage(const wxString& location);
     bool LoadFile(const wxString& filename);
@@ -109,7 +116,7 @@ public:
                           const wxString& fixed_face = wxEmptyString);
 
     void SetLabel(const wxString& title);
-    
+
     // Sets space between text and window borders.
     void SetBorders(int b);
 

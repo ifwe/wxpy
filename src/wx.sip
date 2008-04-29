@@ -1,6 +1,16 @@
 %Module _wxcore
 
+%Copying
+
+copyright 2008 Kevin Watters
+released under the wxWidgets License
+
+%End
+
 %Platforms {WXMSW WXCOCOA WXMAC WXGTK}
+
+// Enable stripping of "wx" from Python names, and auto generation of
+// properties from GetXXX() and SetXXX() methods.
 %SIPOptions (RenameWx, AutoProperties)
 
 %ModuleHeaderCode
@@ -23,19 +33,29 @@ void add_event(PyObject* module_dict, const char* name, ...)
     // todo: build tuples, not lists
     va_list argp;
     va_start(argp, name);
-    
+
     PyObject* list = PyList_New(0);
-    
+
     int i = va_arg(argp, int);
     while (i) {
-        PyList_Append(list, PyInt_FromLong(i));        
+        PyList_Append(list, PyInt_FromLong(i));
         i = va_arg(argp, int);
     }
-    
+
     PyObject *tuple = PyList_AsTuple(list);
     PyDict_SetItemString(module_dict, name, tuple);
     Py_DECREF(list);
 }
+%End
+
+%PostInitialisationCode
+
+//
+// Export add_event for other modules to use.
+//
+if (0 != sipExportSymbol("wxpy_add_event", (void *)&add_event))
+	fprintf(stderr, "error exporting 'wxpy_add_event' symbol\n");
+
 %End
 
 %PostInitialisationCode
@@ -110,7 +130,7 @@ add_event(sipModuleDict, "EVT_COMMAND_SCROLL", wxEVT_SCROLL_TOP,
                       wxEVT_SCROLL_PAGEDOWN,
                       wxEVT_SCROLL_THUMBTRACK,
                       wxEVT_SCROLL_THUMBRELEASE,
-                      //wxEVT_SCROLL_CHANGED, 
+                      //wxEVT_SCROLL_CHANGED,
                       0);
 
 add_event(sipModuleDict, "EVT_COMMAND_SCROLL_TOP", wxEVT_SCROLL_TOP, 0);
@@ -219,7 +239,7 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     #else
         _AddInfoString("wx-assertions-off");
     #endif
-//        _AddInfoString(wxPy_SWIG_VERSION);    
+//        _AddInfoString(wxPy_SWIG_VERSION);
     #ifdef __WXMAC__
         #if wxMAC_USE_CORE_GRAPHICS
             _AddInfoString("mac-cg");

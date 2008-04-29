@@ -15,10 +15,10 @@ class wxApp : wxEvtHandler
 public:
     wxApp() /Transfer/;
     ~wxApp();
-    
+
     virtual bool OnInit();
     bool OnInitGui();
-    
+
     void OnUnhandledException();
 %MethodCode
 #ifdef __WXDEBUG__
@@ -75,7 +75,9 @@ public:
     bool GetUseBestVisual() const;
     virtual void SetPrintMode(int mode);
     int GetPrintMode() const;
-/*    
+
+    static void SetInstance(wxApp* app);
+/*
 %If (WXMAC)
     virtual void         MacOpenFile(const wxString &fileName) ;
     virtual void         MacPrintFile(const wxString &fileName) ;
@@ -105,3 +107,4 @@ wxApp* GetApp();
 %MethodCode
     sipRes = wxTheApp;
 %End
+
