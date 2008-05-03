@@ -15,8 +15,12 @@ class MyApp(wx.App):
         print 'App.__init__'
         wx.App.__init__(self)
         self.SetExitOnFrameDelete(False)
-
+        wx.IdleEvent.SetMode(wx.IDLE_PROCESS_SPECIFIED)
         wx.EntryStart()
+        
+    def ProcessIdle(self):
+        print 'ProcessIdle return False'
+        return False
         
     def OnInit(self):
         print 'MyApp.OnInit'
@@ -39,13 +43,15 @@ def main():
       
 
       f = wx.Frame(None, -1, u'wxpy frame', (40, 40), (400, 300))
-      f.Bind(wx.EVT_ACTIVATE, lambda e: p('frame activate:', f.GetActive()))      
+      f.Bind(wx.EVT_ACTIVATE, lambda e: p('frame activate:', f.IsActive()))
       
       s = wx.BoxSizer(wx.VERTICAL)
       
       def show_modal(e):
-          for x in xrange(1000):
-              diag = wx.Dialog(f, -1, 'test modal dialog', size = (400, 300))
+          diag = wx.Dialog(f, -1, 'test modal dialog', size = (400, 300))
+          try:
+              diag.ShowModal()
+          finally:
               diag.Destroy()
               
           import gc

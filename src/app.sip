@@ -26,34 +26,6 @@ public:
     virtual bool OnInit();
     bool OnInitGui();
     
-    void OnUnhandledException();
-%MethodCode
-#ifdef __WXDEBUG__
-    // we're called from an exception handler so we can re-throw the exception
-    // to recover its type
-    wxString what;
-    try
-    {
-        throw;
-    }
-#if wxUSE_STL
-    catch ( std::exception& e )
-    {
-        what.Printf("std::exception of type \"%s\", what() = \"%s\"",
-                    typeid(e).name(), e.what());
-    }
-#endif // wxUSE_STL
-    catch ( ... )
-    {
-        what = "unknown exception";
-    }
-
-    wxMessageOutputBest().Printf(
-        "*** Caught unhandled %s; terminating\n", what
-    );
-#endif // __WXDEBUG__
-%End
-
     wxString GetAppName() const;
     void SetAppName(const wxString& name);
     wxString GetClassName() const;
@@ -71,16 +43,16 @@ public:
     void ExitMainLoop();
     bool Pending();
     bool Dispatch();
-    bool ProcessIdle();
+    virtual bool ProcessIdle();
 //  virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
-    virtual bool IsActive() const;
+    bool IsActive() const;
     void SetTopWindow(wxWindow *win);
-    virtual wxWindow* GetTopWindow() const;
+    wxWindow* GetTopWindow() const;
     void SetExitOnFrameDelete(bool flag);
     bool GetExitOnFrameDelete() const;
     void SetUseBestVisual( bool flag, bool forceTrueColour = false  );
     bool GetUseBestVisual() const;
-    virtual void SetPrintMode(int mode);
+    void SetPrintMode(int mode);
     int GetPrintMode() const;
 /*    
 %If (WXMAC)
