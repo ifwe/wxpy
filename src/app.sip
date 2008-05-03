@@ -2,13 +2,6 @@
 #include <wx/app.h>
 %End
 
-%PreInitialisationCode
-
-/* disables Mac events (they are crashing atm)*/
-wxApp::sm_isEmbedded = true;
-
-%End
-
 int EntryStart();
 %MethodCode
     int argc = 0;
@@ -22,10 +15,10 @@ class wxApp : wxEvtHandler
 public:
     wxApp() /Transfer/;
     ~wxApp();
-    
+
     virtual bool OnInit();
     bool OnInitGui();
-    
+
     wxString GetAppName() const;
     void SetAppName(const wxString& name);
     wxString GetClassName() const;
@@ -54,7 +47,9 @@ public:
     bool GetUseBestVisual() const;
     void SetPrintMode(int mode);
     int GetPrintMode() const;
-/*    
+
+    static void SetInstance(wxApp* app);
+/*
 %If (WXMAC)
     virtual void         MacOpenFile(const wxString &fileName) ;
     virtual void         MacPrintFile(const wxString &fileName) ;
@@ -84,3 +79,4 @@ wxApp* GetApp();
 %MethodCode
     sipRes = wxTheApp;
 %End
+

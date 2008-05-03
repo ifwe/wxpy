@@ -12,7 +12,6 @@ import sipconfig
 import sipdistutils
 import sys
 import wxpyconfig
-import wxpyinterfaces
 import wxpyfeatures
 
 from distutils.core import Extension
@@ -23,7 +22,7 @@ VERBOSE = True
 def different(file1, file2, start = 0):
     if not file1.exists() or not file2.exists():
         return True
-    
+
     if file1.size != file2.size:
         return True
 
@@ -36,14 +35,14 @@ def manage_cache(gendir):
     is unchanged
     """
     sipconfig.inform("Managing the module cache: %s" % gendir)
-    
+
     gendir = path(gendir)
     cache = gendir / 'cache'
     cache.ensure_exists()
-    
+
     if 'clean' in sys.argv:
         cache.rmtree()
-    
+
     for newfile in gendir.files('*.cpp') + gendir.files('*.h'):
         oldfile = cache / newfile.name
         if different(newfile, oldfile):
@@ -51,6 +50,7 @@ def manage_cache(gendir):
             if VERBOSE:
                 sipconfig.inform("--> changed: %s" % newfile.name)
         else:
+            #sipconfig.inform("--> same:    %s" % newfile.name)
             shutil.copystat(oldfile, newfile)
 
 
@@ -69,15 +69,15 @@ class wxpy_build_ext(sipdistutils.build_ext):
         return str(argsfile)
 
     def _sip_compile(self, sip_bin, source, sbf):
-        features = wxpyfeatures.emit_features_file(wxpyinterfaces.SIP_DIR / 'features.sip')
-        feature_args = itertools.chain(*(('-x', feature) 
+        features = wxpyfeatures.emit_features_file('src/features.sip')
+        feature_args = itertools.chain(*(('-x', feature)
             for feature, enabled in features.iteritems() if not enabled))
 
         argsfile = self.generate_args_file([
-            "-c", self.build_temp, 
+            "-c", self.build_temp,
             '-I', wxpyconfig.wxpy_dir / 'src',
             "-b", sbf,
-            '-t', wxpyconfig.sip_platform] + 
+            '-t', wxpyconfig.sip_platform] +
             list(feature_args) +
             list(getattr(self, 'extra_sip_includes', []))
         )
@@ -94,14 +94,14 @@ class wxpy_build_ext(sipdistutils.build_ext):
 def make_sip_ext(name, iface_files, include = None):
     cxxflags = [f for f in wxpyconfig.cxxflags if not f.startswith('-O')]
     cargs = list(wxpyconfig.cxxflags) + ['-DWXPY=1']
-    
+
     includes = []
     if include is not None:
         if isinstance(include, basestring): include = [include]
         for inc in include:
             includes.extend(['-I', inc])
             cargs.append('-I%s'  % inc)
-    
+
     largs = list(wxpyconfig.lflags)
 
     ext = Extension(name, iface_files, extra_compile_args = cargs, extra_link_args = largs)

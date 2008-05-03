@@ -8,6 +8,7 @@ from __future__ import with_statement
 
 import sipconfig
 import sipdistutils
+import wxpyconfig
 import wxpysetup
 
 from distutils.core import setup
@@ -24,7 +25,8 @@ def build():
           ext_modules = extensions,
           cmdclass = {'build_ext': wxpysetup.wxpy_build_ext})
     
-    install()
+    if wxpyconfig.platform_name == 'mac':
+        install()
           
 def install():
     # TODO: figure out how to make distutils do this for us
