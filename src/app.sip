@@ -60,11 +60,12 @@ public:
 
     void Exit();
     void ExitMainLoop();
+
     bool Pending() /ReleaseGIL/;
     bool ProcessIdle() /ReleaseGIL/;
     bool IsActive() const /ReleaseGIL/;
 
-void SetTopWindow(wxWindow *win);
+    void SetTopWindow(wxWindow *win);
     wxWindow* GetTopWindow() const;
 
     void SetExitOnFrameDelete(bool flag);
@@ -108,4 +109,3 @@ wxApp* GetApp();
 %MethodCode
     sipRes = wxTheApp;
 %End
-

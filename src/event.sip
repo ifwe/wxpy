@@ -50,7 +50,6 @@ void CallAfterCallback::EventThunker(wxEvent& event) {
     for(iter = g_callAfterCbs.begin(); iter != g_callAfterCbs.end(); iter++)
     {
         PyObject* func = *iter;
-
         PyObject* result = PyObject_CallObject(func, NULL);
         if (result)
         {
@@ -253,12 +252,14 @@ public:
         C(wxShowEvent)
         C(wxMenuEvent)
         C(wxShowEvent)
+        C(wxActivateEvent)
         C(wxMaximizeEvent)
         C(wxIconizeEvent)
         C(wxHyperlinkEvent)
         C(wxInitDialogEvent)
         C(wxNotifyEvent)
         C(wxListEvent)
+        C(wxDropFilesEvent)
 
     else
         sipClass = NULL;
@@ -492,4 +493,21 @@ public:
     static void ResetUpdateTime();
     static void SetMode(wxUpdateUIMode mode);
     static wxUpdateUIMode GetMode();
+};
+
+enum wxIdleMode
+{
+    wxIDLE_PROCESS_ALL,
+    wxIDLE_PROCESS_SPECIFIED
+};
+
+class wxIdleEvent : wxEvent
+{
+public:
+    wxIdleEvent();
+    void RequestMore(bool needMore = true);
+    bool MoreRequested() const;
+    static void SetMode(wxIdleMode mode);
+    static wxIdleMode GetMode();
+    static bool CanSend(wxWindow* win);
 };
