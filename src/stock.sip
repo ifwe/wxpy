@@ -59,7 +59,7 @@ public:
         wx.NORMAL_FONT.this  = StockGDI.instance().GetFont(StockGDI.FONT_NORMAL).this
         wx.SMALL_FONT.this   = StockGDI.instance().GetFont(StockGDI.FONT_SMALL).this
         wx.SWISS_FONT.this   = StockGDI.instance().GetFont(StockGDI.FONT_SWISS).this
-                                              
+
         wx.BLACK_DASHED_PEN.this  = StockGDI.GetPen(StockGDI.PEN_BLACKDASHED).this
         wx.BLACK_PEN.this         = StockGDI.GetPen(StockGDI.PEN_BLACK).this
         wx.CYAN_PEN.this          = StockGDI.GetPen(StockGDI.PEN_CYAN).this
@@ -89,7 +89,7 @@ public:
         wx.LIGHT_GREY.this  = StockGDI.GetColour(StockGDI.COLOUR_LIGHTGREY).this
         wx.RED.this         = StockGDI.GetColour(StockGDI.COLOUR_RED).this
         wx.WHITE.this       = StockGDI.GetColour(StockGDI.COLOUR_WHITE).this
-    
+
         wx.CROSS_CURSOR.this      = StockGDI.GetCursor(StockGDI.CURSOR_CROSS).this
         wx.HOURGLASS_CURSOR.this  = StockGDI.GetCursor(StockGDI.CURSOR_HOURGLASS).this
         wx.STANDARD_CURSOR.this   = StockGDI.GetCursor(StockGDI.CURSOR_STANDARD).this
@@ -99,7 +99,7 @@ public:
         wx.TheBrushList.this      = _wxPyInitTheBrushList().this
         wx.TheColourDatabase.this = _wxPyInitTheColourDatabase().this
 
-        
+
     _initStockObjects = staticmethod(_initStockObjects)
     }
     */

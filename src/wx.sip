@@ -54,7 +54,7 @@ void add_event(PyObject* module_dict, const char* name, ...)
 // Export add_event for other modules to use.
 //
 if (0 != sipExportSymbol("wxpy_add_event", (void *)&add_event))
-	fprintf(stderr, "error exporting 'wxpy_add_event' symbol\n");
+    fprintf(stderr, "error exporting 'wxpy_add_event' symbol\n");
 
 %End
 
@@ -81,6 +81,8 @@ AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
 AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
 AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
 
+add_event(sipModuleDict, "EVT_TIMER", wxEVT_TIMER, 0);
+
 add_event(sipModuleDict, "EVT_CLOSE", wxEVT_CLOSE_WINDOW, 0);
 
 add_event(sipModuleDict, "EVT_HOTKEY", wxEVT_HOTKEY, 0);
@@ -88,6 +90,17 @@ add_event(sipModuleDict, "EVT_MENU_HIGHLIGHT", wxEVT_MENU_HIGHLIGHT, 0);
 add_event(sipModuleDict, "EVT_MENU_HIGHLIGHT_ALL", wxEVT_MENU_HIGHLIGHT, 0);
 add_event(sipModuleDict, "EVT_WINDOW_CREATE", wxEVT_CREATE, 0);
 add_event(sipModuleDict, "EVT_WINDOW_DESTROY", wxEVT_DESTROY, 0);
+
+
+//
+// for compatibility with wxPython :[
+//
+#define evtconstant(X) PyDict_SetItemString(sipModuleDict, #X, PyInt_FromLong(X));
+evtconstant(wxEVT_RIGHT_DOWN)
+evtconstant(wxEVT_LEFT_DOWN)
+evtconstant(wxEVT_LEFT_UP)
+evtconstant(wxEVT_RIGHT_UP)
+
 add_event(sipModuleDict, "EVT_MOUSE_EVENTS", wxEVT_LEFT_DOWN,
                     wxEVT_LEFT_UP,
                     wxEVT_MIDDLE_DOWN,

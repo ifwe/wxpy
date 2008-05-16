@@ -130,6 +130,8 @@ public:
     //void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
     //void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
 
+    void SetFonts(wxString normal_face, wxString fixed_face);
+
     // Goes to previous/next page (in browsing history)
     // Returns True if successful, False otherwise
     bool HistoryBack();

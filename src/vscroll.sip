@@ -47,7 +47,7 @@ class wxVListBox : wxVScrolledWindow
 %TypeHeaderCode
     #include <wx/vlbox.h>
 %End
-    
+
 public:
     size_t GetItemCount() const;
     bool HasMultipleSelection() const;
@@ -60,7 +60,7 @@ public:
     wxPoint GetMargins() const;
     const wxColour& GetSelectionBackground() const;
 
-    virtual void SetItemCount(size_t count);
+    void SetItemCount(size_t count);
     void Clear();
     void SetSelection(int selection);
     bool Select(size_t item, bool select = true);
@@ -85,6 +85,8 @@ protected:
     virtual ~wxVListBox();
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
     virtual wxCoord OnMeasureItem(size_t n) const = 0;
+
+    virtual wxCoord OnGetLineHeight(size_t line) const; // don't use -- overload OnMeasureItem
 private:
     wxVListBox();
     wxVListBox(const wxVListBox&);

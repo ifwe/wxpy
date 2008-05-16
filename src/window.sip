@@ -1,4 +1,4 @@
-enum wxWindowVariant 
+enum wxWindowVariant
 {
     wxWINDOW_VARIANT_NORMAL,        // Normal size
     wxWINDOW_VARIANT_SMALL,         // Smaller size (about 25 % smaller than normal )
@@ -12,6 +12,13 @@ class wxWindow : wxEvtHandler
 
 %TypeHeaderCode
 #include <wx/window.h>
+#include <wx/dynlib.h>
+
+#ifdef __WXMSW__
+wxWindow *wxFindWinFromHandle(WXHWND hWnd);
+#endif
+
+
 %End
 
 public:
@@ -21,34 +28,35 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = wxPanelNameStr);
-             
+    virtual ~wxWindow();
+
     void Raise();
     void Lower();
 
     void Destroy();
-    
+
     wxSize GetSize() const;
-//    void GetSize( int *w, int *h ) const;
-    
-    
-             
+
+    void InvalidateBestSize();
     void CacheBestSize(const wxSize& size) const;
-    
+
     void Centre(int dir = wxBOTH);
     void Center(int dir = wxBOTH);
     void CentreOnParent(int dir = wxBOTH);
     void CenterOnParent(int dir = wxBOTH);
-    
+
     void Fit();
     void FitInside();
-    
+
     void SetSizeHints( int minW, int minH,
                        int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                        int incW = wxDefaultCoord, int incH = wxDefaultCoord );
     void SetSizeHints( const wxSize& minSize,
                        const wxSize& maxSize = wxDefaultSize,
                        const wxSize& incSize = wxDefaultSize);
-                       
+    void SetVirtualSizeHints(int minW, int minH, int maxW=-1, int maxH=-1);
+    wxSize GetBestSize() const;
+
     void SetMinSize(const wxSize& minSize);
     void SetMaxSize(const wxSize& maxSize);
     wxSize GetMinSize() const;
@@ -61,18 +69,24 @@ public:
 
     void SetVirtualSize( const wxSize &size );
     void SetVirtualSize( int x, int y );
-    
+
     wxSize GetVirtualSize() const;
     wxSize GetBestVirtualSize() const;
     wxSize GetWindowBorderSize() const;
 
     bool Show(bool show = true);
     bool Hide();
-    
+
     bool Enable(bool enable = true);
+
     bool Disable();
-        
+
     bool IsShown() const;
+    bool Shown() const;
+%MethodCode
+    sipRes = sipCpp->IsShown();
+%End
+
     bool IsEnabled() const;
 
     bool IsShownOnScreen() const;
@@ -108,7 +122,7 @@ public:
     void MoveBeforeInTabOrder(wxWindow *win);
     void MoveAfterInTabOrder(wxWindow *win);
 
-    //const wxWindowList& GetChildren() const;
+    const wxWindowList& GetChildren() const;
     //const wxWindowList& GetWindowChildren() const;
 
     wxWindow *GetPrevSibling() const;
@@ -118,31 +132,41 @@ public:
     wxWindow *GetGrandParent() const;
 
     bool IsTopLevel() const;
+    bool TopLevel() const;
+%MethodCode
+    sipRes = sipCpp->IsTopLevel();
+%End
 
     bool Reparent(wxWindow *newParent);
 
     wxWindow *FindWindow(long winid) const;
     wxWindow *FindWindow(const wxString& name) const;
 
-        
+
     static wxWindow *FindWindowById( long winid, const wxWindow *parent = NULL );
     static wxWindow *FindWindowByName( const wxString& name,
                                        const wxWindow *parent = NULL );
     static wxWindow *FindWindowByLabel( const wxString& label,
                                         const wxWindow *parent = NULL );
-        
+%If (WXMSW)
+    static wxWindow *FindWindowByHandle(long hwnd);
+%MethodCode
+    sipRes = wxFindWinFromHandle((WXHWND)a0);
+%End
+%End
+
     wxEvtHandler *GetEventHandler() const;
     void SetEventHandler( wxEvtHandler *handler );
-        
+
     void PushEventHandler( wxEvtHandler *handler );
     wxEvtHandler *PopEventHandler( bool deleteHandler = false );
-        
+
     bool RemoveEventHandler(wxEvtHandler *handler);
 
 %If (wxUSE_VALIDATORS)
     void SetValidator( const wxValidator &validator );
     wxValidator *GetValidator();
-%End 
+%End
     bool Validate();
 
     bool TransferDataToWindow();
@@ -153,12 +177,12 @@ public:
 %If (wxUSE_ACCEL)
 //    void SetAcceleratorTable( const wxAcceleratorTable& accel );
 //    wxAcceleratorTable *GetAcceleratorTable();
-%End 
+%End
 
 %If (wxUSE_HOTKEY)
     bool RegisterHotKey(int hotkeyId, int modifiers, int keycode);
     bool UnregisterHotKey(int hotkeyId);
-%End 
+%End
 
     wxPoint ConvertPixelsToDialog( const wxPoint& pt );
     wxPoint ConvertDialogToPixels( const wxPoint& pt );
@@ -167,14 +191,14 @@ public:
     wxSize ConvertDialogToPixels( const wxSize& sz );
 
     void WarpPointer(int x, int y);
-        
+
     void CaptureMouse();
     void ReleaseMouse();
-        
+
     static wxWindow *GetCapture();
-        
+
     bool HasCapture() const;
-        
+
     void Refresh(bool eraseBackground = true, const wxRect *rect = NULL );
 
     void RefreshRect(const wxRect& rect, bool eraseBackground = true);
@@ -199,13 +223,13 @@ public:
     bool IsExposed( int x, int y, int w, int h ) const;
     bool IsExposed( const wxPoint& pt ) const;
     bool IsExposed( const wxRect& rect ) const;
-        
+
     /*
     wxVisualAttributes GetDefaultAttributes() const;
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     */
-        
+
     bool SetBackgroundColour(const wxColour& colour);
     void SetOwnBackgroundColour(const wxColour& colour);
     wxColour GetBackgroundColour() const;
@@ -215,7 +239,7 @@ public:
     bool SetForegroundColour(const wxColour& colour);
     void SetOwnForegroundColour(const wxColour& colour);
     wxColour GetForegroundColour() const;
-        
+
     bool SetBackgroundStyle(wxBackgroundStyle style);
     wxBackgroundStyle GetBackgroundStyle() const;
 
@@ -225,13 +249,13 @@ public:
     void SetOwnFont(const wxFont& font);
 
     wxFont GetFont() const;
-    bool SetCursor( const wxCursor &cursor );
+    bool SetCursor(const wxCursor &cursor);
     const wxCursor& GetCursor() const;
 
 %If (wxUSE_CARET)
     void SetCaret(wxCaret *caret);
     wxCaret *GetCaret() const;
-%End 
+%End
     int GetCharHeight() const;
     int GetCharWidth() const;
 
@@ -246,10 +270,10 @@ public:
 
     wxPoint ClientToScreen(const wxPoint& pt) const;
     wxPoint ScreenToClient(const wxPoint& pt) const;
-        
+
     wxHitTest HitTest(wxCoord x, wxCoord y) const;
     wxHitTest HitTest(const wxPoint& pt) const;
-    
+
     wxBorder GetBorder(long flags) const;
     wxBorder GetBorder() const;
 
@@ -258,8 +282,8 @@ public:
 %If (wxUSE_MENUS)
     bool PopupMenu(wxMenu *menu, const wxPoint& pos = wxDefaultPosition);
     bool PopupMenu(wxMenu *menu, int x, int y);
-%End 
-    
+%End
+
     bool HasMultiplePages() const;
     bool HasScrollbar(int orient) const;
 
@@ -295,7 +319,7 @@ public:
 %If (!wxUSE_HELP)
     void SetHelpText(const wxString& text);
     void SetHelpTextForId(const wxString& text);
-%End 
+%End
 
 %If (wxUSE_TOOLTIPS)
     void SetToolTip( const wxString &tip ) /PyName=SetToolTipString/;
@@ -305,12 +329,12 @@ public:
 %End
 %If (!wxUSE_TOOLTIPS)
     void SetToolTip(const wxString & tip );
-%End 
+%End
 
 %If (wxUSE_DRAG_AND_DROP)
     void SetDropTarget( wxDropTarget *dropTarget );
     wxDropTarget *GetDropTarget() const;
-%End 
+%End
 /*
 %If (wxUSE_CONSTRAINTS)
 
@@ -335,15 +359,37 @@ public:
     void GetClientSizeConstraint(int *w, int *h) const;
     void GetPositionConstraint(int *x, int *y) const;
 
-%End 
+%End
 */
     void SetAutoLayout( bool autoLayout );
     bool GetAutoLayout() const;
 
     bool Layout();
 
-    void SetSizer(wxSizer *sizer, bool deleteOld = true );
-    void SetSizerAndFit( wxSizer *sizer, bool deleteOld = true );
+    void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true );
+/*%MethodCode
+        wxSizer* oldSizerCpp = sipCpp->GetSize();
+        if (oldSizerCpp) {
+            printf("oldSizer was not NULL: %p\n", oldSizerCpp);
+            PyObject* oldSizerPy = sipGetWrapper(oldSizer, sipClass_wxSizer);
+            if (oldSizerPy) {
+                printf("oldSizer had a Python object: %p", oldSizerPy);
+                if (deleteOld) {
+                    // TODO: what if it's already owned by C++?
+                    sipTransferTo(oldSizerPy, NULL);
+                } else {
+
+                }
+            }
+
+
+        }
+
+
+        sipCpp->SetSizer(a0, deleteOld);
+%End
+*/
+    void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
 
     wxSizer *GetSizer() const;
 
@@ -371,10 +417,10 @@ public:
     bool HasCustomPalette() const;
 
     wxWindow *GetAncestorWithCustomPalette() const;
-%End 
+%End
     void InheritAttributes();
     bool ShouldInheritColours() const;
-    
+
     void SetName(const wxString& name);
     wxString GetName() const;
     void SetLabel(const wxString& label);
@@ -385,14 +431,14 @@ public:
     void SetSize(const wxSize& size);
     void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO);
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING);
-    
+
     wxPoint GetPosition() const;
     void SetPosition(const wxPoint& pos);
 %MethodCode
     sipCpp->Move(*a0);
 %End
-    
-    
+
+
     wxPoint GetScreenPosition() const;
     wxRect  GetScreenRect() const;
     wxRect  GetRect() const;
@@ -400,6 +446,42 @@ public:
     wxRect  GetClientRect() const;
 
     void Close(bool force = false);
+
+%If (WXMSW)
+    int GetHandle();
+%MethodCode
+    sipRes = (int)sipCpp->GetHWND();
+%End
+%End
+
+
+    static int GetUserIdleTime();
+%MethodCode
+    typedef BOOL (WINAPI *_GetLastInputInfo_t)(PLASTINPUTINFO);
+
+    static _GetLastInputInfo_t s_pfn_GetLastInputInfo = 0;
+
+    wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM);
+    if (dllUser32.IsLoaded()) {
+        s_pfn_GetLastInputInfo = (_GetLastInputInfo_t)
+            dllUser32.GetSymbol(_T("GetLastInputInfo"));
+
+        if (s_pfn_GetLastInputInfo == 0) {
+            printf("ERROR: got 0 from GetSymbol\n");
+        } else {
+            printf("Got function pointer: %p\n", s_pfn_GetLastInputInfo);
+
+            LASTINPUTINFO info = {sizeof(LASTINPUTINFO), 0};
+            if (0 == (*s_pfn_GetLastInputInfo)(&info)) {
+                PyErr_SetString(PyExc_Exception, "GetLastInputInfo returned error");
+                sipIsErr = 1;
+            } else
+                sipRes = (int)info.dwTime;
+        }
+    } else
+        printf("could not load user32.dll\n");
+%End
+
 
 private:
     wxWindow(const wxWindow&);

@@ -6,7 +6,7 @@ typedef unsigned int wxUint32;
 typedef int    wxInt32;
 
 // TODO: not 64 bit compatible!
-// automate size_t detection w/ code here: 
+// automate size_t detection w/ code here:
 //   http://article.gmane.org/gmane.comp.python.pyqt-pykde/5446/match=sip+size%5ft
 %If (WXMAC)
 typedef unsigned long    size_t;
@@ -50,7 +50,7 @@ enum {
     wxNO_BORDER,
     wxDEFAULT_CONTROL_BORDER,
 //    wxDEFAULT_STATUSBAR_STYLE,
-    
+
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
     wxPOPUP_WINDOW,
@@ -62,9 +62,9 @@ enum {
     wxCLIP_SIBLINGS,
 
     wxWINDOW_STYLE_MASK,
-    
+
     wxALWAYS_SHOW_SB,
-    
+
     wxRETAINED,
     wxBACKINGSTORE,
 
@@ -100,7 +100,7 @@ enum {
     wxST_NO_AUTORESIZE,
     wxST_DOTS_MIDDLE,
     wxST_DOTS_END,
-    
+
     wxFLOOD_SURFACE,
     wxFLOOD_BORDER,
     wxODDEVEN_RULE,
@@ -254,14 +254,14 @@ enum {
     wxID_ZOOM_OUT,
     wxID_UNDELETE,
     wxID_REVERT_TO_SAVED,
-   
+
     wxID_HIGHEST,
 
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,
     wxFULL_REPAINT_ON_RESIZE,
-    
+
     wxLI_HORIZONTAL,
     wxLI_VERTICAL,
 
@@ -371,9 +371,9 @@ enum wxBorder
 
 enum wxBackgroundStyle
 {
-  wxBG_STYLE_SYSTEM,
-  wxBG_STYLE_COLOUR,
-  wxBG_STYLE_CUSTOM
+    wxBG_STYLE_SYSTEM,
+    wxBG_STYLE_COLOUR,
+    wxBG_STYLE_CUSTOM
 };
 
 
@@ -448,14 +448,14 @@ enum
     wxTRANSPARENT,
 
     wxSTIPPLE_MASK_OPAQUE,
-    wxSTIPPLE_MASK,       
+    wxSTIPPLE_MASK,
 
     wxSTIPPLE =          110,
 
     wxBDIAGONAL_HATCH,
     wxCROSSDIAG_HATCH,
     wxFDIAGONAL_HATCH,
-    wxCROSS_HATCH,    
+    wxCROSS_HATCH,
     wxHORIZONTAL_HATCH,
     wxVERTICAL_HATCH,
     wxFIRST_HATCH = wxBDIAGONAL_HATCH,
@@ -788,7 +788,7 @@ enum wxPaperSize {
     wxPAPER_PENV_8_ROTATED,     /* PRC Envelope #8 Rotated 309 x 120 mm */
     wxPAPER_PENV_9_ROTATED,     /* PRC Envelope #9 Rotated 324 x 229 mm */
     wxPAPER_PENV_10_ROTATED    /* PRC Envelope #10 Rotated 458 x 324 m */
-   
+
 };
 
 

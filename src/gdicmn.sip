@@ -10,15 +10,13 @@ class wxPoint
 %End
 
 public:
-	wxPoint(int x = 0, int y = 0);
+    wxPoint(int x = 0, int y = 0);
     ~wxPoint();
 
 %ConvertToTypeCode
     if (sipIsErr == NULL)
-    {
         return sequence_2_ints_check(sipPy)
             || sipCanConvertToInstance(sipPy, sipClass_wxPoint, SIP_NO_CONVERTORS);
-    }
 
     int _x, _y;
     if (sequence_2_ints(sipPy, &_x, &_y)) {
@@ -70,8 +68,8 @@ public:
     wxPoint& operator+=(const wxPoint& pt);
     wxPoint& operator-=(const wxPoint& pt);
 
-	int x;
-	int y;
+    int x;
+    int y;
 };
 
 class wxSize
@@ -79,9 +77,9 @@ class wxSize
 %TypeHeaderCode
 #include <wx/gdicmn.h>
 %End
-    
+
 public:
-	wxSize();
+    wxSize();
     wxSize(int width, int height);
     ~wxSize();
 
@@ -161,12 +159,25 @@ class wxRect
 %End
 
 public:
-	wxRect(int x=0, int y=0, int width=0, int height=0);
-	wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
-    
+%ConvertToTypeCode
+    if (sipIsErr == NULL)
+        return sequence_4_ints_check(sipPy)
+            || sipCanConvertToInstance(sipPy, sipClass_wxRect, SIP_NO_CONVERTORS);
+
+    int _x, _y, _w, _h;
+    if (sequence_4_ints(sipPy, &_x, &_y, &_w, &_h)) {
+        *sipCppPtr = new wxRect(_x, _y, _w, _h);
+        return sipGetState(sipTransferObj);
+    }
+
+    *sipCppPtr = reinterpret_cast<wxRect *>(sipConvertToInstance(sipPy, sipClass_wxRect, sipTransferObj, SIP_NO_CONVERTORS, 0, sipIsErr));
+    return 0;
+%End
+
+    wxRect(int x=0, int y=0, int width=0, int height=0);
+    wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
+
     ~wxRect();
-
-
 
     int GetX() const;
     void SetX(int x);
@@ -187,7 +198,7 @@ public:
     void SetSize( const wxSize &s );
 
     bool IsEmpty() const;
-    
+
     wxPoint GetTopLeft() const;
     void SetTopLeft(const wxPoint &p);
     wxPoint GetBottomRight() const;
@@ -198,6 +209,7 @@ public:
     wxPoint GetBottomLeft() const;
     void SetBottomLeft(const wxPoint &p);
 
+    void Offset(const wxPoint& pt);
 
     int GetLeft()   const;
     int GetTop()    const;
@@ -209,9 +221,16 @@ public:
     void SetTop(int top);
     void SetBottom(int bottom);
 
+    void Deflate(wxCoord dx, wxCoord dy);
+    void Inflate(wxCoord dx, wxCoord dy);
+
+    bool Contains(int x, int y) const /PyName=ContainsXY/;
+    bool Contains(const wxPoint& pt) const;
+    bool Contains(const wxRect& rect) const /PyName=ContainsRect/;
+
     SIP_PYOBJECT __repr__();
 %MethodCode
-    sipRes = PyString_FromFormat("<wx.Rect (%d, %d, %d, %d)>", 
+    sipRes = PyString_FromFormat("<wx.Rect (%d, %d, %d, %d)>",
                 sipCpp->x, sipCpp->y, sipCpp->width, sipCpp->height);
 %End
 
@@ -220,17 +239,48 @@ public:
     sipRes = 4;
 %End
 
-    int __getitem__(int i);
+    SIP_PYTUPLE __getitem__(SIP_PYSLICE);
+%MethodCode
+//    int PySlice_GetIndicesEx(	PySliceObject *slice, Py_ssize_t length, Py_ssize_t *start, Py_ssize_t *stop, Py_ssize_t *step, Py_ssize_t *slicelength)
+    
+    Py_ssize_t start, stop, step, length;
+    PySlice_GetIndicesEx((PySliceObject*)a0, 4, &start, &stop, &step, &length);
+
+    sipRes = PyTuple_New(length);
+    int c = 0;
+    int val;
+    int i;
+
+    for (i = start; (step > 0 ? i < stop : i > stop); i += step) {
+        switch (i) {
+            case 0: val = sipCpp->x; break;
+            case 1: val = sipCpp->y; break;
+            case 2: val = sipCpp->width; break;
+            case 3: val = sipCpp->height; break;
+            default:
+                PyErr_SetString(PyExc_IndexError, "index out of range");
+                sipIsErr = 1;
+        }
+
+        if (sipIsErr) break;
+        PyTuple_SET_ITEM(sipRes, c++, PyInt_FromLong(val));
+    }
+
+    if (sipIsErr)
+        Py_DECREF(sipRes);
+%End        
+
+    int __getitem__(size_t i);
 %MethodCode
     switch (a0)
     {
-        case 0: 
+        case 0:
             sipRes = sipCpp->x;
             break;
-        case 1: 
+        case 1:
             sipRes = sipCpp->y;
             break;
-        case 2: 
+        case 2:
             sipRes = sipCpp->width;
             break;
         case 3:
@@ -278,7 +328,7 @@ public:
     wxBrush();
     wxBrush(const wxColour&);
     ~wxBrush();
-    
+
     void SetColour(const wxColour& color);
     wxColour& GetColour() const;
 };
@@ -356,7 +406,7 @@ enum wxStockCursor
     wxCURSOR_BLANK,
     wxCURSOR_DEFAULT, // standard X11 cursor
 //  wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
-    
+
 // #ifdef __X__
 //     // Not yet implemented for Windows
 //     wxCURSOR_CROSS_REVERSE,
@@ -474,7 +524,7 @@ public:
 
     void Union( const wxRect2D &otherRect );
     //void Union( const wxPoint2D &pt );
-    
+
     wxRect2D CreateUnion( const wxRect2D &otherRect ) const;
 
     void Scale( wxDouble f );

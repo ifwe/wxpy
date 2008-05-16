@@ -6,3 +6,6 @@
 %Include tglbtn.sip
 %Include gauge.sip
 %Include splitter.sip
+%Include combobox.sip
+%Include slider.sip
+%Include searchctrl.sip

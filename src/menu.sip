@@ -1,20 +1,26 @@
+/*
+Reading up on SIP's /Transfer/ and its related annotations is probably a good
+idea for understanding this file.
+*/
+
 class wxMenu : wxEvtHandler
 {
 public:
     wxMenu(const wxString& title = wxEmptyString, long style = 0);
-    wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL);
-    wxMenuItem* AppendSeparator();
+
+    wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;
+    wxMenuItem* AppendSeparator() /Transfer/;
     wxMenuItem* AppendCheckItem(int id,
                                 const wxString& text,
-                                const wxString& help = wxEmptyString);
+                                const wxString& help = wxEmptyString) /Transfer/;
     wxMenuItem* AppendRadioItem(int id,
                                 const wxString& text,
-                                const wxString& help = wxEmptyString);
+                                const wxString& help = wxEmptyString) /Transfer/;
 
     wxMenuItem* Append(int id,
                        const wxString& text,
                        wxMenu *submenu /Transfer/,
-                       const wxString& help = wxEmptyString) /PyName=AppendMenu/;
+                       const wxString& help = wxEmptyString) /PyName=AppendMenu, Transfer/;
 
     wxMenuItem* AppendSubMenu(wxMenu *submenu /Transfer/,
                               const wxString& text,
@@ -66,7 +72,7 @@ public:
 
     wxMenuItem *Remove(int id) /Factory/;
     wxMenuItem* Remove(wxMenuItem *item) /PyName=RemoveItem/;
-    
+
     bool Delete(int id);
     bool Delete(wxMenuItem* item) /PyName=DeleteItem/;
 
@@ -110,6 +116,13 @@ public:
     wxMenu *GetParent() const;
 
     wxString GetLabelText(int itemid) const;
+
+%If (WXMSW)
+    long GetHMenu() const;
+%MethodCode
+        sipRes = (long)sipCpp->GetHMenu();
+%End
+%End
 };
 
 class wxMenuBar : wxWindow
@@ -139,7 +152,7 @@ public:
     void Check(int id, bool check);
     bool IsChecked(int id) const;
     bool IsEnabled(int id) const;
-     
+
     void SetLabel(int id, const wxString &label);
     wxString GetLabel(int id) const;
 
@@ -162,28 +175,13 @@ public:
 
     wxString GetMenuLabelText(size_t pos) const;
 
-/*
-    %pythoncode {
-        def GetMenus(self):
-            """Return a list of (menu, label) items for the menus in the MenuBar. """
-            return [(self.GetMenu(i), self.GetLabelTop(i)) 
-                    for i in range(self.GetMenuCount())]
-            
-        def SetMenus(self, items):
-            """Clear and add new menus to the MenuBar from a list of (menu, label) items. """
-            for i in range(self.GetMenuCount()-1, -1, -1):
-                self.Remove(i)
-            for m, l in items:
-                self.Append(m, l)
-    }
-*/
 };
 
 class wxMenuItem : wxObject
 {
 public:
-    wxMenuItem(wxMenu* parentMenu = NULL,
-               int id=wxID_SEPARATOR,
+    wxMenuItem(wxMenu* parentMenu /TransferThis/ = NULL,
+               int id = wxID_SEPARATOR,
                const wxString& text = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
@@ -208,7 +206,7 @@ public:
     wxString GetLabel() const;
     const wxString& GetText() const;
 
-    // get the label from text 
+    // get the label from text
     static wxString GetLabelFromText(const wxString& text);
 
     // what kind of menu item we are
@@ -253,10 +251,10 @@ public:
     wxColour GetBackgroundColour();
     void SetBitmaps(const wxBitmap& bmpChecked,
                     const wxBitmap& bmpUnchecked = wxNullBitmap);
-    
+
     void SetDisabledBitmap( const wxBitmap& bmpDisabled );
     const wxBitmap& GetDisabledBitmap() const;
-   
+
     void SetMarginWidth(int nWidth);
     int GetMarginWidth();
     static int GetDefaultMarginWidth();

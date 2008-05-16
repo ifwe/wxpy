@@ -5,8 +5,20 @@
 int EntryStart();
 %MethodCode
     int argc = 0;
-    char** argv = NULL;
+    char** argv = 0;
+    wxApp* app = wxTheApp;
+
+    /* Ensure the wxApp was created already. */
+    if (app == NULL) {
+        PyErr_SetString(PyExc_AssertionError, "wxEntryStart called without a wxApp created yet");
+        sipIsErr = 1;
+    }
+
+    /* Call wxEntryStart for wx initialization */
     sipRes = wxEntryStart(argc, argv);
+
+    /* Connect the CallAfter mechanism. */
+    initializeCallAfter();
 %End
 
 
@@ -17,66 +29,55 @@ public:
     ~wxApp();
 
     virtual bool OnInit();
-    bool OnInitGui();
+    virtual bool OnInitGui();
+    virtual int MainLoop();
 
-    void OnUnhandledException();
+    void ReleaseGIL();
 %MethodCode
-#ifdef __WXDEBUG__
-    // we're called from an exception handler so we can re-throw the exception
-    // to recover its type
-    wxString what;
-    try
-    {
-        throw;
-    }
-#if wxUSE_STL
-    catch ( std::exception& e )
-    {
-        what.Printf("std::exception of type \"%s\", what() = \"%s\"",
-                    typeid(e).name(), e.what());
-    }
-#endif // wxUSE_STL
-    catch ( ... )
-    {
-        what = "unknown exception";
-    }
-
-    wxMessageOutputBest().Printf(
-        "*** Caught unhandled %s; terminating\n", what
-    );
-#endif // __WXDEBUG__
+    Py_BEGIN_ALLOW_THREADS
+    Py_END_ALLOW_THREADS
 %End
+
+//    virtual bool OnExceptionInMainLoop();
+//%MethodCode
+//        throw;
+//%End
 
     wxString GetAppName() const;
     void SetAppName(const wxString& name);
+
     wxString GetClassName() const;
     void SetClassName(const wxString& name);
+
     const wxString& GetVendorName() const;
     void SetVendorName(const wxString& name);
+
 //  wxAppTraits*, GetTraits(),
-    void ProcessPendingEvents();
-    bool Yield(bool onlyIfNeeded = false);
-    void WakeUpIdle();
-    static bool IsMainLoopRunning() const;
-    int MainLoop();
+    bool Yield(bool onlyIfNeeded = false) /ReleaseGIL/;
+    void WakeUpIdle() /ReleaseGIL/;
+    static bool IsMainLoopRunning() const /ReleaseGIL/;
+
+
     void Exit();
-    wxLayoutDirection GetLayoutDirection() const;
     void ExitMainLoop();
-    bool Pending();
-    bool Dispatch();
-    bool ProcessIdle();
-//  virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
-    virtual bool IsActive() const;
-    void SetTopWindow(wxWindow *win);
-    virtual wxWindow* GetTopWindow() const;
+    bool Pending() /ReleaseGIL/;
+    bool ProcessIdle() /ReleaseGIL/;
+    bool IsActive() const /ReleaseGIL/;
+
+void SetTopWindow(wxWindow *win);
+    wxWindow* GetTopWindow() const;
+
     void SetExitOnFrameDelete(bool flag);
     bool GetExitOnFrameDelete() const;
+
     void SetUseBestVisual( bool flag, bool forceTrueColour = false  );
     bool GetUseBestVisual() const;
-    virtual void SetPrintMode(int mode);
+
+    void SetPrintMode(int mode);
     int GetPrintMode() const;
 
     static void SetInstance(wxApp* app);
+    wxLayoutDirection GetLayoutDirection() const;
 /*
 %If (WXMAC)
     virtual void         MacOpenFile(const wxString &fileName) ;
