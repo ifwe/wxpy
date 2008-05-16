@@ -4,4 +4,7 @@
 *.pyc
 build/
 *.so
-
+*.pdb
+*.pyd
+*.obj
+*.swp
