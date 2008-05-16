@@ -7,6 +7,7 @@ utils for building wxpy or wxpy extensions
 from __future__ import with_statement
 
 import itertools
+import os
 import shutil
 import sipconfig
 import sipdistutils
@@ -117,15 +118,16 @@ def make_sip_ext(name, iface_files, include = None, libs = []):
     ext = Extension(name, iface_files, extra_compile_args = cargs, extra_link_args = largs)
     ext.extra_sip_includes = includes
 
-    # HACK! disutils wants to include /DNDEBUG but we
-    # are using __WXDEBUG__, which needs it
-    from distutils.msvc9compiler import MSVCCompiler
-    old_initialize = MSVCCompiler.initialize
-    def new_initialize(self, plat_name=None):
-        res = old_initialize(self, plat_name)
-        if '/DNDEBUG' in self.compile_options:
-            self.compile_options.remove('/DNDEBUG')
-        return res
-    MSVCCompiler.initialize = new_initialize
+    if os.name == 'nt':
+        # HACK! disutils wants to include /DNDEBUG but we
+        # are using __WXDEBUG__, which needs it
+        from distutils.msvc9compiler import MSVCCompiler
+        old_initialize = MSVCCompiler.initialize
+        def new_initialize(self, plat_name=None):
+            res = old_initialize(self, plat_name)
+            if '/DNDEBUG' in self.compile_options:
+                self.compile_options.remove('/DNDEBUG')
+            return res
+        MSVCCompiler.initialize = new_initialize
 
     return ext
