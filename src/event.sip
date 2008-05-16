@@ -4,21 +4,10 @@
 %End
 %End
 
+
 %ModuleHeaderCode
-
-/* a linked list node holding a PyObject* callable */
-typedef struct _callAfterCb
-{
-    PyObject* cb;
-    struct _callAfterCb* next;
-} callAfterCb;
-
-/* holds the head and tail to a linked list of PyObject* callables */
-typedef struct _callAfterCbList
-{
-    struct _callAfterCb* head;
-    struct _callAfterCb* tail;
-} callAfterCbList;
+#include <list>
+typedef std::list<PyObject*> callAfterCbList;
 
 class CallAfterCallback: public wxObject
 {
@@ -28,6 +17,9 @@ public:
 
     void EventThunker(wxEvent& event);
 };
+
+static wxEventType g_callAfterId = 0;
+void initializeCallAfter();
 %End
 
 %ModuleCode
@@ -35,17 +27,29 @@ public:
 /* the global CallAfter callable object list */
 static callAfterCbList g_callAfterCbs;
 
+/* Connects a special event ID to the app through which CallAfter
+   calls get routed. */
+void initializeCallAfter()
+{
+    // static wxEventType g_callAfterId = 0;
+    static CallAfterCallback g_callafterEvent;
+
+    if (!g_callAfterId) {
+        g_callAfterId = wxNewEventType();
+        wxTheApp->Connect(-1, -1, g_callAfterId,
+                          (wxObjectEventFunction)&CallAfterCallback::EventThunker,
+                          &g_callafterEvent, NULL);
+    }
+}
+
 /* All wx.CallAfter calls are routed through here. */
 void CallAfterCallback::EventThunker(wxEvent& event) {
     SIP_BLOCK_THREADS
-    
-    callAfterCb* cbnode = g_callAfterCbs.head;
-    callAfterCb* oldnode;
-    
-    while(cbnode)
+
+    callAfterCbList::iterator iter;
+    for(iter = g_callAfterCbs.begin(); iter != g_callAfterCbs.end(); iter++)
     {
-        oldnode = cbnode;
-        PyObject* func = cbnode->cb;        
+        PyObject* func = *iter;
         PyObject* result = PyObject_CallObject(func, NULL);
         if (result)
         {
@@ -55,22 +59,18 @@ void CallAfterCallback::EventThunker(wxEvent& event) {
                 PyErr_Print();
         } else
             PyErr_Print();
-            
+
         Py_DECREF(func);
-        
-        cbnode = cbnode->next;
-        sipFree(oldnode);        
     }
-    
-    g_callAfterCbs.head = g_callAfterCbs.tail = NULL;
+
+    g_callAfterCbs.clear();
+
+
     SIP_UNBLOCK_THREADS
 }
 %End
 
-%PreInitialisationCode
-
-g_callAfterCbs.head = NULL;
-g_callAfterCbs.tail = NULL;
+%PostInitialisationCode
 
 %End
 
@@ -78,9 +78,6 @@ g_callAfterCbs.tail = NULL;
 // may be called from any thread
 void CallAfter(SIP_PYCALLABLE);
 %MethodCode
-    static int callAfterId = 0;
-    static CallAfterCallback g_callafterEvent;
-
     if (!wxTheApp)
     {
         SIP_BLOCK_THREADS
@@ -90,38 +87,13 @@ void CallAfter(SIP_PYCALLABLE);
     }
     else
     {
-        if (!callAfterId)
-        {        
-            callAfterId = wxNewEventType();
-            wxTheApp->Connect(-1, -1, callAfterId,
-                (wxObjectEventFunction)&CallAfterCallback::EventThunker, &g_callafterEvent, NULL);
-        }
-    
         /* append the callable to the end of our list */
-        callAfterCb* new_cb = (callAfterCb*)sipMalloc(sizeof(callAfterCb));
-        
-        /* assert callable? */
-        new_cb->cb = a0;                
-        new_cb->next = NULL;
-    
         SIP_BLOCK_THREADS
         Py_INCREF(a0);
-        callAfterCb* tail = g_callAfterCbs.tail;
-        
-        /* add the callback to the end of the linked list of
-           call after callbacks */
-        if (tail == NULL)
-        {
-            g_callAfterCbs.head = g_callAfterCbs.tail = new_cb;
-        }
-        else
-        {
-            g_callAfterCbs.tail->next = new_cb;
-            g_callAfterCbs.tail = new_cb;
-        }
+        g_callAfterCbs.push_back(a0);
         SIP_UNBLOCK_THREADS
-        
-        wxCommandEvent e(callAfterId, -1);
+
+        wxCommandEvent e(g_callAfterId, -1);
         wxTheApp->AddPendingEvent(e);
     }
 %End
@@ -296,19 +268,19 @@ public:
     wxEventType GetEventType() const;
     wxObject* GetEventObject() const;
     void SetEventObject(wxObject* obj);
-    
+
     long GetTimestamp() const;
     void SetTimestamp(long ts = 0);
-    
+
     int GetId() const;
     void SetId(int Id);
-    
+
     bool IsCommandEvent() const;
     void Skip(bool skip = true);
     bool GetSkipped() const;
-    
+
     ~wxEvent();
-    
+
 private:
     wxEvent();
 };
@@ -338,10 +310,54 @@ public:
 };
 
 
-class wxMouseEvent: wxEvent  {
+
+class wxMouseEvent : wxEvent
+{
 public:
-    wxMouseEvent();
+    wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
+    bool IsButton() const;
+    bool ButtonDown(int but = wxMOUSE_BTN_ANY) const;
+    bool ButtonDClick(int but = wxMOUSE_BTN_ANY) const;
+    bool ButtonUp(int but = wxMOUSE_BTN_ANY) const;
+    bool Button(int button) const;
+    bool ButtonIsDown(int but) const;
+
+    int GetButton() const;
+    bool ControlDown() const;
+    bool MetaDown() const;
+    bool AltDown() const;
+    bool ShiftDown() const;
+    bool CmdDown() const;
+
+    bool LeftDown() const;
+    bool MiddleDown() const;
+    bool RightDown() const;
+    bool LeftUp() const;
+    bool MiddleUp() const;
+    bool RightUp() const;
+    bool LeftDClick() const;
+    bool MiddleDClick() const;
+    bool RightDClick() const;
+    bool LeftIsDown();
+    bool MiddleIsDown();
+    bool RightIsDown();
+    bool Dragging() const;
+    bool Moving() const;
+    bool Entering() const;
+    bool Leaving() const;
+
+    wxPoint GetPosition();
+    wxPoint GetLogicalPosition(const wxDC& dc) const;
+
+    wxCoord GetX() const;
+    wxCoord GetY() const;
+
+    int GetWheelRotation() const;
+    int GetWheelDelta() const;
+    int GetLinesPerAction() const;
+    bool IsPageScroll() const;
 };
+
 
 class wxKeyEvent: wxEvent {
 public:
@@ -394,7 +410,7 @@ public:
     wxContextMenuEvent(wxEventType type = wxEVT_NULL,
                        wxWindowID winid = 0,
                        const wxPoint& pt = wxDefaultPosition);
-    
+
     //const wxPoint& GetPosition() const;
     void SetPosition(const wxPoint& pos);
 };

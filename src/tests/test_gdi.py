@@ -1,45 +1,48 @@
+import os.path
 import wx
-import py.test
-
-def setup_module(module):
-    if not wx.GetApp():
-        app = wx.GetApp()
-        wx.EntryStart()
-        wx.InitAllImageHandlers()
-        
-    assert wx.GetApp()
 
 def test_Image():
-    img = wx.Image('src/tests/digsby_ascii_popup.png')
-    assert bool(img)
+    imgpath = './src/tests/digsby_ascii_popup.png'
+
+    assert os.path.exists(imgpath)
+    img = wx.Image(imgpath)
+
+    assert img.IsOk()
     assert img.GetSize() == (362, 324)
+    assert img.GetWidth() == img.Width == 362
+    assert img.GetHeight() == img.Height == 324
+    assert img.GetRed(0, 0) == img.GetGreen(0, 0) == img.GetBlue(0, 0) == 255
+
+    img2 = img.Scale(50, 50)
+    assert img2.IsOk()
+    assert img2.GetSize() == (50, 50)
 
 def test_Point():
     return
     p = wx.Point()
     assert p.x == p.y == 0
-    
+
     p2 = wx.Point(10, 20)
     assert p2.x == 10
     assert p2.y == 20
-    
+
     p3 = wx.Point(5, 6)
     assert p2 != p3
-    
+
     p4 = wx.Point(5, 6)
     assert p3 == p4
     assert p4 == p4
-    
+
     assert p[0] == p[1] == 0
     assert p2[0] == 10
-    
+
     p[0] = 42
     assert p[0] == p.x == 42
     p[1] = p3[1]
     assert p == wx.Point(42, 6)
-    
+
     assert p == (42, 6)
-    
+
 def test_Size():
     s = wx.Size(1, 2)
     assert s == (1, 2)
@@ -48,33 +51,39 @@ def test_Size():
     s = wx.Size()
     assert s.x == s.y == 0
     assert s == s
-    
+
     s2 = wx.Size(50, 60)
     assert s != s2
-    
+
     s3 = wx.Size(50, 60)
     assert s2 == s3
-    
+
     assert s3 == (50, 60)
-    
+
 def test_Rect():
-    return
     r = wx.Rect()
-    assert r.X == r.x == r.Y == r.y == r.Width == r.width == r.Height == r.height == 0
-    
+    attrs = 'X Y x y Width Height width height'.split()
+    assert all(0 == val for val in (getattr(r, a) for a in attrs))
+
     r2 = wx.Rect(1, 2, 3, 4)
     assert r2.x == r2.GetX() == 1
     assert r2.y == r2.GetY() == 2
     assert r2.width == r2.GetWidth() == r2.Width == 3
     assert r2.height == r2.GetHeight() == r2.Height == 4
-    
+
+    assert r2[:2] == r2.Position
+
     assert r2.TopLeft == r2.GetTopLeft() == wx.Point(1, 2)
     assert r2.TopRight == r2.GetTopRight() == wx.Point(3, 2)
     assert r2.BottomLeft == r2.GetBottomLeft() == wx.Point(1, 5)
     assert r2.BottomRight == r2.GetBottomRight() == wx.Point(3, 5)
-    
-    assert r2 == (1, 2, 3, 4) == wx.rect(1, 2, 3, 4)
+
+    assert r2 == (1, 2, 3, 4)
     assert r2 != (4, 3, 2, 1)
+
+    r3 = wx.RectPS(wx.Point(20, 30), wx.Size(40, 50))
+    r4 = wx.RectPS((20, 30), (40, 50))
+    assert r3 == r4
 
 def test_Colour():
     return

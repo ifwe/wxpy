@@ -227,9 +227,9 @@ public:
             bool underline=false, const wxString& face = wxEmptyString,
             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     wxFont(const wxFont&);
-    
+
     ~wxFont();
-    
+
     int GetPointSize() const;
     wxSize GetPixelSize() const;
     bool IsUsingSizeInPixels() const;
@@ -243,11 +243,11 @@ public:
     bool IsFixedWidth() const;
     wxString GetNativeFontInfoDesc() const;
     wxString GetNativeFontInfoUserDesc() const;
-    void SetPointSize( int pointSize );
-    void SetPixelSize( const wxSize& pixelSize );
-    void SetFamily( int family );
-    void SetStyle( int style );
-    void SetWeight( int weight );
+    void SetPointSize(int pointSize);
+    void SetPixelSize(const wxSize& pixelSize );
+    void SetFamily(int family);
+    void SetStyle(int style);
+    void SetWeight(int weight);
     bool SetFaceName( const wxString& faceName );
     void SetUnderlined( bool underlined );
     void SetEncoding(wxFontEncoding encoding);
@@ -273,7 +273,7 @@ class wxFontEnumerator {
 public:
     wxFontEnumerator();
     ~wxFontEnumerator();
-    
+
     wxArrayString GetEncodings();
     wxArrayString GetFacenames();
 

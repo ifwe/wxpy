@@ -2,11 +2,28 @@ class wxGBPosition
 {
 %TypeHeaderCode
 #include <wx/gbsizer.h>
-%End    
+%End
 public:
     wxGBPosition(int row = 0, int col = 0);
     ~wxGBPosition();
-    
+
+%ConvertToTypeCode
+    if (sipIsErr == NULL)
+    {
+        return sequence_2_ints_check(sipPy)
+            || sipCanConvertToInstance(sipPy, sipClass_wxGBPosition, SIP_NO_CONVERTORS);
+    }
+
+    int _x, _y;
+    if (sequence_2_ints(sipPy, &_x, &_y)) {
+        *sipCppPtr = new wxGBPosition(_x, _y);
+        return sipGetState(sipTransferObj);
+    }
+
+    *sipCppPtr = reinterpret_cast<wxGBPosition *>(sipConvertToInstance(sipPy, sipClass_wxGBPosition, sipTransferObj, SIP_NO_CONVERTORS, 0, sipIsErr));
+    return 0;
+%End
+
     int GetRow() const;
     int GetCol() const;
     void SetRow(int row);
@@ -17,11 +34,26 @@ class wxGBSpan
 {
 %TypeHeaderCode
 #include <wx/gbsizer.h>
-%End    
+%End
 
 public:
     wxGBSpan(int rowspan=1, int colspan=1);
     ~wxGBSpan();
+
+%ConvertToTypeCode
+    if (sipIsErr == NULL)
+        return sequence_2_ints_check(sipPy)
+            || sipCanConvertToInstance(sipPy, sipClass_wxGBSpan, SIP_NO_CONVERTORS);
+
+    int _x, _y;
+    if (sequence_2_ints(sipPy, &_x, &_y)) {
+        *sipCppPtr = new wxGBSpan(_x, _y);
+        return sipGetState(sipTransferObj);
+    }
+
+    *sipCppPtr = reinterpret_cast<wxGBSpan *>(sipConvertToInstance(sipPy, sipClass_wxGBSpan, sipTransferObj, SIP_NO_CONVERTORS, 0, sipIsErr));
+    return 0;
+%End
 
     int GetRowspan() const;
     int GetColspan() const;
@@ -34,15 +66,15 @@ class wxGBSizerItem: wxSizerItem
 {
 %TypeHeaderCode
 #include <wx/gbsizer.h>
-%End    
+%End
 
 public:
     wxGBSizerItem();
     ~wxGBSizerItem();
-    
+
     wxGBPosition GetPos() const;
     wxGBSpan GetSpan() const;
-    
+
     bool SetPos(const wxGBPosition& pos);
     bool SetSpan(const wxGBSpan& span);
     bool Intersects(const wxGBSizerItem& other);
@@ -56,17 +88,54 @@ class wxGridBagSizer : wxFlexGridSizer
 {
 %TypeHeaderCode
 #include <wx/gbsizer.h>
-%End    
+%End
 
 public:
     wxGridBagSizer(int vgap = 0, int hgap = 0 );
+    virtual ~wxGridBagSizer();
+
+    wxSizerItem* Add(wxWindow *window,
+                     const wxGBPosition& pos,
+                     const wxGBSpan& span = wxDefaultSpan,
+                     int flag = 0,
+                     int border = 0) /Transfer/;
+
+    wxSizerItem* Add(wxSizer *sizer,
+                     const wxGBPosition& pos,
+                     const wxGBSpan& span = wxDefaultSpan,
+                     int flag = 0,
+                     int border = 0) /Transfer/;
+
+    wxSizerItem* Add(SIP_PYTUPLE spacerSize,
+                     const wxGBPosition& pos,
+                     const wxGBSpan& span = wxDefaultSpan,
+                     int flag = 0,
+                     int border = 0) /Transfer/;
+%MethodCode
+    SIP_BLOCK_THREADS
+    if (PySequence_Fast_GET_SIZE(a0) != 2) {
+        PyErr_SetString(PyExc_TypeError, "wx.GridBagSizer.Add (with size argument): first argument must be a sequence of 2 integers");
+        sipIsErr = 1;
+    } else {
+        int w = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 0));
+        int h = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 1));
+
+        if ((w == -1 || h == -1) && PyErr_Occurred())
+            sipIsErr = 1;
+        else
+            //wxSizerItem* Add(int width, int height, const wxGBPosition& pos, const wxGBSpan& span = wxDefaultSpan, int flag = 0, int border = 0)
+            sipRes = sipCpp->Add(w, h, *a1, *a2, a3, a4);
+    }
+    SIP_UNBLOCK_THREADS
+%End
+
 /*        wxGBSizerItem* Add(PyObject* item,
                            const wxGBPosition& pos,
                            const wxGBSpan& span = wxDefaultSpan,
                            int flag = 0,
                            int border = 0,
                            PyObject* userData = NULL );
-  */                          
+  */
     //wxGBSizerItem* Add( wxGBSizerItem *item );
     wxSize GetCellSize(int row, int col) const;
     wxSize GetEmptyCellSize() const;

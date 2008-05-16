@@ -43,15 +43,20 @@ def manage_cache(gendir):
     if 'clean' in sys.argv:
         cache.rmtree()
 
+    changed_count = 0
     for newfile in gendir.files('*.cpp') + gendir.files('*.h'):
         oldfile = cache / newfile.name
         if different(newfile, oldfile):
+            changed_count += 1
             shutil.copy2(newfile, oldfile)
             if VERBOSE:
                 sipconfig.inform("--> changed: %s" % newfile.name)
         else:
             #sipconfig.inform("--> same:    %s" % newfile.name)
             shutil.copystat(oldfile, newfile)
+
+    sipconfig.inform('%d file%s changed.' %
+                     (changed_count, 's' if changed_count != 1 else ''))
 
 
 class wxpy_build_ext(sipdistutils.build_ext):
@@ -82,7 +87,11 @@ class wxpy_build_ext(sipdistutils.build_ext):
             list(getattr(self, 'extra_sip_includes', []))
         )
 
-        self.spawn([sip_bin, '-z', argsfile, source])
+        self.spawn([sip_bin,
+                    '-g', # release GIL before every call
+                    '-z', argsfile,
+                    '-r',  # debugging trace statements
+                    source])
 
     def swig_sources (self, sources, extension=None):
         sources = sipdistutils.build_ext.swig_sources(self, sources, extension)
@@ -91,7 +100,7 @@ class wxpy_build_ext(sipdistutils.build_ext):
         manage_cache(self.build_temp)
         return sources
 
-def make_sip_ext(name, iface_files, include = None):
+def make_sip_ext(name, iface_files, include = None, libs = []):
     cxxflags = [f for f in wxpyconfig.cxxflags if not f.startswith('-O')]
     cargs = list(wxpyconfig.cxxflags) + ['-DWXPY=1']
 
@@ -103,7 +112,20 @@ def make_sip_ext(name, iface_files, include = None):
             cargs.append('-I%s'  % inc)
 
     largs = list(wxpyconfig.lflags)
+    largs.extend(libs)
 
     ext = Extension(name, iface_files, extra_compile_args = cargs, extra_link_args = largs)
     ext.extra_sip_includes = includes
+
+    # HACK! disutils wants to include /DNDEBUG but we
+    # are using __WXDEBUG__, which needs it
+    from distutils.msvc9compiler import MSVCCompiler
+    old_initialize = MSVCCompiler.initialize
+    def new_initialize(self, plat_name=None):
+        res = old_initialize(self, plat_name)
+        if '/DNDEBUG' in self.compile_options:
+            self.compile_options.remove('/DNDEBUG')
+        return res
+    MSVCCompiler.initialize = new_initialize
+
     return ext

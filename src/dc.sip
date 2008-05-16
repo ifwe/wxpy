@@ -1,4 +1,3 @@
-
 class wxDC : wxObject /Abstract/
 {
 public:
@@ -6,10 +5,8 @@ public:
     ~wxDC();
 
 //     void DrawObject(wxDrawObject* drawobject)
-    bool FloodFill(wxCoord x, wxCoord y, const wxColour& col,
-        int style = wxFLOOD_SURFACE);
-    bool FloodFill(const wxPoint& pt, const wxColour& col,
-        int style = wxFLOOD_SURFACE);
+    bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
+    bool FloodFill(const wxPoint& pt, const wxColour& col, int style = wxFLOOD_SURFACE);
     void GradientFillConcentric(const wxRect& rect,
                                 const wxColour& initialColour,
                                 const wxColour& destColour);
@@ -37,7 +34,7 @@ public:
         double sa, double ea);
     void DrawPoint(wxCoord x, wxCoord y);
     void DrawPoint(const wxPoint& pt);
-    
+
     /*
     void DrawLines(int n, wxPoint points[],
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
@@ -74,19 +71,19 @@ public:
     bool useMask = false);
     void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt,
     bool useMask = false);
-    
+
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
     void DrawText(const wxString& text, const wxPoint& pt);
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
 void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
-
+/*
     void DrawLabel(const wxString& text,
                            const wxBitmap& image,
                            const wxRect& rect,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
                            wxRect *rectBounding = NULL);
-
+*/
     void DrawLabel(const wxString& text, const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                    int indexAccel = -1);
@@ -98,7 +95,7 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
     bool Blit(const wxPoint& destPt, const wxSize& sz,
               wxDC *source, const wxPoint& srcPt,
               int rop = wxCOPY, bool useMask = false, const wxPoint& srcPtMask = wxDefaultPosition);
-    
+
     wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
 /*
 %If (wxUSE_SPLINES)
@@ -197,9 +194,15 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
                        wxCoord *x, wxCoord *y,
                        wxCoord *descent = NULL,
                        wxCoord *externalLeading = NULL,
-                       wxFont *theFont = NULL) const;
+                       wxFont *theFont = NULL) const /PyName=GetFullTextExtent/;
 
-//    wxSize GetTextExtent(const wxString& string) const;
+    SIP_PYTUPLE GetTextExtent(const wxString& string);
+%MethodCode
+        int x = 0;
+        int y = 0;
+        sipCpp->GetTextExtent(*a0, &x, &y);
+        sipRes = Py_BuildValue("(ii)", x, y);
+%End
 
      void GetMultiLineTextExtent(const wxString& string,
                                         wxCoord *width,
@@ -208,7 +211,7 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
                                         wxFont *font = NULL) const;
 
     //wxSize GetMultiLineTextExtent(const wxString& string) const;
-    
+
     //bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
     wxSize GetSize() const;
     wxSize GetSizeMM() const;
@@ -275,8 +278,16 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
     wxCoord MaxY() const;
 
     void GetClippingBox(long *x /Out/, long *y /Out/, long *w /Out/, long *h /Out/) const;
-     wxLayoutDirection GetLayoutDirection() const;
-     void SetLayoutDirection(wxLayoutDirection dir);
+    wxLayoutDirection GetLayoutDirection() const;
+    void SetLayoutDirection(wxLayoutDirection dir);
+
+%If (WXMSW)
+    long GetHDC();
+%MethodCode
+        sipRes = (long)sipCpp->GetHDC();
+%End
+%End
+
 
 private:
     wxDC(const wxDC&);
@@ -316,7 +327,7 @@ public:
     wxMemoryDC(wxBitmap& bitmap = wxNullBitmap);
     void SelectObject(wxBitmap& bitmap);
     void SelectObjectAsSource(const wxBitmap& bmp);
-    
+
 };
 
 
@@ -338,7 +349,7 @@ public:
     void UnMask();
 
     void SetStyle(int style);
-    int GetStyle() const;    
+    int GetStyle() const;
 };
 
 class wxBufferedPaintDC : wxBufferedDC

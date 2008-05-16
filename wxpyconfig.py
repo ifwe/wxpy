@@ -7,7 +7,7 @@ import platform
 import shlex
 from path import path
 
-wxpy_dir         = path('~/src/wxpy').expand()
+wxpy_dir         = path(os.environ['WXPYDIR'])
 possible_wx_libs = 'xrc stc aui html qa adv core xml net base'.split()
 use_wx_libs      = 'core base adv'.split()
 
@@ -27,7 +27,6 @@ if platform_name in ('mac',):
     if not wxconfig.exists():
         raise AssertionError('cannot find wx-config at: "%s"' % wxconfig)
 
-
     cxxflags = shlex.split(wxconfig.run('--cxxflags').strip()) + ['-Wall', '-ggdb']
     lflags   = shlex.split(wxconfig.run('--libs %s' % ','.join(use_wx_libs)).strip())
 
@@ -40,24 +39,37 @@ elif platform_name == 'msw':
 
     print 'using wxwidgets dir:', wxdir
 
-    DEBUG_SYMBOLS = True
-    ENABLE_EXCEPTIONS = True
+    WX_FLAG = 'ud'              # the postfix on .libs and .dlls
+    WXDEBUG = True              # __WXDEBUG__
+    DEBUG_SYMBOLS = True        # /Zi
+    ENABLE_EXCEPTIONS = False
+    WHOLE_PROGRAM_OPTIMIZATION = False
 
     # TODO: infer these without a wx-config binary? (bakefiles!)
-    cxxflags = ('/MD /DWIN32 /O2 /D__NO_VC_CRTDBG__ /D__WXMSW__ '
-                '/D__WXDEBUG__ /D_UNICODE /DwxUSE_UNICODE_MSLU=1 '
-                '/DwxUSE_GRAPHICS_CONTEXT=1 /DWXUSINGDLL').split()
+    cxxflags = ('/MD /DWIN32 /GR /D__NO_VC_CRTDBG__ /D__WXMSW__ '
+                '/D_UNICODE /DwxUSE_UNICODE_MSLU=1 '
+                '/DwxUSE_GRAPHICS_CONTEXT=1 /DWXUSINGDLL /Ox').split()
+
+    lflags = ['/LIBPATH:' + str(wxdir / 'lib/vc_dll')]
+
+    if WHOLE_PROGRAM_OPTIMIZATION:
+        cxxflags.append('/GL')
+        lflags.append('/LTCG')
+
+    if WXDEBUG:
+        cxxflags.extend(['/D__WXDEBUG__', '/D__NO_VC_CRTDBG__'])
 
     if DEBUG_SYMBOLS: # debug
         cxxflags.append('/Zi')
 
     if ENABLE_EXCEPTIONS:
         cxxflags.append('/EHa')
+    else:
+        cxxflags.append('/DwxNO_EXCEPTIONS')
 
 
     wx_lib_dir = wxdir / 'lib/vc_dll'
-    wx_flag = 'uh'
-    wx_config_dir = 'msw' + wx_flag
+    wx_config_dir = 'msw' + WX_FLAG
 
     # TODO: these too ;)
     cxxflags.extend(['/I%s' % str(wx_lib_dir / wx_config_dir),
@@ -72,11 +84,7 @@ msw28%s_aui
 msw28%s_core
 msw28%s_html'''.split()
 
-    wx_libs = ['wx' + (s % wx_flag) + '.lib' for s in wx_libs]
-
-
-
-    lflags = ['/LIBPATH:' + str(wxdir / 'lib/vc_dll')]
+    wx_libs = ['wx' + (s % WX_FLAG) + '.lib' for s in wx_libs]
     lflags.extend(wx_libs)
 
     if DEBUG_SYMBOLS:

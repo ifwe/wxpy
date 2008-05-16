@@ -133,6 +133,14 @@ wxPoint wxGetMousePosition();
 wxWindow* wxGetActiveWindow();
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
+
+// this form has an out value as an argument
+wxWindow* wxFindWindowAtPointer();
+%MethodCode
+    wxPoint pos;
+    sipRes = wxFindWindowAtPointer(pos);
+%End
+
 wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 bool wxLaunchDefaultBrowser(const wxString& url);

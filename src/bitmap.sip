@@ -17,6 +17,11 @@ wxBitmap wxBitmapFromImage(const wxImage& image, int depth = -1);
     sipRes = new wxBitmap(*a0, a1);
 %End
 
+wxBitmap wxEmptyBitmap(int width, int height);
+%MethodCode
+    sipRes = new wxBitmap(a0, a1);
+%End
+
 class wxBitmap : wxGDIObject
 {
 public:
@@ -24,34 +29,40 @@ public:
     wxBitmap(const wxString& filename, long type = wxBITMAP_TYPE_ANY);
 
     bool IsOk();
+
+    bool Ok();
+%MethodCode
+        sipRes = sipCpp->IsOk();
+%End
+
     int GetWidth();
     int GetHeight();
     int GetDepth();
     // wxSize GetSize();
-    
+
     wxImage ConvertToImage() const;
     wxMask* GetMask() const;
     void SetMask(wxMask* mask /Transfer/);
-    
+
     wxBitmap GetSubBitmap(const wxRect& rect) const;
 //  bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
 //  bool LoadFile(const wxString& name, wxBitmapType type);
-    
+
     wxPalette* GetPalette() const;
-    
+
     bool CopyFromIcon(const wxIcon& icon);
-    
+
     void SetHeight(int height);
     void SetWidth(int width);
     void SetDepth(int depth);
-    
+
     bool HasAlpha() const;
     void UseAlpha();
-    
+
     // non zero
-    
-    
-    
-    
+
+
+
+
     ~wxBitmap();
 };

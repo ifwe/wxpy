@@ -10,11 +10,18 @@ class wxControl : wxWindow
 %End
 
 public:
+    wxControl(wxWindow *parent,
+              wxWindowID id = -1,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style=0,
+              const wxValidator& validator = wxDefaultValidator,
+              const wxString& name=wxControlNameStr);
     //void Command(wxCommandEvent&);
     //const wxString& GetLabel() const;
     //const wxString& GetLabelText() const;
     void SetLabel(const wxString&);
-    
+
 private:
     wxControl(const wxControl&);
 };
@@ -32,11 +39,11 @@ public:
     bool SetStringSelection(const wxString& s);
     wxString GetStringSelection() const;
     void Select(int n);
-    
+
     virtual unsigned int GetCount() const = 0;
     virtual wxString GetString(unsigned int n) const = 0;
     virtual void SetSelection(int n) = 0;
-    
+
 };
 
 

@@ -20,7 +20,7 @@ enum
     wxRESIZE_BORDER,
 
     wxDIALOG_NO_PARENT,
-    
+
     wxDEFAULT_FRAME_STYLE,
     wxDEFAULT_DIALOG_STYLE,
 
@@ -34,7 +34,7 @@ enum
     wxFRAME_EX_METAL,
     wxDIALOG_EX_METAL,
     wxWS_EX_CONTEXTHELP,
-    
+
     // Obsolete
     wxDIALOG_MODAL,
     wxDIALOG_MODELESS,
@@ -43,7 +43,7 @@ enum
 
     wxFRAME_EX_CONTEXTHELP,
     wxDIALOG_EX_CONTEXTHELP,
-};    
+};
 
 
 enum
@@ -73,6 +73,8 @@ class wxTopLevelWindow : wxWindow
 #include <wx/toplevel.h>
 %End
 public:
+    virtual ~wxTopLevelWindow();
+
     void Maximize(bool maximize = true);
     void Restore();
     void Iconize(bool iconize = true);
@@ -136,14 +138,17 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
             const wxString& name = wxFrameNameStr) /Transfer/;
-    ~wxFrame();
+    virtual ~wxFrame();
+
+    void SetMenuBar(wxMenuBar* menuBar /Transfer/);
+    wxMenuBar* GetMenuBar();
 
 private:
     wxFrame(const wxFrame&);
 };
 
 enum {
-   wxDEFAULT_DIALOG_STYLE  
+   wxDEFAULT_DIALOG_STYLE
 };
 
 class wxDialog : wxTopLevelWindow
@@ -156,6 +161,8 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxDialogNameStr) /Transfer/;
+    virtual ~wxDialog();
+
     void SetReturnCode(int returnCode);
     int GetReturnCode() const;
 

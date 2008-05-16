@@ -26,6 +26,20 @@ class wxDropTarget
 {
     wxDropTarget(wxDataObject* = NULL) /Transfer/;
     ~wxDropTarget();
+
+    wxDataObject *GetDataObject() const;
+    void SetDataObject(wxDataObject *dataObject /Transfer/);
+
+    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
+    virtual void OnLeave();
+
+    virtual bool OnDrop(wxCoord x, wxCoord y) = 0;
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) = 0;
+    virtual bool GetData() = 0;
+
+    void SetDefaultAction(wxDragResult action);
+    wxDragResult GetDefaultAction();
 };
 
 class wxDropSource

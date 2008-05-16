@@ -5,8 +5,20 @@
 int EntryStart();
 %MethodCode
     int argc = 0;
-    char** argv = NULL;
+    char** argv = 0;
+    wxApp* app = wxTheApp;
+
+    /* Ensure the wxApp was created already. */
+    if (app == NULL) {
+        PyErr_SetString(PyExc_AssertionError, "wxEntryStart called without a wxApp created yet");
+        sipIsErr = 1;
+    }
+
+    /* Call wxEntryStart for wx initialization */
     sipRes = wxEntryStart(argc, argv);
+
+    /* Connect the CallAfter mechanism. */
+    initializeCallAfter();
 %End
 
 
@@ -17,38 +29,56 @@ public:
     ~wxApp();
 
     virtual bool OnInit();
-    bool OnInitGui();
+    virtual bool OnInitGui();
+    virtual int MainLoop();
+
+    void ReleaseGIL();
+%MethodCode
+    Py_BEGIN_ALLOW_THREADS
+    Py_END_ALLOW_THREADS
+%End
+
+//    virtual bool OnExceptionInMainLoop();
+//%MethodCode
+//        throw;
+//%End
 
     wxString GetAppName() const;
     void SetAppName(const wxString& name);
+
     wxString GetClassName() const;
     void SetClassName(const wxString& name);
+
     const wxString& GetVendorName() const;
     void SetVendorName(const wxString& name);
+
 //  wxAppTraits*, GetTraits(),
-    void ProcessPendingEvents();
-    bool Yield(bool onlyIfNeeded = false);
-    void WakeUpIdle();
-    static bool IsMainLoopRunning() const;
-    int MainLoop();
+    bool Yield(bool onlyIfNeeded = false) /ReleaseGIL/;
+    void WakeUpIdle() /ReleaseGIL/;
+    static bool IsMainLoopRunning() const /ReleaseGIL/;
+
+
     void Exit();
-    wxLayoutDirection GetLayoutDirection() const;
     void ExitMainLoop();
-    bool Pending();
-    bool Dispatch();
-    virtual bool ProcessIdle();
-//  virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
-    bool IsActive() const;
+
+    bool Pending() /ReleaseGIL/;
+    bool ProcessIdle() /ReleaseGIL/;
+    bool IsActive() const /ReleaseGIL/;
+
     void SetTopWindow(wxWindow *win);
     wxWindow* GetTopWindow() const;
+
     void SetExitOnFrameDelete(bool flag);
     bool GetExitOnFrameDelete() const;
+
     void SetUseBestVisual( bool flag, bool forceTrueColour = false  );
     bool GetUseBestVisual() const;
+
     void SetPrintMode(int mode);
     int GetPrintMode() const;
 
     static void SetInstance(wxApp* app);
+    wxLayoutDirection GetLayoutDirection() const;
 /*
 %If (WXMAC)
     virtual void         MacOpenFile(const wxString &fileName) ;
@@ -79,4 +109,3 @@ wxApp* GetApp();
 %MethodCode
     sipRes = wxTheApp;
 %End
-
