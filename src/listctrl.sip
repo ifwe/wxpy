@@ -218,7 +218,8 @@ public:
 };
 class wxListCtrl: wxControl {
 public:
-    wxListCtrl(wxWindow* parent /TransferThis/, wxWindowID id = -1,
+    wxListCtrl(wxWindow* parent /TransferThis/,
+               wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
