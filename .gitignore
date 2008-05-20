@@ -6,5 +6,8 @@ build/
 *.so
 *.pdb
 *.pyd
+*.pyd.manifest
+*.exe
+*.exe.manifest
 *.obj
 *.swp
