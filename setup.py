@@ -14,6 +14,9 @@ import wxpysetup
 from distutils.core import setup
 from path import path
 
+class wxUSE(object):
+    STC = True
+
 def build():
     if wxpyconfig.platform_name == 'msw':
         # no touch on windows
@@ -23,6 +26,9 @@ def build():
         wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip']),
         wxpysetup.make_sip_ext('_wxhtml', ['src/html.sip']),
     ]
+
+    if wxUSE.STC:
+        extensions.append(wxpysetup.make_sip_ext('_wxstc', ['contrib/stc/stc.sip']))
 
     setup(name = 'wxpy',
           version = '1.0',

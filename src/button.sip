@@ -21,6 +21,7 @@ public:
              
     void SetDefault();
     static wxSize GetDefaultSize();
+
          
 private:
     wxButton(const wxButton&);

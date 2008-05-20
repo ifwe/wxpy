@@ -9,13 +9,12 @@ public:
 
 %ConvertToTypeCode
     if (sipIsErr == NULL)
-    {
         return sequence_2_ints_check(sipPy)
             || sipCanConvertToInstance(sipPy, sipClass_wxGBPosition, SIP_NO_CONVERTORS);
-    }
 
     int _x, _y;
-    if (sequence_2_ints(sipPy, &_x, &_y)) {
+    if (sequence_2_ints(sipPy, &_x, &_y))
+    {
         *sipCppPtr = new wxGBPosition(_x, _y);
         return sipGetState(sipTransferObj);
     }
@@ -23,6 +22,8 @@ public:
     *sipCppPtr = reinterpret_cast<wxGBPosition *>(sipConvertToInstance(sipPy, sipClass_wxGBPosition, sipTransferObj, SIP_NO_CONVERTORS, 0, sipIsErr));
     return 0;
 %End
+
+    bool operator==(const wxGBPosition&);
 
     int GetRow() const;
     int GetCol() const;
@@ -37,7 +38,7 @@ class wxGBSpan
 %End
 
 public:
-    wxGBSpan(int rowspan=1, int colspan=1);
+    wxGBSpan(int rowspan = 1, int colspan = 1);
     ~wxGBSpan();
 
 %ConvertToTypeCode
@@ -46,7 +47,8 @@ public:
             || sipCanConvertToInstance(sipPy, sipClass_wxGBSpan, SIP_NO_CONVERTORS);
 
     int _x, _y;
-    if (sequence_2_ints(sipPy, &_x, &_y)) {
+    if (sequence_2_ints(sipPy, &_x, &_y))
+    {
         *sipCppPtr = new wxGBSpan(_x, _y);
         return sipGetState(sipTransferObj);
     }
@@ -54,6 +56,8 @@ public:
     *sipCppPtr = reinterpret_cast<wxGBSpan *>(sipConvertToInstance(sipPy, sipClass_wxGBSpan, sipTransferObj, SIP_NO_CONVERTORS, 0, sipIsErr));
     return 0;
 %End
+
+    bool operator==(const wxGBSpan&);
 
     int GetRowspan() const;
     int GetColspan() const;
@@ -91,7 +95,7 @@ class wxGridBagSizer : wxFlexGridSizer
 %End
 
 public:
-    wxGridBagSizer(int vgap = 0, int hgap = 0 );
+    wxGridBagSizer(int vgap = 0, int hgap = 0);
     virtual ~wxGridBagSizer();
 
     wxSizerItem* Add(wxWindow *window,
@@ -113,17 +117,19 @@ public:
                      int border = 0) /Transfer/;
 %MethodCode
     SIP_BLOCK_THREADS
-    if (PySequence_Fast_GET_SIZE(a0) != 2) {
+    if (PySequence_Fast_GET_SIZE(a0) != 2)
+    {
         PyErr_SetString(PyExc_TypeError, "wx.GridBagSizer.Add (with size argument): first argument must be a sequence of 2 integers");
         sipIsErr = 1;
-    } else {
+    }
+    else
+    {
         int w = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 0));
         int h = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 1));
 
         if ((w == -1 || h == -1) && PyErr_Occurred())
             sipIsErr = 1;
         else
-            //wxSizerItem* Add(int width, int height, const wxGBPosition& pos, const wxGBSpan& span = wxDefaultSpan, int flag = 0, int border = 0)
             sipRes = sipCpp->Add(w, h, *a1, *a2, a3, a4);
     }
     SIP_UNBLOCK_THREADS

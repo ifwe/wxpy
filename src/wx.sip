@@ -4,7 +4,6 @@
 
 copyright 2008 Kevin Watters
 released under the wxWidgets License
-
 %End
 
 %Platforms {WXMSW WXCOCOA WXMAC WXGTK}
@@ -218,15 +217,17 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     int wxdebug = 0;
 #endif
 
+    // Show the SIP version used to build
+    PyDict_SetItemString(sipModuleDict, "SIP_VERSION", PyString_FromString(SIP_VERSION_STR));
 
-        // These should be deprecated in favor of the PlatformInfo tuple built below...
-        PyDict_SetItemString(sipModuleDict, "Platform", PyString_FromString(wxPlatform));
-        PyDict_SetItemString(sipModuleDict, "USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
-        PyDict_SetItemString(sipModuleDict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
+    // These should be deprecated in favor of the PlatformInfo tuple built below...
+    PyDict_SetItemString(sipModuleDict, "Platform", PyString_FromString(wxPlatform));
+    PyDict_SetItemString(sipModuleDict, "USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
+    PyDict_SetItemString(sipModuleDict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
 
-        // Make a tuple of strings that gives more info about the platform.
-        PyObject* PlatInfo = PyList_New(0);
-        PyObject* obj;
+    // Make a tuple of strings that gives more info about the platform.
+    PyObject* PlatInfo = PyList_New(0);
+    PyObject* obj;
 
     #define _AddInfoString(st) \
         obj = PyString_FromString(st); \
@@ -252,7 +253,7 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     #else
         _AddInfoString("wx-assertions-off");
     #endif
-//        _AddInfoString(wxPy_SWIG_VERSION);
+    
     #ifdef __WXMAC__
         #if wxMAC_USE_CORE_GRAPHICS
             _AddInfoString("mac-cg");
@@ -268,9 +269,9 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
 
     #undef _AddInfoString
 
-        PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
-        Py_DECREF(PlatInfo);
-        PyDict_SetItemString(sipModuleDict, "PlatformInfo", PlatInfoTuple);
+    PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
+    Py_DECREF(PlatInfo);
+    PyDict_SetItemString(sipModuleDict, "PlatformInfo", PlatInfoTuple);
 
 
 %End

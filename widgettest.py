@@ -10,7 +10,6 @@ def message(e):
 def prnt(*args):
     print ' '.join(str(a) for a in args)
 
-<<<<<<< HEAD:widgettest.py
 def construct_layout(f):
     b  = wx.Button(f, -1, 'test')
     b2 = wx.Button(f, -1, 'test2')
@@ -24,24 +23,6 @@ def construct_layout(f):
     s2 = f.Sizer = wx.BoxSizer(wx.VERTICAL)
     sip.dump(s)
     
-=======
-class MyApp(wx.App):
-    def __init__(self):
-        print 'App.__init__'
-        wx.App.__init__(self)
-        self.SetExitOnFrameDelete(False)
-        wx.IdleEvent.SetMode(wx.IDLE_PROCESS_SPECIFIED)
-        wx.EntryStart()
-
-    def ProcessIdle(self):
-        print 'ProcessIdle return False'
-        return False
-        
-    def OnInit(self):
-        print 'MyApp.OnInit'
-        return True
->>>>>>> 08ab9a820cc5622442580ae5480bd0524d99adf4:widgettest.py
-
 def main():
     a = wx.PySimpleApp()
     f = wx.Frame(None)
@@ -51,7 +32,6 @@ def main():
     f.Fit()
     f.Show()
     a.MainLoop()
-
 
 def main2():
       a = wx.PySimpleApp()
