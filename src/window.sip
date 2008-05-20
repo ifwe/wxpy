@@ -454,7 +454,7 @@ public:
 %End
 %End
 
-
+%If (WXMSW)
     static int GetUserIdleTime();
 %MethodCode
     typedef BOOL (WINAPI *_GetLastInputInfo_t)(PLASTINPUTINFO);
@@ -480,6 +480,7 @@ public:
         }
     } else
         printf("could not load user32.dll\n");
+%End
 %End
 
 

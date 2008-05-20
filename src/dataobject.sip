@@ -37,7 +37,12 @@ public:
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
 
+%If (WXMAC)
+    void SetType(wxDataFormatId format);
+%End
+%If (WXMSW)
     void SetType(int format);
+%End
     int GetType() const;
 
     wxString GetId() const;
