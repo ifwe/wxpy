@@ -10,3 +10,5 @@
 %Include slider.sip
 %Include searchctrl.sip
 %Include treectrl.sip
+%Include notebook.sip
+

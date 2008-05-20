@@ -258,6 +258,13 @@ MenuBar.GetMenus = MenuBar_GetMenus
 MenuBar.SetMenus = MenuBar_SetMenus
 MenuBar.Menus    = property(MenuBar_GetMenus, MenuBar_SetMenus)
 
+#
+# KeyEvent
+#
+
+# compatibility constants
+WXK_PRIOR = wx.WXK_PAGEUP
+WXK_NEXT  = wx.WXK_PAGEDOWN
 
 TIMER_ONE_SHOT = wx.TIMER_ONE_SHOT
 

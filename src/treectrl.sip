@@ -55,7 +55,8 @@ enum
     wxTREE_HITTEST_ONITEM
 };
 
-class wxTreeItemId {
+class wxTreeItemId
+{
 public:
     wxTreeItemId();
     ~wxTreeItemId(); 
@@ -65,19 +66,25 @@ public:
 
     bool Ok() const;
 %MethodCode
-    return sipCpp->IsOk();
+    sipRes = sipCpp->IsOk();
 %End
 
     int __nonzero__();
 %MethodCode
-        return (int)sipCpp->IsOk();
+    sipRes = (int)sipCpp->IsOk();
 %End
 
-    // __eq__
-    bool operator ==(const wxTreeItemId& item) const;
+    bool operator ==(const wxTreeItemId* other) const;
+%MethodCode
+    sipRes = a0 ? (*sipCpp == *a0) : false;
+%End
+    
 };
 
 %ModuleHeaderCode
+
+static wxTreeItemId wxNullTreeItemId;
+
 class wxPyTreeItemData : public wxTreeItemData
 {
 public:
@@ -87,7 +94,7 @@ public:
         m_obj = obj;
     }
 
-    virtual ~wxPyTreeItemData();
+    virtual ~wxPyTreeItemData() {}
 
     PyObject* GetData() const
     {
@@ -117,7 +124,7 @@ public:
 
     void Destroy();
 %MethodCode
-    delete self;
+    delete sipCpp;
 %End
 
 private:
@@ -140,34 +147,33 @@ public:
 };
 */
 
-/* TODO XXX
+%PostInitialisationCode
 
-%pythoncode {
-EVT_TREE_BEGIN_DRAG        = wx.PyEventBinder(wxEVT_COMMAND_TREE_BEGIN_DRAG       , 1)
-EVT_TREE_BEGIN_RDRAG       = wx.PyEventBinder(wxEVT_COMMAND_TREE_BEGIN_RDRAG      , 1)
-EVT_TREE_BEGIN_LABEL_EDIT  = wx.PyEventBinder(wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT , 1)
-EVT_TREE_END_LABEL_EDIT    = wx.PyEventBinder(wxEVT_COMMAND_TREE_END_LABEL_EDIT   , 1)
-EVT_TREE_DELETE_ITEM       = wx.PyEventBinder(wxEVT_COMMAND_TREE_DELETE_ITEM      , 1)
-EVT_TREE_GET_INFO          = wx.PyEventBinder(wxEVT_COMMAND_TREE_GET_INFO         , 1)
-EVT_TREE_SET_INFO          = wx.PyEventBinder(wxEVT_COMMAND_TREE_SET_INFO         , 1)
-EVT_TREE_ITEM_EXPANDED     = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_EXPANDED    , 1)
-EVT_TREE_ITEM_EXPANDING    = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_EXPANDING   , 1)
-EVT_TREE_ITEM_COLLAPSED    = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_COLLAPSED   , 1)
-EVT_TREE_ITEM_COLLAPSING   = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_COLLAPSING  , 1)
-EVT_TREE_SEL_CHANGED       = wx.PyEventBinder(wxEVT_COMMAND_TREE_SEL_CHANGED      , 1)
-EVT_TREE_SEL_CHANGING      = wx.PyEventBinder(wxEVT_COMMAND_TREE_SEL_CHANGING     , 1)
-EVT_TREE_KEY_DOWN          = wx.PyEventBinder(wxEVT_COMMAND_TREE_KEY_DOWN         , 1)
-EVT_TREE_ITEM_ACTIVATED    = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_ACTIVATED   , 1)
-EVT_TREE_ITEM_RIGHT_CLICK  = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK , 1)
-EVT_TREE_ITEM_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, 1)
-EVT_TREE_END_DRAG          = wx.PyEventBinder(wxEVT_COMMAND_TREE_END_DRAG         , 1)
-EVT_TREE_STATE_IMAGE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 1)
-EVT_TREE_ITEM_GETTOOLTIP   = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,   1)
-EVT_TREE_ITEM_MENU         = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MENU,         1)
-}
+#define TREE_EVT(name) add_event(sipModuleDict, "EVT_TREE_" #name, wxEVT_COMMAND_TREE_##name, 0);
 
-static wxTreeItemId wxNullTreeItemId;
-*/
+TREE_EVT(BEGIN_DRAG)
+TREE_EVT(BEGIN_RDRAG)
+TREE_EVT(BEGIN_LABEL_EDIT)
+TREE_EVT(END_LABEL_EDIT)
+TREE_EVT(DELETE_ITEM)
+TREE_EVT(GET_INFO)
+TREE_EVT(SET_INFO)
+TREE_EVT(ITEM_EXPANDED)
+TREE_EVT(ITEM_EXPANDING)
+TREE_EVT(ITEM_COLLAPSED)
+TREE_EVT(ITEM_COLLAPSING)
+TREE_EVT(SEL_CHANGED)
+TREE_EVT(SEL_CHANGING)
+TREE_EVT(KEY_DOWN)
+TREE_EVT(ITEM_ACTIVATED)    
+TREE_EVT(ITEM_RIGHT_CLICK)
+TREE_EVT(ITEM_MIDDLE_CLICK)
+TREE_EVT(END_DRAG)
+TREE_EVT(STATE_IMAGE_CLICK)
+TREE_EVT(ITEM_GETTOOLTIP)
+TREE_EVT(ITEM_MENU)
+
+%End // PostInitialisationCode
 
 class wxTreeEvent : wxNotifyEvent
 {
@@ -453,6 +459,7 @@ public:
         }
     }
 */
+
 %If (WXMSW)
     // set/get the item state.image (state == -1 means cycle to the next one)
     void SetState(const wxTreeItemId& node, int state);
