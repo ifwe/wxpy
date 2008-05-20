@@ -9,3 +9,4 @@
 %Include combobox.sip
 %Include slider.sip
 %Include searchctrl.sip
+%Include treectrl.sip

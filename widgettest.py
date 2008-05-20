@@ -33,7 +33,6 @@ def main():
     f.Show()
     a.MainLoop()
 
-
 def main2():
       a = wx.PySimpleApp()
 

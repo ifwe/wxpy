@@ -45,6 +45,9 @@ elif platform_name == 'msw':
     ENABLE_EXCEPTIONS = False
     WHOLE_PROGRAM_OPTIMIZATION = False
 
+    class CONTRIB(object):
+        STC = True
+
     # TODO: infer these without a wx-config binary? (bakefiles!)
     cxxflags = ('/MD /DWIN32 /GR /D__NO_VC_CRTDBG__ /D__WXMSW__ '
                 '/D_UNICODE /DwxUSE_UNICODE_MSLU=1 '
@@ -73,18 +76,24 @@ elif platform_name == 'msw':
 
     # TODO: these too ;)
     cxxflags.extend(['/I%s' % str(wx_lib_dir / wx_config_dir),
-                     '/I%s' % str(wxdir / 'include')])
+                     '/I%s' % str(wxdir / 'include'),
+                     '/I%s' % str(wxdir / 'contrib' / 'include')])
+
+    version_number = '28'
 
     wx_libs = '''\
-base28%s
-base28%s_net
-base28%s_xml
-msw28%s_adv
-msw28%s_aui
-msw28%s_core
-msw28%s_html'''.split()
+base%s
+base%s_net
+base%s_xml
+msw%s_adv
+msw%s_aui
+msw%s_core
+msw%s_html'''.split()
 
-    wx_libs = ['wx' + (s % WX_FLAG) + '.lib' for s in wx_libs]
+    if CONTRIB.STC:
+        wx_libs.append('msw%s_stc')
+
+    wx_libs = ['wx' + (s % (version_number + WX_FLAG)) + '.lib' for s in wx_libs]
     lflags.extend(wx_libs)
 
     if DEBUG_SYMBOLS:

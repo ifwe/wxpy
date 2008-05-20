@@ -20,6 +20,17 @@ class SipTrace(object):
 SipTrace.ALL = (SipTrace.VIRTUAL | SipTrace.CONSTRUCTOR | SipTrace.DESTRUCTOR
                 | SipTrace.PY_INIT | SipTrace.PY_DEL | SipTrace.PY_METHOD)
 
+def autorepr(s = None):
+    if s is not None:
+        assert isinstance(s, basestring)
+        def __repr__(self):
+            return '<%s %s>' % (self.__class__.__name__, s % vars(self))
+    else:
+        def __repr__(self):
+            return '<%s at %x>' % (self.__class__.__name__, id(self))
+
+    return __repr__
+
 #sip.settracemask(SipTrace.ALL)
 
 #
@@ -151,7 +162,7 @@ DefaultSpan = (1, 1)
 
 _gbsizer_add = GridBagSizer.Add
 
-def GridBagSizer_Add(self, item, pos, span = DefaultSpan, flag = 0, border = 0):
+def GridBagSizer_Add(self, item, pos = DefaultPosition, span = DefaultSpan, flag = 0, border = 0):
     if isinstance(item, Size): item = tuple(item)
     return _gbsizer_add(self, item, pos, span, flag, border)
 GridBagSizer.Add = GridBagSizer_Add
