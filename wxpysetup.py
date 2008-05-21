@@ -18,7 +18,7 @@ import wxpyfeatures
 from distutils.core import Extension
 from path import path
 
-GIL_MODE = 'release'      # causes the GIL to be released before every call
+RELEASE_GIL      = False  # causes the GIL to be released before every call (slow?)
 TRACE_STATEMENTS = False  # emit tracing statements in all functions
 
 VERBOSE = True
@@ -93,7 +93,7 @@ class wxpy_build_ext(sipdistutils.build_ext):
 
         sip_args = [sip_bin]
 
-        if GIL_MODE == 'release':
+        if RELEASE_GIL:
             sip_args.append('-g')
         if TRACE_STATEMENTS:
             sip_args.append('-r')

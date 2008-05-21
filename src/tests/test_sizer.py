@@ -33,3 +33,20 @@ def test_SizerClear():
     assert sip.isdeleted(b2)
 
     f.Destroy()
+
+def test_WindowSetSizer():
+    f = wx.Frame(None)
+    b = wx.Button(f, -1, 'test')
+
+    s1 = f.Sizer = wx.BoxSizer(wx.HORIZONTAL)
+    s1.AddStretchSpacer(1)
+    s1.Add(b)
+
+    s2 = f.Sizer = wx.BoxSizer(wx.VERTICAL)
+    s2.AddStretchSpacer(1)
+    s2.Add(b)
+    
+    assert not sip.isdeleted(b)
+    assert sip.isdeleted(s1)
+
+    f.Destroy()

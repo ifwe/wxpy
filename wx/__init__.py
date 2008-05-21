@@ -125,6 +125,12 @@ class RadioButton(_RadioButton):
     def __init__(self, parent, id = -1, label = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = DefaultValidator, name = 'RadioButton'):
         _RadioButton.__init__(self, parent, id, label, pos, size, style, validator, name)
 
+_SplitterWindow = SplitterWindow
+class SplitterWindow(_SplitterWindow):
+    def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = wx.SP_3D, name = 'splitterWindow'):
+        _SplitterWindow.__init__(self, parent, id, pos, size, style, name)
+
+
 class SimplePanel(wx.Panel):
     def __init__(self, parent, id, style):
 

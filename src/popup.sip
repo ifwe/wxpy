@@ -4,9 +4,14 @@ class wxPopupWindow : wxWindow {
     #include <wx/popupwin.h>
 %End
 public:
-    wxPopupWindow(wxWindow *parent /TransferThis/, int flags = wxBORDER_NONE) /Transfer/;
+    wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE) /Transfer/;
 //    void Position(const wxPoint& ptOrigin,
 //                  const wxSize& size);
+
+    void SetRect(const wxRect& rect);
+%MethodCode
+    sipCpp->Position(a0->GetPosition(), a0->GetSize());
+%End
 };
 
 class wxPopupTransientWindow : wxPopupWindow
@@ -18,5 +23,5 @@ public:
     wxPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE) /Transfer/;
 
     void Popup(wxWindow *focus = NULL);
-    void Dismiss();   
+    void Dismiss();
 };

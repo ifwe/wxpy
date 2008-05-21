@@ -1,5 +1,6 @@
 
-class wxSizerItem: wxObject {
+class wxSizerItem: wxObject
+{
 public:
     wxSizerItem(wxWindow *window,
                 int proportion,
@@ -32,6 +33,8 @@ public:
 
     void DeleteWindows();
     void DetachSizer();
+
+
 
     wxSize GetSize() const;
     wxSize CalcMin();
@@ -85,7 +88,7 @@ private:
 
 class wxSizer: wxObject {
 public:
-    ~wxSizer();
+    virtual ~wxSizer();
 
     //
     // Add
@@ -157,6 +160,19 @@ public:
     }
 %End
 
+    // TODO: fix the object ownership issues here!
+    bool Detach(wxWindow* window);
+    bool Detach(wxSizer* sizer);
+    bool Detach(size_t index);
+
+    bool Show(wxWindow* item, bool show = true, bool recursive = false);
+    bool Show(wxSizer*  item, bool show = true, bool recursive = false);
+    bool Show(size_t    item, bool show = true);
+
+    bool IsShown(wxWindow *window) const;
+    bool IsShown(wxSizer *sizer) const;
+    bool IsShown(size_t index) const;
+
     bool Remove(wxWindow* window);
     bool Remove(wxSizer* sizer);
     bool Remove(size_t index);
@@ -187,48 +203,6 @@ public:
     //wxSizerItemList& GetChildren();
 
 /*
-    %extend {
-        DocAStr(Show,
-                "Show(self, item, bool show=True, bool recursive=false) -> bool",
-                "Shows or hides an item managed by the sizer.  To make a sizer item
-disappear or reappear, use Show followed by `Layout`.  The *item*
-parameter can be either a window, a sizer, or the zero-based index of
-the item.  Use the recursive parameter to show or hide an item in a
-subsizer.  Returns True if the item was found.", "");
-        bool Show(PyObject* item, bool show = true, bool recursive=false) {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
-            wxPyEndBlockThreads(blocked);
-            if ( info.window )
-                return self->Show(info.window, show, recursive);
-            else if ( info.sizer )
-                return self->Show(info.sizer, show, recursive);
-            else if ( info.gotPos )
-                return self->Show(info.pos, show);
-            else
-                return false;
-        }
-
-        DocAStr(IsShown,
-                "IsShown(self, item)",
-                "Determines if the item is currently shown. To make a sizer
-item disappear or reappear, use Show followed by `Layout`.  The *item*
-parameter can be either a window, a sizer, or the zero-based index of
-the item.", "");
-        bool IsShown(PyObject* item) {
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
-            wxPyEndBlockThreads(blocked);
-            if ( info.window )
-                return self->IsShown(info.window);
-            else if ( info.sizer )
-                return self->IsShown(info.sizer);
-            else if ( info.gotPos )
-                return self->IsShown(info.pos);
-            else
-                return false;
-        }
-    }
 
     %pythoncode {
     def Hide(self, item, recursive=False):

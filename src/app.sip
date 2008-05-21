@@ -30,7 +30,7 @@ public:
 
     virtual bool OnInit();
     virtual bool OnInitGui();
-    virtual int MainLoop();
+    virtual int MainLoop() /ReleaseGIL/;
 
     void ReleaseGIL();
 %MethodCode

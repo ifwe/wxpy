@@ -10,11 +10,12 @@ released under the wxWidgets License
 
 // Enable stripping of "wx" from Python names, and auto generation of
 // properties from GetXXX() and SetXXX() methods.
-%SIPOptions (RenameWx, AutoProperties)
+%SIPOptions (RenameWx, AutoProperties, ThreadChecking)
 
 %ModuleHeaderCode
 #define WXSIP 1
 %End
+
 
 %Include vector.sip
 
@@ -253,7 +254,7 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     #else
         _AddInfoString("wx-assertions-off");
     #endif
-    
+
     #ifdef __WXMAC__
         #if wxMAC_USE_CORE_GRAPHICS
             _AddInfoString("mac-cg");
