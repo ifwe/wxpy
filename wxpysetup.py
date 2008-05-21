@@ -18,6 +18,9 @@ import wxpyfeatures
 from distutils.core import Extension
 from path import path
 
+GIL_MODE = 'release'      # causes the GIL to be released before every call
+TRACE_STATEMENTS = False  # emit tracing statements in all functions
+
 VERBOSE = True
 
 def different(file1, file2, start = 0):
@@ -88,11 +91,15 @@ class wxpy_build_ext(sipdistutils.build_ext):
             list(getattr(self, 'extra_sip_includes', []))
         )
 
-        self.spawn([sip_bin,
-                    '-g', # release GIL before every call
-                    '-z', argsfile,
-                    '-r',  # debugging trace statements
-                    source])
+        sip_args = [sip_bin]
+
+        if GIL_MODE == 'release':
+            sip_args.append('-g')
+        if TRACE_STATEMENTS:
+            sip_args.append('-r')
+
+        sip_args.extend(['-z', argsfile, source])
+        self.spawn(sip_args)
 
     def swig_sources (self, sources, extension=None):
         sources = sipdistutils.build_ext.swig_sources(self, sources, extension)

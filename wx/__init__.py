@@ -444,6 +444,7 @@ StockCursor = wx.StockGDI.GetCursor
 SystemSettings_GetColour = wx.SystemSettings.GetColour
 
 wx.Window.Enabled = property(wx.Window.IsEnabled, wx.Window.Enable)
+wx.Window.Shown   = property(wx.Window.IsShown)
 
 WXPY = True
 del wx

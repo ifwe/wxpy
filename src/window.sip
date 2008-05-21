@@ -82,10 +82,6 @@ public:
     bool Disable();
 
     bool IsShown() const;
-    bool Shown() const;
-%MethodCode
-    sipRes = sipCpp->IsShown();
-%End
 
     bool IsEnabled() const;
 

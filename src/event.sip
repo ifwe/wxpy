@@ -511,3 +511,26 @@ public:
     static wxIdleMode GetMode();
     static bool CanSend(wxWindow* win);
 };
+
+
+class wxPaintEvent : wxEvent
+{
+public:
+    wxPaintEvent(int Id = 0);
+};
+
+
+class wxNcPaintEvent : wxEvent
+{
+public:
+    wxNcPaintEvent(int winid = 0);
+};
+
+class wxEraseEvent : wxEvent
+{
+public:
+    wxEraseEvent(int Id = 0, wxDC *dc = NULL);
+    wxDC * GetDC() const;
+};
+
+
