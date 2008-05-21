@@ -45,3 +45,5 @@
 
 %Include functions.sip
 %Include stdpaths.sip
+
+%Include dialogs.sip
