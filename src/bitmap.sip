@@ -37,6 +37,14 @@ public:
 
     int GetWidth();
     int GetHeight();
+
+    wxSize GetSize();
+%MethodCode
+    sipRes = new wxSize(sipCpp->GetWidth(), sipCpp->GetHeight());
+%End
+
+
+
     int GetDepth();
     // wxSize GetSize();
 

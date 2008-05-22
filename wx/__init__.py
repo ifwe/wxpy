@@ -425,6 +425,12 @@ class App(_app):
 PySimpleApp = App
 
 wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
+wxEVT_SIZE = wx.EVT_SIZE
+wxEVT_MENU_OPEN = wx.EVT_MENU_OPEN
+wxEVT_COMMAND_MENU_SELECTED = wx.EVT_COMMAND_MENU_SELECTED
+wxEVT_MOUSE_CAPTURE_LOST = wx.EVT_MOUSE_CAPTURE_LOST
+wxEVT_MOTION = wx.EVT_MOTION
+assert isinstance(wxEVT_MOTION, int)
 
 FindWindowByName = wx.Window.FindWindowByName
 
@@ -436,13 +442,6 @@ PyValidator = wx.Validator
 PyCommandEvent = wx.CommandEvent
 
 PyScrolledWindow = wx.ScrolledWindow
-
-wxEVT_MOTION = wx.EVT_MOTION
-assert isinstance(wxEVT_MOTION, int)
-
-wxEVT_MENU_OPEN = wx.EVT_MENU_OPEN
-wxEVT_COMMAND_MENU_SELECTED = wx.EVT_COMMAND_MENU_SELECTED
-wxEVT_MOUSE_CAPTURE_LOST = wx.EVT_MOUSE_CAPTURE_LOST
 
 StockCursor = wx.StockGDI.GetCursor
 
