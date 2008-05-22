@@ -283,9 +283,26 @@ public:
 
     ~wxEvent();
 
+    //wxEvent *Clone(void) const = 0;
 private:
     wxEvent();
+
 };
+
+%ModuleHeaderCode
+class wxPyEvent : wxEvent
+{
+public:
+    virtual wxEvent* Clone() const { return new wxPyEvent(*this); }
+};
+%End
+
+class wxPyEvent : wxEvent
+{
+public:
+    wxPyEvent();
+};
+
 
 class wxSysColourChangedEvent : wxEvent
 {
