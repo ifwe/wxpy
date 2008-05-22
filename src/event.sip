@@ -72,11 +72,6 @@ void CallAfterCallback::EventThunker(wxEvent& event)
 }
 %End
 
-%PostInitialisationCode
-
-%End
-
-
 // may be called from any thread
 void CallAfter(SIP_PYCALLABLE);
 %MethodCode

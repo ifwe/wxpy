@@ -130,6 +130,10 @@ class SplitterWindow(_SplitterWindow):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = wx.SP_3D, name = 'splitterWindow'):
         _SplitterWindow.__init__(self, parent, id, pos, size, style, name)
 
+_ScrolledWindow = ScrolledWindow
+class ScrolledWindow(_ScrolledWindow):
+    def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = HSCROLL | VSCROLL, name = 'scrolledWindow'):
+        _ScrolledWindow.__init__(self, parent, id, pos, size, style, name)
 
 class SimplePanel(wx.Panel):
     def __init__(self, parent, id, style):

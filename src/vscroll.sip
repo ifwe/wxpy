@@ -84,6 +84,7 @@ protected:
 
     virtual ~wxVListBox();
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
+    virtual void OnDrawSeparator(wxDC&, wxRect&, size_t) const;
     virtual wxCoord OnMeasureItem(size_t n) const = 0;
 
     virtual wxCoord OnGetLineHeight(size_t line) const; // don't use -- overload OnMeasureItem

@@ -228,6 +228,8 @@ public:
     bool Contains(const wxPoint& pt) const;
     bool Contains(const wxRect& rect) const /PyName=ContainsRect/;
 
+    bool Intersects(const wxRect &rect) const;
+
     SIP_PYOBJECT __repr__();
 %MethodCode
     sipRes = PyString_FromFormat("<wx.Rect (%d, %d, %d, %d)>",
@@ -242,7 +244,7 @@ public:
     SIP_PYTUPLE __getitem__(SIP_PYSLICE);
 %MethodCode
 //    int PySlice_GetIndicesEx(	PySliceObject *slice, Py_ssize_t length, Py_ssize_t *start, Py_ssize_t *stop, Py_ssize_t *step, Py_ssize_t *slicelength)
-    
+
     Py_ssize_t start, stop, step, length;
     PySlice_GetIndicesEx((PySliceObject*)a0, 4, &start, &stop, &step, &length);
 
@@ -268,7 +270,7 @@ public:
 
     if (sipIsErr)
         Py_DECREF(sipRes);
-%End        
+%End
 
     int __getitem__(size_t i);
 %MethodCode

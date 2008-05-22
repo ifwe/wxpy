@@ -1,3 +1,7 @@
+//
+// wxLog
+//
+
 typedef unsigned long wxTraceMask;
 typedef unsigned long wxLogLevel;
 
@@ -37,7 +41,7 @@ public:
 
     static bool IsEnabled();
     static bool EnableLogging(bool doIt = true);
-//    static void OnLog(wxLogLevel level, const wxChar *szString, time_t t);    
+//    static void OnLog(wxLogLevel level, const wxChar *szString, time_t t);
     virtual void Flush();
     static void FlushActive();
     static wxLog *GetActiveTarget();
@@ -64,10 +68,6 @@ public:
 //    static const wxChar *GetTimestamp();
 };
 
-
-//---------------------------------------------------------------------------
-
-
 class wxLogStderr : wxLog
 {
 public:
@@ -76,7 +76,6 @@ private:
     wxLogStderr(const wxLogStderr&);
 };
 
-
 class wxLogTextCtrl : wxLog
 {
 public:
@@ -84,7 +83,6 @@ public:
 private:
     wxLogTextCtrl(const wxLogTextCtrl&);
 };
-
 
 class wxLogGui : wxLog
 {

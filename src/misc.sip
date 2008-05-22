@@ -9,6 +9,7 @@
 %Include config.sip
 %Include popup.sip
 %Include stock.sip
+%Include log.sip
 
 %If (!WXMAC)
 %Include power.sip
@@ -19,7 +20,7 @@ class wxToolTip : wxObject {
 public:
     wxToolTip(const wxString &tip);
     ~wxToolTip();
-    
+
     void SetTip(const wxString& tip);
     wxString GetTip();
 
@@ -34,14 +35,14 @@ private:
 class wxCaret {
 public:
     wxCaret(wxWindow* window, const wxSize& size);
-    ~wxCaret(); 
+    ~wxCaret();
 
     bool IsOk();
     bool IsVisible();
 
     wxPoint GetPosition();
     wxSize GetSize();
-    
+
     wxWindow *GetWindow();
     void Move(const wxPoint& pt);
     void SetSize(const wxSize& size);

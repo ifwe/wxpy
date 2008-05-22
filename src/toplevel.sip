@@ -172,9 +172,9 @@ public:
      void SetEscapeId(int escapeId);
      int GetEscapeId() const;
 
-     wxSizer* CreateTextSizer(const wxString &message);
-     wxSizer* CreateButtonSizer(long flags);
-     wxSizer *CreateSeparatedButtonSizer(long flags);
+     wxSizer* CreateTextSizer(const wxString &message) /Transfer/;
+     wxSizer* CreateButtonSizer(long flags) /Transfer/;
+     wxSizer *CreateSeparatedButtonSizer(long flags) /Transfer/;
      //wxStdDialogButtonSizer* CreateStdDialogButtonSizer( long flags );
 
      bool IsModal() const;

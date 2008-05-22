@@ -33,7 +33,7 @@ public:
 
     int GetScrollPageSize(int orient) const;
     void SetScrollPageSize(int orient, int pageSize);
-    void SetScrollRate( int xstep, int ystep );
+    void SetScrollRate(int xstep, int ystep);
     void GetScrollPixelsPerUnit(int *x, int *y) const;
     void EnableScrolling(bool x_scrolling, bool y_scrolling);
     void GetViewStart(int *x, int *y) const;

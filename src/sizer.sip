@@ -95,7 +95,7 @@ public:
     //
 
     wxSizerItem* Add(wxWindow* item, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
-    wxSizerItem* Add(wxSizer* item,  int proportion = 0, int flag = 0, int border = 0) /Transfer/;
+    wxSizerItem* Add(wxSizer* item /Transfer/,  int proportion = 0, int flag = 0, int border = 0) /Transfer/;
 
     // TODO: transfer ownership for the return value of this function
     wxSizerItem* Add(SIP_PYTUPLE spacerSize, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
