@@ -171,6 +171,9 @@ public:
     bool CheckForIntersection(wxGBSizerItem* item, wxGBSizerItem* excludeItem = NULL);
 
     bool CheckForIntersection(const wxGBPosition& pos, const wxGBSpan& span, wxGBSizerItem* excludeItem = NULL);
+
+
+    void RecalcSizes();
 private:
     wxGridBagSizer(const wxGridBagSizer&);
 };

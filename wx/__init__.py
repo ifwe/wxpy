@@ -433,7 +433,6 @@ NamedColor = wx.NamedColour
 PyBitmapDataObject = wx.BitmapDataObject
 PyDropTarget = wx.DropTarget
 PyValidator = wx.Validator
-PyEvent = wx.Event
 PyCommandEvent = wx.CommandEvent
 
 PyScrolledWindow = wx.ScrolledWindow

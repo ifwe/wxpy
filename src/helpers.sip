@@ -12,16 +12,8 @@ bool sequence_2_ints_check(PyObject* obj)
 {
     bool is_ints = false;
 
-    if (!PySequence_Check(obj))
-     {
-        PyObject_Print(obj, stdout, 0);
-        printf("\n");
-         return false;
-     }
-     else if (PySequence_Length(obj) != 2)
-    {
+    if (!PySequence_Check(obj) || PySequence_Length(obj) != 2)
         return false;
-    }
 
     PyObject* o1 = PySequence_GetItem(obj, 0);
     PyObject* o2 = PySequence_GetItem(obj, 1);

@@ -26,7 +26,7 @@ def test_GBPosition():
     assert p == wx.GBPosition(1, 2) == (1, 2)
     assert p.Row == p.GetRow() == 1
     assert p.Col == p.GetCol() == 2
-    
+
 def test_GBSpan():
     s = wx.GBSpan(3, 4)
     assert s == wx.GBSpan(3, 4) == (3, 4)
@@ -41,8 +41,9 @@ def test_GridBagSizer():
 
     positions = [(0, 0), (0, 2), (1, 0),]
     spans     = [(1, 2), (1, 1), (1, 1),]
-    buttons   = [wx.Button(f, -1, 'button %d' % n) for n in xrange(len(positions))]
-    
+    buttons   = [wx.Button(f, -1, 'button %d' % n)
+                 for n in xrange(len(positions))]
+
     def on_button(e):
         e.EventObject.Destroy()
 
@@ -50,17 +51,27 @@ def test_GridBagSizer():
 
     sizer = f.Sizer = wx.GridBagSizer()
 
+    sizer_items = []
+
     for n, (pos, span) in enumerate(izip(positions, spans)):
         button = buttons[n]
         res = sizer.Add(button, pos, span)
+
+        assert isinstance(res, wx.GBSizerItem) and isinstance(res, wx.SizerItem)
+        assert res.Pos  == res.GetPos()  == pos
+        assert res.Span == res.GetSpan() == span
+
+        #assert res == sizer.FindItemAtPosition(pos), "%r != %r" % \
+        #    (res, sizer.FindItemAtPosition(pos))
+
         assert res is not None
         assert not ispyowned(res)
-        
+
         # GetItemPosition
         p1, p2 = sizer.GetItemPosition(button), sizer.GetItemPosition(n)
         assert p1 == p2 == pos
-        assert p1.Row == p2.Row == pos[0]
-        assert p1.Col == p2.Col == pos[1]
+        assert p1.Row == p2.Row == pos[0] != (321321,321321)
+        assert p1.Col == p2.Col == pos[1] != (321321,321321)
 
         # GetItemSpan
         s1, s2 = sizer.GetItemSpan(button), sizer.GetItemSpan(n)
@@ -70,6 +81,7 @@ def test_GridBagSizer():
 
 
     sizer.Layout()
+
     print 'CalcMin:', sizer.CalcMin()
     print 'GetEmptyCellSize():', sizer.GetEmptyCellSize()
 

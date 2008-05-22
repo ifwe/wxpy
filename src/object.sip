@@ -7,7 +7,39 @@ class wxObject
 
 %TypeHeaderCode
 #include <wx/object.h>
+#include <wx/gbsizer.h>
 %End
+
+%ConvertToSubClassCode
+    wxClassInfo* c = sipCpp -> GetClassInfo();
+
+    /* TODO: automate this by grepping for wxXXXEvent and putting
+     * entries here before build :( */
+    if(0) ;
+    #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+
+        C(wxKeyEvent)
+        C(wxMouseEvent)
+        C(wxTimerEvent)
+        C(wxShowEvent)
+        C(wxMenuEvent)
+        C(wxShowEvent)
+        C(wxActivateEvent)
+        C(wxMaximizeEvent)
+        C(wxIconizeEvent)
+        C(wxHyperlinkEvent)
+        C(wxInitDialogEvent)
+        C(wxNotifyEvent)
+        C(wxListEvent)
+        C(wxDropFilesEvent)
+
+        C(wxSizerItem)
+        C(wxGBSizerItem)
+
+    else
+        sipClass = NULL;
+%End
+
 
 public:
     bool IsSameAs(const wxObject& p) const;
