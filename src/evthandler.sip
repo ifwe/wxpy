@@ -106,19 +106,58 @@ public:
         id = source->GetId();
 
     int event;
-    if (PyTuple_Check(events)) {
-        for(int i = 0; i < PyTuple_GET_SIZE(events); ++i) {
+    if (PyTuple_Check(events))
+    {
+        for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
+        {
             event = PyInt_AsLong(PyTuple_GET_ITEM(events, i));
-            sipCpp->Connect(id, id2, event,
-                (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
+            if (event == -1 && PyErr_Occurred())
+            {
+                sipIsErr = 1;
+                break;
+            }
+            else
+                sipCpp->Connect(id, id2, event,
+                        (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
         }
-    } else {
+    }
+    else
+    {
         event = PyInt_AsLong(events);
         if (event == -1 && PyErr_Occurred())
             sipIsErr = 1;
         else
             sipCpp->Connect(id, id2, event,
                 (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
+    }
+%End
+
+    void Unbind(SIP_PYOBJECT event, int id = wxID_ANY, int id2 = wxID_ANY);
+%MethodCode
+    PyObject* events = a0;
+    int event;
+
+    if (PyTuple_Check(events))
+    {
+        for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
+        {
+            event = PyInt_AsLong(PyTuple_GET_ITEM(events, i));
+            if (event == -1 && PyErr_Occurred())
+            {
+                sipIsErr = 1;
+                break;
+            }
+            else
+                sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
+        }
+    }
+    else
+    {
+        event = PyInt_AsLong(events);
+        if (event == -1 && PyErr_Occurred())
+            sipIsErr = 1;
+        else
+            sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
     }
 %End
 
