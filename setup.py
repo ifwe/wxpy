@@ -1,39 +1,39 @@
 '''
-
-build the wxpy extension
-
+builds the wxpy extension
 '''
 
 from __future__ import with_statement
 
+import distutils.core
 import sipconfig
 import sipdistutils
 import wxpyconfig
 import wxpysetup
 
-from distutils.core import setup
 from path import path
 
 class wxUSE(object):
     STC = True
+    HTML = True
 
 def build():
     if wxpyconfig.platform_name == 'msw':
         # no touch on windows
-        import os; os.utime('src/wx.sip', None)
+        import os
+        os.utime('src/wx.sip', None)
 
-    extensions = [
-        wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip']),
-        wxpysetup.make_sip_ext('_wxhtml', ['src/html.sip']),
-    ]
+    extensions = [wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip'])]
+
+    if wxUSE.HTML:
+        extensions.append(wxpysetup.make_sip_ext('_wxhtml', ['src/html.sip']))
 
     if wxUSE.STC:
         extensions.append(wxpysetup.make_sip_ext('_wxstc', ['contrib/stc/stc.sip']))
 
-    setup(name = 'wxpy',
-          version = '1.0',
-          ext_modules = extensions,
-          cmdclass = {'build_ext': wxpysetup.wxpy_build_ext})
+    distutils.core.setup(name = 'wxpy',
+                         version = '1.0',
+                         ext_modules = extensions,
+                         cmdclass = {'build_ext': wxpysetup.wxpy_build_ext})
 
     if wxpyconfig.platform_name == 'mac':
         install()
