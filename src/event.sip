@@ -34,7 +34,8 @@ void initializeCallAfter()
     // static wxEventType g_callAfterId = 0;
     static CallAfterCallback g_callafterEvent;
 
-    if (!g_callAfterId) {
+    if (!g_callAfterId)
+    {
         g_callAfterId = wxNewEventType();
         wxTheApp->Connect(-1, -1, g_callAfterId,
                           (wxObjectEventFunction)&CallAfterCallback::EventThunker,
@@ -43,7 +44,8 @@ void initializeCallAfter()
 }
 
 /* All wx.CallAfter calls are routed through here. */
-void CallAfterCallback::EventThunker(wxEvent& event) {
+void CallAfterCallback::EventThunker(wxEvent& event)
+{
     SIP_BLOCK_THREADS
 
     callAfterCbList::iterator iter;
@@ -239,10 +241,10 @@ class wxEvent : wxObject  {
 public:
 
 %ConvertToSubClassCode
-    // QEvent sub-classes provide a unique type ID.
     wxClassInfo* c = sipCpp -> GetClassInfo();
 
-    /* TODO: automate this :( */
+    /* TODO: automate this by grepping for wxXXXEvent and putting
+     * entries here before build :( */
     if(0) ;
     #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
 
@@ -285,12 +287,14 @@ private:
     wxEvent();
 };
 
-class wxSysColourChangedEvent: wxEvent  {
+class wxSysColourChangedEvent : wxEvent
+{
 public:
     wxSysColourChangedEvent();
 };
 
-class wxInitDialogEvent: wxEvent  {
+class wxInitDialogEvent : wxEvent
+{
 public:
     wxInitDialogEvent();
 };
@@ -359,7 +363,8 @@ public:
 };
 
 
-class wxKeyEvent: wxEvent {
+class wxKeyEvent: wxEvent
+{
 public:
     wxKeyEvent(wxEventType eventType = wxEVT_NULL);
     int GetModifiers() const;
@@ -378,7 +383,8 @@ public:
     wxCoord GetY() const;
 };
 
-class wxCommandEvent : wxEvent {
+class wxCommandEvent : wxEvent
+{
 public:
     wxCommandEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
     int GetSelection() const;
@@ -390,7 +396,8 @@ public:
     int GetInt() const;
 };
 
-class wxNotifyEvent : wxCommandEvent {
+class wxNotifyEvent : wxCommandEvent
+{
 public:
     wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
     void Veto();
@@ -398,7 +405,8 @@ public:
     void IsAllowed();
 };
 
-class wxActivateEvent: wxEvent {
+class wxActivateEvent: wxEvent
+{
 public:
     wxActivateEvent(wxEventType eventType = 0, bool active = true, int id = 0);
     bool GetActive() const;
