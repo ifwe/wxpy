@@ -1,4 +1,5 @@
 %ModuleHeaderCode
+// TODO: use wxUSE flags for these includes
 #include <wx/fontdlg.h>
 #include <wx/colordlg.h>
 #include <wx/fdrepdlg.h>
@@ -103,8 +104,8 @@ public:
     wxString GetWildcard() const;
     int GetFilterIndex() const;
 
-    wxArrayString GetFilenames();
-    wxArrayString GetPaths();
+    void GetFilenames(wxArrayString& filenames /Out/) const;
+    void GetPaths(wxArrayString& paths /Out/) const;
 };
 
 enum {
@@ -127,7 +128,7 @@ public:
     //wxArrayInt GetSelections() const;
 };
 
-
+/*
 class wxSingleChoiceDialog : wxDialog
 {
 public:
@@ -136,18 +137,20 @@ public:
     wxSingleChoiceDialog(wxWindow* parent,
                          const wxString& message,
                          const wxString& caption,
-                         int choices, wxString* choices_array,
+                         int choices /ArraySize/,
+                         wxString* choices_array /Array/,
                          //char** clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
 %MethodCode
-    sipCpp = new wxSingleChoiceDialog(a0, a1, a2, a3, a4, NULL, a5, a6);
+    sipCpp = new wxSingleChoiceDialog(a0, *a1, *a2, a3, a4, NULL, a5, *a6);
 %End
 
     int GetSelection();
     wxString GetStringSelection();
     void SetSelection(int sel);
 };
+*/
 
 
 enum
@@ -183,14 +186,16 @@ public:
 %If (wxUSE_NUMBERDLG)
 class wxNumberEntryDialog : wxDialog
 {
+%TypeHeaderCode
+    #include <wx/numdlg.h>
+%End
 public:
-    
-        wxNumberEntryDialog(wxWindow *parent,
-                            const wxString& message,
-                            const wxString& prompt,
-                            const wxString& caption,
-                            long value, long min, long max,
-                            const wxPoint& pos = wxDefaultPosition);
+    wxNumberEntryDialog(wxWindow *parent,
+                        const wxString& message,
+                        const wxString& prompt,
+                        const wxString& caption,
+                        long value, long min, long max,
+                        const wxPoint& pos = wxDefaultPosition);
     long GetValue();
 };
 
@@ -320,6 +325,9 @@ public:
     void SetFlags(int flags);
     void SetFindString(const wxString& str);
     void SetReplaceString(const wxString& str);
+
+private:
+    wxFindDialogEvent(const wxFindDialogEvent&);
 };
 
 

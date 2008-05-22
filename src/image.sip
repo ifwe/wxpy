@@ -1,3 +1,6 @@
+%ModuleHeaderCode
+#include <wx/mstream.h>
+%End
 
 void wxInitAllImageHandlers();
 
@@ -12,6 +15,21 @@ enum
     wxIMAGE_QUALITY_NORMAL = 0,
     wxIMAGE_QUALITY_HIGH = 1
 };
+
+wxImage ImageFromString(SIP_PYOBJECT);
+%MethodCode
+    if (!PyString_Check(a0))
+    {
+        PyErr_SetString(PyExc_TypeError, "str object expected");
+        sipIsErr = 1;
+    }
+    else
+    {
+        wxMemoryInputStream inpStream(PyString_AS_STRING(a0), PyString_GET_SIZE(a0));
+        sipRes = new wxImage(inpStream);
+    }
+%End
+
 
 wxImage ImageFromBitmap(const wxBitmap& bitmap);
 %MethodCode

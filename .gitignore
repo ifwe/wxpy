@@ -11,3 +11,6 @@ build/
 *.exe.manifest
 *.obj
 *.swp
+
+.project
+.pydevproject
