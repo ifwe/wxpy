@@ -104,7 +104,7 @@ public:
                      int flag = 0,
                      int border = 0) /Transfer/;
 
-    wxSizerItem* Add(wxSizer *sizer,
+    wxSizerItem* Add(wxSizer *sizer /Transfer/,
                      const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0,

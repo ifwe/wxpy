@@ -347,6 +347,9 @@ public:
     int GetWheelDelta() const;
     int GetLinesPerAction() const;
     bool IsPageScroll() const;
+
+    int m_x;
+    int m_y;
 };
 
 

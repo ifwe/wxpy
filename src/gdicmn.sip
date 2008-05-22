@@ -97,12 +97,9 @@ public:
 
 // Convert from tuples of two integers
 %ConvertToTypeCode
-    if (!sipIsErr)
-    {
-        int val = sequence_2_ints_check(sipPy)
-            || sipCanConvertToInstance(sipPy, sipClass_wxSize, SIP_NO_CONVERTORS);
-        return val;
-    }
+    if (sipIsErr == NULL)
+        return sequence_2_ints_check(sipPy) ||
+            sipCanConvertToInstance(sipPy, sipClass_wxSize, SIP_NO_CONVERTORS);
 
     int _x, _y;
     if (sequence_2_ints(sipPy, &_x, &_y)) {
