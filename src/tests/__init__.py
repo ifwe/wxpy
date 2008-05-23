@@ -6,10 +6,8 @@ def setup():
     '''
     Setup code run before all tests in this package.
     '''
-    assert not wx.GetApp()
-    wx.App.SetInstance(wx.App())
-    wx.EntryStart()
-    wx.InitAllImageHandlers()
+    assert not wx.GetApp() # make sure an app is created ONCE
+    assert wx.App() == wx.GetApp()
 
 def teardown():
     '''

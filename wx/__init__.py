@@ -412,6 +412,7 @@ def _wxpy_init():
     _entrystart()
     _initallimagehandlers()
 
+
 _did_wxpy_init = False
 
 class App(_app):
