@@ -9,7 +9,8 @@ int EntryStart();
     wxApp* app = wxTheApp;
 
     /* Ensure the wxApp was created already. */
-    if (app == NULL) {
+    if (app == NULL)
+    {
         PyErr_SetString(PyExc_AssertionError, "wxEntryStart called without a wxApp created yet");
         sipIsErr = 1;
     }

@@ -1,17 +1,22 @@
-
-class wxPopupWindow : wxWindow {
+class wxPopupWindow : wxWindow
+{
 %TypeHeaderCode
     #include <wx/popupwin.h>
 %End
 public:
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE) /Transfer/;
-//    void Position(const wxPoint& ptOrigin,
-//                  const wxSize& size);
 
     void SetRect(const wxRect& rect);
 %MethodCode
-    sipCpp->Position(a0->GetPosition(), a0->GetSize());
+    sipCpp->Move(a0->GetPosition());
+    sipCpp->SetSize(a0->GetSize());
 %End
+
+    wxRect GetRect() const;
+%MethodCode
+    sipRes = new wxRect(sipCpp->GetPosition(), sipCpp->GetSize());
+%End
+
 };
 
 class wxPopupTransientWindow : wxPopupWindow

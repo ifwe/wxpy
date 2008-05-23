@@ -291,6 +291,8 @@ public:
     }
 %End
 
+    bool operator==(const wxRect&);
+
     int x;
     int y;
     int width;

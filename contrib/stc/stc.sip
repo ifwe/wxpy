@@ -11,6 +11,7 @@
 #include <wx/stc/stc.h>
 %End
 
+
 /*
 #ifdef WXMAKINGDLL_STC
     #define WXDLLIMPEXP_STC WXEXPORT
@@ -3257,13 +3258,13 @@ public:
     bool GetUseAntiAliasing();
 
 
-    
+
     // The following methods are nearly equivallent to their similarly named
     // cousins above.  The difference is that these methods bypass wxString
     // and always use a char* even if used in a unicode build of wxWidgets.
     // In that case the character data will be utf-8 encoded since that is
     // what is used internally by Scintilla in unicode builds.
-    
+
     // Add text to the document at current position.
     void AddTextRaw(const char* text);
 
@@ -3295,7 +3296,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxStyledTextEvent : wxCommandEvent 
+class wxStyledTextEvent : wxCommandEvent
 {
 public:
     wxStyledTextEvent(wxEventType commandType=0, int id=0);

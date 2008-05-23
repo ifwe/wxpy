@@ -19,7 +19,7 @@ from distutils.core import Extension
 from path import path
 
 RELEASE_GIL      = False  # causes the GIL to be released before every call (slow?)
-TRACE_STATEMENTS = False  # emit tracing statements in all functions
+TRACE_STATEMENTS = True   # emit tracing statements in all functions
 
 VERBOSE = True
 

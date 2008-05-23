@@ -29,7 +29,7 @@ Date:    9 Mar 2007
 
 from __future__ import generators
 
-import sys, warnings, os, fnmatch, glob, shutil, codecs, md5, subprocess
+import sys, warnings, os, fnmatch, glob, shutil, codecs, hashlib, subprocess
 
 __version__ = '2.2'
 __all__ = ['path']
@@ -354,7 +354,7 @@ class path(_base):
         whose names match the given pattern.  For example,
         d.files('*.pyc').
         """
-        
+
         return [p for p in self.listdir(pattern) if p.isfile()]
 
     def walk(self, pattern=None, errors='strict'):
@@ -768,7 +768,7 @@ class path(_base):
         """
         f = self.open('rb')
         try:
-            m = md5.new()
+            m = hashlib.md5()
             while True:
                 d = f.read(8192)
                 if not d:
@@ -889,7 +889,7 @@ class path(_base):
 
     def makedirs(self, mode=0777):
         os.makedirs(self, mode)
-        
+
     def ensure_exists(self):
         if not self.exists():
             return self.makedirs()
@@ -899,13 +899,13 @@ class path(_base):
 
     def removedirs(self):
         os.removedirs(self)
-        
+
     def run(self, *a):
         popen =  subprocess.Popen((unicode(self),) + a, stdout = subprocess.PIPE)
         stdout, stderr = popen.communicate()
-        
+
         return stdout
-        
+
     # --- Modifying operations on files
 
     def touch(self):
@@ -977,8 +977,8 @@ class path(_base):
     if hasattr(os, 'startfile'):
         def startfile(self):
             os.startfile(self)
-    
-    if _base is unicode:            
+
+    if _base is unicode:
         def __str__(self):
             return self.encode(_filesystem_encoding)
 

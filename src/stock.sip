@@ -39,10 +39,6 @@ public:
         ITEMCOUNT
     };
 
-//    wxStockGDI();
-//    virtual ~wxStockGDI();
-    static void DeleteAll();
-
     static wxStockGDI& instance();
 
     static const wxBrush*  GetBrush(Item item);
@@ -51,6 +47,8 @@ public:
     static const wxPen*    GetPen(Item item);
 
     const wxFont* GetFont(Item item);
+
+    static void DeleteAll();
 
 private:
     wxStockGDI();

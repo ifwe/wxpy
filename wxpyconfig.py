@@ -51,7 +51,7 @@ elif platform_name == 'msw':
     # TODO: infer these without a wx-config binary? (bakefiles!)
     cxxflags = ('/MD /DWIN32 /GR /D__NO_VC_CRTDBG__ /D__WXMSW__ '
                 '/D_UNICODE /DwxUSE_UNICODE_MSLU=1 '
-                '/DwxUSE_GRAPHICS_CONTEXT=1 /DWXUSINGDLL /Ox').split()
+                '/DwxUSE_GRAPHICS_CONTEXT=1 /DWXUSINGDLL').split()
 
     lflags = ['/LIBPATH:' + str(wxdir / 'lib/vc_dll')]
 
@@ -84,11 +84,13 @@ elif platform_name == 'msw':
     wx_libs = '''\
 base%s
 base%s_net
-base%s_xml
-msw%s_adv
-msw%s_aui
 msw%s_core
-msw%s_html'''.split()
+msw%s_adv
+msw%s_html
+'''.strip().split()
+
+#msw%s_aui
+#base%s_xml
 
     if CONTRIB.STC:
         wx_libs.append('msw%s_stc')
