@@ -32,6 +32,7 @@ class wxObject
         C(wxNotifyEvent)
         C(wxListEvent)
         C(wxDropFilesEvent)
+        C(wxTreeEvent)
 
         C(wxSizerItem)
         C(wxGBSizerItem)

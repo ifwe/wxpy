@@ -59,7 +59,7 @@ class wxTreeItemId
 {
 public:
     wxTreeItemId();
-    ~wxTreeItemId(); 
+    ~wxTreeItemId();
 
     // is this a valid tree item?
     bool IsOk() const;
@@ -78,7 +78,7 @@ public:
 %MethodCode
     sipRes = a0 ? (*sipCpp == *a0) : false;
 %End
-    
+
 };
 
 %ModuleHeaderCode
@@ -138,7 +138,7 @@ public:
 
 
     ~wxTreeItemData();
-    
+
     PyObject* GetData();
     void      SetData(SIP_PYOBJECT* obj);
 
@@ -165,7 +165,7 @@ TREE_EVT(ITEM_COLLAPSING)
 TREE_EVT(SEL_CHANGED)
 TREE_EVT(SEL_CHANGING)
 TREE_EVT(KEY_DOWN)
-TREE_EVT(ITEM_ACTIVATED)    
+TREE_EVT(ITEM_ACTIVATED)
 TREE_EVT(ITEM_RIGHT_CLICK)
 TREE_EVT(ITEM_MIDDLE_CLICK)
 TREE_EVT(END_DRAG)
@@ -207,11 +207,11 @@ public:
 class wxTreeCtrl : wxControl {
 public:
     wxTreeCtrl(wxWindow *parent, wxWindowID id,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 long style,
-                 const wxValidator& validator,
-                 const wxString& name);
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxTR_DEFAULT_STYLE,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxTreeCtrlNameStr);
 
     unsigned int GetCount() const;
 
@@ -232,9 +232,9 @@ public:
     void AssignImageList(wxImageList *imageList);
     void AssignStateImageList(wxImageList *imageList);
     %cleardisown( wxImageList *imageList );
- */   
+ */
     wxString GetItemText(const wxTreeItemId& item) const;
-    
+
     int GetItemImage(const wxTreeItemId& item, wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
 /*
     %extend {
@@ -260,10 +260,16 @@ public:
         }
     }
     %pythoncode { GetPyData = GetItemPyData }
- */       
+ */
     wxColour GetItemTextColour(const wxTreeItemId& item) const;
     wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
     wxFont GetItemFont(const wxTreeItemId& item) const;
+
+    SIP_PYOBJECT GetItemPyData(const wxTreeItemId& item) const;
+%MethodCode
+    wxPyTreeItemData* data = (wxPyTreeItemData*)sipCpp->GetItemData(*a0);
+    sipRes = data->GetData();
+%End
 
     void SetItemText(const wxTreeItemId& item, const wxString& text);
     void SetItemImage(const wxTreeItemId& item, int image,
@@ -366,18 +372,18 @@ public:
             PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
             wxPyEndBlockThreads(blocked);
             return tup;
-        }            
+        }
     }
- */   
+ */
     wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
     wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;
     wxTreeItemId GetPrevSibling(const wxTreeItemId& item) const;
     wxTreeItemId GetFirstVisibleItem() const;
     wxTreeItemId GetNextVisible(const wxTreeItemId& item) const;
     wxTreeItemId GetPrevVisible(const wxTreeItemId& item) const;
-    
+
     // %disownarg( wxPyTreeItemData* data );
-    
+
     wxTreeItemId AddRoot(const wxString& text,
                          int image = -1, int selectedImage = -1,
                          wxPyTreeItemData *data /Transfer/ = NULL);
@@ -405,7 +411,7 @@ public:
                             wxPyTreeItemData *data /Transfer/ = NULL);
 
     // %cleardisown( wxPyTreeItemData* data );
-    
+
     void Delete(const wxTreeItemId& item);
     void DeleteChildren(const wxTreeItemId& item);
     void DeleteAllItems();
@@ -426,7 +432,7 @@ public:
     void UnselectAll();
     void SelectItem(const wxTreeItemId& item, bool select = true);
     void ToggleItemSelection(const wxTreeItemId& item);
-    
+
     void EnsureVisible(const wxTreeItemId& item);
     void ScrollTo(const wxTreeItemId& item);
 

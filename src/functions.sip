@@ -2,6 +2,16 @@
 #include <wx/stockitem.h>
 %End
 
+void wxWakeUpIdle();
+
+void wxBeginBusyCursor(wxCursor& cursor);
+%MethodCode
+    wxBeginBusyCursor(a0);
+%End
+
+void wxEndBusyCursor();
+
+
 long wxNewId();
 void wxRegisterId(long id);
 long wxGetCurrentId();
@@ -171,7 +181,7 @@ public:
     void        SetLeftDown(bool down);
     void        SetMiddleDown(bool down);
     void        SetRightDown(bool down);
-    
+
     void        SetControlDown(bool down);
     void        SetShiftDown(bool down);
     void        SetAltDown(bool down);

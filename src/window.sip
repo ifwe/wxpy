@@ -128,11 +128,6 @@ public:
     wxWindow *GetGrandParent() const;
 
     bool IsTopLevel() const;
-    bool TopLevel() const;
-%MethodCode
-    sipRes = sipCpp->IsTopLevel();
-%End
-
     bool Reparent(wxWindow *newParent);
 
     wxWindow *FindWindow(long winid) const;

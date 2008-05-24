@@ -5,7 +5,7 @@
 
 %MappedType wxString
 {
-    
+
 %TypeHeaderCode
 #include <wx/string.h>
 
@@ -30,25 +30,27 @@
     bool needsDeref = false;
 
     // str -> unicode via utf-8
-    if (PyString_Check(sipPy)) {
+    if (PyString_Check(sipPy))
+    {
         unicode = PyUnicode_FromEncodedObject(sipPy, "utf-8", "strict");
         if (PyErr_Occurred())
             return 0;
 
         needsDeref = true;
     }
-    
+
     wxString* target = new wxString;
 
     // Move Unicode wchar_t bytes into wxString
     size_t len = PyUnicode_GET_SIZE(unicode);
-    if (len) {
+    if (len)
+    {
         PyUnicode_AsWideChar((PyUnicodeObject*)unicode, target->GetWriteBuf(len), len);
         target->UngetWriteBuf();
     }
-        
+
     *sipCppPtr = target;
-    
+
     if (needsDeref)
         Py_DECREF(unicode);
 

@@ -6,7 +6,8 @@ python additions
 
 VERSION = (1, 0, 0, 0)
 
-import sip
+import sip, new
+from functools import wraps
 
 # SIP can show diagnostic traces for these categories
 class SipTrace(object):
@@ -48,6 +49,7 @@ def PyEventBinder(evttype, n = None):
 
 _old_callafter = wx.CallAfter
 def CallAfter(func, *a, **k):
+    assert callable(func)
     return _old_callafter(lambda: func(*a, **k))
 
 wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
@@ -135,6 +137,16 @@ class ScrolledWindow(_ScrolledWindow):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = HSCROLL | VSCROLL, name = 'scrolledWindow'):
         _ScrolledWindow.__init__(self, parent, id, pos, size, style, name)
 
+_Notebook = wx.Notebook
+class Notebook(_Notebook):
+    def __init__(self, parent, id = -1, pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0, name = 'notebook'):
+        _Notebook.__init__(self, parent, id, pos, size, style, name)
+
+_TextEntryDialog = TextEntryDialog
+class TextEntryDialog(_TextEntryDialog):
+    def __init__(self, parent, message, caption = u'Input Text', defaultValue = '', style = TextEntryDialogStyle, pos = DefaultPosition):
+        _TextEntryDialog.__init__(self, parent, message, caption, defaultValue, style, pos)
+
 class SimplePanel(wx.Panel):
     def __init__(self, parent, id, style):
 
@@ -216,6 +228,15 @@ EvtHandler.Bind = EvtHandler_Bind
 del EvtHandler_Bind
 
 #
+# Notebook
+#
+_notebook_addpage = Notebook.AddPage
+@wraps(_notebook_addpage)
+def Notebook_AddPage(self, page, text, select = False, imageId = -1):
+    return _notebook_addpage(self, page, text, select, imageId)
+Notebook.AddPage = Notebook_AddPage
+del Notebook_AddPage
+#
 # Size
 #
 Size.width  = property(attrgetter('x'), lambda s, val: setattr(s, 'x', val))
@@ -226,6 +247,8 @@ Size.height = property(attrgetter('y'), lambda s, val: setattr(s, 'y', val))
 #
 Rect.left = property(Rect.GetX, Rect.SetX)
 Rect.top  = property(Rect.GetY, Rect.SetY)
+Rect.bottom = property(Rect.GetBottom, Rect.SetBottom)
+Rect.right = property(Rect.GetRight, Rect.SetRight)
 
 
 #
@@ -438,6 +461,8 @@ wxEVT_MOTION = wx.EVT_MOTION
 wxEVT_COMMAND_BUTTON_CLICKED = wx.EVT_COMMAND_BUTTON_CLICKED
 assert isinstance(wxEVT_MOTION, int)
 
+EVT_SPLITTER_DCLICK = EVT_SPLITTER_DOUBLECLICKED
+
 FindWindowByName = wx.Window.FindWindowByName
 
 Color = wx.Colour
@@ -449,12 +474,23 @@ PyCommandEvent = wx.CommandEvent
 
 PyScrolledWindow = wx.ScrolledWindow
 
-StockCursor = wx.StockGDI.GetCursor
-
 SystemSettings_GetColour = wx.SystemSettings.GetColour
 
-wx.Window.Enabled = property(wx.Window.IsEnabled, wx.Window.Enable)
-wx.Window.Shown   = property(wx.Window.IsShown)
+wx.Window.Enabled  = property(wx.Window.IsEnabled, wx.Window.Enable)
+wx.Window.Shown    = property(wx.Window.IsShown)
+wx.Window.TopLevel = property(wx.Window.IsTopLevel)
+
+BusyCursor = lambda: 'WXPYHACK'
+
+BeginBusyCursor = lambda: 'WXPYHACK'
+EndBusyCursor = lambda: 'WXPYHACK'
+
+GetDefaultPyEncoding = lambda: 'utf-8'
+
+TreeItemData = PyTreeItemData
+FutureCall = CallLater
+
+TreeCtrl.GetPyData = new.instancemethod(TreeCtrl.GetItemPyData, None, TreeCtrl)
 
 WXPY = True
 del wx

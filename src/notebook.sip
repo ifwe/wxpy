@@ -25,7 +25,9 @@ public:
     size_t GetPageCount() const;
     wxWindow *GetPage(size_t n);
     wxWindow* GetCurrentPage() const;
+
     int GetSelection() const = 0;
+
     bool SetPageText(size_t n, const wxString& strText) = 0;
     wxString GetPageText(size_t n) const = 0;
 /*
@@ -55,23 +57,23 @@ public:
     bool RemovePage(size_t n);
     bool DeleteAllPages();
     bool AddPage(wxWindow *page,
-                         const wxString& text,
-                         bool select = false,
-                         int imageId = -1);
+                 const wxString& text,
+                 bool select = false,
+                 int imageId = -1);
     bool InsertPage(size_t n,
                             wxWindow *page,
                             const wxString& text,
                             bool select = false,
-                            int imageId = -1) = 0;
+                            int imageId = -1);
 
-    int SetSelection(size_t n) = 0;
-    
-    int ChangeSelection(size_t n) = 0;
+    virtual int SetSelection(size_t n) = 0;
+    virtual int ChangeSelection(size_t n) = 0;
+
     void AdvanceSelection(bool forward = true);
 
     int HitTest(const wxPoint& pt, long* where /Out/) const;
 private:
-   wxBookCtrlBase(const wxBookCtrlBase&); 
+   wxBookCtrlBase(const wxBookCtrlBase&);
 };
 
 class wxBookCtrlBaseEvent : wxNotifyEvent
@@ -112,14 +114,29 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxNotebookNameStr);
+    virtual ~wxNotebook();
 
     int GetRowCount() const;
     void SetPadding(const wxSize& padding);
     void SetTabSize(const wxSize& sz);
-    wxSize CalcSizeFromPage(const wxSize& sizePage) const;
     wxColour GetThemeBackgroundColour() const;
     bool SendPageChangingEvent(int nPage);
     void SendPageChangedEvent(int nPageOld, int nPageNew = -1);
+
+    // overridden virtuals
+    wxString GetPageText(size_t n) const;
+    bool SetPageText(size_t n, const wxString& strText);
+
+    wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+
+    int GetPageImage(size_t n) const;
+    bool SetPageImage(size_t n, int imageId);
+
+    int SetSelection(size_t n);
+    int ChangeSelection(size_t n);
+    int GetSelection() const;
+
+
 };
 
 class wxNotebookEvent : wxBookCtrlBaseEvent
@@ -202,7 +219,7 @@ public:
 
 */
 
-/* 
+/*
 // wxChoiceBook
 
 enum {

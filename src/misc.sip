@@ -10,6 +10,7 @@
 %Include popup.sip
 %Include stock.sip
 %Include log.sip
+%Include clipboard.sip
 
 %If (!WXMAC)
 %Include power.sip

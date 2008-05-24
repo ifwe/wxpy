@@ -226,6 +226,7 @@ public:
     bool Contains(const wxRect& rect) const /PyName=ContainsRect/;
 
     bool Intersects(const wxRect &rect) const;
+    void Union(const wxRect &otherRect);
 
     SIP_PYOBJECT __repr__();
 %MethodCode
@@ -376,7 +377,7 @@ enum wxBitmapType
     wxBITMAP_TYPE_ANY = 50
 };
 
-enum wxStockCursor
+enum // wxStockCursor
 {
     wxCURSOR_NONE,          // should be 0
     wxCURSOR_ARROW,

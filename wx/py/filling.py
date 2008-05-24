@@ -39,7 +39,7 @@ except AttributeError:
 
 class FillingTree(wx.TreeCtrl):
     """FillingTree based on TreeCtrl."""
-    
+
     name = 'Filling Tree'
     revision = __revision__
 
@@ -290,9 +290,9 @@ class Filling(wx.SplitterWindow):
                                 rootIsNamespace=rootIsNamespace,
                                 static=static)
         self.text = FillingText(parent=self, static=static)
-        
+
         wx.FutureCall(1, self.SplitVertically, self.tree, self.text, 200)
-        
+
         self.SetMinimumPaneSize(1)
 
         # Override the filling so that descriptions go to FillingText.

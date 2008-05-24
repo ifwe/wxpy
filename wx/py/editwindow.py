@@ -76,7 +76,7 @@ class EditWindow(stc.StyledTextCtrl):
         """Create EditWindow instance."""
         stc.StyledTextCtrl.__init__(self, parent, id, pos, size, style)
         self.__config()
-        stc.EVT_STC_UPDATEUI(self, id, self.OnUpdateUI)
+        self.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI, id = id)
         dispatcher.connect(receiver=self._fontsizer, signal='FontIncrease')
         dispatcher.connect(receiver=self._fontsizer, signal='FontDecrease')
         dispatcher.connect(receiver=self._fontsizer, signal='FontDefault')
@@ -95,7 +95,7 @@ class EditWindow(stc.StyledTextCtrl):
 
     def __config(self):
         self.setDisplayLineNumbers(False)
-        
+
         self.SetLexer(stc.STC_LEX_PYTHON)
         self.SetKeyWords(0, ' '.join(keyword.kwlist))
 
@@ -116,8 +116,9 @@ class EditWindow(stc.StyledTextCtrl):
         # Do we want to automatically pop up command argument help?
         self.autoCallTip = True
         self.callTipInsert = True
-        self.CallTipSetBackground(FACES['calltipbg'])
-        self.CallTipSetForeground(FACES['calltipfg'])
+        # WXPYHACK
+        self.CallTipSetBackground(wx.WHITE)#FACES['calltipbg'])
+        self.CallTipSetForeground(wx.BLACK)#FACES['calltipfg'])
         self.SetWrapMode(False)
         try:
             self.SetEndAtLastLine(False)
@@ -133,7 +134,7 @@ class EditWindow(stc.StyledTextCtrl):
             # Leave a small margin so the feature hidden lines marker can be seen
             self.SetMarginType(1, 0)
             self.SetMarginWidth(1, 10)
-        
+
     def setStyles(self, faces):
         """Configure font size, typeface and color for lexer."""
 
@@ -145,7 +146,7 @@ class EditWindow(stc.StyledTextCtrl):
         self.StyleClearAll()
         self.SetSelForeground(True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
         self.SetSelBackground(True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT))
-        
+
         # Built in styles
         self.StyleSetSpec(stc.STC_STYLE_LINENUMBER,
                           "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % FACES)

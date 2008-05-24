@@ -88,7 +88,7 @@ class ShellFrame(frame.Frame, frame.ShellFrameMixin):
                'Platform: %s\n' % sys.platform + \
                'Python Version: %s\n' % sys.version.split()[0] + \
                'wxPython Version: %s\n' % wx.VERSION_STRING + \
-               ('\t(%s)\n' % ", ".join(wx.PlatformInfo[1:])) 
+               ('\t(%s)\n' % ", ".join(wx.PlatformInfo[1:]))
         dialog = wx.MessageDialog(self, text, title,
                                   wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
@@ -117,7 +117,7 @@ class ShellFrame(frame.Frame, frame.ShellFrameMixin):
         if self.config is not None:
             self.SaveSettings(force=True)
             self.config.Flush()
-        
+
 
 
 
@@ -148,7 +148,7 @@ Ctrl+=            Default font size.
 Ctrl-Space        Show Auto Completion.
 Ctrl-Alt-Space    Show Call Tip.
 Shift+Enter       Complete Text from History.
-Ctrl+F            Search 
+Ctrl+F            Search
 F3                Search next
 Ctrl+H            "hide" lines containing selection / "unhide"
 F12               on/off "free-edit" mode
@@ -168,7 +168,7 @@ class ShellFacade:
         d = self.__dict__
         d['other'] = other
         d['helpText'] = HELP_TEXT
-        d['this'] = other.this
+        #d['this'] = other.this
 
     def help(self):
         """Display some useful information about how to use the shell."""
@@ -295,7 +295,7 @@ class Shell(editwindow.EditWindow):
         # Assign handler for the context menu
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI)
-        
+
         # Assign handlers for edit events
         self.Bind(wx.EVT_MENU, lambda evt: self.Cut(), id=wx.ID_CUT)
         self.Bind(wx.EVT_MENU, lambda evt: self.Copy(), id=wx.ID_COPY)
@@ -306,7 +306,7 @@ class Shell(editwindow.EditWindow):
         self.Bind(wx.EVT_MENU, lambda evt: self.Clear(), id=wx.ID_CLEAR)
         self.Bind(wx.EVT_MENU, lambda evt: self.Undo(), id=wx.ID_UNDO)
         self.Bind(wx.EVT_MENU, lambda evt: self.Redo(), id=wx.ID_REDO)
-        
+
 
         # Assign handler for idle time.
         self.waiting = False
@@ -333,7 +333,7 @@ class Shell(editwindow.EditWindow):
             self.execStartupScript(startupScript)
         else:
             self.prompt()
-        
+
         wx.CallAfter(self.ScrollToLine, 0)
 
 
@@ -474,7 +474,7 @@ Platform: %s""" % \
         if self.AutoCompActive():
             event.Skip()
             return
-        
+
         # Prevent modification of previously submitted
         # commands/responses.
         controlDown = event.ControlDown()
@@ -483,8 +483,8 @@ Platform: %s""" % \
         currpos = self.GetCurrentPos()
         endpos = self.GetTextLength()
         selecting = self.GetSelectionStart() != self.GetSelectionEnd()
-        
-        if controlDown and shiftDown and key in (ord('F'), ord('f')): 
+
+        if controlDown and shiftDown and key in (ord('F'), ord('f')):
             li = self.GetCurrentLine()
             m = self.MarkerGet(li)
             if m & 1<<0:
@@ -492,7 +492,7 @@ Platform: %s""" % \
                 self.MarkerDelete(li, 0)
                 maxli = self.GetLineCount()
                 li += 1 # li stayed visible as header-line
-                li0 = li 
+                li0 = li
                 while li<maxli and self.GetLineVisible(li) == 0:
                     li += 1
                 endP = self.GetLineEndPosition(li-1)
@@ -513,7 +513,7 @@ Platform: %s""" % \
 
         if key == wx.WXK_F12: #seb
             if self.noteMode:
-                # self.promptPosStart not used anyway - or ? 
+                # self.promptPosStart not used anyway - or ?
                 self.promptPosEnd = self.PositionFromLine( self.GetLineCount()-1 ) + len(str(sys.ps1))
                 self.GotoLine(self.GetLineCount())
                 self.GotoPos(self.promptPosEnd)
@@ -538,11 +538,11 @@ Platform: %s""" % \
             if self.CallTipActive():
                 self.CallTipCancel()
             self.processLine()
-            
-        # Complete Text (from already typed words)    
+
+        # Complete Text (from already typed words)
         elif shiftDown and key in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
             self.OnShowCompHistory()
-            
+
         # Ctrl+Return (Ctrl+Enter) is used to insert a line break.
         elif controlDown and key in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
             if self.CallTipActive():
@@ -551,11 +551,11 @@ Platform: %s""" % \
                 self.processLine()
             else:
                 self.insertLineBreak()
-                
+
         # Let Ctrl-Alt-* get handled normally.
         elif controlDown and altDown:
             event.Skip()
-            
+
         # Clear the current, unexecuted command.
         elif key == wx.WXK_ESCAPE:
             if self.CallTipActive():
@@ -630,45 +630,45 @@ Platform: %s""" % \
         # Paste from the clipboard, run commands.
         elif controlDown and shiftDown and key in (ord('V'), ord('v')):
             self.PasteAndRun()
-            
+
         # Replace with the previous command from the history buffer.
         elif (controlDown and key == wx.WXK_UP) \
                  or (altDown and key in (ord('P'), ord('p'))):
             self.OnHistoryReplace(step=+1)
-            
+
         # Replace with the next command from the history buffer.
         elif (controlDown and key == wx.WXK_DOWN) \
                  or (altDown and key in (ord('N'), ord('n'))):
             self.OnHistoryReplace(step=-1)
-            
+
         # Insert the previous command from the history buffer.
         elif (shiftDown and key == wx.WXK_UP) and self.CanEdit():
             self.OnHistoryInsert(step=+1)
-            
+
         # Insert the next command from the history buffer.
         elif (shiftDown and key == wx.WXK_DOWN) and self.CanEdit():
             self.OnHistoryInsert(step=-1)
-            
+
         # Search up the history for the text in front of the cursor.
         elif key == wx.WXK_F8:
             self.OnHistorySearch()
-            
+
         # Don't backspace over the latest non-continuation prompt.
         elif key == wx.WXK_BACK:
             if selecting and self.CanEdit():
                 event.Skip()
             elif currpos > self.promptPosEnd:
                 event.Skip()
-                
+
         # Only allow these keys after the latest prompt.
         elif key in (wx.WXK_TAB, wx.WXK_DELETE):
             if self.CanEdit():
                 event.Skip()
-                
+
         # Don't toggle between insert mode and overwrite mode.
         elif key == wx.WXK_INSERT:
             pass
-        
+
         # Don't allow line deletion.
         elif controlDown and key in (ord('L'), ord('l')):
             pass
@@ -691,33 +691,33 @@ Platform: %s""" % \
 
     def OnShowCompHistory(self):
         """Show possible autocompletion Words from already typed words."""
-        
+
         #copy from history
         his = self.history[:]
-        
+
         #put together in one string
         joined = " ".join (his)
         import re
 
         #sort out only "good" words
         newlist = re.split("[ \.\[\]=}(\)\,0-9\"]", joined)
-        
+
         #length > 1 (mix out "trash")
         thlist = []
         for i in newlist:
             if len (i) > 1:
                 thlist.append (i)
-        
+
         #unique (no duplicate words
         #oneliner from german python forum => unique list
         unlist = [thlist[i] for i in xrange(len(thlist)) if thlist[i] not in thlist[:i]]
-            
+
         #sort lowercase
         unlist.sort(lambda a, b: cmp(a.lower(), b.lower()))
-        
+
         #this is more convenient, isn't it?
         self.AutoCompSetIgnoreCase(True)
-        
+
         #join again together in a string
         stringlist = " ".join(unlist)
 
@@ -727,7 +727,7 @@ Platform: %s""" % \
         cpos = self.GetCurrentPos() - 1
         while chr (self.GetCharAt (cpos)).isalnum():
             cpos -= 1
-            
+
         #the most important part
         self.AutoCompShow(self.GetCurrentPos() - cpos -1, stringlist)
 
@@ -1107,7 +1107,7 @@ Platform: %s""" % \
             # fallback.
             tippos = max(tippos, fallback)
             self.CallTipShow(tippos, tip)
-    
+
     def OnCallTipAutoCompleteManually (self, shiftDown):
         """AutoComplete and Calltips manually."""
         if self.AutoCompActive():
@@ -1150,10 +1150,10 @@ Platform: %s""" % \
                 ctindex = ctips.find ('(')
                 if ctindex != -1 and not self.CallTipActive():
                     #insert calltip, if current pos is '(', otherwise show it only
-                    self.autoCallTipShow(ctips[:ctindex + 1], 
+                    self.autoCallTipShow(ctips[:ctindex + 1],
                         self.GetCharAt(currpos - 1) == ord('(') and self.GetCurrentPos() == self.GetTextLength(),
                         True)
-                
+
 
     def writeOut(self, text):
         """Replacement for stdout."""
@@ -1288,7 +1288,7 @@ Platform: %s""" % \
             wx.TheClipboard.Close()
         if text:
             self.Execute(text)
-            
+
 
     def Execute(self, text):
         """Replace selection with text and run commands."""
@@ -1370,7 +1370,7 @@ Platform: %s""" % \
             self.SetZoom(zoom)
 
 
-    
+
     def SaveSettings(self, config):
         config.WriteBool('Options/AutoComplete', self.autoComplete)
         config.WriteBool('Options/AutoCompleteIncludeMagic', self.autoCompleteIncludeMagic)
@@ -1392,25 +1392,25 @@ Platform: %s""" % \
         menu = wx.Menu()
         menu.Append(wx.ID_UNDO, "Undo")
         menu.Append(wx.ID_REDO, "Redo")
-        
+
         menu.AppendSeparator()
-        
+
         menu.Append(wx.ID_CUT, "Cut")
         menu.Append(wx.ID_COPY, "Copy")
         menu.Append(frame.ID_COPY_PLUS, "Copy Plus")
         menu.Append(wx.ID_PASTE, "Paste")
         menu.Append(frame.ID_PASTE_PLUS, "Paste Plus")
         menu.Append(wx.ID_CLEAR, "Clear")
-        
+
         menu.AppendSeparator()
-        
+
         menu.Append(wx.ID_SELECTALL, "Select All")
         return menu
-        
+
     def OnContextMenu(self, evt):
         menu = self.GetContextMenu()
         self.PopupMenu(menu)
-        
+
     def OnUpdateUI(self, evt):
         id = evt.Id
         if id in (wx.ID_CUT, wx.ID_CLEAR):
@@ -1423,7 +1423,7 @@ Platform: %s""" % \
             evt.Enable(self.CanUndo())
         elif id == wx.ID_REDO:
             evt.Enable(self.CanRedo())
-        
+
 
 
 
@@ -1460,12 +1460,12 @@ Platform: %s""" % \
 ##         self.filedo = wx.FileDataObject()
 ##         self.compdo.Add(self.textdo)
 ##         self.compdo.Add(self.filedo, True)
-        
+
 ##         self.SetDataObject(self.compdo)
-                
+
 ##     def OnDrop(self, x, y):
 ##         return True
-    
+
 ##     def OnData(self, x, y, result):
 ##         self.GetData()
 ##         if self.textdo.GetTextLength() > 1:
@@ -1487,4 +1487,4 @@ Platform: %s""" % \
 ##             self.shell.SetSelection( pos, pos )
 
 ##         return result
-    
+

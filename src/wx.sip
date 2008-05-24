@@ -69,6 +69,8 @@ if (0 != sipExportSymbol("wxpy_add_event", (void *)&add_event))
 AddItem("DefaultSize",      &wxDefaultSize,      sipClass_wxSize);
 AddItem("DefaultPosition",  &wxDefaultPosition,  sipClass_wxPoint);
 AddItem("DefaultValidator", &wxDefaultValidator, sipClass_wxValidator);
+PyDict_SetItemString(sipModuleDict, "TextEntryDialogStyle", PyInt_FromLong(wxTextEntryDialogStyle));
+
 
 AddItem("BLACK", wxBLACK, sipClass_wxColour);
 AddItem("WHITE", wxWHITE, sipClass_wxColour);
