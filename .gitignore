@@ -4,13 +4,18 @@
 *.pyc
 build/
 *.so
-*.pdb
-*.pyd
-*.pyd.manifest
-*.exe
-*.exe.manifest
 *.obj
 *.swp
+
+# windows binaries/project files
+*.pdb
+*.ilk
+*.suo
+*.exe
+*.exe.manifest
+*.pyd
+*.pyd.manifest
+
 
 .project
 .pydevproject
