@@ -1,3 +1,9 @@
+enum {
+    wxCHK_2STATE,
+    wxCHK_3STATE,
+    wxCHK_ALLOW_3RD_STATE_FOR_USER,
+};
+
 enum wxCheckBoxState
 {
     wxCHK_UNCHECKED,
@@ -16,7 +22,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxCheckBoxNameStr);
-               
+
     void SetValue(bool value);
     bool GetValue() const;
     bool IsChecked() const;

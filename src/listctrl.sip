@@ -237,7 +237,7 @@ public:
     bool SetItem(wxListItem& info) ;
 
     //%Rename(SetStringItem, long, SetItem(long index, int col, const wxString& label, int imageId = -1));
-    
+
     int  GetItemState(long item, long stateMask) const ;
     bool SetItemState(long item, long state, long stateMask) ;
 
@@ -311,7 +311,7 @@ public:
 
     //%Rename(FindItemAtPoslong, FindItem(long start, const wxPoint& pt, int direction));
     long FindItem(long start, const wxPoint& pt, int direction);
-    
+
     // TODO: HitTest methods
 
     long InsertItem(wxListItem& info);
@@ -337,7 +337,7 @@ public:
 
     void SetItemFont(long item, const wxFont &f);
     wxFont GetItemFont(long item ) const;
-    
+
 /*
     // bool SortItems(wxListCtrlCompare fn, long data);
     %extend {
@@ -359,4 +359,36 @@ public:
     //GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 };
+
+%PostInitialisationCode
+
+#ifdef LIST_EVT
+#error "macro LIST_EVT is already defined, better pick a better one here"
+#else
+#define LIST_EVT(name) add_event(sipModuleDict, "EVT_LIST_" #name, wxEVT_COMMAND_LIST_##name, 0);
+#endif
+
+LIST_EVT(BEGIN_DRAG)
+LIST_EVT(BEGIN_RDRAG)
+LIST_EVT(BEGIN_LABEL_EDIT)
+LIST_EVT(END_LABEL_EDIT)
+LIST_EVT(DELETE_ITEM)
+LIST_EVT(DELETE_ALL_ITEMS)
+LIST_EVT(ITEM_SELECTED)
+LIST_EVT(ITEM_DESELECTED)
+LIST_EVT(KEY_DOWN)
+LIST_EVT(INSERT_ITEM)
+LIST_EVT(COL_CLICK)
+LIST_EVT(ITEM_RIGHT_CLICK)
+LIST_EVT(ITEM_MIDDLE_CLICK)
+LIST_EVT(ITEM_ACTIVATED)
+LIST_EVT(CACHE_HINT)
+LIST_EVT(COL_RIGHT_CLICK)
+LIST_EVT(COL_BEGIN_DRAG)
+LIST_EVT(COL_DRAGGING)
+LIST_EVT(COL_END_DRAG)
+LIST_EVT(ITEM_FOCUSED)
+
+#undef LIST_EVT
+%End // PostInitialisationCode
 

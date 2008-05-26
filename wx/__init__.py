@@ -147,12 +147,27 @@ class TextEntryDialog(_TextEntryDialog):
     def __init__(self, parent, message, caption = u'Input Text', defaultValue = '', style = TextEntryDialogStyle, pos = DefaultPosition):
         _TextEntryDialog.__init__(self, parent, message, caption, defaultValue, style, pos)
 
+_CheckBox = CheckBox
+class CheckBox(_CheckBox):
+    def __init__(self, parent, id, label = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = DefaultValidator, name = 'checkBox'):
+        _CheckBox.__init__(self, parent, id, label, pos, size, style, validator, name)
+
+_BoxSizer = BoxSizer
+class BoxSizer(_BoxSizer):
+    def __init__(self, orient):
+        _BoxSizer.__init__(self, orient)
+
 class SimplePanel(wx.Panel):
     def __init__(self, parent, id, style):
 
         print '***', type(parent)
         Panel.__init__(self, parent, id, style = style)
-        self.SetBackgroundStyle(BG_STYLE_CUSTOM);
+        self.SetBackgroundStyle(BG_STYLE_CUSTOM)
+
+#_ScrolledWindow = ScrolledWindow
+#class ScrolledWindow(ScrolledWindow):
+#    def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = HSCROLL | VSCROLL, name = 'scrolledWindow'):
+#        _ScrolledWindow.__init__(self, parent, id, pos, size, style, name)
 
 #
 # Window
@@ -472,7 +487,7 @@ PyDropTarget = wx.DropTarget
 PyValidator = wx.Validator
 PyCommandEvent = wx.CommandEvent
 
-PyScrolledWindow = wx.ScrolledWindow
+PyScrolledWindow = ScrolledWindow
 
 SystemSettings_GetColour = wx.SystemSettings.GetColour
 

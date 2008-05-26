@@ -10,7 +10,7 @@ released under the wxWidgets License
 
 // Enable stripping of "wx" from Python names, and auto generation of
 // properties from GetXXX() and SetXXX() methods.
-%SIPOptions (RenameWx, AutoProperties, ThreadChecking)
+%SIPOptions (RenameWx, AutoProperties)
 
 %ModuleHeaderCode
 #define WXSIP 1
@@ -20,6 +20,7 @@ released under the wxWidgets License
 %Include vector.sip
 
 %Include core.sip
+%Include generated/lists.sip
 %Include gdi.sip
 %Include controls.sip
 

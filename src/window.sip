@@ -417,10 +417,15 @@ public:
     void SetLabel(const wxString& label);
     wxString GetLabel() const;
 
+
     wxWindowID GetId() const;
     static int NewControlId();
     void SetSize(const wxSize& size);
     void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO);
+    void SetInitialSize(const wxSize& size = wxDefaultSize);
+
+    void SetId(int id);
+
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING);
 
     wxPoint GetPosition() const;

@@ -7,7 +7,6 @@
 
 %Include helpers.sip
 
-%Include windowlist.sip
 %Include menulist.sip
 
 %Include string.sip

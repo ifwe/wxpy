@@ -69,3 +69,5 @@ public:
 private:
     wxDropSource(const wxDropSource&);
 };
+
+

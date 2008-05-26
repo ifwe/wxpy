@@ -200,7 +200,7 @@ public:
         sipRes = sipCpp->GetChildren().GetCount();
 %End
 
-    //wxSizerItemList& GetChildren();
+    wxSizerItemList& GetChildren();
 
 /*
 
@@ -231,13 +231,53 @@ public:
     void SetOrientation(int orient);
 };
 
+
+class wxGridSizer: wxSizer
+{
+public:
+    wxGridSizer(int rows=1, int cols=0, int vgap=0, int hgap=0);
+    virtual ~wxGridSizer();
+
+    void RecalcSizes();
+
+    void SetCols(int cols);
+    void SetRows(int rows);
+    void SetVGap(int gap);
+    void SetHGap(int gap);
+    int GetCols();
+    int GetRows();
+    int GetVGap();
+    int GetHGap();
+/*
+    %pythoncode {
+        def CalcRowsCols(self):
+            """
+            CalcRowsCols() -> (rows, cols)
+
+            Calculates how many rows and columns will be in the sizer based
+            on the current number of items and also the rows, cols specified
+            in the constructor.
+            """
+            nitems = len(self.GetChildren())
+            rows = self.GetRows()
+            cols = self.GetCols()
+            assert rows != 0 or cols != 0, "Grid sizer must have either rows or columns fixed"
+            if cols != 0:
+                rows = (nitems + cols - 1) / cols
+            elif rows != 0:
+                cols = (nitems + rows - 1) / rows
+            return (rows, cols)
+    }
+    */
+};
+
+
 enum wxFlexSizerGrowMode
 {
     wxFLEX_GROWMODE_NONE,
     wxFLEX_GROWMODE_SPECIFIED,
     wxFLEX_GROWMODE_ALL
 };
-
 
 class wxFlexGridSizer : wxSizer
 {

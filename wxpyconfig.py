@@ -43,7 +43,7 @@ elif platform_name == 'msw':
     WXDEBUG = True              # __WXDEBUG__
     DEBUG_SYMBOLS = True        # /Zi
     ENABLE_EXCEPTIONS = False
-    WHOLE_PROGRAM_OPTIMIZATION = False
+    WHOLE_PROGRAM_OPTIMIZATION = True
 
     class CONTRIB(object):
         STC = True
@@ -51,7 +51,7 @@ elif platform_name == 'msw':
     # TODO: infer these without a wx-config binary? (bakefiles!)
     cxxflags = ('/MD /DWIN32 /GR /D__NO_VC_CRTDBG__ /D__WXMSW__ '
                 '/D_UNICODE /DwxUSE_UNICODE_MSLU=1 '
-                '/DwxUSE_GRAPHICS_CONTEXT=1 /DWXUSINGDLL').split()
+                '/DwxUSE_GRAPHICS_CONTEXT=1 /DWXUSINGDLL /Ox').split()
 
     lflags = ['/LIBPATH:' + str(wxdir / 'lib/vc_dll')]
 

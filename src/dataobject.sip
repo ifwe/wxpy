@@ -26,11 +26,16 @@ enum wxDataFormatId
     wxDF_MAX,
 };
 
+wxDataFormat CustomDataFormat(const wxString& format);
+%MethodCode
+    sipRes = new wxDataFormat(*a0);
+%End
+
 class wxDataFormat {
 public:
     wxDataFormat( wxDataFormatId type );
-    wxDataFormat(const wxString& format);
-    ~wxDataFormat();    
+    //wxDataFormat(const wxString& format);
+    ~wxDataFormat();
 
     bool operator==(wxDataFormatId format) const;
     bool operator!=(wxDataFormatId format) const;
@@ -49,7 +54,7 @@ public:
     void SetId(const wxString& format);
 };
 
-class wxDataObject {      
+class wxDataObject {
 public:
     enum Direction {
         Get  = 0x01,    // format is supported by GetDataHere()
@@ -81,14 +86,14 @@ in the given direction.", "");
                 wxDataFormat* format = new wxDataFormat(formats[i]);
                 PyObject* obj = wxPyConstructObject((void*)format, wxT("wxDataFormat"), true);
                 PyList_SET_ITEM(list, i, obj); // PyList_SET_ITEM steals a reference
-            }            
+            }
             wxPyEndBlockThreads(blocked);
             delete [] formats;
             return list;
         }
     }
 */
-    
+
 /*
     // copy raw data (in the specified format) to the provided buffer, return
     // True if data copied successfully, False otherwise
@@ -101,11 +106,11 @@ in the given direction.", "");
 :todo: This should use the python buffer interface isntead...");
         PyObject* GetDataHere(const wxDataFormat& format) {
             PyObject* rval = NULL;
-            size_t size = self->GetDataSize(format);            
+            size_t size = self->GetDataSize(format);
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (size) {
                 char* buf = new char[size];
-                if (self->GetDataHere(format, buf)) 
+                if (self->GetDataHere(format, buf))
                     rval = PyString_FromStringAndSize(buf, size);
                 delete [] buf;
             }
@@ -118,7 +123,7 @@ in the given direction.", "");
         }
     }
 
-    
+
     // get data from the buffer of specified length (in the given format),
     // return True if the data was read successfully, False otherwise
     // bool SetData(const wxDataFormat& format,
@@ -166,11 +171,11 @@ on failure.  Must be implemented in the derived class if the object
 supports rendering its data.", "");
         PyObject* GetDataHere() {
             PyObject* rval = NULL;
-            size_t size = self->GetDataSize();            
+            size_t size = self->GetDataSize();
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             if (size) {
                 char* buf = new char[size];
-                if (self->GetDataHere(buf)) 
+                if (self->GetDataHere(buf))
                     rval = PyString_FromStringAndSize(buf, size);
                 delete [] buf;
             }
@@ -183,7 +188,7 @@ supports rendering its data.", "");
         }
     }
 
-    
+
     %extend {
         DocAStr(SetData,
                 "SetData(self, String data) -> bool",
@@ -210,7 +215,7 @@ private:
     wxDataObjectSimple(const wxDataObjectSimple&);
 };
 
-class wxDataObjectComposite : wxDataObject 
+class wxDataObjectComposite : wxDataObject
 {
 public:
     wxDataObjectComposite();
@@ -250,7 +255,7 @@ public:
         PyErr_SetString(PyExc_NotImplementedError, "GetFilenames is not implemented");
         sipIsErr = 1;
 %End
-    
+
     void AddFile(const wxString &filename);
 private:
     wxFileDataObject(const wxFileDataObject&);
@@ -283,7 +288,7 @@ public:
     }
     %pythoncode { TakeData = SetData }
     */
-    
+
     size_t GetSize();
 /*
     %extend {

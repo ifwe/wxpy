@@ -19,7 +19,7 @@ from distutils.core import Extension
 from path import path
 
 RELEASE_GIL      = False  # causes the GIL to be released before every call (slow?)
-TRACE_STATEMENTS = True   # emit tracing statements in all functions
+TRACE_STATEMENTS = False   # emit tracing statements in all functions
 
 VERBOSE = True
 
@@ -106,6 +106,7 @@ class wxpy_build_ext(sipdistutils.build_ext):
 
         sipconfig.inform('build_temp is %s' % self.build_temp)
         manage_cache(self.build_temp)
+
         return sources
 
 def make_sip_ext(name, iface_files, include = None, libs = []):
