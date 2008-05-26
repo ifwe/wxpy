@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+
+<makefile>
+    <set var="WX_UNICODE">1</set>
+    <set var="WX_SHARED">1</set>
+    <include file="wxpy-settings.bkl"/>
+
+    <if cond="not isdefined('PYTHON_VERSION')">
+        <option name="PYTHON_VERSION">
+            <values>24,25</values>
+            <default-value>25</default-value>
+            <description>
+                Python version we're building against.
+            </description>
+        </option>
+    </if>
+
+    <if cond="not isdefined('PYTHON_LIBDIR')">
+        <option name="PYTHON_LIBDIR" category="path">
+            <default-value>C:/Python25/Libs</default-value>
+            <description>
+                The directory containing the Python library to link against.
+            </description>
+        </option>
+    </if>
+
+    <module id="wxwebkit-python" template="wxwk,webcore,xml2,iconv,xslt,icu,jscore,curl,sqlite3,gtk,pthreads">
+        <!-- make sure we relink wxwebkit if either webcore or jscore change -->
+        <if cond="FORMAT=='gnu'">
+            <depends-on-file>$(WKOUTPUTDIR)/libjscore.a</depends-on-file>
+            <depends-on-file>$(WKOUTPUTDIR)/libwebcore-wx.a</depends-on-file>
+        </if>
+        <if cond="FORMAT=='msvc'">
+            <depends-on-file>$(WKOUTPUTDIR)/jscore.lib</depends-on-file>
+            <depends-on-file>$(WKOUTPUTDIR)/webcore-wx.lib</depends-on-file>
+        </if>
+        <runtime-libs>dynamic</runtime-libs>
+        <dllname>_webview</dllname>
+
+        <include>$(WK_ROOT)/WebCore/platform/wx</include>
+        <include>$(WK_ROOT)/WebCore/bridge/wx</include>
+        <include>$(WK_ROOT)/WebCore/page/wx</include>
+        <include>$(WK_ROOT)/WebKit/wx</include>
+        <include>$(WK_ROOT)/WebKit/wx/WebKitSupport</include>
+
+        <if cond="FORMAT=='gnu'">
+            <sys-lib>png</sys-lib>
+            <set var="MAC_FLAGS">
+                <if cond="WX_PORT=='mac'">-bundle</if>
+            </set>
+
+            <ldflags>$(MAC_FLAGS) -undefined dynamic_lookup</ldflags>
+        </if>
+        <if cond="FORMAT in ['msvc','msvs2005prj']">
+            <set var="PY_LIBNAME">
+                <if cond="PYTHON_VERSION=='24'">
+                    python24
+                </if>
+                <if cond="PYTHON_VERSION=='25'">
+                    python25
+                </if>
+            </set>
+            <sys-lib>libpng</sys-lib>
+            <sys-lib>$(PY_LIBNAME)</sys-lib>
+            <lib-path>$(WK_ROOT)/libpng</lib-path>
+            <lib-path>$(PYTHON_LIBDIR)</lib-path>
+        </if>
+
+        <sys-lib>wxwebkit</sys-lib>
+        <lib-path>$(WKOUTPUTDIR)</lib-path>
+
+        <sources>
+            webview.cpp
+        </sources>
+    </module>
+
+</makefile>
