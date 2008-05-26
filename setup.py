@@ -5,6 +5,7 @@ builds the wxpy extension
 from __future__ import with_statement
 
 import distutils.core
+import os
 import sipconfig
 import sipdistutils
 import wxpyconfig
@@ -30,6 +31,8 @@ def build():
     if wxUSE.STC:
         extensions.append(wxpysetup.make_sip_ext('_wxstc', ['contrib/stc/stc.sip']))
 
+    generate_list_types()
+
     distutils.core.setup(name = 'wxpy',
                          version = '1.0',
                          ext_modules = extensions,
@@ -53,6 +56,10 @@ def install():
     import os.path, time
     with open('buildstats.txt', 'a') as f:
         f.write('%s %s\n' % (time.time(), os.path.getsize(build_dir + '_wxcore.so')))
+
+def generate_list_types():
+    import genlisttypes
+    genlisttypes.generate()
 
 if __name__ == '__main__':
     build()

@@ -7,7 +7,8 @@ from __future__ import with_statement
 import os.path
 
 types = [
-    'wxSizerItem',
+    ('wxSizerItem', 'wxSizerItemList', ['<wx/sizer.h>']),
+    ('wxWindow',    'wxWindowList',    ['<wx/window.h>']),
 ]
 
 wrapper = '''\
@@ -24,15 +25,17 @@ header = '''\
 '''
 
 
-def gentype(typename):
+def gentype(typename, listtype, includes):
+    includes = '\n'.join('#include %s' % i for i in includes)
+
     with open('list.sip.template') as f:
-        return header + f.read().replace('TYPE', typename)
+        return header + f.read().replace('LISTTYPE', listtype).replace('TYPE', typename).replace('INCLUDES', includes)
 
 def filename(typename):
     if typename.startswith('wx'):
         typename = typename[2:]
 
-    return typename.lower()
+    return 'generated/%s_list.sip' % typename.lower()
 
 def write_if_different(filename, content):
     orig = None
@@ -41,8 +44,7 @@ def write_if_different(filename, content):
             orig = f.read()
 
     if orig != content:
-        print 'writing %s.sip' % filename
-        with open(filename + '.sip', 'w') as f:
+        with open(filename, 'w') as f:
             f.write(content)
 
 def generate():
@@ -51,14 +53,14 @@ def generate():
     try:
         filenames = []
 
-        for t in types:
+        for t, typename, includes in types:
             type_filename = filename(t)
             filenames.append(type_filename)
-            write_if_different(type_filename, gentype(t))
+            write_if_different(type_filename, gentype(t, typename, includes))
 
-        wrapper_txt = wrapper % '\n'.join('%%Include %s.sip' % fn for fn in filenames)
+        wrapper_txt = wrapper % '\n'.join('%%Include %s' % fn for fn in filenames)
 
-        with open('lists.sip', 'w') as f:
+        with open('generated/lists.sip', 'w') as f:
             f.write(wrapper_txt)
     finally:
         os.chdir(orig_dir)
