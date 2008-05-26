@@ -3,6 +3,10 @@
 %End
 
 enum {
+    wxEVT_COMMAND_LIST_ITEM_FOCUSED
+};
+
+enum {
     // style flags
     wxLC_VRULES,
     wxLC_HRULES,

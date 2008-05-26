@@ -38,7 +38,8 @@ void add_event(PyObject* module_dict, const char* name, ...)
     PyObject* list = PyList_New(0);
 
     int i = va_arg(argp, int);
-    while (i) {
+    while (i)
+    {
         PyList_Append(list, PyInt_FromLong(i));
         i = va_arg(argp, int);
     }
@@ -80,6 +81,7 @@ AddItem("BLUE",  wxBLUE,  sipClass_wxColour);
 
 AddItem("TRANSPARENT_PEN",   wxTRANSPARENT_PEN,   sipClass_wxPen);
 AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
+AddItem("RED_PEN",           wxRED_PEN,           sipClass_wxPen);
 AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
 AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
 AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);

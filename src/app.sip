@@ -39,11 +39,6 @@ public:
     Py_END_ALLOW_THREADS
 %End
 
-//    virtual bool OnExceptionInMainLoop();
-//%MethodCode
-//        throw;
-//%End
-
     wxString GetAppName() const;
     void SetAppName(const wxString& name);
 

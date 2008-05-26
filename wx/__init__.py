@@ -157,10 +157,18 @@ class BoxSizer(_BoxSizer):
     def __init__(self, orient):
         _BoxSizer.__init__(self, orient)
 
+_GridSizer = GridSizer
+class GridSizer(_GridSizer):
+    def __init__(self, rows = 1, cols = 0, vgap = 0, hgap = 0):
+        _GridSizer.__init__(self, rows, cols, vgap, hgap)
+
+_FlexGridSizer = FlexGridSizer
+class FlexGridSizer(_FlexGridSizer):
+    def __init__(self, rows, cols, vgap, hgap):
+        _FlexGridSizer.__init__(self, rows, cols, vgap, hgap)
+
 class SimplePanel(wx.Panel):
     def __init__(self, parent, id, style):
-
-        print '***', type(parent)
         Panel.__init__(self, parent, id, style = style)
         self.SetBackgroundStyle(BG_STYLE_CUSTOM)
 

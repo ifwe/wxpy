@@ -19,6 +19,7 @@ class wxObject
     #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
 
         C(wxKeyEvent)
+        C(wxCommandEvent)
         C(wxMouseEvent)
         C(wxTimerEvent)
         C(wxShowEvent)

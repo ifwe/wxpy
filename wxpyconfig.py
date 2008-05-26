@@ -2,6 +2,16 @@
 ../configure --enable-unicode --enable-optimise --disable-ftp --disable-dialupman --disable-mediactrl --disable-help --disable-xrc --disable-aui --disable-constraints --disable-printarch --disable-mdi --disable-mdidoc --disable-richtext --disable-grid --disable-dataviewctrl --disable-tipdlg --disable-wizarddlg
 '''
 
+WX_FLAG = 'ud'                      # the postfix on .libs and .dlls
+WXDEBUG = True                      # __WXDEBUG__
+DEBUG_SYMBOLS = True                # /Zi
+ENABLE_EXCEPTIONS = False
+WHOLE_PROGRAM_OPTIMIZATION = False  # /GL (slow)
+
+class CONTRIB(object):
+    STC = True
+
+
 import os
 import platform
 import shlex
@@ -38,15 +48,6 @@ elif platform_name == 'msw':
     assert wxdir.exists()
 
     print 'using wxwidgets dir:', wxdir
-
-    WX_FLAG = 'ud'              # the postfix on .libs and .dlls
-    WXDEBUG = True              # __WXDEBUG__
-    DEBUG_SYMBOLS = True        # /Zi
-    ENABLE_EXCEPTIONS = False
-    WHOLE_PROGRAM_OPTIMIZATION = True
-
-    class CONTRIB(object):
-        STC = True
 
     # TODO: infer these without a wx-config binary? (bakefiles!)
     cxxflags = ('/MD /DWIN32 /GR /D__NO_VC_CRTDBG__ /D__WXMSW__ '

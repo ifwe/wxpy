@@ -11,6 +11,7 @@
 %Include stock.sip
 %Include log.sip
 %Include clipboard.sip
+%Include renderer.sip
 
 %If (!WXMAC)
 %Include power.sip

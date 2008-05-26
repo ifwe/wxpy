@@ -166,8 +166,8 @@ public:
     void InitDialog();
 
 %If (wxUSE_ACCEL)
-//    void SetAcceleratorTable( const wxAcceleratorTable& accel );
-//    wxAcceleratorTable *GetAcceleratorTable();
+    void SetAcceleratorTable(const wxAcceleratorTable& accel);
+    wxAcceleratorTable *GetAcceleratorTable();
 %End
 
 %If (wxUSE_HOTKEY)
