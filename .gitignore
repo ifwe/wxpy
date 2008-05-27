@@ -14,9 +14,13 @@
 *.exe.manifest
 *.pyd
 *.pyd.manifest
+*.sln.cache
 
 
 .project
 .pydevproject
 
-src/generated/*.sip
+build/.bakefile_gen.state
+build/obj-*/
+
+src/generated/

@@ -46,6 +46,9 @@ def write_if_different(filename, content):
     if orig != content:
         with open(filename, 'w') as f:
             f.write(content)
+            return True
+    else:
+        print 'NOT DIFFERENT: ', filename
 
 def generate():
     orig_dir = os.getcwd()
@@ -56,9 +59,13 @@ def generate():
         for t, typename, includes in types:
             type_filename = filename(t)
             filenames.append(type_filename)
-            write_if_different(type_filename, gentype(t, typename, includes))
+            if write_if_different(type_filename, gentype(t, typename, includes)):
+                print type_filename
 
         wrapper_txt = wrapper % '\n'.join('%%Include %s' % fn for fn in filenames)
+
+        if not os.path.isdir('generated'):
+            os.makedirs('generated')
 
         with open('generated/lists.sip', 'w') as f:
             f.write(wrapper_txt)

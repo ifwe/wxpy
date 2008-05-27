@@ -2,7 +2,7 @@
     #include <wx/confbase.h>
     #include <wx/fileconf.h>
 %End
-    
+
 %If (WXMSW)
 %ModuleHeaderCode
     #include <wx/msw/regconf.h>
@@ -17,9 +17,11 @@ enum
     wxCONFIG_USE_NO_ESCAPE_CHARACTERS
 };
 
-class wxConfigBase {
+class wxConfigBase
+{
 private:
     wxConfigBase();
+    wxConfigBase(const wxConfigBase&);
 public:
     ~wxConfigBase();
 
@@ -106,7 +108,7 @@ public:
     ~wxConfig();
 };
 
-class wxFileConfig : wxConfigBase 
+class wxFileConfig : wxConfigBase
 {
 private:
     wxFileConfig(const wxFileConfig&);
@@ -117,7 +119,7 @@ public:
                  const wxString& localFilename = wxEmptyString,
                  const wxString& globalFilename = wxEmptyString,
                  long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE);
-    
+
     ~wxFileConfig();
 };
 

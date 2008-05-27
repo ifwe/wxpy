@@ -17,10 +17,11 @@ class SIPGenerator(object):
 
     def generate_sources(self, module_name, sources, includes):
         sbf = sip(module_name,
-                  sources,
-                  self.build_dir,
-                  sources,
-                  self.platform)
+                  sipfiles  = sources,
+                  build_dir = self.build_dir,
+                  include_dirs = includes,
+                  platform  = self.platform,
+                  features  = self.features)
 
         return [self.build_dir / s for s in sbf['sources']]
 
@@ -36,10 +37,9 @@ def gen_args_file(build_dir, args):
     return argsfile
 
 
-def sip(module_name, sipfiles, build_dir, include_dirs, platform = None):
-    '''
-    Returns a list of sources created by this invocation of SIP.
-    '''
+def sip(module_name, sipfiles, build_dir, include_dirs, platform = None, features = None):
+    'Returns a list of sources created by this invocation of SIP.'
+
     build_dir = path(build_dir)
     if not build_dir.exists():
         build_dir.makedirs()
@@ -52,18 +52,17 @@ def sip(module_name, sipfiles, build_dir, include_dirs, platform = None):
     ]
 
     # define a platform for %If (MY_PLATFORM) statements
-    if platform is None:
+    if platform is not None:
         args.extend(['-t', platform])
 
     # additional directories to look for SIP files in
     for incdir in include_dirs:
         args.extend(['-I', incdir])
 
+    if features is not None:
+        args.extend(features)
+
     args = gen_args_file(build_dir, args)
-    print
-    print 'argsfile.txt'
-    print open(args).read()
-    print
 
     # spawn the sip binary
     run([sip_cfg.sip_bin,

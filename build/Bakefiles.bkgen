@@ -2,22 +2,22 @@
 
 <bakefile-gen>
 
-    <input>wxpymini.bkl</input>
+    <input>wxpy.bkl</input>
 
     <!-- List of output formats to generate: -->
     <add-formats>gnu,msvs2005prj</add-formats>
 
     <!-- each output type gets a different output name: -->
 
-    <add-flags files="wxpymini.bkl" formats="gnu">
+    <add-flags files="wxpy.bkl" formats="gnu">
         -oGNUmakefile
     </add-flags>
 
-    <add-flags files="wxpymini.bkl" formats="msvs2005prj">
-        -owxpymini.sln
+    <add-flags files="wxpy.bkl" formats="msvs2005prj">
+        -owxpy.sln
     </add-flags>
 <!--
-    <add-flags files="wxpymini.bkl" formats="msvc">
+    <add-flags files="wxpy.bkl" formats="msvc">
         -omakefile.vc
     </add-flags>
 -->

@@ -16,6 +16,8 @@ released under the wxWidgets License
 #define WXSIP 1
 %End
 
+// This must be included first--it defines which %Features are available.
+%Include generated/features.sip
 
 %Include vector.sip
 

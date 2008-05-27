@@ -2,7 +2,6 @@
 // core wx functionality
 //
 
-%Include features.sip
 %Include defs.sip
 
 %Include helpers.sip

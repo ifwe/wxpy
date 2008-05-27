@@ -1,1 +1,1 @@
-if exist build rmdir /s /q build
+echo FIXME

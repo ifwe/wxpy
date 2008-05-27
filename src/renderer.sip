@@ -24,7 +24,7 @@ enum
     // controls internally
     wxCONTROL_DIRTY      = 0x80000000
 };
-
+/*
 struct wxSplitterRenderParams
 {
     wxSplitterRenderParams(wxCoord widthSash_, wxCoord border_, bool isSens_);
@@ -33,8 +33,10 @@ struct wxSplitterRenderParams
     const wxCoord widthSash;
     const wxCoord border;
     const bool isHotSensitive;
+private:
+    wxSplitterRenderParams(const wxSplitterRenderParams&);
 };
-
+*/
 struct wxHeaderButtonParams
 {
     wxHeaderButtonParams();
@@ -81,6 +83,9 @@ struct wxRendererVersion
 
 class wxRendererNative
 {
+private:
+    wxRendererNative();
+
 public:
     int DrawHeaderButton(wxWindow *win,
                          wxDC& dc,
@@ -90,62 +95,63 @@ public:
                          wxHeaderButtonParams* params=NULL);
 
 
-    virtual int DrawHeaderButtonContents(wxWindow *win,
+    int DrawHeaderButtonContents(wxWindow *win,
                                          wxDC& dc,
                                          const wxRect& rect,
                                          int flags = 0,
                                          wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                          wxHeaderButtonParams* params=NULL);
 
-    virtual int GetHeaderButtonHeight(wxWindow *win);
+    int GetHeaderButtonHeight(wxWindow *win);
 
-    virtual void DrawTreeItemButton(wxWindow *win,
+    void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags = 0);
 
-    virtual void DrawSplitterBorder(wxWindow *win,
+    void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags = 0);
 
-    virtual void DrawSplitterSash(wxWindow *win,
+    void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
                                   wxOrientation orient,
                                   int flags = 0);
 
-    virtual void DrawComboBoxDropButton(wxWindow *win,
+    void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0);
 
-    virtual void DrawDropArrow(wxWindow *win,
+    void DrawDropArrow(wxWindow *win,
                                wxDC& dc,
                                const wxRect& rect,
                                int flags = 0);
 
-    virtual void DrawCheckBox(wxWindow *win,
+    void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
                               int flags = 0);
 
-    virtual void DrawPushButton(wxWindow *win,
+    void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
                                 int flags = 0);
 
-    virtual void DrawItemSelectionRect(wxWindow *win,
+    void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
                                        int flags = 0);
 
-    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
+    //wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     static wxRendererNative& Get();
     static wxRendererNative& GetGeneric();
     static wxRendererNative& GetDefault();
     static wxRendererNative* Set(wxRendererNative *renderer);
-    //virtual wxRendererVersion GetVersion() const;
+    //wxRendererVersion GetVersion() const;
+
 };
