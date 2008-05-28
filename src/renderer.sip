@@ -24,7 +24,7 @@ enum
     // controls internally
     wxCONTROL_DIRTY      = 0x80000000
 };
-
+/*
 struct wxSplitterRenderParams
 {
     wxSplitterRenderParams(wxCoord widthSash_, wxCoord border_, bool isSens_);
@@ -34,7 +34,7 @@ struct wxSplitterRenderParams
     const wxCoord border;
     const bool isHotSensitive;
 };
-
+*/
 struct wxHeaderButtonParams
 {
     wxHeaderButtonParams();
@@ -78,7 +78,7 @@ struct wxRendererVersion
     const int age;
 };
 */
-
+/*
 class wxRendererNative
 {
 public:
@@ -141,7 +141,7 @@ public:
                                        const wxRect& rect,
                                        int flags = 0);
 
-    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
+    //virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     static wxRendererNative& Get();
     static wxRendererNative& GetGeneric();
@@ -149,3 +149,4 @@ public:
     static wxRendererNative* Set(wxRendererNative *renderer);
     //virtual wxRendererVersion GetVersion() const;
 };
+*/
