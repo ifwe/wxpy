@@ -33,6 +33,8 @@ public:
     void Raise();
     void Lower();
 
+
+
     void Destroy();
 
     wxSize GetSize() const;
@@ -421,7 +423,7 @@ public:
     wxWindowID GetId() const;
     static int NewControlId();
     void SetSize(const wxSize& size);
-    void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO);
+    void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO) /PyName=SetRect/;
     void SetInitialSize(const wxSize& size = wxDefaultSize);
 
     void SetId(int id);
@@ -440,6 +442,10 @@ public:
     wxRect  GetRect() const;
     wxSize  GetClientSize() const;
     wxRect  GetClientRect() const;
+
+    void SetClientSize(const wxSize& size);
+    void SetClientSize(int width, int height) /PyName=SetClientSizeWH/;
+    void SetClientSize(const wxRect& rect) /PyName=SetClientRect/;
 
     void Close(bool force = false);
 

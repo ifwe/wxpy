@@ -57,53 +57,52 @@ class wxGraphicsObject : wxObject
 {
 public :
     wxGraphicsObject(wxGraphicsRenderer* renderer = NULL);
-     ~wxGraphicsObject();
-    
-        bool IsNull() const ;
-        wxGraphicsRenderer* GetRenderer() const;
+    ~wxGraphicsObject();
+
+    bool IsNull() const;
+    wxGraphicsRenderer* GetRenderer() const;
 };
 
 class wxGraphicsPen : wxGraphicsObject
 {
 public :
     wxGraphicsPen();
-     ~wxGraphicsPen();
+    ~wxGraphicsPen();
 };
 
 class wxGraphicsBrush : wxGraphicsObject
 {
 public :
     wxGraphicsBrush();
-     ~wxGraphicsBrush();
+    ~wxGraphicsBrush();
 };
 
 class wxGraphicsFont : wxGraphicsObject
 {
 public :
     wxGraphicsFont();
-     ~wxGraphicsFont();
+    ~wxGraphicsFont();
 };
 
 class wxGraphicsMatrix : wxGraphicsObject
 {
 public :
-//    wxGraphicsMatrix(); 
+//    wxGraphicsMatrix();
      ~wxGraphicsMatrix();
-
-         void Concat(const wxGraphicsMatrix& t);
-         void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-                           wxDouble tx=0.0, wxDouble ty=0.0);
-         void Get(wxDouble* a, wxDouble* b, wxDouble* c,
-                           wxDouble* d, wxDouble* tx, wxDouble* ty);
-         void Invert();
-         bool IsEqual(const wxGraphicsMatrix& t) const;
-         bool IsIdentity() const;
-         void Translate(wxDouble dx, wxDouble dy);
-         void Scale(wxDouble xScale, wxDouble yScale);
-         void Rotate(wxDouble angle);
-         void TransformPoint(wxDouble *x, wxDouble *y) const;
-         void TransformDistance(wxDouble *x, wxDouble *y) const;
-         void * GetNativeMatrix() const;
+    void Concat(const wxGraphicsMatrix& t);
+    void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
+                       wxDouble tx=0.0, wxDouble ty=0.0);
+    void Get(wxDouble* a, wxDouble* b, wxDouble* c,
+                       wxDouble* d, wxDouble* tx, wxDouble* ty);
+    void Invert();
+    bool IsEqual(const wxGraphicsMatrix& t) const;
+    bool IsIdentity() const;
+    void Translate(wxDouble dx, wxDouble dy);
+    void Scale(wxDouble xScale, wxDouble yScale);
+    void Rotate(wxDouble angle);
+    void TransformPoint(wxDouble *x, wxDouble *y) const;
+    void TransformDistance(wxDouble *x, wxDouble *y) const;
+    void * GetNativeMatrix() const;
 };
 
 class wxGraphicsPath : wxGraphicsObject
@@ -152,57 +151,58 @@ public:
      ~wxGraphicsContext();
 
     static wxGraphicsContext* Create(const wxWindowDC& dc);
-    static wxGraphicsContext* Create(wxWindow* window) ;
+    static wxGraphicsContext* Create(wxWindow* window);
     static wxGraphicsContext* Create();
-    static wxGraphicsContext* CreateFromNative(void * context) ;
-    static wxGraphicsContext* CreateFromNativeWindow(void * window) ;
-         wxGraphicsPath CreatePath();
-         wxGraphicsPen CreatePen(const wxPen& pen);
-         wxGraphicsBrush CreateBrush(const wxBrush& brush);
-         wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxColour& c1, const wxColour& c2);
-         wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, const wxColour &oColor, const wxColour &cColor);    
-         wxGraphicsFont CreateFont(const wxFont &font, const wxColour &col);
-         wxGraphicsMatrix CreateMatrix(wxDouble a=1.0, wxDouble b=0.0,
-                                                 wxDouble c=0.0, wxDouble d=1.0,
-                                                 wxDouble tx=0.0, wxDouble ty=0.0);
+    static wxGraphicsContext* CreateFromNative(void * context);
+    static wxGraphicsContext* CreateFromNativeWindow(void * window);
 
-         void PushState();
-         void PopState();
-         void Clip(const wxRegion &region);
-         void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-         void ResetClip();
-         void * GetNativeContext();
-         int GetLogicalFunction() const;
-         bool SetLogicalFunction(int function) ;
-         void Translate(wxDouble dx, wxDouble dy);
-         void Scale(wxDouble xScale, wxDouble yScale);
-         void Rotate(wxDouble angle);
-         void ConcatTransform(const wxGraphicsMatrix& matrix);
-         void SetTransform(const wxGraphicsMatrix& matrix);
-         wxGraphicsMatrix GetTransform() const;
-     void SetPen(const wxGraphicsPen& pen);
+    wxGraphicsPath CreatePath();
+    wxGraphicsPen CreatePen(const wxPen& pen);
+    wxGraphicsBrush CreateBrush(const wxBrush& brush);
+    wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxColour& c1, const wxColour& c2);
+    wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, const wxColour &oColor, const wxColour &cColor);
+    wxGraphicsFont CreateFont(const wxFont &font, const wxColour &col);
+    wxGraphicsMatrix CreateMatrix(wxDouble a=1.0, wxDouble b=0.0,
+                                  wxDouble c=0.0, wxDouble d=1.0,
+                                  wxDouble tx=0.0, wxDouble ty=0.0);
+
+    void PushState();
+    void PopState();
+    void Clip(const wxRegion &region);
+    void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void ResetClip();
+    void * GetNativeContext();
+    int GetLogicalFunction() const;
+    bool SetLogicalFunction(int function) ;
+    void Translate(wxDouble dx, wxDouble dy);
+    void Scale(wxDouble xScale, wxDouble yScale);
+    void Rotate(wxDouble angle);
+    void ConcatTransform(const wxGraphicsMatrix& matrix);
+    void SetTransform(const wxGraphicsMatrix& matrix);
+    wxGraphicsMatrix GetTransform() const;
+    void SetPen(const wxGraphicsPen& pen);
     void SetPen(const wxPen& pen);
 
-     void SetBrush(const wxGraphicsBrush& brush);
+    void SetBrush(const wxGraphicsBrush& brush);
     void SetBrush(const wxBrush& brush);
 
-     void SetFont(const wxGraphicsFont& font);
+    void SetFont(const wxGraphicsFont& font);
     void SetFont(const wxFont& font, const wxColour& colour);
-         void StrokePath(const wxGraphicsPath& path);
-         void FillPath(const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE);
-         void DrawPath(const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE);
+    void StrokePath(const wxGraphicsPath& path);
+    void FillPath(const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE);
+    void DrawPath(const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE);
 
-        void DrawText(const wxString &str, wxDouble x, wxDouble y,
-        const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush);
+    void DrawText(const wxString &str, wxDouble x, wxDouble y,
+    const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush);
 //        void DrawRotatedText(const wxString &str, wxDouble x, wxDouble y, wxDouble angle,
 //            const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush);
-         void GetTextExtent(const wxString &text,
-                                      wxDouble *width /*width*/,
-                                      wxDouble *height /*height*/,
-                                      wxDouble *descent /*descent*/,
-                                      wxDouble *externalLeading /*externalLeading*/) const /PyName=GetFullTextExtent/;
+    void GetTextExtent(const wxString &text,
+                       wxDouble *width /*width*/,
+                       wxDouble *height /*height*/,
+                       wxDouble *descent /*descent*/,
+                       wxDouble *externalLeading /*externalLeading*/) const /PyName=GetFullTextExtent/;
 
-        
+
 SIP_PYOBJECT GetTextExtent(const wxString &text);
 %MethodCode
             wxDouble width = 0.0,
@@ -252,7 +252,7 @@ public :
 
      wxGraphicsContext * CreateContext(const wxWindowDC& dc) ;
      wxGraphicsContext * CreateContext(wxWindow* window);
-    
+
     // create a context that can be used for measuring texts only, no drawing allowed
      wxGraphicsContext * CreateMeasuringContext();
 
@@ -262,14 +262,14 @@ public :
 
      wxGraphicsPath CreatePath();
 
-     wxGraphicsMatrix CreateMatrix(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+     wxGraphicsMatrix CreateMatrix(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
                                            wxDouble tx=0.0, wxDouble ty=0.0);
-        
+
      wxGraphicsPen CreatePen(const wxPen& pen) ;
-    
+
      wxGraphicsBrush CreateBrush(const wxBrush& brush) ;
-    
-     wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+
+     wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                                                         const wxColour&c1, const wxColour&c2);
 
      wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,

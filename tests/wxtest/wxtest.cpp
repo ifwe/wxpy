@@ -3,7 +3,8 @@
  * Hello world sample by Robert Roebling
  */
 
-#include "wx/wx.h"
+#include <wx/wx.h>
+#include <wx/dcbuffer.h>
 
 class MyApp: public wxApp
 {
@@ -18,6 +19,7 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnPaint(wxPaintEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -29,6 +31,7 @@ enum
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_PAINT(MyFrame::OnPaint)
     EVT_MENU(ID_Quit, MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
@@ -73,6 +76,22 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     CreateStatusBar();
     SetStatusText(_T("Welcome to wxWindows!"));
+}
+
+void MyFrame::OnPaint(wxPaintEvent& event)
+{
+    wxBufferedPaintDC dc(this);
+
+    dc.SetBrush(*wxWHITE_BRUSH);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(wxRect(GetClientSize()));
+
+    wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
+    gc->SetPen(*wxRED_PEN);
+    gc->SetBrush(*wxBLUE_BRUSH);
+    gc->DrawRoundedRectangle(50, 50, 150, 150, 5);
+    delete gc;
+
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

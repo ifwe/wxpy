@@ -1,29 +1,32 @@
-//
-// wxEvtHandler
-//
-
-
 %ModuleHeaderCode
-    class wxPyCallback: public wxObject
-    {
-    public:
-        wxPyCallback(PyObject* func) {
-            m_func = func;
-            Py_INCREF(func);
-        }
 
-        ~wxPyCallback() {
-            Py_DECREF(m_func);
-        }
+static int gs_callbackcount = 0;
 
-        void EventThunker(wxEvent& event);
+class wxPyCallback: public wxObject
+{
+public:
+    wxPyCallback(PyObject* func);
+    ~wxPyCallback();
+    void EventThunker(wxEvent& event);
+    PyObject* m_func;
+};
 
-        PyObject* m_func;
-    };
-%End
+%End // ModuleHeaderCode
 
 
 %ModuleCode
+
+wxPyCallback::wxPyCallback(PyObject* func) {
+    printf("cb count +1: %d\n", ++gs_callbackcount);
+    m_func = func;
+    Py_INCREF(func);
+}
+
+wxPyCallback::~wxPyCallback() {
+    printf("cb count -1: %d\n", --gs_callbackcount);
+    Py_DECREF(m_func);
+}
+
 // All wxEvtHandler::Connect calls made from Python are routed through
 // here.
 void wxPyCallback::EventThunker(wxEvent& event) {
@@ -50,16 +53,15 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
         if (PyErr_Occurred())
             PyErr_Print();
-    } else {
+    } else
         PyErr_Print();
-    }
 
     Py_DECREF(tuple);
 
     SIP_UNBLOCK_THREADS
 }
 
-%End
+%End // ModuleCode
 
 class wxEvtHandler : wxObject
 {
@@ -90,8 +92,10 @@ public:
     PyObject* func = a3;
 
     // func must be callable
+    SIP_BLOCK_THREADS
         sipCpp->Connect(id, lastId, eventType,
             (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
+    SIP_UNBLOCK_THREADS
 %End
 
     void Bind(SIP_PYOBJECT event, SIP_PYCALLABLE func, wxWindow* source = NULL, int id = wxID_ANY, int id2 = wxID_ANY);
@@ -106,6 +110,7 @@ public:
         id = source->GetId();
 
     int event;
+    SIP_BLOCK_THREADS
     if (PyTuple_Check(events))
     {
         for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
@@ -130,6 +135,7 @@ public:
             sipCpp->Connect(id, id2, event,
                 (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
     }
+    SIP_UNBLOCK_THREADS
 %End
 
     void Unbind(SIP_PYOBJECT event, int id = wxID_ANY, int id2 = wxID_ANY);
@@ -137,6 +143,7 @@ public:
     PyObject* events = a0;
     int event;
 
+    SIP_BLOCK_THREADS
     if (PyTuple_Check(events))
     {
         for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
@@ -159,6 +166,7 @@ public:
         else
             sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
     }
+    SIP_UNBLOCK_THREADS
 %End
 
 private:

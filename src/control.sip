@@ -26,7 +26,7 @@ private:
     wxControl(const wxControl&);
 };
 
-class wxItemContainer /Abstract/
+class wxItemContainer
 {
 public:
     void Clear();
@@ -40,14 +40,18 @@ public:
     wxString GetStringSelection() const;
     void Select(int n);
 
-    virtual unsigned int GetCount() const = 0;
-    virtual wxString GetString(unsigned int n) const = 0;
-    virtual void SetSelection(int n) = 0;
-
+    unsigned int GetCount() const = 0;
+    wxString GetString(unsigned int n) const = 0;
+    void SetSelection(int n) = 0;
+private:
+    wxItemContainer();
 };
 
 
-class wxControlWithItems : wxControl, wxItemContainer /Abstract/
+class wxControlWithItems : wxControl, wxItemContainer
 {
 public:
+    int Append(const wxString& item);
+private:
+    wxControlWithItems();
 };

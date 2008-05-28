@@ -73,18 +73,21 @@ AddItem("DefaultPosition",  &wxDefaultPosition,  sipClass_wxPoint);
 AddItem("DefaultValidator", &wxDefaultValidator, sipClass_wxValidator);
 PyDict_SetItemString(sipModuleDict, "TextEntryDialogStyle", PyInt_FromLong(wxTextEntryDialogStyle));
 
-
 AddItem("BLACK", wxBLACK, sipClass_wxColour);
 AddItem("WHITE", wxWHITE, sipClass_wxColour);
 AddItem("RED",   wxRED,   sipClass_wxColour);
 AddItem("BLUE",  wxBLUE,  sipClass_wxColour);
 
 AddItem("TRANSPARENT_PEN",   wxTRANSPARENT_PEN,   sipClass_wxPen);
-AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
 AddItem("RED_PEN",           wxRED_PEN,           sipClass_wxPen);
+
+AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
 AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
 AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
+AddItem("CYAN_BRUSH",        wxCYAN_BRUSH,        sipClass_wxBrush);
+
 AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
+
 
 add_event(sipModuleDict, "EVT_TIMER", wxEVT_TIMER, 0);
 

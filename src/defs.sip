@@ -4,6 +4,7 @@
 %End
 typedef unsigned int wxUint32;
 typedef int    wxInt32;
+typedef wchar_t wxChar;
 
 // TODO: not 64 bit compatible!
 // automate size_t detection w/ code here:

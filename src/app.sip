@@ -23,12 +23,81 @@ int EntryStart();
 %End
 
 
+%ModuleHeaderCode
+
+class wxPyApp : public wxApp
+{
+public:
+    wxPyApp();
+    ~wxPyApp();
+
+    void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg);
+};
+
+%End // ModuleHeaderCode
+
+%ModuleCode
+
+wxPyApp::wxPyApp() {}
+wxPyApp::~wxPyApp() {}
+
+void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc, const wxChar *cond, const wxChar *szMsg)
+{
+    SIP_BLOCK_THREADS
+    PyObject* traceback = PyImport_ImportModule("traceback");
+    if (traceback)
+    {
+        PyObject* dict = PyModule_GetDict(traceback);
+        if (dict)
+        {
+            PyObject* print_stack = PyDict_GetItemString(dict, "print_stack");
+            if (print_stack)
+                Py_DECREF(PyObject_CallFunction(print_stack, NULL));
+        }
+        Py_DECREF(traceback);
+    }
+    SIP_UNBLOCK_THREADS
+
+    wxString msg;
+    msg.reserve(2048);
+
+    // make life easier for people using VC++ IDE by using this format: like
+    // this, clicking on the message will take us immediately to the place of
+    // the failed assert
+    msg.Printf(wxT("%s(%d): assert \"%s\" failed"), file, line, cond);
+
+    // add the function name, if any
+    if ( szFunc && *szFunc )
+        msg << _T(" in ") << szFunc << _T("()");
+
+    // and the message itself
+    if ( szMsg )
+        msg << _T(": ") << szMsg;
+    else // no message given
+        msg << _T('.');
+
+#if wxUSE_STACKTRACE
+    msg << "\n" << GetAssertStackTrace();
+#endif
+
+
+    fprintf(stderr, "%s", msg.ToAscii());
+}
+
+%End // ModuleCode
+
 class wxApp : wxEvtHandler
 {
 public:
-    wxApp() /Transfer/;
+    wxApp();
     ~wxApp();
+};
 
+class wxPyApp : wxApp
+{
+public:
+    wxPyApp() /Transfer/;
+    ~wxPyApp();
     virtual bool OnInit();
     virtual bool OnInitGui();
     virtual int MainLoop() /ReleaseGIL/;

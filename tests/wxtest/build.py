@@ -14,7 +14,7 @@ def run_program():
 
 
 def main():
-    chdir('src\\tests\\wxtest')
+    chdir('tests\\wxtest')
     build()
     run_program()
 

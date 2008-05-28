@@ -22,6 +22,8 @@ def build():
         # no touch on windows
         import os
         os.utime('src/wx.sip', None)
+        os.utime('src/html.sip', None)
+        os.utime('contrib/stc/stc.sip', None)
 
     extensions = [wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip'])]
 

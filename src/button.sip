@@ -2,6 +2,19 @@
 // wxButton
 //
 
+enum {
+    wxBU_LEFT,
+    wxBU_TOP,
+    wxBU_RIGHT,
+    wxBU_BOTTOM,
+
+    wxBU_ALIGN_MASK,
+
+    wxBU_EXACTFIT,
+    wxBU_AUTODRAW,
+};
+
+
 class wxButton : wxControl
 {
 
@@ -18,11 +31,11 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxButtonNameStr);
-             
+
     void SetDefault();
     static wxSize GetDefaultSize();
 
-         
+
 private:
     wxButton(const wxButton&);
 };

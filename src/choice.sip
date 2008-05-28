@@ -8,5 +8,11 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxChoiceNameStr);
-    int GetCurrentSelection() const;    
+    virtual ~wxChoice();
+
+    int GetCurrentSelection() const;
+
+    unsigned int GetCount() const;
+    wxString GetString(unsigned int n) const;
+    void SetSelection(int n);
 };

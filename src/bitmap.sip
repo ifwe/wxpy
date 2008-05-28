@@ -14,7 +14,13 @@ wxBitmap wxBitmapFromIcon(const wxIcon& icon);
 
 wxBitmap wxBitmapFromImage(const wxImage& image, int depth = -1);
 %MethodCode
-    sipRes = new wxBitmap(*a0, a1);
+    if (!a0->Ok())
+    {
+        PyErr_SetString(PyExc_AssertionError, "wxImage.Ok() must be True");
+        sipIsErr = 1;
+    }
+    else
+        sipRes = new wxBitmap(*a0, a1);
 %End
 
 wxBitmap wxEmptyBitmap(int width, int height);

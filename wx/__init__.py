@@ -40,7 +40,6 @@ def autorepr(s = None):
 from _wxcore import *
 import _wxcore as wx
 
-
 import sys as _sys
 from operator import attrgetter
 
@@ -152,6 +151,20 @@ class CheckBox(_CheckBox):
     def __init__(self, parent, id, label = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = DefaultValidator, name = 'checkBox'):
         _CheckBox.__init__(self, parent, id, label, pos, size, style, validator, name)
 
+_Choice = Choice
+class Choice(_Choice):
+    def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, choices = None, style = 0, validator = DefaultValidator, name = 'choice'):
+        _Choice.__init__(self, parent, id, pos, size, choices, style, validator, name)
+
+_Slider = Slider
+class Slider(_Slider):
+    def __init__(self, parent, id = -1, value = 0, minValue = 0, maxValue = 100,
+                         pos = DefaultPosition, size = DefaultSize, style = SL_HORIZONTAL,
+                         validator = DefaultValidator, name = 'slider'):
+        _Slider.__init__(self, parent, id, value, minValue, maxValue,
+                         pos, size, style, validator, name)
+
+
 _BoxSizer = BoxSizer
 class BoxSizer(_BoxSizer):
     def __init__(self, orient):
@@ -164,7 +177,7 @@ class GridSizer(_GridSizer):
 
 _FlexGridSizer = FlexGridSizer
 class FlexGridSizer(_FlexGridSizer):
-    def __init__(self, rows, cols, vgap, hgap):
+    def __init__(self, rows, cols, vgap = 0, hgap = 0):
         _FlexGridSizer.__init__(self, rows, cols, vgap, hgap)
 
 class SimplePanel(wx.Panel):
@@ -442,7 +455,7 @@ wxDialog(wxWindow* parent,
 
 # wxPySimpleApp -- calls wxpEntry function
 
-_app = wx.App
+_app = wx.PyApp
 _entrystart = wx.EntryStart
 _initallimagehandlers = wx.InitAllImageHandlers
 _getapp = wx.GetApp
