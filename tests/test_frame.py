@@ -25,15 +25,24 @@ def test_frame():
     f.SetMinSize(wx.Size(42, 43))
     assert f.GetMinSize() == (42, 43) == f.MinSize
 
-    f.MinSize = (10, 10)
-    assert f.MinSize == (10, 10)
+    #f.MinSize = (10, 10)
+    #assert f.MinSize == (10, 10)
 
     check_toplevel(f)
+    return f
 
-    f.Destroy()
 
 def test_FrameDestroy():
     f = wx.Frame(None)
     f.Destroy()
     assert sip.isdeleted(f)
+
+
+def main():
+    a = wx.PySimpleApp()
+    test_frame().Show()
+    a.MainLoop()
+
+if __name__ == '__main__':
+    main()
 

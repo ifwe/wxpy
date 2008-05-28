@@ -22,10 +22,10 @@ public:
     wxTaskBarIcon();
     ~wxTaskBarIcon();
 
-//    void Destroy() {
-//        self->RemoveIcon();
-//        delete self;
-//    }
+    void Destroy();
+%MethodCode
+    delete sipCpp;
+%End
 
     bool IsOk() const;
     bool IsIconInstalled() const;

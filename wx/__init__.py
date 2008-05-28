@@ -170,6 +170,11 @@ class BoxSizer(_BoxSizer):
     def __init__(self, orient):
         _BoxSizer.__init__(self, orient)
 
+_GridBagSizer = GridBagSizer
+class GridBagSizer(_GridBagSizer):
+    def __init__(self, vgap = 0, hgap = 0):
+        _GridBagSizer.__init__(self, vgap, hgap)
+
 _GridSizer = GridSizer
 class GridSizer(_GridSizer):
     def __init__(self, rows = 1, cols = 0, vgap = 0, hgap = 0):
@@ -180,10 +185,17 @@ class FlexGridSizer(_FlexGridSizer):
     def __init__(self, rows, cols, vgap = 0, hgap = 0):
         _FlexGridSizer.__init__(self, rows, cols, vgap, hgap)
 
+_Button = wx.Button
+class Button(wx.Button):
+    def __init__(self, parent, id = -1, label = '', pos = DefaultPosition, size = DefaultSize, style = 0,
+                 validator = DefaultValidator, name = 'button'):
+        _Button.__init__(self, parent, id, label, pos, size, style, validator, name)
+
 class SimplePanel(wx.Panel):
     def __init__(self, parent, id, style):
         Panel.__init__(self, parent, id, style = style)
         self.SetBackgroundStyle(BG_STYLE_CUSTOM)
+
 
 #_ScrolledWindow = ScrolledWindow
 #class ScrolledWindow(ScrolledWindow):
@@ -495,7 +507,15 @@ wxEVT_COMMAND_MENU_SELECTED = wx.EVT_COMMAND_MENU_SELECTED
 wxEVT_MOUSE_CAPTURE_LOST = wx.EVT_MOUSE_CAPTURE_LOST
 wxEVT_MOTION = wx.EVT_MOTION
 wxEVT_COMMAND_BUTTON_CLICKED = wx.EVT_COMMAND_BUTTON_CLICKED
+
+wxEVT_COMMAND_LIST_ITEM_FOCUSED = EVT_COMMAND_LIST_ITEM_FOCUSED
+wxEVT_COMMAND_LIST_ITEM_SELECTED = EVT_COMMAND_LIST_ITEM_SELECTED
+wxEVT_COMMAND_LIST_ITEM_DESELECTED = EVT_COMMAND_LIST_ITEM_DESELECTED
+wxEVT_COMMAND_LISTBOX_DOUBLECLICKED = EVT_COMMAND_LIST_ITEM_DESELECTED
+
+
 assert isinstance(wxEVT_MOTION, int)
+
 
 EVT_SPLITTER_DCLICK = EVT_SPLITTER_DOUBLECLICKED
 

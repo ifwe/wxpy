@@ -1,4 +1,9 @@
-%ModuleHeaderCode
+
+
+class wxEvtHandler : wxObject
+{
+
+%TypeHeaderCode
 
 static int gs_callbackcount = 0;
 
@@ -11,19 +16,17 @@ public:
     PyObject* m_func;
 };
 
-%End // ModuleHeaderCode
+%End // TypeHeaderCode
 
 
-%ModuleCode
+%TypeCode
 
 wxPyCallback::wxPyCallback(PyObject* func) {
-    printf("cb count +1: %d\n", ++gs_callbackcount);
-    m_func = func;
     Py_INCREF(func);
+    m_func = func;
 }
 
 wxPyCallback::~wxPyCallback() {
-    printf("cb count -1: %d\n", --gs_callbackcount);
     Py_DECREF(m_func);
 }
 
@@ -38,7 +41,8 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     SIP_BLOCK_THREADS
 
     PyObject* event_arg = sipConvertFromInstance(&event, sipClass_wxEvent, NULL);
-    if (!event_arg) {
+    if (!event_arg)
+    {
         printf("WARNING: could not convert to sipClass_wxEvent\n");
         return;
     }
@@ -48,7 +52,8 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyTuple_SET_ITEM(tuple, 0, event_arg); // steals ref to arg
 
     PyObject* result = PyEval_CallObject(func, tuple);
-    if (result) {
+    if (result)
+    {
         Py_DECREF(result); // result is ignored, but we still need to decref it
 
         if (PyErr_Occurred())
@@ -61,10 +66,8 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     SIP_UNBLOCK_THREADS
 }
 
-%End // ModuleCode
+%End // TypeCode
 
-class wxEvtHandler : wxObject
-{
 %TypeHeaderCode
 #include <wx/event.h>
 %End

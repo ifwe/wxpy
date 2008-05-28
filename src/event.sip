@@ -1,3 +1,5 @@
+
+
 %If (!wxUSE_HOTKEY)
 %ModuleHeaderCode
 #define wxEVT_HOTKEY -9999
