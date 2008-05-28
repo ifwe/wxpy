@@ -105,7 +105,7 @@ public:
     {
         Py_XDECREF(m_obj);
         m_obj = obj;
-        Py_INCREF(m_obj);
+        Py_XINCREF(m_obj);
     }
 
 protected:
@@ -118,6 +118,17 @@ class wxPyTreeItemData
 public:
     wxPyTreeItemData(SIP_PYOBJECT obj = NULL) /HoldGIL/;
     virtual ~wxPyTreeItemData();
+
+%GCTraverseCode
+    PyObject *obj = reinterpret_cast<PyObject *>(sipCpp->GetData());
+    sipRes = obj ? sipVisit(obj, sipArg) : 0;
+%End
+
+%GCClearCode
+    sipCpp->SetData(0); // derefs for us
+    sipRes = 0;
+%End
+
 
     SIP_PYOBJECT GetData() /HoldGIL/;
     void SetData(SIP_PYOBJECT) /HoldGIL/;

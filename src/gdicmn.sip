@@ -218,8 +218,8 @@ public:
     void SetTop(int top);
     void SetBottom(int bottom);
 
-    void Deflate(wxCoord dx, wxCoord dy);
-    void Inflate(wxCoord dx, wxCoord dy);
+    wxRect Deflate(wxCoord dx, wxCoord dy) const;
+    wxRect Inflate(wxCoord dx, wxCoord dy) const;
 
     bool Contains(int x, int y) const /PyName=ContainsXY/;
     bool Contains(const wxPoint& pt) const;

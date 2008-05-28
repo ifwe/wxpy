@@ -5,8 +5,6 @@ class wxEvtHandler : wxObject
 
 %TypeHeaderCode
 
-static int gs_callbackcount = 0;
-
 class wxPyCallback: public wxObject
 {
 public:

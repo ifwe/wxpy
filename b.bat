@@ -11,7 +11,6 @@ pause
 goto reallydone
 :done
 color 4f
-echo !! ERROR !!
 pause
 :reallydone
 color

@@ -18,13 +18,13 @@ public:
                             const wxColour& initialColour,
                             const wxColour& destColour,
                             wxDirection nDirection = wxEAST);
-                        bool GetPixel(wxCoord x, wxCoord y, wxColour *col) const;
-                        bool GetPixel(const wxPoint& pt, wxColour *col) const;
-                        void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
-                        void DrawLine(const wxPoint& pt1, const wxPoint& pt2);
-                        void CrossHair(wxCoord x, wxCoord y);
-                        void CrossHair(const wxPoint& pt);
-                        void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre);
+    bool GetPixel(wxCoord x, wxCoord y, wxColour *col) const;
+    bool GetPixel(const wxPoint& pt, wxColour *col) const;
+    void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+    void DrawLine(const wxPoint& pt1, const wxPoint& pt2) /PyName=DrawLinePoint/;
+    void CrossHair(wxCoord x, wxCoord y);
+    void CrossHair(const wxPoint& pt);
+    void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre);
     void DrawCheckMark(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height);
     void DrawCheckMark(const wxRect& rect);
@@ -176,9 +176,9 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
 %End // wxUSE_PALETTE
 
     void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-    void SetClippingRegion(const wxRect& rect);
-    void SetClippingRegion(const wxRegion& region);
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz) /PyName=SetClippingRegionPointSize/;
+    void SetClippingRegion(const wxRect& rect) /PyName=SetClippingRect/;
+    void SetClippingRegion(const wxRegion& region) /PyName=SetClippingRegionAsRegion/;
 
      void DestroyClippingRegion();
 

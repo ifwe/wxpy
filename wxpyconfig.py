@@ -50,9 +50,22 @@ elif platform_name == 'msw':
     print 'using wxwidgets dir:', wxdir
 
     # TODO: infer these without a wx-config binary? (bakefiles!)
-    cxxflags = ('/MD /DWIN32 /GR /D__NO_VC_CRTDBG__ /D__WXMSW__ '
-                '/D_UNICODE /DwxUSE_UNICODE_MSLU=1 '
-                '/DwxUSE_GRAPHICS_CONTEXT=1 /DWXUSINGDLL /MP').split()
+    if True:
+        # RELEASE runtime
+        cxxflags = ('/MP /MD /D__NO_VC_CRTDBG__ /DWXUSINGDLL').split()
+    else:
+        # DEBUG runtime
+        cxxflags = ('/MDd /Zi /D_DEBUG /Od '
+                    '/DWXUSINGDLL /W4').split()
+
+    cxxflags.extend(['/DWIN32',
+                     '/D__WXMSW__',
+                     '/D_UNICODE',
+                     '/DwxUSE_GRAPHICS_CONTEXT=1',
+                     '/GR',
+                     ])
+
+
 
     lflags = ['/LIBPATH:' + str(wxdir / 'lib/vc_dll')]
 
@@ -64,7 +77,8 @@ elif platform_name == 'msw':
         cxxflags.extend(['/D__WXDEBUG__', '/D__NO_VC_CRTDBG__'])
 
     if DEBUG_SYMBOLS: # debug
-        cxxflags.append('/Zi')
+        if '/Zi' not in cxxflags:
+            cxxflags.append('/Zi')
 
     if ENABLE_EXCEPTIONS:
         cxxflags.append('/EHa')
