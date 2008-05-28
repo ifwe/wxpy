@@ -16,14 +16,19 @@ class SIPGenerator(object):
         self.features = features
 
     def generate_sources(self, module_name, sources, includes):
+        # filter out SIP files
+        sources = sources[:]
+        sipfiles = [s for s in sources if s.endswith('.sip')]
+        sources  = [s for s in sources if not s.endswith('.sip')]
+
         sbf = sip(module_name,
-                  sipfiles  = sources,
+                  sipfiles  = sipfiles,
                   build_dir = self.build_dir,
                   include_dirs = includes,
                   platform  = self.platform,
                   features  = self.features)
 
-        return [self.build_dir / s for s in sbf['sources']]
+        return [self.build_dir / s for s in sbf['sources']] + sources
 
 def gen_args_file(build_dir, args):
     argsfile = path(build_dir) / 'sipargs.txt'

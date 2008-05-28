@@ -14,6 +14,7 @@ released under the wxWidgets License
 
 %ModuleHeaderCode
 #define WXSIP 1
+#define WXPY 1
 %End
 
 // This must be included first--it defines which %Features are available.

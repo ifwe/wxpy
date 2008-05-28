@@ -47,8 +47,6 @@ def write_if_different(filename, content):
         with open(filename, 'w') as f:
             f.write(content)
             return True
-    else:
-        print 'NOT DIFFERENT: ', filename
 
 def generate():
     orig_dir = os.getcwd()

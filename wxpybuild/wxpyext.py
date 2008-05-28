@@ -1,71 +1,71 @@
-from xml.etree.cElementTree import Element, SubElement, ElementTree
-from wxpybuild.runsip import SIPGenerator, run
-from wxpybuild.path import path
-
-
+from __future__ import with_statement
 import os
 import shutil
 import sipconfig
 import sys
 
-PROJECT_DIR       = path('build')
+from xml.etree.cElementTree import Element, SubElement, ElementTree
+from itertools import chain
+from contextlib import contextmanager
+
+from wxpybuild.runsip import SIPGenerator, run
+from wxpybuild.path import path
+from wxpyfeatures import emit_features_file
+
+OUTPUT_DIR       = path('build')
 GENERATED_SRC_DIR = path('src/generated')
 VERBOSE = True
 sip_cfg = sipconfig.Configuration()
 
-def build_extension(modules, features = None):
-    sources = runsip(modules, features)
-    manage_cache(GENERATED_SRC_DIR)
-    bakefile(sources)
-
-
 def wx_path():
     opts = {}
-    execfile('wxpy.cfg', opts)
-    wxdir = path(opts['WXWIN'])
-    if not wxdir.isdir():
-        raise AssertionError('cannot find WXWIN at %s' % wxdir)
 
+    try:
+        execfile('wxpy.cfg', opts)
+        wxwin = opts['WXWIN']
+    except Exception:
+        if 'WXWIN' in os.environ:
+            wxwin = os.environ['WXWIN']
+        else:
+            raise
+
+    wxdir = path(wxwin)
+    if not wxdir.isdir(): raise AssertionError('cannot find WXWIN at %s' % wxdir)
     return wxdir
 
 WXWIN = wx_path()
 
-def runsip(modules, features):
-    sipgen = SIPGenerator(GENERATED_SRC_DIR, 'WXMSW', features)
-    makefile = Element('makefile')
 
-#    subelem(makefile, 'include', file = 'wxpy-settings.bkl')
-    include = SubElement(makefile, 'include')
-    include.set('file', 'wxpy-settings.bkl')
+def build_extension(project_name, modules, includes = None):
+    features = emit_features_file(WXWIN, 'src/generated/features.sip')
+    feature_args = list(chain(*(('-x', feature)
+                        for feature, enabled in features.iteritems() if not enabled)))
 
-    for module_name, sources in modules:
-        sip_sources = sipgen.generate_sources(module_name, sources, ['src'])
-        add_wxpy_module(makefile, module_name, sip_sources)
+    if includes is not None:
+        if isinstance(includes, basestring):
+            includes = [includes]
 
-    return makefile
+        includes = [path(i).abspath() for i in includes]
 
-def bakefile(makefile):
-    if not PROJECT_DIR.exists():
-        PROJECT_DIR.makedirs()
+    sources = runsip(modules, feature_args, includes)
+    manage_cache(GENERATED_SRC_DIR)
 
-    os.chdir(PROJECT_DIR)
+    # The files we create below go in OUTPUT_DIR
+    if not OUTPUT_DIR.exists():
+        OUTPUT_DIR.makedirs()
 
-    ElementTree(makefile).write('wxpy.bkl', 'utf-8')
+    with cd(OUTPUT_DIR):
+        output = bakefile(project_name, sources)
+        globals()['build_' + os.name](output)
 
-    os.environ.update(
-        WXWIN = WXWIN,
-        BAKEFILE_PATHS = WXWIN / 'build/bakefiles/wxpresets'
-    )
-
-    run('bakefile_gen')
-
-    globals()['build_' + os.name]()
-
-def build_nt():
+def build_nt(solution_name):
     vcbuild_opts = [
-        'wxpy.sln',
-        '/M',       # TODO: multicore compilation doesn't seem to be working :[
+        solution_name,
+        '/verbosity:detailed',
+        '/nologo',    # leave out the MS copyright message
+        '/showenv',
         '/time',
+        #'/MP',       # TODO: multicore compilation doesn't seem to be working :[
     ]
 
     if 'rebuild' in sys.argv:
@@ -73,37 +73,99 @@ def build_nt():
 
     run('vcbuild %s Multilib|Win32' % ' '.join(vcbuild_opts))
 
-    output_dir = PROJECT_DIR / 'obj-msvs2005prj'
+    output_dir = OUTPUT_DIR / 'obj-msvs2005prj'
 
+def runsip(modules, features, includes = None):
+    sipgen = SIPGenerator(GENERATED_SRC_DIR, 'WXMSW', features)
+    makefile = Element('makefile')
+
+    include = xmlnode(makefile, 'include', file = 'wxpy-settings.bkl')
+
+    for module_name, sources in modules:
+        sip_sources = sipgen.generate_sources(module_name, sources, [os.path.abspath('./src'), path(__file__).parent.parent / 'src'])
+        add_wxpy_module(makefile, module_name, sip_sources, includes)
+
+    return makefile
+
+def bakefile_gen(input, formats):
+    bakefile_gen = xmlnode(None, 'bakefile-gen',
+                           xmlns = 'http://www.bakefile.org/schema/bakefile-gen')
+
+    xmlnode(bakefile_gen, 'input', input)
+    xmlnode(bakefile_gen, 'add-formats', ', '.join(compiler for compiler, output in formats))
+
+    for compiler, output in formats:
+        xmlnode(bakefile_gen, 'add-flags', '-o%s' % output,
+                files   = input,
+                formats = compiler)
+
+    return bakefile_gen
+
+def bakefile(project_name, makefile):
+    # First, create the BKL file which will tell bakefile how to create platform
+    # specific makefiles.
+    bkl = project_name + '.bkl'
+    ElementTree(makefile).write(bkl, 'utf-8')
+
+    # TODO: support more formats here
+    formats = [('msvs2005prj', '%s.sln' % project_name)]
+
+    # create Bakefiles.bkgen
+    ElementTree(bakefile_gen(bkl, formats)).write('Bakefiles.bkgen', 'utf-8')
+
+    # Bakefile needs to be told the locations of some .bkl files we need--
+    # 1) wx.bkl (and related files)
+    # 2) wxpy-settings.bkl, which will provide a template for all wxpy based extensions
+    bakefile_paths = [WXWIN / 'build/bakefiles/wxpresets',
+                      path(__file__).parent]
+
+    os.environ.update(WXWIN = WXWIN,
+                      BAKEFILE_PATHS = os.pathsep.join(bakefile_paths))
+
+    # This results in Makefile (autotools), SLN (Visual Studio), or other
+    # platform specific files.
+    run('bakefile_gen')
+
+    if len(formats) > 1:
+        raise AssertionError('figure out a better way to return the name of the sln')
+    return formats[0][1]
 
 
 def build_path(p):
     'Fix a path so that it is relative to the build directory.'
 
     p = path(p)
-    return PROJECT_DIR.relpathto(p.parent) / p.name
+    return OUTPUT_DIR.relpathto(p.parent) / p.name
 
 def add_includes(module, inc_paths):
-    return [subelem(module, 'include', p) for p in inc_paths]
+    return [xmlnode(module, 'include', p) for p in inc_paths]
 
-def add_wxpy_module(makefile, module_name, sources):
-    module = subelem(makefile, 'module',
+def add_wxpy_module(makefile, module_name, sources, include_paths = None):
+    module = xmlnode(makefile, 'module',
                      id = module_name,
                      template = 'wxpy_extension')
 
-    dllname = subelem(module, 'dllname', '_%s' % module_name)
+    dllname = xmlnode(module, 'dllname', '%s' % module_name)
 
-    add_includes(module, [sip_cfg.sip_inc_dir,
-                          sip_cfg.py_inc_dir])
+    includes = [sip_cfg.sip_inc_dir,    # for sip.h
+                sip_cfg.py_inc_dir]     # for python.h
 
-    subelem(module, 'lib-path', sip_cfg.py_lib_dir)
+    if include_paths is not None:
+        assert not isinstance(include_paths, basestring)
+        includes.extend(include_paths)
 
-    source_elem = subelem(module, 'sources', '\n'.join(build_path(s) for s in sources))
+    add_includes(module, includes)
+
+    xmlnode(module, 'lib-path', sip_cfg.py_lib_dir)
+
+    source_elem = xmlnode(module, 'sources', '\n'.join(build_path(s) for s in sources))
 
     return module
 
-def subelem(root, name, text = '', **attrs):
-    elem = SubElement(root, name)
+def xmlnode(root, name, text = '', **attrs):
+    'Simple way to attach an ElementTree node.'
+
+    elem = SubElement(root, name) if root is not None else Element(name)
     if text:
         elem.text = text
 
@@ -152,3 +214,18 @@ def manage_cache(gendir):
 
     sipconfig.inform('%d file%s changed.' %
                      (changed_count, 's' if changed_count != 1 else ''))
+
+@contextmanager
+def cd(*path):
+    '''
+    chdirs to path, always restoring the cwd
+
+    >>> with cd('mydir'):
+    >>>     do_stuff()
+    '''
+    original_cwd = os.getcwd()
+    try:
+        os.chdir(os.path.join(*path))
+        yield
+    finally:
+        os.chdir(original_cwd)
