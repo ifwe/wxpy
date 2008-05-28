@@ -2,7 +2,7 @@ import os.path
 import wx
 
 def test_Image():
-    imgpath = './src/tests/digsby_ascii_popup.png'
+    imgpath = './tests/digsby_ascii_popup.png'
 
     assert os.path.exists(imgpath)
     img = wx.Image(imgpath)
@@ -18,7 +18,6 @@ def test_Image():
     assert img2.GetSize() == (50, 50)
 
 def test_Point():
-    return
     p = wx.Point()
     assert p.x == p.y == 0
 
@@ -84,6 +83,13 @@ def test_Rect():
     r3 = wx.RectPS(wx.Point(20, 30), wx.Size(40, 50))
     r4 = wx.RectPS((20, 30), (40, 50))
     assert r3 == r4
+
+    r5 = r3.Inflate(10, 10)
+    assert r3 == r5 == (10, 20, 41, 41)
+
+
+
+
 
 def test_Colour():
     c = wx.Colour(33, 66, 99)

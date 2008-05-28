@@ -60,6 +60,11 @@ if (0 != sipExportSymbol("wxpy_add_event", (void *)&add_event))
 
 %End
 
+enum
+{
+    wxEVT_ACTIVATE
+};
+
 %PostInitialisationCode
 
 //
@@ -84,7 +89,6 @@ AddItem("RED_PEN",           wxRED_PEN,           sipClass_wxPen);
 AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
 AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
 AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
-AddItem("CYAN_BRUSH",        wxCYAN_BRUSH,        sipClass_wxBrush);
 
 AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
 

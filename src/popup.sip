@@ -14,7 +14,13 @@ public:
 
     wxRect GetRect() const;
 %MethodCode
+#if defined(__WXMSW__)
+    RECT rect;
+    GetWindowRect(static_cast<HWND>(sipCpp->GetHWND()), &rect);
+    sipRes = new wxRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+#else
     sipRes = new wxRect(sipCpp->GetPosition(), sipCpp->GetSize());
+#endif
 %End
 
 };

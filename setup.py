@@ -25,7 +25,7 @@ def build():
         os.utime('src/html.sip', None)
         os.utime('contrib/stc/stc.sip', None)
 
-    extensions = [wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip'])]
+    extensions = [wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip'], libs = ['user32.lib'])]
 
     if wxUSE.HTML:
         extensions.append(wxpysetup.make_sip_ext('_wxhtml', ['src/html.sip']))

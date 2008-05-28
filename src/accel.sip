@@ -12,6 +12,12 @@ class wxAcceleratorEntry
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmdID = 0/*, wxMenuItem *menuitem = NULL*/);
 
+    int GetFlags();
+    int GetKeyCode();
+    int GetCommand();
+    bool IsOk() const;
+    wxString ToString() const;
+    bool FromString(const wxString &str);
 };
 
 class wxAcceleratorTable : wxObject

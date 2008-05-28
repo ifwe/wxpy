@@ -3,10 +3,15 @@ Reading up on SIP's /Transfer/ and its related annotations is probably a good
 idea for understanding this file.
 */
 
+enum
+{
+    wxEVT_MENU_CLOSE
+};
+
 class wxMenu : wxEvtHandler
 {
 public:
-    wxMenu(const wxString& title = wxEmptyString, long style = 0);
+    wxMenu(const wxString& title = wxEmptyString, long style = 0) /Transfer/;
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;
     wxMenuItem* AppendSeparator() /Transfer/;

@@ -139,6 +139,11 @@ public:
     SIP_UNBLOCK_THREADS
 %End
 
+    void Disconnect(int id, int id2, int eventType);
+%MethodCode
+        sipCpp->Disconnect(a0, a1, a2);
+%End
+
     void Unbind(SIP_PYOBJECT event, int id = wxID_ANY, int id2 = wxID_ANY);
 %MethodCode
     PyObject* events = a0;

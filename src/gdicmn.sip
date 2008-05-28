@@ -219,7 +219,17 @@ public:
     void SetBottom(int bottom);
 
     wxRect Deflate(wxCoord dx, wxCoord dy) const;
+%MethodCode
+        sipCpp->Deflate(a0, a1);
+        sipRes = new wxRect(*sipCpp);
+%End
+
+
     wxRect Inflate(wxCoord dx, wxCoord dy) const;
+%MethodCode
+        sipCpp->Inflate(a0, a1);
+        sipRes = new wxRect(*sipCpp);
+%End
 
     bool Contains(int x, int y) const /PyName=ContainsXY/;
     bool Contains(const wxPoint& pt) const;
