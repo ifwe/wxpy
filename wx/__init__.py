@@ -5,6 +5,7 @@ python additions
 '''
 
 VERSION = (1, 0, 0, 0)
+USE_UNICODE = True
 
 import sip, new
 from functools import wraps
@@ -185,6 +186,70 @@ class FlexGridSizer(_FlexGridSizer):
     def __init__(self, rows, cols, vgap = 0, hgap = 0):
         _FlexGridSizer.__init__(self, rows, cols, vgap, hgap)
 
+_ListCtrl = ListCtrl
+class ListCtrl(_ListCtrl):
+    def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize,
+                 style = LC_ICON, validator = DefaultValidator, name = 'listCtrl'):
+        _ListCtrl.__init__(self, parent, id, pos, size, style, validator, name)
+
+    def Select(self, idx, on=1):
+        '''[de]select an item'''
+        if on: state = LIST_STATE_SELECTED
+        else: state = 0
+        self.SetItemState(idx, state, LIST_STATE_SELECTED)
+
+    def Focus(self, idx):
+        '''Focus and show the given item'''
+        self.SetItemState(idx, LIST_STATE_FOCUSED, LIST_STATE_FOCUSED)
+        self.EnsureVisible(idx)
+
+    def GetFocusedItem(self):
+        '''get the currently focused item or -1 if none'''
+        return self.GetNextItem(-1, LIST_NEXT_ALL, LIST_STATE_FOCUSED)
+
+    def GetFirstSelected(self, *args):
+        '''return first selected item, or -1 when none'''
+        return self.GetNextSelected(-1)
+
+    def GetNextSelected(self, item):
+        '''return subsequent selected items, or -1 when no more'''
+        return self.GetNextItem(item, LIST_NEXT_ALL, LIST_STATE_SELECTED)
+
+    def IsSelected(self, idx):
+        '''return True if the item is selected'''
+        return (self.GetItemState(idx, LIST_STATE_SELECTED) & LIST_STATE_SELECTED) != 0
+
+    def SetColumnImage(self, col, image):
+        item = self.GetColumn(col)
+        # preserve all other attributes too
+        item.SetMask( LIST_MASK_STATE |
+                      LIST_MASK_TEXT  |
+                      LIST_MASK_IMAGE |
+                      LIST_MASK_DATA  |
+                      LIST_SET_ITEM   |
+                      LIST_MASK_WIDTH |
+                      LIST_MASK_FORMAT )
+        item.SetImage(image)
+        self.SetColumn(col, item)
+
+    def ClearColumnImage(self, col):
+        self.SetColumnImage(col, -1)
+
+    def Append(self, entry):
+        '''Append an item to the list control.  The entry parameter should be a
+           sequence with an item for each column'''
+        if len(entry):
+            if USE_UNICODE:
+                cvtfunc = unicode
+            else:
+                cvtfunc = str
+            pos = self.GetItemCount()
+            self.InsertStringItem(pos, cvtfunc(entry[0]))
+            for i in range(1, len(entry)):
+                self.SetStringItem(pos, i, cvtfunc(entry[i]))
+            return pos
+
+
 _Button = wx.Button
 class Button(wx.Button):
     def __init__(self, parent, id = -1, label = '', pos = DefaultPosition, size = DefaultSize, style = 0,
@@ -195,6 +260,8 @@ class SimplePanel(wx.Panel):
     def __init__(self, parent, id, style):
         Panel.__init__(self, parent, id, style = style)
         self.SetBackgroundStyle(BG_STYLE_CUSTOM)
+
+
 
 
 #_ScrolledWindow = ScrolledWindow

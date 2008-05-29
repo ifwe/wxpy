@@ -208,7 +208,7 @@ public:
     int GetImage();
     long GetData();
     long GetMask();
-    // const wxListItem& GetItem();
+    const wxListItem& GetItem();
 
     long GetCacheFrom();
     long GetCacheTo();
@@ -234,9 +234,8 @@ public:
     wxRect GetViewRect() const;
     wxTextCtrl* GetEditControl() const;
 
-    bool SetItem(wxListItem& info) ;
-
-    //%Rename(SetStringItem, long, SetItem(long index, int col, const wxString& label, int imageId = -1));
+    bool SetItem(wxListItem& info);
+    long SetItem(long index, int col, const wxString& label, int imageId = -1) /PyName=SetStringItem/;
 
     int  GetItemState(long item, long stateMask) const ;
     bool SetItemState(long item, long state, long stateMask) ;
@@ -262,6 +261,40 @@ public:
 //         }
 //    }
 
+    // Gets information about the item
+    wxListItem* GetItem(long itemId, int col=0) /Factory/;
+%MethodCode
+        wxListItem* info = new wxListItem;
+        info->m_itemId = a0;
+        info->m_col = a1;
+        info->m_mask = 0xFFFF;
+        sipCpp->GetItem(*info);
+        sipRes = info;
+%End
+
+%TypeCode
+
+static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
+    int retval = 0;
+
+    SIP_BLOCK_THREADS
+    PyObject* result = PyObject_CallFunction((PyObject*)funcPtr, "ii", item1, item2);
+    if (result)
+    {
+        retval = PyInt_AsLong(result);
+        Py_DECREF(result);
+    }
+    SIP_UNBLOCK_THREADS
+
+    return retval;
+}
+
+%End // TypeCode
+
+    bool SortItems(SIP_PYCALLABLE func);
+%MethodCode
+        sipRes = sipCpp->SortItems((wxListCtrlCompare)wxPyListCtrl_SortItems, (long)a0);
+%End
 
     bool SetItemPosition(long item, const wxPoint& pos) ;
     int GetItemCount() const;
@@ -315,8 +348,8 @@ public:
     // TODO: HitTest methods
 
     long InsertItem(wxListItem& info);
-    long InsertItem(long index, const wxString& label, int imageIndex = -1);
-    long InsertItem(long index, int imageIndex);
+    long InsertItem(long index, const wxString& label, int imageIndex = -1) /PyName=InsertStringItem/;
+    long InsertItem(long index, int imageIndex) /PyName=InsertImageItem/;
 
     long InsertColumn(long col, wxListItem& info);
 
