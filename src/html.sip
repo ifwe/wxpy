@@ -165,3 +165,147 @@ public:
 
     static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
 };
+
+class wxHtmlTag : wxObject
+{
+public:
+    virtual ~wxHtmlTag();
+
+    wxHtmlTag *GetParent() const;
+    wxHtmlTag *GetFirstSibling() const;
+    wxHtmlTag *GetLastSibling() const;
+    wxHtmlTag *GetChildren() const;
+    wxHtmlTag *GetPreviousSibling() const;
+    wxHtmlTag *GetNextSibling() const;
+    wxHtmlTag *GetNextTag() const;
+
+    wxString GetName() const;
+    bool HasParam(const wxString& par) const;
+    wxString GetParam(const wxString& par, bool with_commas = false) const;
+    bool GetParamAsColour(const wxString& par, wxColour *clr) const;
+    bool GetParamAsInt(const wxString& par, int *clr) const;
+    int ScanParam(const wxString& par, const wxChar *format, void *param) const;
+    wxString GetAllParams() const;
+    bool HasEnding() const;
+    int GetBeginPos() const;
+    int GetEndPos1() const;
+    int GetEndPos2() const;
+
+private:
+    wxHtmlTag(const wxHtmlTag&);
+};
+
+
+
+class wxHtmlParser
+{
+private:
+    wxHtmlParser();
+
+};
+
+class wxHtmlTagHandler : wxObject
+{
+public:
+    wxHtmlTagHandler();
+    virtual ~wxHtmlTagHandler();
+
+    virtual void SetParser(wxHtmlParser *parser);
+    virtual wxString GetSupportedTags() = 0;
+    virtual bool HandleTag(const wxHtmlTag& tag) = 0;
+private:
+    wxHtmlTagHandler(const wxHtmlTagHandler&);
+};
+
+class wxHtmlWinTagHandler : wxHtmlTagHandler
+{
+public:
+    wxHtmlWinTagHandler();
+    virtual ~wxHtmlWinTagHandler();
+    void SetParser(wxHtmlParser *parser);
+private:
+    wxHtmlWinTagHandler(const wxHtmlWinTagHandler&);
+};
+
+class wxHtmlWinParser
+{
+%TypeCode
+
+class wxPyHtmlTagsModule : public wxHtmlTagsModule
+{
+public:
+    wxPyHtmlTagsModule(PyObject* thc) : wxHtmlTagsModule() {
+        m_tagHandlerClass = thc;
+        Py_INCREF(m_tagHandlerClass);
+        RegisterModule(this);
+        wxHtmlWinParser::AddModule(this);
+    }
+
+    void OnExit() {
+        SIP_BLOCK_THREADS
+        Py_DECREF(m_tagHandlerClass);
+        m_tagHandlerClass = NULL;
+        for (size_t x=0; x < m_objArray.GetCount(); x++)
+        {
+            PyObject* obj = (PyObject*)m_objArray.Item(x);
+            Py_DECREF(obj);
+        }
+        SIP_UNBLOCK_THREADS
+    };
+
+    void FillHandlersTable(wxHtmlWinParser *parser)
+    {
+        // Wave our magic wand...  (if it works it's a miracle!  ;-)
+
+        // First, make a new instance of the tag handler
+        SIP_BLOCK_THREADS
+        PyObject* arg = PyTuple_New(0);
+        PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
+        Py_DECREF(arg);
+
+        // now figure out where it's C++ object is...
+        wxHtmlWinTagHandler* thPtr = 0;
+        int sipIsErr = 0;
+
+        if (sipCanConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, SIP_NOT_NONE))
+            thPtr = (wxHtmlWinTagHandler*)sipConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, NULL, SIP_NOT_NONE, NULL, &sipIsErr);
+        else
+            sipIsErr = 1;
+
+        if (!sipIsErr)
+        {
+            // add it,
+            parser->AddTagHandler(thPtr);
+
+            // and track it.
+            m_objArray.Add(obj);
+        }
+
+        SIP_UNBLOCK_THREADS
+    }
+
+private:
+    PyObject*           m_tagHandlerClass;
+    wxArrayPtrVoid      m_objArray;
+
+};
+
+%End
+
+public:
+    static void AddTagHandler(SIP_PYOBJECT);
+%MethodCode
+    new wxPyHtmlTagsModule(a0);
+%End
+
+private:
+    wxHtmlWinParser();
+    wxHtmlWinParser(const wxHtmlWinParser&);
+};
+
+class wxHtmlLinkEvent : wxCommandEvent
+{
+public:
+    wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo);
+    const wxHtmlLinkInfo &GetLinkInfo() const;
+};
