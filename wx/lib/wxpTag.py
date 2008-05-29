@@ -100,6 +100,8 @@ import  wx.html
 WXPTAG   = 'WXP'
 PARAMTAG = 'PARAM'
 
+SUPPORTED_TAGS = WXPTAG+','+PARAMTAG
+
 #----------------------------------------------------------------------
 
 class wxpTagHandler(wx.html.HtmlWinTagHandler):
@@ -108,8 +110,7 @@ class wxpTagHandler(wx.html.HtmlWinTagHandler):
         self.ctx = None
 
     def GetSupportedTags(self):
-        return WXPTAG+','+PARAMTAG
-
+        return SUPPORTED_TAGS
 
     def HandleTag(self, tag):
         name = tag.GetName()
@@ -118,7 +119,7 @@ class wxpTagHandler(wx.html.HtmlWinTagHandler):
         elif name == PARAMTAG:
             return self.HandleParamTag(tag)
         else:
-            raise ValueError, 'unknown tag: ' + name
+            raise ValueError('unknown tag: %r' % name)
 
 
     def HandleWxpTag(self, tag):
@@ -140,8 +141,9 @@ class wxpTagHandler(wx.html.HtmlWinTagHandler):
 
         className = tag.GetParam('CLASS')
         self.ctx.classObj = getattr(self.ctx.classMod, className)
-        if type(self.ctx.classObj) not in [ types.ClassType, types.TypeType]:
-            raise TypeError, "WXP tag attribute CLASS must name a class"
+        #if type(self.ctx.classObj) not in [ types.ClassType, types.TypeType]:
+        #    raise TypeError("WXP tag attribute CLASS must name a class: "
+        #                    "%r (instance: %r)" % (type(self.ctx.classObj), self.ctx.classObj))
 
         # now look for width and height
         width  = -1

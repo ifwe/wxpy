@@ -19,7 +19,7 @@ add_event(sipModuleDict, "EVT_TASKBAR_CLICK",        wxEVT_TASKBAR_CLICK, 0);
 class wxTaskBarIcon : wxEvtHandler
 {
 public:
-    wxTaskBarIcon();
+    wxTaskBarIcon() /Transfer/;
     ~wxTaskBarIcon();
 
     void Destroy();

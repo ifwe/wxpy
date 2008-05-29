@@ -210,12 +210,20 @@ public:
     wxHtmlTagHandler();
     virtual ~wxHtmlTagHandler();
 
-    virtual void SetParser(wxHtmlParser *parser);
+    void SetParser(wxHtmlParser *parser);
+    void ParseInner(const wxHtmlTag& tag);
+
     virtual wxString GetSupportedTags() = 0;
     virtual bool HandleTag(const wxHtmlTag& tag) = 0;
 private:
     wxHtmlTagHandler(const wxHtmlTagHandler&);
 };
+
+class wxHtmlWidgetCell : wxHtmlCell {
+public:
+    wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
+};
+
 
 class wxHtmlWinTagHandler : wxHtmlTagHandler
 {
@@ -223,9 +231,101 @@ public:
     wxHtmlWinTagHandler();
     virtual ~wxHtmlWinTagHandler();
     void SetParser(wxHtmlParser *parser);
+    wxHtmlWinParser* GetParser() const;
+
 private:
     wxHtmlWinTagHandler(const wxHtmlWinTagHandler&);
 };
+
+
+class wxHtmlCell : wxObject
+{
+private:
+    wxHtmlCell(const wxHtmlCell&);
+public:
+    wxHtmlCell();
+    ~wxHtmlCell();
+
+    int GetPosX();
+    int GetPosY();
+    int GetWidth();
+    int GetHeight();
+    int GetDescent();
+
+    int GetMaxTotalWidth() const;
+
+    const wxString& GetId() const;
+    void SetId(const wxString& id);
+    wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
+    wxHtmlCell* GetNext();
+    //wxHtmlContainerCell* GetParent();
+    wxHtmlCell* GetFirstChild() const;
+
+    virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const;
+
+    //wxCursor GetCursor() const;
+    bool IsFormattingCell() const;
+    void SetLink(const wxHtmlLinkInfo& link);
+    void SetNext(wxHtmlCell *cell /Transfer/);
+//  void SetParent(wxHtmlContainerCell *p);
+    void SetPos(int x, int y);
+    void Layout(int w);
+    //void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
+    //          wxHtmlRenderingInfo& info);
+    //void DrawInvisible(wxDC& dc, int x, int y,
+    //          wxHtmlRenderingInfo& info);
+    const wxHtmlCell* Find(int condition, const void* param);
+
+
+    virtual bool ProcessMouseClick(wxHtmlWindowInterface *window,
+                                   const wxPoint& pos,
+                                   const wxMouseEvent& event);
+
+    void SetCanLiveOnPagebreak(bool can);
+    bool IsLinebreakAllowed() const;
+    bool IsTerminalCell() const;
+    wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
+                                  unsigned flags = wxHTML_FIND_EXACT) const;
+    wxPoint GetAbsPos(wxHtmlCell *rootCell = NULL) const;
+    wxHtmlCell *GetRootCell() const;
+
+    wxHtmlCell *GetFirstTerminal() const ;
+    wxHtmlCell *GetLastTerminal() const ;
+
+    unsigned GetDepth() const;
+    bool IsBefore(wxHtmlCell *cell) const;
+    //wxString ConvertToText(wxHtmlSelection *sel) const;
+};
+
+
+class wxHtmlContainerCell : wxHtmlCell
+{
+private:
+    wxHtmlContainerCell(const wxHtmlContainerCell&);
+public:
+    wxHtmlContainerCell(wxHtmlContainerCell *parent);
+
+    void InsertCell(wxHtmlCell *cell /Transfer/);
+
+    void SetAlignHor(int al);
+    int GetAlignHor();
+    void SetAlignVer(int al);
+    int GetAlignVer();
+    void SetIndent(int i, int what, int units = wxHTML_UNITS_PIXELS);
+    int GetIndent(int ind);
+    int GetIndentUnits(int ind);
+    void SetAlign(const wxHtmlTag& tag);
+    void SetWidthFloat(int w, int units);
+    void SetWidthFloat(const wxHtmlTag& tag) /PyName=SetWidthFloatFromTag/;
+    void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP);
+    void SetBackgroundColour(const wxColour& clr);
+    wxColour GetBackgroundColour();
+    void SetBorder(const wxColour& clr1, const wxColour& clr2);
+    wxHtmlCell* GetFirstChild();
+    //%pragma(python) addtoclass = "GetFirstCell = GetFirstChild"
+};
+
+
 
 class wxHtmlWinParser
 {
@@ -255,22 +355,31 @@ public:
 
     void FillHandlersTable(wxHtmlWinParser *parser)
     {
-        // Wave our magic wand...  (if it works it's a miracle!  ;-)
-
         // First, make a new instance of the tag handler
         SIP_BLOCK_THREADS
         PyObject* arg = PyTuple_New(0);
         PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
 
+        printf("FillHandlersTable for parser %p\n", parser);
+        printf("tag handler is ");
+        PyObject_Print(obj, stdout, 0);
+        printf("\n");
+
         // now figure out where it's C++ object is...
         wxHtmlWinTagHandler* thPtr = 0;
         int sipIsErr = 0;
 
         if (sipCanConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, SIP_NOT_NONE))
+        {
             thPtr = (wxHtmlWinTagHandler*)sipConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, NULL, SIP_NOT_NONE, NULL, &sipIsErr);
+            printf("sipConvertToInstance returned %p, sipIsErr is %d\n", thPtr, sipIsErr);
+        }
         else
+        {
+            printf("ERROR: sipCanConvertToInstance returned false\n");
             sipIsErr = 1;
+        }
 
         if (!sipIsErr)
         {
@@ -298,6 +407,10 @@ public:
     new wxPyHtmlTagsModule(a0);
 %End
 
+    wxHtmlWindowInterface *GetWindowInterface();
+    wxHtmlContainerCell* GetContainer();
+
+
 private:
     wxHtmlWinParser();
     wxHtmlWinParser(const wxHtmlWinParser&);
@@ -308,4 +421,29 @@ class wxHtmlLinkEvent : wxCommandEvent
 public:
     wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo);
     const wxHtmlLinkInfo &GetLinkInfo() const;
+};
+
+
+class wxHtmlWindowInterface
+{
+private:
+    wxHtmlWindowInterface();
+    wxHtmlWindowInterface(const wxHtmlWindowInterface&);
+    virtual ~wxHtmlWindowInterface();
+public:
+
+    virtual void SetHTMLWindowTitle(const wxString& title) = 0;
+    //virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell, const wxPoint& pos) const = 0;
+    virtual wxWindow* GetHTMLWindow() = 0;
+    virtual wxColour GetHTMLBackgroundColour() const = 0;
+    virtual void SetHTMLBackgroundColour(const wxColour& clr) = 0;
+    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) = 0;
+    virtual void SetHTMLStatusText(const wxString& text) = 0;
+
+    enum HTMLCursor
+    {
+        HTMLCursor_Default,
+        HTMLCursor_Link,
+        HTMLCursor_Text
+    };
 };

@@ -8,19 +8,13 @@ public:
 
     void SetRect(const wxRect& rect);
 %MethodCode
-    sipCpp->Move(a0->GetPosition());
     sipCpp->SetSize(a0->GetSize());
+    sipCpp->Move(a0->GetPosition());
 %End
 
     wxRect GetRect() const;
 %MethodCode
-#if defined(__WXMSW__)
-    RECT rect;
-    GetWindowRect(static_cast<HWND>(sipCpp->GetHWND()), &rect);
-    sipRes = new wxRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-#else
     sipRes = new wxRect(sipCpp->GetPosition(), sipCpp->GetSize());
-#endif
 %End
 
 };
