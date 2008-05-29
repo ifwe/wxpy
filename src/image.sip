@@ -36,7 +36,16 @@ wxImage ImageFromBitmap(const wxBitmap& bitmap);
     sipRes = new wxImage(a0->ConvertToImage());
 %End
 
-wxImage ImageFromDataWithAlpha(int width, 
+wxImage* EmptyImage(int width = 0, int height = 0, bool clear = true);
+%MethodCode
+    if (a0 > 0 && a1 > 0)
+        sipRes = new wxImage(a0, a1, a2);
+    else
+        sipRes = new wxImage;
+%End
+
+
+wxImage ImageFromDataWithAlpha(int width,
                                int height,
                                SIP_PYOBJECT rgb,
                                SIP_PYOBJECT alpha);
@@ -65,7 +74,7 @@ wxImage ImageFromDataWithAlpha(int width,
         PyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
         goto err;
     }
-    
+
     // Copy the source data so the wxImage can clean it up later
     unsigned char* dcopy = (unsigned char*)sipMalloc(DATASIZE);
     if (dcopy == NULL)
@@ -111,7 +120,7 @@ public:
         int len = sipCpp->GetWidth() * sipCpp->GetHeight();
         sipRes = PyString_FromStringAndSize((char*)data, len);
 %End
-    
+
     // from file
     wxImage(const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1);
 
@@ -159,7 +168,7 @@ public:
 %End
 
     wxImage GetSubImage(const wxRect& rect);
-    wxImage Size(const wxSize& size, const wxPoint& pos, 
+    wxImage Size(const wxSize& size, const wxPoint& pos,
         int r = -1, int g = -1, int b = -1 ) const;
     wxImage Copy();
     void Paste( const wxImage &image, int x, int y );
