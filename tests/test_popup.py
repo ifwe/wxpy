@@ -6,6 +6,9 @@ def test_Popup():
     r = wx.Rect(30, 30, 200, 200)
     p.SetRect(r)
     p.Show()
+
+    print 'after setting %r, GetRect() is %r' % (r, p.GetRect())
+
     assert p.GetRect() == r
 
     p.Rect = wx.Rect(40, 40, 100, 100)
