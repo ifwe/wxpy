@@ -211,6 +211,9 @@ public:
      wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos /Out/) const /PyName=HitTestPos/;
      wxTextCtrlHitTestResult HitTest(const wxPoint& pt, wxTextCoord *col /Out/, wxTextCoord *row /Out/) const;
 
+     wxPoint IndexToCoords(long pos) const;
+
+
      void Copy();
      void Cut();
      void Paste();

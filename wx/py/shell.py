@@ -511,7 +511,7 @@ Platform: %s""" % \
             self.HideLines(startL+1,endL)
             self.SetCurrentPos( startP ) # to ensure caret stays visible !
 
-        if key == wx.WXK_F12: #seb
+        if False and key == wx.WXK_F12: #seb
             if self.noteMode:
                 # self.promptPosStart not used anyway - or ?
                 self.promptPosEnd = self.PositionFromLine( self.GetLineCount()-1 ) + len(str(sys.ps1))
@@ -528,6 +528,7 @@ Platform: %s""" % \
 
             self.noteMode = not self.noteMode
             return
+
         if self.noteMode:
             event.Skip()
             return

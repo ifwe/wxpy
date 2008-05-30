@@ -2,7 +2,7 @@
 ../configure --enable-unicode --enable-optimise --disable-ftp --disable-dialupman --disable-mediactrl --disable-help --disable-xrc --disable-aui --disable-constraints --disable-printarch --disable-mdi --disable-mdidoc --disable-richtext --disable-grid --disable-dataviewctrl --disable-tipdlg --disable-wizarddlg
 '''
 
-WX_FLAG = 'ud'                      # the postfix on .libs and .dlls
+WX_FLAG = 'u'                       # the postfix on .libs and .dlls
 WXDEBUG = True                      # __WXDEBUG__
 DEBUG_SYMBOLS = True                # /Zi
 ENABLE_EXCEPTIONS = False
