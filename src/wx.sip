@@ -16,6 +16,9 @@ released under the wxWidgets License
 #define WXSIP 1
 %End
 
+%UnitCode
+#include "stdwxpy.h"
+%End
 
 %Include vector.sip
 

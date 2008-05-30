@@ -2,9 +2,6 @@
 
 class wxVScrolledWindow : wxPanel
 {
-%TypeHeaderCode
-    #include <wx/vscroll.h>
-%End
 public:
     wxVScrolledWindow(wxWindow *parent /TransferThis/,
                       wxWindowID id = wxID_ANY,
@@ -44,10 +41,6 @@ protected:
 
 class wxVListBox : wxVScrolledWindow
 {
-%TypeHeaderCode
-    #include <wx/vlbox.h>
-%End
-
 public:
     size_t GetItemCount() const;
     bool HasMultipleSelection() const;

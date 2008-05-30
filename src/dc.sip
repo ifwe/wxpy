@@ -331,10 +331,6 @@ public:
 
 class wxBufferedDC : wxMemoryDC
 {
-%TypeHeaderCode
-    #include <wx/dcbuffer.h>
-%End
-
 public:
     wxBufferedDC(wxDC* dc,
                  wxBitmap& buffer=wxNullBitmap,
@@ -352,10 +348,6 @@ public:
 
 class wxBufferedPaintDC : wxBufferedDC
 {
-%TypeHeaderCode
-    #include <wx/dcbuffer.h>
-%End
-
 public:
     // TODO: ownership of wxBitmap argument?
     wxBufferedPaintDC( wxWindow *window,
@@ -367,9 +359,6 @@ public:
 
 class wxAutoBufferedPaintDC : wxDC
 {
-%TypeHeaderCode
-    #include <wx/dcbuffer.h>
-%End
 public:
     wxAutoBufferedPaintDC(wxWindow* win);
 };

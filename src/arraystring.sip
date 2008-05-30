@@ -1,15 +1,11 @@
 %MappedType wxArrayString
 {
-%TypeHeaderCode
-#include <wx/arrstr.h>
-%End
-
 %ConvertToTypeCode
     // See if we are just being asked to check the type of the Python object.
     if (sipIsErr == NULL) {
         if (!PyList_Check(sipPy)) // Check it is a list.
             return 0;
-            
+
         // Now check each element of the list is of the type we expect.
         // The template is for a pointer type so we don't disallow None.
         for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
@@ -54,12 +50,12 @@
     // Go through each element in the C++ instance and convert it to the
     // corresponding Python object.
     const sipMappedType* wxString_MT = sipFindMappedType("wxString");
-    
+
     for (size_t i = 0; i < sipCpp->Count(); ++i)
     {
         wxString s = sipCpp->Item(i);
         PyObject* tobj;
-        
+
 
         tobj = sipConvertFromMappedType(&s, wxString_MT, sipTransferObj);
         if (tobj == NULL)
@@ -67,10 +63,10 @@
             Py_DECREF(l);
             return NULL;
         }
-        
+
         PyList_SET_ITEM(l, i, tobj);
     }
-    
+
     return l;
 %End
 

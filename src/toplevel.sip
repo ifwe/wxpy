@@ -68,10 +68,6 @@ enum
 
 class wxTopLevelWindow : wxWindow
 {
-
-%TypeHeaderCode
-#include <wx/toplevel.h>
-%End
 public:
     virtual ~wxTopLevelWindow();
 
@@ -125,11 +121,6 @@ wxWindowList wxGetTopLevelWindows();
 
 class wxFrame : wxTopLevelWindow
 {
-
-%TypeHeaderCode
-#include <wx/frame.h>
-%End
-
 public:
     wxFrame(wxWindow* parent,
             const wxWindowID id = wxID_ANY,

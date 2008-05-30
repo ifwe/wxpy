@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/dataobj.h>
-%End
-
 enum wxDataFormatId
 {
     wxDF_INVALID,

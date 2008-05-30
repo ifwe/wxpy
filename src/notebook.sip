@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/notebook.h>
-%End
-
 enum {
     wxBK_DEFAULT,
     wxBK_TOP,

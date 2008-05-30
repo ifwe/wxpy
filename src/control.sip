@@ -5,10 +5,6 @@
 class wxControl : wxWindow
 {
 
-%TypeHeaderCode
-#include <wx/control.h>
-%End
-
 public:
     wxControl(wxWindow *parent,
               wxWindowID id = -1,

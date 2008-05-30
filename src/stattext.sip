@@ -1,9 +1,5 @@
 class wxStaticText : wxControl
 {
-%TypeHeaderCode
-#include <wx/stattext.h>
-%End
-
 public:
     wxStaticText(wxWindow *parent /TransferThis/,
                  wxWindowID id,
@@ -18,9 +14,6 @@ public:
 
 class wxStaticBox : wxControl
 {
-%TypeHeaderCode
-#include <wx/statbox.h>
-%End
 
 public:
     wxStaticBox(wxWindow* parent /TransferThis/, wxWindowID id=-1,
@@ -33,10 +26,6 @@ public:
 
 class wxStaticLine : wxControl
 {
-%TypeHeaderCode
-#include <wx/statline.h>
-%End
-
 public:
     wxStaticLine( wxWindow *parent /TransferThis/, wxWindowID id=-1,
                   const wxPoint &pos = wxDefaultPosition,
@@ -50,10 +39,6 @@ public:
 
 class wxStaticBitmap : wxControl
 {
-%TypeHeaderCode
-#include <wx/statbmp.h>
-%End
-
 public:
     wxStaticBitmap(wxWindow* parent /TransferThis/, wxWindowID id=-1,
                    const wxBitmap& bitmap = wxNullBitmap,

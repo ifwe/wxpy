@@ -1,7 +1,5 @@
 %ModuleHeaderCode
 void add_event(PyObject* module_dict, const char* name, ...);
-
-#include <wx/power.h>
 %End
 
 %PostInitialisationCode

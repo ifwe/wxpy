@@ -4,12 +4,6 @@
 
 class wxObject
 {
-
-%TypeHeaderCode
-#include <wx/object.h>
-#include <wx/gbsizer.h>
-%End
-
 %ConvertToSubClassCode
     wxClassInfo* c = sipCpp -> GetClassInfo();
 

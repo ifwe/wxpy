@@ -1,10 +1,3 @@
-%ModuleHeaderCode
-#include <wx/graphics.h>
-#include <wx/gdicmn.h>
-#include <wx/geometry.h>
-%End
-
-
 class wxPoint2DDouble
 {
 public:
@@ -283,9 +276,6 @@ private:
 
 class wxGCDC :  wxDC
 {
-%TypeHeaderCode
-    #include "wx/dcgraph.h"
-%End
 public:
     wxGCDC(const wxWindowDC& dc);
     wxGCDC(wxWindow* window);

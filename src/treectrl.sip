@@ -2,10 +2,6 @@
     wxTreeCtrl
 */
 
-%ModuleHeaderCode
-#include <wx/treectrl.h>
-%End
-
 enum
 {
     wxTR_NO_BUTTONS,

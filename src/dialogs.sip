@@ -1,9 +1,5 @@
 %ModuleHeaderCode
 // TODO: use wxUSE flags for these includes
-#include <wx/fontdlg.h>
-#include <wx/colordlg.h>
-#include <wx/fdrepdlg.h>
-#include <wx/progdlg.h>
 #ifndef wxHIDE_READONLY
 #define wxHIDE_READONLY 0
 #endif
@@ -186,9 +182,6 @@ public:
 %If (wxUSE_NUMBERDLG)
 class wxNumberEntryDialog : wxDialog
 {
-%TypeHeaderCode
-    #include <wx/numdlg.h>
-%End
 public:
     wxNumberEntryDialog(wxWindow *parent,
                         const wxString& message,
@@ -250,7 +243,7 @@ public:
                     const wxString& message,
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK | wxCANCEL | wxCENTRE,
-                    const wxPoint& pos = wxDefaultPosition) /Transfer/; 
+                    const wxPoint& pos = wxDefaultPosition) /Transfer/;
 };
 
 %End

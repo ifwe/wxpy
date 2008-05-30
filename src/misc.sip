@@ -1,8 +1,3 @@
-%ModuleHeaderCode
-#include <wx/tooltip.h>
-#include <wx/caret.h>
-%End
-
 %Include sound.sip
 %Include settings.sip
 %Include taskbar.sip

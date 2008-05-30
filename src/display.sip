@@ -1,8 +1,3 @@
-%ModuleHeaderCode
-#include <wx/display.h>
-#include <wx/vidmode.h>
-%End
-
 struct wxVideoMode
 {
     wxVideoMode(int width = 0, int height = 0, int depth = 0, int freq = 0);
@@ -25,7 +20,7 @@ class wxDisplay
 public:
     wxDisplay(unsigned index = 0);
     ~wxDisplay();
-    
+
     static unsigned GetCount();
     static int GetFromPoint(const wxPoint& pt);
     static int GetFromWindow(wxWindow *window);

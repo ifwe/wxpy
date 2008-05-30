@@ -23,7 +23,6 @@ public:
 class wxAcceleratorTable : wxObject
 {
 %TypeHeaderCode
-#include <wx/accel.h>
     PyObject* accel_check(PyObject* item);
     void accel_from_tuple(PyObject* item, wxAcceleratorEntry* accel);
 

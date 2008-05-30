@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/srchctrl.h>
-%End
-
 %PostInitialisationCode
 add_event(sipModuleDict, "EVT_SEARCHCTRL_CANCEL_BTN", wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, 0);
 add_event(sipModuleDict, "EVT_SEARCHCTRL_SEARCH_BTN", wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, 0);

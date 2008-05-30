@@ -1,9 +1,3 @@
-%ModuleHeaderCode
-void add_event(PyObject* module_dict, const char* name, ...);
-
-#include <wx/splitter.h>
-%End
-
 %PostInitialisationCode
 add_event(sipModuleDict, "EVT_SPLITTER_SASH_POS_CHANGED",  wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, 0);
 add_event(sipModuleDict, "EVT_SPLITTER_SASH_POS_CHANGING", wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, 0);

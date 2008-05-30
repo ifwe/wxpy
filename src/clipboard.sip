@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/clipbrd.h>
-%End
-
 class wxClipboard : wxObject
 {
 public:

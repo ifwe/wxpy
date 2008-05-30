@@ -5,9 +5,11 @@
 %Module _wxstc
 %Import wx.sip
 
+%UnitCode
+#include "stdwx.h"
+%End
+
 %ModuleHeaderCode
-#include <wx/wx.h>
-#include <wx/dnd.h>
 #include <wx/stc/stc.h>
 %End
 

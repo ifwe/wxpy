@@ -266,10 +266,6 @@ public:
 
 
 class wxFontEnumerator {
-%TypeHeaderCode
-#include <wx/fontenum.h>
-%End
-
 public:
     wxFontEnumerator();
     ~wxFontEnumerator();

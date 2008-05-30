@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/app.h>
-%End
-
 int EntryStart();
 %MethodCode
     int argc = 0;

@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/sound.h>
-%End
-
 enum wxSoundFlags
 {
     wxSOUND_SYNC,

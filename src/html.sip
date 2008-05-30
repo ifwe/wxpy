@@ -4,13 +4,8 @@
 
 %Import wx.sip
 
-%ModuleHeaderCode
-#include <wx/html/htmlwin.h>
-%End
-
-
-%PreInitialisationCode
-
+%UnitCode
+#include "stdwx.h"
 %End
 
 %PostInitialisationCode

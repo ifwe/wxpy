@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include "wx/renderer.h"
-%End
-
 enum
 {
     wxCONTROL_DISABLED   = 0x00000001,  // control is disabled

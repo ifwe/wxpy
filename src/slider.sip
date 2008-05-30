@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/slider.h>
-%End
-
 enum {
     wxSL_HORIZONTAL,
     wxSL_VERTICAL,

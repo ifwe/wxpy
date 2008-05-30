@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/gauge.h>
-%End
-
 enum {
     wxGA_HORIZONTAL,
     wxGA_VERTICAL,
@@ -29,5 +25,5 @@ public:
     int GetShadowWidth() const;
     void SetBezelFace(int w);
     int GetBezelFace() const;
- 
+
 };

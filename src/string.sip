@@ -7,7 +7,6 @@
 {
 
 %TypeHeaderCode
-#include <wx/string.h>
 
 #if !wxUSE_UNICODE
 #error "wxpy currently requires that wxWidgets is built with Unicode support (--enable-unicode or wxUSE_UNICODE=1)"

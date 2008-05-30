@@ -1,8 +1,3 @@
-%ModuleHeaderCode
-#include <wx/hyperlink.h>
-%End
-
-
 enum {
     wxHL_CONTEXTMENU,
     wxHL_ALIGN_LEFT,

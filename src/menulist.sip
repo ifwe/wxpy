@@ -4,11 +4,6 @@
 
 %MappedType wxMenuItemList
 {
-%TypeHeaderCode
-#include <wx/list.h>
-#include <wx/window.h>
-%End
-
 %ConvertToTypeCode
     // See if we are just being asked to check the type of the Python object.
     if (sipIsErr == NULL) {

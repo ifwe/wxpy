@@ -18,6 +18,8 @@ import wxpyfeatures
 from distutils.core import Extension
 from path import path
 
+USE_PCH = True
+
 RELEASE_GIL      = False  # causes the GIL to be released before every call (slow?)
 TRACE_STATEMENTS = False   # emit tracing statements in all functions
 
@@ -107,11 +109,19 @@ class wxpy_build_ext(sipdistutils.build_ext):
         sipconfig.inform('build_temp is %s' % self.build_temp)
         manage_cache(self.build_temp)
 
+        if USE_PCH:
+            print 'PRECOMPILE HEADER HERE /Yc"stdwxpy.h"'
+            self.compiler.compile(['src/stdwxpy.cpp'])
+
         return sources
 
 def make_sip_ext(name, iface_files, include = None, libs = []):
     cxxflags = [f for f in wxpyconfig.cxxflags if not f.startswith('-O')]
-    cargs = list(wxpyconfig.cxxflags) + ['-DWXPY=1']
+    cargs = list(wxpyconfig.cxxflags) + ['-DWXPY=1',
+                                         '-I%s' % (wxpyconfig.wxpy_dir / 'src').abspath()]
+    
+    if USE_PCH:
+        cargs += ['/Yu"stdwxpy.h"']
 
     includes = []
     if include is not None:
@@ -119,6 +129,7 @@ def make_sip_ext(name, iface_files, include = None, libs = []):
         for inc in include:
             includes.extend(['-I', inc])
             cargs.append('-I%s'  % inc)
+
 
     largs = list(wxpyconfig.lflags)
     largs.extend(libs)

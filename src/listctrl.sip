@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/listctrl.h>
-%End
-
 enum {
     // style flags
     wxLC_VRULES,

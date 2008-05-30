@@ -11,14 +11,9 @@ class wxWindow : wxEvtHandler
 {
 
 %TypeHeaderCode
-#include <wx/window.h>
-#include <wx/dynlib.h>
-
 #ifdef __WXMSW__
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 #endif
-
-
 %End
 
 public:

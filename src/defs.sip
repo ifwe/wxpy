@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/wx.h>
-#include <wx/tooltip.h>
-%End
 typedef unsigned int wxUint32;
 typedef int    wxInt32;
 typedef wchar_t wxChar;

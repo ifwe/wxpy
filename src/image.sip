@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/mstream.h>
-%End
-
 void wxInitAllImageHandlers();
 
 enum {

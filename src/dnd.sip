@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/dnd.h>
-%End
-
 enum
 {
     wxDrag_CopyOnly    = 0, // allow only copying

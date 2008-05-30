@@ -1,9 +1,5 @@
 class wxStandardPaths
 {
-%TypeHeaderCode
-#include <wx/stdpaths.h>
-%End
-
 public:
     enum ResourceCat
     {

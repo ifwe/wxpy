@@ -1,7 +1,3 @@
-%ModuleHeaderCode
-#include <wx/stockitem.h>
-%End
-
 void wxWakeUpIdle();
 
 void wxBeginBusyCursor(wxCursor& cursor);

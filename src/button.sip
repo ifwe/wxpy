@@ -18,10 +18,6 @@ enum {
 class wxButton : wxControl
 {
 
-%TypeHeaderCode
-#include <wx/button.h>
-%End
-
 public:
     wxButton(wxWindow* parent /TransferThis/,
              const wxWindowID id = wxID_ANY,

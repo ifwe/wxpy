@@ -4,11 +4,6 @@
 
 class wxPoint
 {
-
-%TypeHeaderCode
-#include <wx/gdicmn.h>
-%End
-
 public:
     wxPoint(int x = 0, int y = 0);
     ~wxPoint();
@@ -74,10 +69,6 @@ public:
 
 class wxSize
 {
-%TypeHeaderCode
-#include <wx/gdicmn.h>
-%End
-
 public:
     wxSize();
     wxSize(int width, int height);
@@ -150,10 +141,6 @@ wxRect RectPS(const wxPoint& topLeft, const wxPoint& bottomRight);
 
 class wxRect
 {
-
-%TypeHeaderCode
-#include <wx/gdicmn.h>
-%End
 
 public:
 %ConvertToTypeCode
