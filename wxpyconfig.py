@@ -2,11 +2,22 @@
 ../configure --enable-unicode --enable-optimise --disable-ftp --disable-dialupman --disable-mediactrl --disable-help --disable-xrc --disable-aui --disable-constraints --disable-printarch --disable-mdi --disable-mdidoc --disable-richtext --disable-grid --disable-dataviewctrl --disable-tipdlg --disable-wizarddlg
 '''
 
-WX_FLAG = 'u'                       # the postfix on .libs and .dlls
-WXDEBUG = True                      # __WXDEBUG__
-DEBUG_SYMBOLS = True                # /Zi
+from distutils.debug import DEBUG
+
+if True:
+    DEBUG_RUNTIME = True
+    WX_FLAG = 'ud'                       # the postfix on .libs and .dlls
+    WXDEBUG = True                       # __WXDEBUG__
+    DEBUG_SYMBOLS = True                 # /Zi
+    WHOLE_PROGRAM_OPTIMIZATION = False   # /GL (slow)
+else:
+    DEBUG_RUNTIME = False
+    WX_FLAG = 'u'
+    WXDEBUG = False
+    DEBUG_SYMBOLS = True
+    WHOLE_PROGRAM_OPTIMIZATION = True
+
 ENABLE_EXCEPTIONS = False
-WHOLE_PROGRAM_OPTIMIZATION = False  # /GL (slow)
 
 class CONTRIB(object):
     STC = True
@@ -50,15 +61,15 @@ elif platform_name == 'msw':
     print 'using wxwidgets dir:', wxdir
 
     # TODO: infer these without a wx-config binary? (bakefiles!)
-    if True:
-        # RELEASE runtime
-        cxxflags = ('/MP /MD /D__NO_VC_CRTDBG__ /DWXUSINGDLL').split()
-    else:
+    if DEBUG_RUNTIME:
         # DEBUG runtime
-        cxxflags = ('/MDd /Zi /D_DEBUG /Od '
-                    '/DWXUSINGDLL /W4').split()
+        cxxflags = ('/MDd /Zi /D_DEBUG /Od /W4').split()
+    else:
+        # RELEASE runtime
+        cxxflags = ('/MD').split()
 
-    cxxflags.extend(['/DWIN32',
+    cxxflags.extend(['/DWXUSINGDLL'
+                     '/DWIN32',
                      '/D__WXMSW__',
                      '/D_UNICODE',
                      '/DwxUSE_GRAPHICS_CONTEXT=1',
@@ -74,7 +85,9 @@ elif platform_name == 'msw':
         lflags.append('/LTCG')
 
     if WXDEBUG:
-        cxxflags.extend(['/D__WXDEBUG__', '/D__NO_VC_CRTDBG__'])
+        cxxflags.extend(['/D__WXDEBUG__'])
+        if not DEBUG_RUNTIME:
+            cxxflags.extend(['/D__NO_VC_CRTDBG__'])
 
     if DEBUG_SYMBOLS: # debug
         if '/Zi' not in cxxflags:

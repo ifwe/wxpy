@@ -11,10 +11,10 @@ def test_Popup():
 
     assert p.GetRect() == r
 
-    p.Rect = wx.Rect(40, 40, 100, 100)
+    p.Rect = r2 = wx.Rect(40, 40, 100, 100)
     assert p.Rect == (40, 40, 100, 100), repr(p.Rect)
-    assert p.GetPosition() == (40, 40)
-    assert p.GetSize() == (100, 100)
+    assert p.GetPosition() == p.Position == r2.Position == (40, 40)
+    assert p.GetSize() == p.Size == r2.Size == (100, 100)
     f.Show()
 
 

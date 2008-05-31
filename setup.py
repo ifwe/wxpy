@@ -16,6 +16,8 @@ from path import path
 class wxUSE(object):
     STC = True
     HTML = True
+    WEBVIEW = True
+
 
 def build():
     if wxpyconfig.platform_name == 'msw':
@@ -25,6 +27,7 @@ def build():
         os.utime('src/html.sip', None)
         os.utime('contrib/stc/stc.sip', None)
 
+
     extensions = [wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip'], libs = ['user32.lib'])]
 
     if wxUSE.HTML:
@@ -32,6 +35,16 @@ def build():
 
     if wxUSE.STC:
         extensions.append(wxpysetup.make_sip_ext('_wxstc', ['contrib/stc/stc.sip']))
+
+    if wxUSE.WEBVIEW:
+        wk = r'c:\dev\digsby\build\msw\webkit'
+
+        ext = wxpysetup.make_sip_ext('_webview', ['src/webview.sip'],
+                                     include = wk + r'\webkit',
+                                     libs = [wk + r'\WebKitBuild\Release\wxwebkit.lib'],
+                                             cargs = ['/DWXUSINGDLL_WEBKIT'])
+        extensions.append(ext)
+
 
     generate_list_types()
 
