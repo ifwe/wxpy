@@ -23,4 +23,7 @@ build/
 src/generated/*.sip
 src/generated/sip_*.cpp
 src/generated/sipAPI_*.h
+src/generated/cache
+
+sipargs.txt
 

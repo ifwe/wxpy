@@ -1,80 +1,52 @@
-'''
-builds the wxpy extension
-'''
-
-from __future__ import with_statement
-
-import distutils.core
 import os
-import sipconfig
-import sipdistutils
-import wxpyconfig
-import wxpysetup
+import shutil
 
-from path import path
+import genlisttypes
+from wxpybuild.wxpyext import build_extension, WXWIN
 
-class wxUSE(object):
-    STC = True
-    HTML = True
-    WEBVIEW = True
+wxpy_modules = [
+    ('_wxcore', ['src/wx.sip']),
+    ('_wxhtml', ['src/html.sip']),
+    ('_wxstc',  ['contrib/stc/stc.sip']),
+]
 
-
-def build():
-    if wxpyconfig.platform_name == 'msw':
-        # no touch on windows
-        import os
-        os.utime('src/wx.sip', None)
-        os.utime('src/html.sip', None)
-        os.utime('contrib/stc/stc.sip', None)
-
-
-    extensions = [wxpysetup.make_sip_ext('_wxcore', ['src/wx.sip'], libs = ['user32.lib'])]
-
-    if wxUSE.HTML:
-        extensions.append(wxpysetup.make_sip_ext('_wxhtml', ['src/html.sip']))
-
-    if wxUSE.STC:
-        extensions.append(wxpysetup.make_sip_ext('_wxstc', ['contrib/stc/stc.sip']))
-
-    if wxUSE.WEBVIEW:
-        wk = r'c:\dev\digsby\build\msw\webkit'
-
-        ext = wxpysetup.make_sip_ext('_webview', ['src/webview.sip'],
-                                     include = wk + r'\webkit',
-                                     libs = [wk + r'\WebKitBuild\Release\wxwebkit.lib'],
-                                             cargs = ['/DWXUSINGDLL_WEBKIT'])
-        extensions.append(ext)
-
-
-    generate_list_types()
-
-    distutils.core.setup(name = 'wxpy',
-                         version = '1.0',
-                         ext_modules = extensions,
-                         cmdclass = {'build_ext': wxpysetup.wxpy_build_ext})
-
-    if wxpyconfig.platform_name == 'mac':
-        install()
-
-def install():
-    # TODO: figure out how to make distutils do this for us
-
-    # copy the finished shared libraries into the "wx" directory
-    # directly under this one
-    build_dir = './build/lib.macosx-10.5-i386-2.5/'
-    built_files = ['_wxcore.so', '_wxhtml.so']
-
-    for f in built_files:
-        (path(build_dir) / f).copy('./wx')
-
-    # write some build statistics
-    import os.path, time
-    with open('buildstats.txt', 'a') as f:
-        f.write('%s %s\n' % (time.time(), os.path.getsize(build_dir + '_wxcore.so')))
-
-def generate_list_types():
-    import genlisttypes
+def main():
     genlisttypes.generate()
+    build_extension('wxpy', wxpy_modules)
+
+    import os
+    if os.name == 'nt':
+        windows_install_pyds()
+
+def windows_install_pyds():
+
+    d = 'build/obj-msvs2005prj/'
+    for name, sources in wxpy_modules:
+        src, dest = d + name + '.dll', 'wx/' + name + '.pyd'
+        print 'copy %s --> %s' % (src, dest)
+
+        try_again = True
+        while try_again:
+            try:
+                shutil.copy2(src, dest)
+            except IOError, e:
+                print e
+                inp = raw_input('Retry? [Y|n] ')
+
+                if inp and not inp.startswith('y'):
+                    raise SystemExit(1)
+                else:
+                    try_again = True
+            else:
+                try_again = False
+
+
+
 
 if __name__ == '__main__':
-    build()
+    from traceback import print_exc
+    import sys
+
+    try: main()
+    except SystemExit: raise
+    except: print_exc(); sys.exit(1)

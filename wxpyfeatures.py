@@ -6,30 +6,33 @@ import wxpyconfig
 
 def iterincludes(flags):
     'Finds and returns all include directives in a list of commandline options.'
-    
+
     for flag in flags:
         if flag.startswith('-I') or flag.startswith('/I'):
             yield flag
 
-def find_setup_h(cxxflags):
+def find_setup_h(wxdir):
     'Given a list of cflags, returns the path to setup.h'
-    
+
     includes = []
     setups   = []
-    
+
+    # TODO
+    return path(wxdir) / 'include' / 'wx' / 'msw' / 'setup.h'
+
     for include in iterincludes(cxxflags):
         p = path(include[2:]) / 'wx' / 'setup.h'
         includes.append(p)
         if p.exists():
             setups.append(p)
-    
+
     if not setups:
         raise Exception('could not find setup.h (searched: %r)' % includes)
     elif len(setups) > 1:
         raise Exception('multiple setup.h files found')
-    
+
     return setups[0]
-    
+
 # pattern for finding "#define wxUSE_XXX" flags
 use_define = re.compile('#define\s+(wxUSE_\w+)\s+(\w+)')
 use_enabled = {'0': False, '1': True}
@@ -37,7 +40,7 @@ use_enabled = {'0': False, '1': True}
 def get_enabled_features(setup_h):
     '''
     Return a mapping of all wxUSE_XXX flags in a setup.h like
-    
+
     {'wxUSE_BUTTON': False}
     '''
     features = {}
@@ -48,7 +51,7 @@ def get_enabled_features(setup_h):
             if not flag.startswith('wxUSE_'):
                 raise ValueError('invalid match returned o`n line %d of %s: %r'
                                  % (i, setup_h, flag))
-            
+
             if enabled in use_enabled:
                 features[flag] = use_enabled[enabled]
             elif enabled in features:
@@ -63,13 +66,13 @@ def write_features(features, fileobj):
     for name in sorted(features):
         enabled = features[name]
         write(''.join(['%Feature ', name, '\n']))
-        
-def emit_features_file(destfile):
-    features = get_enabled_features(find_setup_h(wxpyconfig.cxxflags))
+
+def emit_features_file(wxdir, destfile):
+    features = get_enabled_features(find_setup_h(wxdir))
     with open(destfile, 'w') as f:
         f.write(features_header)
         write_features(features, f)
-        
+
     return features
 
 features_header = '''\
