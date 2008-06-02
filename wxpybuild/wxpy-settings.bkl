@@ -3,13 +3,12 @@
 <makefile>
     <set var="WX_UNICODE">1</set>
     <set var="WX_PYTHON">0</set>
-    <set var="WX_DEBUG">1</set>
+    <set var="WX_DEBUG">0</set>
     <set var="WX_SHARED">1</set>
     <include file="presets/wx.bkl"/>
-
+    <set var="DEBUG">0</set>
 
     <set var="BUILDDIR">obj-$(FORMAT)</set>
-    <set var="DEBUG">0</set>
 
     <template id="wxpy_build_settings">
         <warnings>max</warnings>
@@ -27,6 +26,11 @@
         </if>
     </template>
     <template id="wxpy_extension" template="wxpy_build_settings,wx">
+
+        <define>WXPY_PREC</define>
+        <precomp-headers>on</precomp-headers>
+        <precomp-headers-file>stdwx.cpp</precomp-headers-file>
+
 
         <include>c:\dev\wxWebKitBranch-2.8\contrib\include</include>
         <runtime-libs>dynamic</runtime-libs>

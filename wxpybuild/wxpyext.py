@@ -61,6 +61,7 @@ def build_extension(project_name, modules, includes = None):
 def build_nt(solution_name):
     vcbuild_opts = [
         solution_name,
+        '/htmllog:build.html',
         '/verbosity:detailed',
         '/nologo',    # leave out the MS copyright message
         '/showenv',
