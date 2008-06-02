@@ -21,3 +21,6 @@ build/
 .pydevproject
 
 src/generated/*.sip
+src/generated/sip_*.cpp
+src/generated/sipAPI_*.h
+
