@@ -35,7 +35,6 @@ def test_SizerClear():
 
     print 'BEFORE: button1 title is', b1.Label
     s.Clear(True) # test deleteWindows argument
-    print 'AFTER:  button1 title is', b1.Label
 
     assert sip.isdeleted(b1)
     assert sip.isdeleted(b2)
@@ -46,22 +45,31 @@ def test_WindowSetSizer():
     f = wx.Frame(None)
     b = wx.Button(f, -1, 'test')
 
-    s1 = f.Sizer = wx.BoxSizer(wx.HORIZONTAL)
+    s1 = wx.BoxSizer(wx.HORIZONTAL)
+    f.SetSizer(s1)
+    assert f.Sizer is s1
     s1.AddStretchSpacer(1)
     s1.Add(b)
 
-    s2 = f.Sizer = wx.BoxSizer(wx.VERTICAL)
+    s2 = wx.BoxSizer(wx.VERTICAL)
+    f.SetSizer(s2)
+    assert f.Sizer is s2
     s2.AddStretchSpacer(1)
     s2.Add(b)
 
     assert not sip.isdeleted(b)
     assert sip.isdeleted(s1)
-
-    f.Destroy()
+    return f
 
 def main():
     a = wx.PySimpleApp()
-    test_SizerClear().Destroy()
+
+    tests = [#test_SizerClear,
+             test_WindowSetSizer,
+             ]
+
+    for f in tests:
+        f().Destroy()
 
 if __name__ == '__main__':
     main()

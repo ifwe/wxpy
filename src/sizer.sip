@@ -226,6 +226,8 @@ class wxBoxSizer: wxSizer
 {
 public:
     wxBoxSizer(int orient);
+    virtual ~wxBoxSizer();
+
     void RecalcSizes();
 
     wxSize CalcMin();
@@ -286,6 +288,8 @@ class wxFlexGridSizer : wxSizer
 {
 public:
     wxFlexGridSizer(int rows, int cols, int vgap = 0, int hgap = 0);
+    virtual ~wxFlexGridSizer();
+
     void RecalcSizes();
 
     void AddGrowableRow(size_t idx, int proportion = 0);
@@ -311,6 +315,8 @@ class wxStaticBoxSizer : wxBoxSizer
 {
 public:
     wxStaticBoxSizer(wxStaticBox *box /Transfer/, int orient = wxHORIZONTAL);
+    virtual ~wxStaticBoxSizer();
+
     void RecalcSizes();
 
     wxStaticBox* GetStaticBox();

@@ -362,11 +362,12 @@ public:
         const bool deleteOld = a1;
 
         printf("wxWindow::SetSizer(%p, deleteOld = %d)\n", a0, deleteOld);
-        sipCpp->SetSizer(a0, deleteOld);
-/*
+
         wxSizer* oldSizerCpp = sipCpp->GetSizer();
         if (oldSizerCpp) {
             printf("oldSizer was not NULL: %p\n", oldSizerCpp);
+        }
+        /*
             PyObject* oldSizerPy = sipGetWrapper(oldSizerCpp, sipClass_wxSizer);
             if (oldSizerPy) {
                 printf("oldSizer had a Python object: %p", oldSizerPy);
@@ -379,8 +380,8 @@ public:
                 }
             }
         }
-        sipCpp->SetSizer(a0, deleteOld);
 */
+        sipCpp->SetSizer(a0, deleteOld);
 %End
 
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
