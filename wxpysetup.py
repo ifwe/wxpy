@@ -129,7 +129,7 @@ def make_sip_ext(name, iface_files, include = None, libs = [], cargs = None):
     ext = Extension(name, iface_files, extra_compile_args = cargs, extra_link_args = largs)
     ext.extra_sip_includes = includes
 
-    if os.name == 'nt' and wxpyconfig.WXDEBUG:
+    if os.name == 'nt':
         # HACK! disutils wants to include /DNDEBUG but we
         # are using __WXDEBUG__, which needs it
         from distutils.msvc9compiler import MSVCCompiler

@@ -3,7 +3,9 @@
 class wxVScrolledWindow : wxPanel
 {
 %TypeHeaderCode
-    #include <wx/vscroll.h>
+#ifndef WXPY_PREC
+#include <wx/vscroll.h>
+#endif
 %End
 public:
     wxVScrolledWindow(wxWindow *parent /TransferThis/,
@@ -45,7 +47,9 @@ protected:
 class wxVListBox : wxVScrolledWindow
 {
 %TypeHeaderCode
-    #include <wx/vlbox.h>
+#ifndef WXPY_PREC
+#include <wx/vlbox.h>
+#endif
 %End
 
 public:

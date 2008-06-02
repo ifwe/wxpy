@@ -79,6 +79,9 @@ public:
 
     void SetWindow(wxWindow *window);
     void SetSizer(wxSizer *sizer);
+
+
+
     void SetSpacer(const wxSize& size);
     void SetSpacer(int width, int height);
 

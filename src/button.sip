@@ -19,7 +19,9 @@ class wxButton : wxControl
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/button.h>
+#endif
 %End
 
 public:

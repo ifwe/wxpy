@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/stockitem.h>
+#endif
 %End
 
 void wxWakeUpIdle();

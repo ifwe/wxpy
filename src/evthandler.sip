@@ -67,7 +67,9 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 %End // TypeCode
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/event.h>
+#endif
 %End
 
 public:

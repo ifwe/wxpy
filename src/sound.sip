@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/sound.h>
+#endif
 %End
 
 enum wxSoundFlags

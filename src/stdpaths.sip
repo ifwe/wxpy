@@ -1,7 +1,9 @@
 class wxStandardPaths
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/stdpaths.h>
+#endif
 %End
 
 public:

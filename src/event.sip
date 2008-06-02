@@ -8,7 +8,9 @@
 
 
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <list>
+#endif
 typedef std::list<PyObject*> callAfterCbList;
 
 class CallAfterCallback: public wxObject

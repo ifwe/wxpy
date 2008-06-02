@@ -1,4 +1,4 @@
-// SIP support for std::vector 
+// SIP support for std::vector
 // by Giovanni Bajo <rasky <at> develer.com>
 // Public domain
 
@@ -6,14 +6,16 @@
 // SIP generic implementation for std::vector<>
 // ****************************************************
 // ALas, this template-based generic implementation is valid only
-// if the element type is a SIP-wrapped type. For basic types (int, double, etc.) 
+// if the element type is a SIP-wrapped type. For basic types (int, double, etc.)
 // we are forced to cut & paste to provide a specialization.
 
 template<TYPE>
 %MappedType std::vector<TYPE>
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <vector>
+#endif
 %End
 
 %ConvertFromTypeCode
@@ -104,7 +106,9 @@ template<TYPE>
 %MappedType std::vector<double>
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <vector>
+#endif
 %End
 
 %ConvertFromTypeCode
@@ -185,7 +189,9 @@ template<TYPE>
 %MappedType std::vector<int>
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <vector>
+#endif
 %End
 
 %ConvertFromTypeCode
@@ -266,7 +272,9 @@ template<TYPE>
 %MappedType std::vector<unsigned int>
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <vector>
+#endif
 %End
 
 %ConvertFromTypeCode

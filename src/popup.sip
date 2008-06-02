@@ -1,7 +1,9 @@
 class wxPopupWindow : wxWindow
 {
 %TypeHeaderCode
-    #include <wx/popupwin.h>
+#ifndef WXPY_PREC
+#include <wx/popupwin.h>
+#endif
 %End
 public:
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE) /Transfer/;
@@ -22,7 +24,9 @@ public:
 class wxPopupTransientWindow : wxPopupWindow
 {
 %TypeHeaderCode
-    #include <wx/popupwin.h>
+#ifndef WXPY_PREC
+#include <wx/popupwin.h>
+#endif
 %End
 public:
     wxPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE) /Transfer/;

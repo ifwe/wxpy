@@ -108,7 +108,7 @@ enum wxSystemFeature
 {
     wxSYS_CAN_DRAW_FRAME_DECORATIONS = 1,
     wxSYS_CAN_ICONIZE_FRAME,
-    wxSYS_TABLET_PRESENT 
+    wxSYS_TABLET_PRESENT
 };
 
 
@@ -140,7 +140,9 @@ public:
 class wxSystemOptions : wxObject
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/sysopt.h>
+#endif
 %End
 public:
     wxSystemOptions();

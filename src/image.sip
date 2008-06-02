@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/mstream.h>
+#endif
 %End
 
 void wxInitAllImageHandlers();

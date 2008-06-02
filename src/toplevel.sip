@@ -70,7 +70,9 @@ class wxTopLevelWindow : wxWindow
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/toplevel.h>
+#endif
 %End
 public:
     virtual ~wxTopLevelWindow();
@@ -127,7 +129,9 @@ class wxFrame : wxTopLevelWindow
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/frame.h>
+#endif
 %End
 
 public:

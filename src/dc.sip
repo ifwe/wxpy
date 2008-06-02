@@ -332,7 +332,9 @@ public:
 class wxBufferedDC : wxMemoryDC
 {
 %TypeHeaderCode
-    #include <wx/dcbuffer.h>
+#ifndef WXPY_PREC
+#include <wx/dcbuffer.h>
+#endif
 %End
 
 public:
@@ -353,7 +355,9 @@ public:
 class wxBufferedPaintDC : wxBufferedDC
 {
 %TypeHeaderCode
-    #include <wx/dcbuffer.h>
+#ifndef WXPY_PREC
+#include <wx/dcbuffer.h>
+#endif
 %End
 
 public:
@@ -368,7 +372,9 @@ public:
 class wxAutoBufferedPaintDC : wxDC
 {
 %TypeHeaderCode
-    #include <wx/dcbuffer.h>
+#ifndef WXPY_PREC
+#include <wx/dcbuffer.h>
+#endif
 %End
 public:
     wxAutoBufferedPaintDC(wxWindow* win);

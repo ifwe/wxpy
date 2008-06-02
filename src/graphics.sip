@@ -1,7 +1,9 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/graphics.h>
 #include <wx/gdicmn.h>
 #include <wx/geometry.h>
+#endif
 %End
 
 
@@ -284,7 +286,9 @@ private:
 class wxGCDC :  wxDC
 {
 %TypeHeaderCode
-    #include "wx/dcgraph.h"
+#ifndef WXPY_PREC
+#include "wx/dcgraph.h"
+#endif
 %End
 public:
     wxGCDC(const wxWindowDC& dc);

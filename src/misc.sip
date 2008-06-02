@@ -1,6 +1,8 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/tooltip.h>
 #include <wx/caret.h>
+#endif
 %End
 
 %Include sound.sip

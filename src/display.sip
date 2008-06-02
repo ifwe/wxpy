@@ -1,6 +1,8 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/display.h>
 #include <wx/vidmode.h>
+#endif
 %End
 
 struct wxVideoMode
@@ -25,7 +27,7 @@ class wxDisplay
 public:
     wxDisplay(unsigned index = 0);
     ~wxDisplay();
-    
+
     static unsigned GetCount();
     static int GetFromPoint(const wxPoint& pt);
     static int GetFromWindow(wxWindow *window);

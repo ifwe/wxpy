@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/dnd.h>
+#endif
 %End
 
 enum

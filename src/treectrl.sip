@@ -3,7 +3,9 @@
 */
 
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/treectrl.h>
+#endif
 %End
 
 enum

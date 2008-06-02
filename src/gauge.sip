@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gauge.h>
+#endif
 %End
 
 enum {
@@ -29,5 +31,5 @@ public:
     int GetShadowWidth() const;
     void SetBezelFace(int w);
     int GetBezelFace() const;
- 
+
 };

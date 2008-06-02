@@ -1,7 +1,8 @@
 %ModuleHeaderCode
 void add_event(PyObject* module_dict, const char* name, ...);
-
+#ifndef WXPY_PREC
 #include <wx/splitter.h>
+#endif
 %End
 
 %PostInitialisationCode

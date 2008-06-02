@@ -12,6 +12,12 @@ released under the wxWidgets License
 // properties from GetXXX() and SetXXX() methods.
 %SIPOptions (RenameWx, AutoProperties)
 
+%UnitCode
+#ifdef WXPY_PREC
+#include "stdwx.h"
+#endif
+%End
+
 %ModuleHeaderCode
 #define WXSIP 1
 %End

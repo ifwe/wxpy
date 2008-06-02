@@ -6,7 +6,9 @@ class wxPoint
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gdicmn.h>
+#endif
 %End
 
 public:
@@ -75,7 +77,9 @@ public:
 class wxSize
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gdicmn.h>
+#endif
 %End
 
 public:
@@ -152,7 +156,9 @@ class wxRect
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gdicmn.h>
+#endif
 %End
 
 public:

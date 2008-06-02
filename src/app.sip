@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/app.h>
+#endif
 %End
 
 int EntryStart();

@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/listctrl.h>
+#endif
 %End
 
 enum {

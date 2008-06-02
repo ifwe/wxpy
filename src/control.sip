@@ -6,7 +6,9 @@ class wxControl : wxWindow
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/control.h>
+#endif
 %End
 
 public:

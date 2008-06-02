@@ -6,8 +6,10 @@ class wxObject
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/object.h>
 #include <wx/gbsizer.h>
+#endif
 %End
 
 %ConvertToSubClassCode

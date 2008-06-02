@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include <wx/clipbrd.h>
+#endif
 %End
 
 class wxClipboard : wxObject

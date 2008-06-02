@@ -5,8 +5,10 @@
 %MappedType wxMenuItemList
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/list.h>
 #include <wx/window.h>
+#endif
 %End
 
 %ConvertToTypeCode

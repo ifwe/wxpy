@@ -1,7 +1,9 @@
 class wxGBPosition
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
+#endif
 %End
 public:
     wxGBPosition(int row = 0, int col = 0);
@@ -34,7 +36,9 @@ public:
 class wxGBSpan
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
+#endif
 %End
 
 public:
@@ -69,7 +73,9 @@ public:
 class wxGBSizerItem: wxSizerItem
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
+#endif
 %End
 
 public:
@@ -91,7 +97,9 @@ public:
 class wxGridBagSizer : wxFlexGridSizer
 {
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
+#endif
 %End
 
 public:

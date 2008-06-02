@@ -1,5 +1,7 @@
 %ModuleHeaderCode
+#ifndef WXPY_PREC
 #include "wx/renderer.h"
+#endif
 %End
 
 enum

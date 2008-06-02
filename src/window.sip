@@ -11,8 +11,10 @@ class wxWindow : wxEvtHandler
 {
 
 %TypeHeaderCode
+#ifndef WXPY_PREC
 #include <wx/window.h>
 #include <wx/dynlib.h>
+#endif
 
 #ifdef __WXMSW__
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
@@ -359,29 +361,32 @@ public:
 
     bool Layout();
 
-    void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true );
-/*%MethodCode
-        wxSizer* oldSizerCpp = sipCpp->GetSize();
+    void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true);
+%MethodCode
+        const bool deleteOld = a1;
+
+        printf("wxWindow::SetSizer(%p, deleteOld = %d)\n", a0, deleteOld);
+        sipCpp->SetSizer(a0, deleteOld);
+/*
+        wxSizer* oldSizerCpp = sipCpp->GetSizer();
         if (oldSizerCpp) {
             printf("oldSizer was not NULL: %p\n", oldSizerCpp);
-            PyObject* oldSizerPy = sipGetWrapper(oldSizer, sipClass_wxSizer);
+            PyObject* oldSizerPy = sipGetWrapper(oldSizerCpp, sipClass_wxSizer);
             if (oldSizerPy) {
                 printf("oldSizer had a Python object: %p", oldSizerPy);
-                if (deleteOld) {
-                    // TODO: what if it's already owned by C++?
-                    sipTransferTo(oldSizerPy, NULL);
-                } else {
-
+                if (deleteOld && sipWrapper_Check(oldSizerPy)) {
+                    sipWrapper* w = (sipWrapper*)oldSizerPy;
+                    printf("UNHOOKING SIP OBJECT\n");
+                    removeFromParent(w);
+                    sipResetPyOwned(w);
+                    w->u.cppPtr = NULL;
                 }
             }
-
-
         }
-
-
         sipCpp->SetSizer(a0, deleteOld);
-%End
 */
+%End
+
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
 
     wxSizer *GetSizer() const;

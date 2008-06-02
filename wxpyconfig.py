@@ -4,7 +4,7 @@
 
 from distutils.debug import DEBUG
 
-if True:
+if False and DEBUG:
     DEBUG_RUNTIME = True
     WX_FLAG = 'ud'                       # the postfix on .libs and .dlls
     WXDEBUG = True                       # __WXDEBUG__
