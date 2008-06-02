@@ -13,9 +13,7 @@ released under the wxWidgets License
 %SIPOptions (RenameWx, AutoProperties)
 
 %UnitCode
-#ifdef WXPY_PREC
-#include "stdwx.h"
-#endif
+#include "stdwxpy.h"
 %End
 
 %ModuleHeaderCode

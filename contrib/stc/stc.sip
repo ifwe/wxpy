@@ -5,6 +5,10 @@
 %Module _wxstc
 %Import wx.sip
 
+%UnitCode
+#include "stdwxpy.h"
+%End
+
 %ModuleHeaderCode
 #include <wx/wx.h>
 #include <wx/dnd.h>

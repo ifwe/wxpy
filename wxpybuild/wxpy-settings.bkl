@@ -25,13 +25,9 @@
             <debug-runtime-libs>off</debug-runtime-libs>
         </if>
     </template>
+
     <template id="wxpy_extension" template="wxpy_build_settings,wx">
-
-        <define>WXPY_PREC</define>
-        <precomp-headers>on</precomp-headers>
-        <precomp-headers-file>stdwx.cpp</precomp-headers-file>
-
-
+        <include>../src</include>
         <include>c:\dev\wxWebKitBranch-2.8\contrib\include</include>
         <runtime-libs>dynamic</runtime-libs>
 
@@ -58,6 +54,15 @@
 
     </template>
 
-    <set var="WX3RDPARTYLIBPOSTFIX">d</set>
+    <template id="wxpy_core" template="wxpy_extension">
+        <define>WXPY_PREC</define>
+        <precomp-headers>on</precomp-headers>
+
+        <sources>../src/stdwxpy.cpp</sources>
+        <precomp-headers-gen>../src/stdwxpy.cpp</precomp-headers-gen>
+        <precomp-headers-header>stdwxpy.h</precomp-headers-header>
+        <precomp-headers-file>../src/stdwxpy.cpp</precomp-headers-file>
+        <!--<precomp-headers-location>../src/generated</precomp-headers-location>-->
+    </template>
 
 </makefile>

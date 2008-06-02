@@ -4,6 +4,11 @@
 
 %Import wx.sip
 
+%UnitCode
+#include "stdwxpy.h"
+%End
+
+
 %ModuleHeaderCode
 #include <wx/html/htmlwin.h>
 %End

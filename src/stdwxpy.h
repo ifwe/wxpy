@@ -63,4 +63,8 @@
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>
 #endif
+
+#include <vector>
+#include <list>
+
 #endif // WXPY_PREC

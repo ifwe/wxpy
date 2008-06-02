@@ -12,8 +12,10 @@ from wxpybuild.runsip import SIPGenerator, run
 from wxpybuild.path import path
 from wxpyfeatures import emit_features_file
 
-OUTPUT_DIR       = path('build')
-GENERATED_SRC_DIR = path('src/generated')
+OUTPUT_DIR        = path('build')
+SRC_DIR           = path('src')
+GENERATED_SRC_DIR = SRC_DIR / 'generated'
+
 VERBOSE = True
 sip_cfg = sipconfig.Configuration()
 
@@ -62,7 +64,6 @@ def build_nt(solution_name):
     vcbuild_opts = [
         solution_name,
         '/htmllog:build.html',
-        '/verbosity:detailed',
         '/nologo',    # leave out the MS copyright message
         '/showenv',
         '/time',
@@ -84,7 +85,14 @@ def runsip(modules, features, includes = None):
 
     for module_name, sources in modules:
         sip_sources = sipgen.generate_sources(module_name, sources, [os.path.abspath('./src'), path(__file__).parent.parent / 'src'])
-        add_wxpy_module(makefile, module_name, sip_sources, includes)
+
+        # TODO: remove this awful hack
+        if module_name == '_wxcore':
+            template = 'wxpy_core'
+        else:
+            template = 'wxpy_extension'
+
+        add_wxpy_module(makefile, module_name, sip_sources, includes, template)
 
     return makefile
 
@@ -141,10 +149,10 @@ def build_path(p):
 def add_includes(module, inc_paths):
     return [xmlnode(module, 'include', p) for p in inc_paths]
 
-def add_wxpy_module(makefile, module_name, sources, include_paths = None):
+def add_wxpy_module(makefile, module_name, sources, include_paths = None, template = None):
     module = xmlnode(makefile, 'module',
                      id = module_name,
-                     template = 'wxpy_extension')
+                     template = 'wxpy_extension' if template is None else template)
 
     dllname = xmlnode(module, 'dllname', '%s' % module_name)
 

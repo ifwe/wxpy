@@ -20,11 +20,9 @@ public:
     // string access
     size_t GetCount() const;
     int FindString(const wxString& s) const;
-    
+
     wxString GetString(int n) const;
     void SetString(int n, const wxString& label);
-//    %pythoncode { GetItemLabel = GetString };
-//    %pythoncode { SetItemLabel = SetString };
 
     // change the individual radio button state
     void Enable(unsigned int n, bool enable = true) /PyName=EnableItem/;

@@ -15,12 +15,6 @@ class wxWindow : wxEvtHandler
 #include <wx/window.h>
 #include <wx/dynlib.h>
 #endif
-
-#ifdef __WXMSW__
-wxWindow *wxFindWinFromHandle(WXHWND hWnd);
-#endif
-
-
 %End
 
 public:
@@ -143,12 +137,14 @@ public:
                                        const wxWindow *parent = NULL );
     static wxWindow *FindWindowByLabel( const wxString& label,
                                         const wxWindow *parent = NULL );
+/*
 %If (WXMSW)
     static wxWindow *FindWindowByHandle(long hwnd);
 %MethodCode
     sipRes = wxFindWinFromHandle((WXHWND)a0);
 %End
 %End
+*/
 
     wxEvtHandler *GetEventHandler() const;
     void SetEventHandler( wxEvtHandler *handler );
