@@ -40,6 +40,8 @@ class wxPowerEvent : wxEvent
 {
 public:
     wxPowerEvent(wxEventType evtType);
+    virtual ~wxPowerEvent();
+
     void Veto();
     bool IsVetoed() const;
 };

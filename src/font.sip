@@ -228,7 +228,7 @@ public:
             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     wxFont(const wxFont&);
 
-    ~wxFont();
+    virtual ~wxFont();
 
     int GetPointSize() const;
     wxSize GetPixelSize() const;
@@ -274,7 +274,7 @@ class wxFontEnumerator {
 
 public:
     wxFontEnumerator();
-    ~wxFontEnumerator();
+    virtual ~wxFontEnumerator();
 
     wxArrayString GetEncodings();
     wxArrayString GetFacenames();

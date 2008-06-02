@@ -22,6 +22,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxCheckBoxNameStr);
+    virtual ~wxCheckBox();
 
     void SetValue(bool value);
     bool GetValue() const;

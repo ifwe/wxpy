@@ -14,6 +14,7 @@ public:
                       const wxSize& size = wxDefaultSize,
                       long style = 0,
                       const wxString& name = wxPanelNameStr);
+    virtual ~wxVScrolledWindow();
 
     void SetLineCount(size_t count);
     bool ScrollToLine(size_t line);
@@ -53,6 +54,8 @@ class wxVListBox : wxVScrolledWindow
 %End
 
 public:
+    virtual ~wxVListBox();
+
     size_t GetItemCount() const;
     bool HasMultipleSelection() const;
     int GetSelection() const;
@@ -78,6 +81,7 @@ public:
     void SetMargins(wxCoord x, wxCoord y);
 
     void SetSelectionBackground(const wxColour& col);
+
 protected:
     wxVListBox(wxWindow *parent /TransferThis/,
                wxWindowID id = wxID_ANY,
@@ -86,7 +90,6 @@ protected:
                long style = 0,
                const wxString& name = wxVListBoxNameStr);
 
-    virtual ~wxVListBox();
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
     virtual void OnDrawSeparator(wxDC&, wxRect&, size_t) const;
     virtual wxCoord OnMeasureItem(size_t n) const = 0;

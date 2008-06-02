@@ -13,5 +13,5 @@ wxRegion RegionFromBitmap(const wxBitmap& bitmap);
 class wxRegion
 {
     wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
-    ~wxRegion();
+    virtual ~wxRegion();
 };

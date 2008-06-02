@@ -12,6 +12,7 @@ class wxMenu : wxEvtHandler
 {
 public:
     wxMenu(const wxString& title = wxEmptyString, long style = 0) /Transfer/;
+    virtual ~wxMenu();
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;
     wxMenuItem* AppendSeparator() /Transfer/;
@@ -134,6 +135,8 @@ class wxMenuBar : wxWindow
 {
 public:
     wxMenuBar(long style = 0);
+    virtual ~wxMenuBar();
+
     bool Append(wxMenu *menu, const wxString& title);
     bool Insert(size_t pos, wxMenu *menu, const wxString& title);
     size_t GetMenuCount() const;
@@ -191,7 +194,7 @@ public:
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu* subMenu = NULL);
-    ~wxMenuItem();
+    virtual ~wxMenuItem();
 
     wxMenu *GetMenu() const;
     void SetMenu(wxMenu* menu);

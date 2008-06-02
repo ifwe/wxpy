@@ -47,6 +47,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style=wxSP_3D,
                      const wxString& name = wxT("wxSplitterWindow"));
+    virtual ~wxSplitterWindow();
 
     wxWindow * GetWindow1() const;
     wxWindow * GetWindow2() const;
@@ -80,6 +81,7 @@ class wxSplitterEvent : wxNotifyEvent
 public:
     wxSplitterEvent(wxEventType type = wxEVT_NULL,
                     wxSplitterWindow *splitter = NULL);
+    virtual ~wxSplitterEvent();
 
     void SetSashPosition(int pos);
     int GetSashPosition() const;

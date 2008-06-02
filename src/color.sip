@@ -17,7 +17,7 @@ wxColour NamedColour(const wxString& name);
 class wxColour : wxGDIObject {
 public:
     wxColour(byte red = 0, byte green = 0, byte blue = 0, byte alpha = 0);
-    ~wxColour();
+    virtual ~wxColour();
 
     wxString GetAsString(int flags);
 
@@ -63,7 +63,7 @@ int __len__();
 class wxColourDatabase {
 public:
     wxColourDatabase();
-    ~wxColourDatabase();
+    virtual ~wxColourDatabase();
 
     // find colour by name or name for the given colour
     wxColour Find(const wxString& name) const;

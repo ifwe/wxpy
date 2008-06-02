@@ -74,6 +74,8 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 public:
     wxEvtHandler();
+    virtual ~wxEvtHandler();
+
 
     wxEvtHandler* GetNextHandler();
     wxEvtHandler* GetPreviousHandler();

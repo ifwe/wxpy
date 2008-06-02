@@ -14,6 +14,8 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxStaticTextNameStr);
+    virtual ~wxStaticText();
+
 
     void Wrap(int width);
 };
@@ -33,6 +35,8 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
+    virtual ~wxStaticBox();
+
 };
 
 class wxStaticLine : wxControl
@@ -49,6 +53,8 @@ public:
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
                   const wxString& name = wxStaticLineNameStr);
+    virtual ~wxStaticLine();
+
     bool IsVertical() const;
     static int GetDefaultSize();
 };
@@ -69,6 +75,8 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxString& name = wxStaticBitmapNameStr);
+    virtual ~wxStaticBitmap();
+
     wxBitmap GetBitmap();
     void SetBitmap(const wxBitmap& bitmap);
     void SetIcon(const wxIcon& icon);

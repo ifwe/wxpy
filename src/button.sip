@@ -33,6 +33,7 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxButtonNameStr);
+    virtual ~wxButton();
 
     void SetDefault();
     static wxSize GetDefaultSize();

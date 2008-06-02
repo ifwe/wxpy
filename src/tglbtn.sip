@@ -20,6 +20,7 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxT("ToggleButton"));
+    virtual ~wxToggleButton();
 
     void SetValue(bool value);
     bool GetValue() const ;

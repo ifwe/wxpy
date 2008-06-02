@@ -106,6 +106,7 @@ public:
                const wxColour& colBack = wxNullColour,
                const wxFont& font = wxNullFont,
                wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
+    virtual ~wxTextAttr();
 
     static wxTextAttr Merge(const wxTextAttr& base, const wxTextAttr& overlay);
     void Merge(const wxTextAttr& overlay);
@@ -158,6 +159,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxTextCtrlNameStr);
+    virtual ~wxTextCtrl();
 
      wxString GetValue() const;
      bool IsEmpty() const;

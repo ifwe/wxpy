@@ -125,6 +125,7 @@ public:
 
     // from file
     wxImage(const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1);
+    virtual ~wxImage();
 
     wxImage Scale( int width, int height, int quality = wxIMAGE_QUALITY_NORMAL );
     wxImage ResampleBox(int width, int height) const;
@@ -209,5 +210,4 @@ public:
     sipRes = sipCpp->IsOk();
 %End
 
-    ~wxImage();
 };

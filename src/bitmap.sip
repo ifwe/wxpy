@@ -4,7 +4,7 @@ class wxMask : wxObject
 {
 public:
     wxMask(const wxBitmap& bitmap, const wxColour& colour = wxNullColour);
-    ~wxMask();
+    virtual ~wxMask();
 };
 
 wxBitmap wxBitmapFromIcon(const wxIcon& icon);
@@ -34,8 +34,9 @@ public:
     wxBitmap();
     wxBitmap(const wxString& filename, long type = wxBITMAP_TYPE_ANY);
 
-    bool IsOk();
+    virtual ~wxBitmap();
 
+    bool IsOk();
     bool Ok();
 %MethodCode
         sipRes = sipCpp->IsOk();
@@ -74,9 +75,4 @@ public:
     void UseAlpha();
 
     // non zero
-
-
-
-
-    ~wxBitmap();
 };

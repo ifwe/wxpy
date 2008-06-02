@@ -30,6 +30,7 @@ public:
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxSliderNameStr);
+    virtual ~wxSlider();
 
     int GetValue() const;
     void SetValue(int value);

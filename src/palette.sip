@@ -1,6 +1,6 @@
 class wxPalette: wxGDIObject {
     wxPalette();
-    ~wxPalette();
+    virtual ~wxPalette();
     int GetPixel(byte red, byte green, byte blue);
     int GetColoursCount() const;
 };

@@ -24,6 +24,8 @@ enum {
 class wxBookCtrlBase : wxControl
 {
 public:
+    virtual ~wxBookCtrlBase();
+
     size_t GetPageCount() const;
     wxWindow *GetPage(size_t n);
     wxWindow* GetCurrentPage() const;
@@ -83,6 +85,7 @@ class wxBookCtrlBaseEvent : wxNotifyEvent
 public:
     wxBookCtrlBaseEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                     int nSel = -1, int nOldSel = -1);
+    virtual ~wxBookCtrlBaseEvent();
 
     int GetSelection() const;
     void SetSelection(int nSel);
@@ -146,6 +149,8 @@ class wxNotebookEvent : wxBookCtrlBaseEvent
 public:
     wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                     int nSel = -1, int nOldSel = -1);
+    virtual ~wxNotebookEvent();
+
 };
 
 %PostInitialisationCode

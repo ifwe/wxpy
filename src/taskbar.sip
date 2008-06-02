@@ -21,7 +21,7 @@ class wxTaskBarIcon : wxEvtHandler
 {
 public:
     wxTaskBarIcon() /Transfer/;
-    ~wxTaskBarIcon();
+    virtual ~wxTaskBarIcon();
 
     void Destroy();
 %MethodCode
@@ -41,4 +41,5 @@ class wxTaskBarIconEvent : wxEvent
 {
 public:
     wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon);
+    virtual ~wxTaskBarIconEvent();
 };

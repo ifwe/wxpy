@@ -19,6 +19,8 @@ public:
               long style=0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name=wxControlNameStr);
+    virtual ~wxControl();
+
     //void Command(wxCommandEvent&);
     //const wxString& GetLabel() const;
     //const wxString& GetLabelText() const;
@@ -45,6 +47,7 @@ public:
     unsigned int GetCount() const = 0;
     wxString GetString(unsigned int n) const = 0;
     void SetSelection(int n) = 0;
+
 private:
     wxItemContainer();
 };

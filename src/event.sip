@@ -17,7 +17,7 @@ class CallAfterCallback: public wxObject
 {
 public:
     CallAfterCallback() {}
-    ~CallAfterCallback() {}
+    virtual ~CallAfterCallback() {}
 
     void EventThunker(wxEvent& event);
 };
@@ -255,7 +255,7 @@ public:
     void Skip(bool skip = true);
     bool GetSkipped() const;
 
-    ~wxEvent();
+    virtual ~wxEvent();
 
     //wxEvent *Clone(void) const = 0;
 private:
@@ -275,6 +275,7 @@ class wxPyEvent : wxEvent
 {
 public:
     wxPyEvent();
+    virtual ~wxPyEvent();
 };
 
 
@@ -282,12 +283,14 @@ class wxSysColourChangedEvent : wxEvent
 {
 public:
     wxSysColourChangedEvent();
+    virtual ~wxSysColourChangedEvent();
 };
 
 class wxInitDialogEvent : wxEvent
 {
 public:
     wxInitDialogEvent();
+    virtual ~wxInitDialogEvent();
 };
 
 
@@ -296,6 +299,7 @@ class wxScrollWinEvent : wxEvent
 public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
                      int pos = 0, int orient = 0);
+    virtual ~wxScrollWinEvent();
 
     int GetOrientation() const;
     int GetPosition() const;
@@ -310,6 +314,8 @@ class wxMouseEvent : wxEvent
 {
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
+    virtual ~wxMouseEvent();
+
     bool IsButton() const;
     bool ButtonDown(int but = wxMOUSE_BTN_ANY) const;
     bool ButtonDClick(int but = wxMOUSE_BTN_ANY) const;
@@ -361,6 +367,8 @@ class wxKeyEvent: wxEvent
 {
 public:
     wxKeyEvent(wxEventType eventType = wxEVT_NULL);
+    virtual ~wxKeyEvent();
+
     int GetModifiers() const;
     bool ControlDown() const;
     bool MetaDown() const;
@@ -381,6 +389,8 @@ class wxCommandEvent : wxEvent
 {
 public:
     wxCommandEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
+    virtual ~wxCommandEvent();
+
     int GetSelection() const;
     wxString GetString() const;
     bool IsChecked() const;
@@ -394,6 +404,8 @@ class wxNotifyEvent : wxCommandEvent
 {
 public:
     wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
+    virtual ~wxNotifyEvent();
+
     void Veto();
     void Allow();
     void IsAllowed();
@@ -403,6 +415,8 @@ class wxActivateEvent: wxEvent
 {
 public:
     wxActivateEvent(wxEventType eventType = 0, bool active = true, int id = 0);
+    virtual ~wxActivateEvent();
+
     bool GetActive() const;
 };
 
@@ -412,6 +426,7 @@ public:
     wxContextMenuEvent(wxEventType type = wxEVT_NULL,
                        wxWindowID winid = 0,
                        const wxPoint& pt = wxDefaultPosition);
+    virtual ~wxContextMenuEvent();
 
     //const wxPoint& GetPosition() const;
     void SetPosition(const wxPoint& pos);
@@ -421,6 +436,7 @@ class wxMenuEvent : wxEvent
 {
 public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = NULL);
+    virtual ~wxMenuEvent();
     int GetMenuId() const;
     bool IsPopup() const;
     wxMenu* GetMenu() const;
@@ -430,6 +446,7 @@ class wxCloseEvent : wxEvent
 {
 public:
     wxCloseEvent(wxEventType type = wxEVT_NULL, int winid = 0);
+    virtual ~wxCloseEvent();
     void SetLoggingOff(bool logOff);
     bool GetLoggingOff() const;
     void Veto(bool veto = true);
@@ -442,6 +459,7 @@ class wxShowEvent : wxEvent
 {
 public:
     wxShowEvent(int winid = 0, bool show = false);
+    virtual ~wxShowEvent();
 
     void SetShow(bool show);
     bool GetShow() const;
@@ -451,6 +469,8 @@ class wxIconizeEvent: wxEvent
 {
 public:
     wxIconizeEvent(int id = 0, bool iconized = true);
+    virtual ~wxIconizeEvent();
+
     bool Iconized();
 };
 
@@ -458,6 +478,8 @@ class wxMaximizeEvent: wxEvent
 {
 public:
     wxMaximizeEvent(int id = 0);
+    virtual ~wxMaximizeEvent();
+
 };
 
 class wxDropFilesEvent: wxEvent
@@ -477,6 +499,8 @@ class wxUpdateUIEvent : wxCommandEvent
 {
 public:
     wxUpdateUIEvent(wxWindowID commandId = 0);
+    virtual ~wxUpdateUIEvent();
+
     bool GetChecked() const;
     bool GetEnabled() const;
     bool GetShown() const;
@@ -507,6 +531,8 @@ class wxIdleEvent : wxEvent
 {
 public:
     wxIdleEvent();
+    virtual ~wxIdleEvent();
+
     void RequestMore(bool needMore = true);
     bool MoreRequested() const;
     static void SetMode(wxIdleMode mode);
@@ -519,6 +545,8 @@ class wxPaintEvent : wxEvent
 {
 public:
     wxPaintEvent(int Id = 0);
+    virtual ~wxPaintEvent();
+
 };
 
 
@@ -526,12 +554,16 @@ class wxNcPaintEvent : wxEvent
 {
 public:
     wxNcPaintEvent(int winid = 0);
+    virtual ~wxNcPaintEvent();
+
 };
 
 class wxEraseEvent : wxEvent
 {
 public:
     wxEraseEvent(int Id = 0, wxDC *dc = NULL);
+    virtual ~wxEraseEvent();
+
     wxDC * GetDC() const;
 };
 

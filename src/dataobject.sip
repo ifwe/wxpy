@@ -35,9 +35,9 @@ wxDataFormat CustomDataFormat(const wxString& format);
 
 class wxDataFormat {
 public:
-    wxDataFormat( wxDataFormatId type );
+    wxDataFormat(wxDataFormatId type);
     //wxDataFormat(const wxString& format);
-    ~wxDataFormat();
+    virtual ~wxDataFormat();
 
     bool operator==(wxDataFormatId format) const;
     bool operator!=(wxDataFormatId format) const;
@@ -65,7 +65,7 @@ public:
     };
 
     // wxDataObject();  // ***  It's an ABC.
-    ~wxDataObject();
+    virtual ~wxDataObject();
 
     wxDataFormat GetPreferredFormat(Direction dir = Get) const;
     size_t GetFormatCount(Direction dir = Get) const;
@@ -161,6 +161,8 @@ private:
 class wxDataObjectSimple : wxDataObject {
 public:
     wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid);
+    virtual ~wxDataObjectSimple();
+
     const wxDataFormat& GetFormat();
     void SetFormat(const wxDataFormat& format);
      size_t GetDataSize() const;
@@ -221,6 +223,7 @@ class wxDataObjectComposite : wxDataObject
 {
 public:
     wxDataObjectComposite();
+    virtual ~wxDataObjectComposite();
 
     void Add(wxDataObjectSimple *dataObject /Transfer/, bool preferred = false);
     wxDataFormat GetReceivedFormat() const;
@@ -231,6 +234,8 @@ private:
 class wxTextDataObject : wxDataObjectSimple {
 public:
     wxTextDataObject(const wxString& text = wxEmptyString);
+    virtual ~wxTextDataObject();
+
     size_t GetTextLength();
     wxString GetText();
     void SetText(const wxString& text);
@@ -241,6 +246,8 @@ private:
 class wxBitmapDataObject : wxDataObjectSimple {
 public:
     wxBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap);
+    virtual ~wxBitmapDataObject();
+
     wxBitmap GetBitmap() const;
     void SetBitmap(const wxBitmap& bitmap);
 private:
@@ -252,6 +259,8 @@ class wxFileDataObject : wxDataObjectSimple
 {
 public:
     wxFileDataObject();
+    virtual ~wxFileDataObject();
+
     const SIP_PYOBJECT GetFilenames();
 %MethodCode
         PyErr_SetString(PyExc_NotImplementedError, "GetFilenames is not implemented");
@@ -267,6 +276,7 @@ class wxCustomDataObject : wxDataObjectSimple {
 public:
     wxCustomDataObject(const wxDataFormat& format);
     wxCustomDataObject();
+    virtual ~wxCustomDataObject();
 
 /*
     %extend {
@@ -313,6 +323,7 @@ private:
 class wxURLDataObject : wxDataObject/*Composite*/ {
 public:
     wxURLDataObject(const wxString& url = wxEmptyString);
+    virtual ~wxURLDataObject();
 
     wxString GetURL();
     void SetURL(const wxString& url);

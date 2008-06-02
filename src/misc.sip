@@ -23,7 +23,7 @@
 class wxToolTip : wxObject {
 public:
     wxToolTip(const wxString &tip);
-    ~wxToolTip();
+    virtual ~wxToolTip();
 
     void SetTip(const wxString& tip);
     wxString GetTip();
@@ -39,7 +39,7 @@ private:
 class wxCaret {
 public:
     wxCaret(wxWindow* window, const wxSize& size);
-    ~wxCaret();
+    virtual ~wxCaret();
 
     bool IsOk();
     bool IsVisible();

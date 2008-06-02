@@ -25,7 +25,7 @@ class wxConfigBase {
 private:
     wxConfigBase();
 public:
-    ~wxConfigBase();
+    virtual ~wxConfigBase();
 
     enum EntryType
     {
@@ -107,7 +107,7 @@ public:
              const wxString& globalFilename = wxEmptyString,
              long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE);
 
-    ~wxConfig();
+    virtual ~wxConfig();
 };
 
 class wxFileConfig : wxConfigBase
@@ -122,7 +122,7 @@ public:
                  const wxString& globalFilename = wxEmptyString,
                  long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE);
 
-    ~wxFileConfig();
+    virtual ~wxFileConfig();
 };
 
 /*

@@ -85,6 +85,8 @@ enum wxHtmlURLType
 class wxHtmlLinkInfo : wxObject {
 public:
     wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString);
+    virtual ~wxHtmlLinkInfo();
+
     wxString GetHref();
     wxString GetTarget();
     //wxMouseEvent* GetEvent();
@@ -102,6 +104,8 @@ public:
                  const wxSize& size = wxDefaultSize,
                  int style = wxHW_DEFAULT_STYLE,
                  const wxString& name = wxT("HtmlWindow"));
+    virtual ~wxHtmlWindow();
+
 
     bool SetPage(const wxString& source);
     bool LoadPage(const wxString& location);
@@ -227,6 +231,7 @@ private:
 class wxHtmlWidgetCell : wxHtmlCell {
 public:
     wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
+    virtual ~wxHtmlWidgetCell();
 };
 
 
@@ -235,6 +240,7 @@ class wxHtmlWinTagHandler : wxHtmlTagHandler
 public:
     wxHtmlWinTagHandler();
     virtual ~wxHtmlWinTagHandler();
+
     void SetParser(wxHtmlParser *parser);
     wxHtmlWinParser* GetParser() const;
 

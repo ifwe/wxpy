@@ -37,7 +37,7 @@ class wxLog
 {
 public:
     wxLog();
-    ~wxLog();
+    virtual ~wxLog();
 
     static bool IsEnabled();
     static bool EnableLogging(bool doIt = true);
@@ -137,5 +137,5 @@ class wxLogNull
 {
 public:
     wxLogNull();
-    ~wxLogNull();
+    virtual ~wxLogNull();
 };

@@ -15,7 +15,7 @@ class wxColourData : wxObject
 {
 public:
     wxColourData();
-    ~wxColourData();
+    virtual ~wxColourData();
     bool GetChooseFull();
     wxColour GetColour();
     wxColour GetCustomColour(int i);
@@ -30,6 +30,7 @@ class wxColourDialog : wxDialog
 public:
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
     wxColourData& GetColourData();
+    virtual ~wxColourDialog();
 };
 
 wxColour wxGetColourFromUser(wxWindow *parent = NULL,
@@ -53,6 +54,8 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
+    virtual ~wxDirDialog();
+
     wxString GetPath();
     wxString GetMessage();
     void SetMessage(const wxString& message);
@@ -92,6 +95,7 @@ public:
                  const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                  long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition);
+    virtual ~wxFileDialog();
 
     void SetMessage(const wxString& message);
     void SetPath(const wxString& path);
@@ -124,6 +128,7 @@ public:
                         int choices=0, wxString* choices_array=NULL,
                         long style = wxCHOICEDLG_STYLE,
                         const wxPoint& pos = wxDefaultPosition);
+    virtual ~wxMultiChoiceDialog();
 
 
     //void SetSelections(const wxArrayInt& selections);
@@ -170,6 +175,8 @@ public:
                       long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition);
 
+    virtual ~wxTextEntryDialog();
+
     wxString GetValue();
     void SetValue(const wxString& value);
 };
@@ -183,6 +190,7 @@ public:
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition);
+    virtual ~wxPasswordEntryDialog();
 };
 
 %If (wxUSE_NUMBERDLG)
@@ -200,6 +208,7 @@ public:
                         const wxString& caption,
                         long value, long min, long max,
                         const wxPoint& pos = wxDefaultPosition);
+    virtual ~wxNumberEntryDialog();
     long GetValue();
 };
 
@@ -210,7 +219,7 @@ class wxFontData : wxObject
 {
 public:
     wxFontData();
-    ~wxFontData();
+    virtual ~wxFontData();
 
     void EnableEffects(bool enable);
 
@@ -235,6 +244,7 @@ class wxFontDialog : wxDialog
 public:
     wxFontDialog(wxWindow* parent, const wxFontData& data);
     wxFontData& GetFontData();
+    virtual ~wxFontDialog();
 };
 
 
@@ -255,6 +265,7 @@ public:
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK | wxCANCEL | wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition) /Transfer/;
+    virtual ~wxMessageDialog();
 };
 
 %End
@@ -277,11 +288,12 @@ enum {
 class wxProgressDialog : wxDialog {
 public:
 
-        wxProgressDialog(const wxString& title,
-                         const wxString& message,
-                         int maximum = 100,
-                         wxWindow* parent = NULL,
-                         int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL );
+    wxProgressDialog(const wxString& title,
+                     const wxString& message,
+                     int maximum = 100,
+                     wxWindow* parent = NULL,
+                     int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL );
+    virtual ~wxProgressDialog();
 
     bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip /Out/ = NULL);
     bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip /Out/ = NULL);
@@ -320,6 +332,7 @@ class wxFindDialogEvent : wxCommandEvent
 {
 public:
     wxFindDialogEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+    virtual ~wxFindDialogEvent();
 
     int GetFlags();
     const wxString& GetFindString();
@@ -339,7 +352,7 @@ class wxFindReplaceData : wxObject
 {
 public:
     wxFindReplaceData(int flags=0);
-    ~wxFindReplaceData();
+    virtual ~wxFindReplaceData();
     const wxString& GetFindString();
     const wxString& GetReplaceString();
     int GetFlags();
@@ -358,6 +371,7 @@ public:
                         wxFindReplaceData *data,
                         const wxString &title,
                         int style = 0);
+    virtual ~wxFindReplaceDialog();
 
     const wxFindReplaceData* GetData();
     void SetData(wxFindReplaceData *data);

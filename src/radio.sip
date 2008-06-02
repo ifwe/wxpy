@@ -10,6 +10,7 @@ public:
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr);
+    virtual ~wxRadioBox();
 
     void SetSelection(int n);
     int GetSelection() const;
@@ -56,6 +57,7 @@ public:
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = wxRadioButtonNameStr);
+    virtual ~wxRadioButton();
 
     bool GetValue();
     void SetValue(bool value);

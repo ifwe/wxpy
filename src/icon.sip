@@ -8,7 +8,7 @@ class wxIcon: wxGDIObject
 {
 public:
     wxIcon();
-    ~wxIcon();
+    virtual ~wxIcon();
 };
 
 
@@ -26,7 +26,8 @@ class wxIconBundle
 {
 public:
     wxIconBundle();
-    ~wxIconBundle();
+    virtual ~wxIconBundle();
+
     void AddIcon(const wxIcon& icon);
     void AddIcon(const wxString& file, long type) /PyName=AddIconFromFile/;
     const wxIcon& GetIcon( const wxSize& size ) const;

@@ -59,7 +59,7 @@ class wxGraphicsObject : wxObject
 {
 public :
     wxGraphicsObject(wxGraphicsRenderer* renderer = NULL);
-    ~wxGraphicsObject();
+    virtual ~wxGraphicsObject();
 
     bool IsNull() const;
     wxGraphicsRenderer* GetRenderer() const;
@@ -69,28 +69,28 @@ class wxGraphicsPen : wxGraphicsObject
 {
 public :
     wxGraphicsPen();
-    ~wxGraphicsPen();
+    virtual ~wxGraphicsPen();
 };
 
 class wxGraphicsBrush : wxGraphicsObject
 {
 public :
     wxGraphicsBrush();
-    ~wxGraphicsBrush();
+    virtual ~wxGraphicsBrush();
 };
 
 class wxGraphicsFont : wxGraphicsObject
 {
 public :
     wxGraphicsFont();
-    ~wxGraphicsFont();
+    virtual ~wxGraphicsFont();
 };
 
 class wxGraphicsMatrix : wxGraphicsObject
 {
 public :
 //    wxGraphicsMatrix();
-     ~wxGraphicsMatrix();
+    virtual ~wxGraphicsMatrix();
     void Concat(const wxGraphicsMatrix& t);
     void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
                        wxDouble tx=0.0, wxDouble ty=0.0);
@@ -111,7 +111,7 @@ class wxGraphicsPath : wxGraphicsObject
 {
 public :
 //    wxGraphicsPath();
-     ~wxGraphicsPath();
+     virtual ~wxGraphicsPath();
 
      void  MoveToPoint(wxDouble x, wxDouble y);
     void MoveToPoint(const wxPoint2DDouble& p);
@@ -150,7 +150,7 @@ class wxGraphicsContext : wxGraphicsObject
 {
 public:
     //wxGraphicsContext();         This is an ABC, use Create to make an instance...
-     ~wxGraphicsContext();
+    virtual ~wxGraphicsContext();
 
     static wxGraphicsContext* Create(const wxWindowDC& dc);
     static wxGraphicsContext* Create(wxWindow* window);
@@ -294,7 +294,7 @@ public:
     wxGCDC(const wxWindowDC& dc);
     wxGCDC(wxWindow* window);
     //wxGCDC();
-     ~wxGCDC();
+    virtual ~wxGCDC();
 
     wxGraphicsContext* GetGraphicsContext();
      void SetGraphicsContext(wxGraphicsContext* ctx);

@@ -28,5 +28,7 @@ class wxTimerEvent : wxEvent
 {
 public:
     wxTimerEvent(int timerid = 0, int interval = 0);
+    virtual ~wxTimerEvent();
+
     int GetInterval() const;
 };

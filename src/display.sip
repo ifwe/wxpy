@@ -26,7 +26,7 @@ class wxDisplay
 {
 public:
     wxDisplay(unsigned index = 0);
-    ~wxDisplay();
+    virtual ~wxDisplay();
 
     static unsigned GetCount();
     static int GetFromPoint(const wxPoint& pt);

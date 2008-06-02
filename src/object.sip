@@ -4,6 +4,7 @@
 
 class wxObject
 {
+    virtual ~wxObject();
 
 %TypeHeaderCode
 #ifndef WXPY_PREC

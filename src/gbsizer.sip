@@ -7,7 +7,7 @@ class wxGBPosition
 %End
 public:
     wxGBPosition(int row = 0, int col = 0);
-    ~wxGBPosition();
+    virtual ~wxGBPosition();
 
 %ConvertToTypeCode
     if (sipIsErr == NULL)
@@ -43,7 +43,7 @@ class wxGBSpan
 
 public:
     wxGBSpan(int rowspan = 1, int colspan = 1);
-    ~wxGBSpan();
+    virtual ~wxGBSpan();
 
 %ConvertToTypeCode
     if (sipIsErr == NULL)
@@ -80,7 +80,7 @@ class wxGBSizerItem: wxSizerItem
 
 public:
     wxGBSizerItem();
-    ~wxGBSizerItem();
+    virtual ~wxGBSizerItem();
 
     wxGBPosition GetPos() const;
     wxGBSpan GetSpan() const;

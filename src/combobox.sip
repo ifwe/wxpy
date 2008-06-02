@@ -11,6 +11,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr);
+    virtual ~wxComboBox();
 
     wxString GetValue() const;
     void SetValue(const wxString& value);
@@ -77,6 +78,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr);
+    virtual ~wxComboBox();
 
     wxString GetValue() const;
     void SetValue(const wxString& value);

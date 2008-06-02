@@ -19,6 +19,7 @@ public:
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxSearchCtrlNameStr);
+    virtual ~wxSearchCtrl();
 
     void SetMenu(wxMenu* menu);
     wxMenu* GetMenu();

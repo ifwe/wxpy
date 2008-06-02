@@ -7,6 +7,8 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPanelNameStr);
+    virtual ~wxPanel();
+
 
     void InitDialog();
 
@@ -23,6 +25,8 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxHSCROLL | wxVSCROLL,
                      const wxString& name = wxPanelNameStr);
+    virtual ~wxScrolledWindow();
+
 
     void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,

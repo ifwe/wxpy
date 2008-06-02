@@ -7,6 +7,7 @@ class wxPopupWindow : wxWindow
 %End
 public:
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE) /Transfer/;
+    virtual ~wxPopupWindow();
 
     void SetRect(const wxRect& rect);
 %MethodCode
@@ -30,6 +31,7 @@ class wxPopupTransientWindow : wxPopupWindow
 %End
 public:
     wxPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE) /Transfer/;
+    virtual ~wxPopupTransientWindow();
 
     void Popup(wxWindow *focus = NULL);
     void Dismiss();

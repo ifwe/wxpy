@@ -28,7 +28,7 @@ public:
               const wxString& name = wxWebViewNameStr,
               WebViewFrameData* data = NULL);
 
-    ~wxWebView();
+    virtual ~wxWebView();
 
     void LoadURL(const wxString& url);
     bool GoBack();

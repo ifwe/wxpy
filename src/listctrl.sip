@@ -153,7 +153,7 @@ public:
 class wxListItem : wxObject {
 public:
     wxListItem();
-    ~wxListItem();
+    virtual ~wxListItem();
 
     // resetting
     void Clear();
@@ -199,6 +199,7 @@ public:
 class wxListEvent: wxNotifyEvent {
 public:
     wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+    virtual ~wxListEvent();
 
     int GetKeyCode();
     long GetIndex();
@@ -218,6 +219,7 @@ public:
     bool IsEditCancelled() const;
     void SetEditCanceled(bool editCancelled);
 };
+
 class wxListCtrl: wxControl {
 public:
     wxListCtrl(wxWindow* parent /TransferThis/,
@@ -227,6 +229,8 @@ public:
                long style = wxLC_ICON,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxListCtrlNameStr);
+    virtual ~wxListCtrl();
+
     bool SetForegroundColour(const wxColour& col);
     bool SetBackgroundColour(const wxColour& col);
     bool SetColumn(int col, wxListItem& item) ;

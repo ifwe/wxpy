@@ -24,6 +24,8 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = wxHL_DEFAULT_STYLE,
                     const wxString& name = wxHyperlinkCtrlNameStr);
+    virtual ~wxHyperlinkCtrl();
+
 
     wxColour GetHoverColour() const;
     void SetHoverColour(const wxColour &colour);
@@ -46,6 +48,8 @@ class wxHyperlinkEvent : wxCommandEvent
 {
 public:
     wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString& url);
+    virtual ~wxHyperlinkEvent();
+
 
     wxString GetURL() const;
     void SetURL(const wxString &url);

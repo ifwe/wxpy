@@ -19,6 +19,7 @@ public:
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxGaugeNameStr);
+    virtual ~wxGauge();
 
     void SetRange(int range);
     int GetRange() const;

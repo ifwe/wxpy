@@ -27,7 +27,7 @@ bool wxIsDragResultOk(wxDragResult res);
 class wxDropTarget
 {
     wxDropTarget(wxDataObject* = NULL) /Transfer/;
-    ~wxDropTarget();
+    virtual ~wxDropTarget();
 
     wxDataObject *GetDataObject() const;
     void SetDataObject(wxDataObject *dataObject /Transfer/);
@@ -62,7 +62,7 @@ public:
                    const wxIcon& none = wxNullIcon);
 %End
 */
-    ~wxDropSource();
+    virtual ~wxDropSource();
 
     void SetData(wxDataObject& data);
     wxDataObject *GetDataObject();

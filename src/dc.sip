@@ -2,7 +2,7 @@ class wxDC : wxObject /Abstract/
 {
 public:
     wxDC();
-    ~wxDC();
+    virtual ~wxDC();
 
 //     void DrawObject(wxDrawObject* drawobject)
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE);
@@ -295,7 +295,7 @@ class wxWindowDC: wxDC
 {
 public:
     wxWindowDC(wxWindow* win);
-    ~wxWindowDC();
+    virtual ~wxWindowDC();
 private:
     wxWindowDC(const wxWindowDC&);
 };
@@ -304,7 +304,7 @@ class wxClientDC: wxWindowDC
 {
 public:
     wxClientDC(wxWindow* win);
-    ~wxClientDC();
+    virtual ~wxClientDC();
 private:
     wxClientDC(const wxClientDC&);
 };
@@ -314,7 +314,7 @@ class wxPaintDC: wxWindowDC
 {
 public:
     wxPaintDC(wxWindow* win);
-    ~wxPaintDC();
+    virtual ~wxPaintDC();
 private:
     wxPaintDC(const wxPaintDC&);
 };
@@ -323,6 +323,8 @@ class wxMemoryDC: wxWindowDC
 {
 public:
     wxMemoryDC(wxBitmap& bitmap = wxNullBitmap);
+    virtual ~wxMemoryDC();
+
     void SelectObject(wxBitmap& bitmap);
     void SelectObjectAsSource(const wxBitmap& bmp);
 
@@ -345,7 +347,7 @@ public:
                  const wxSize& area,
                  int style = wxBUFFER_CLIENT_AREA );
 
-    ~wxBufferedDC();
+    virtual ~wxBufferedDC();
     void UnMask();
 
     void SetStyle(int style);
@@ -366,6 +368,8 @@ public:
                        wxBitmap &buffer = wxNullBitmap,
                        int style = wxBUFFER_CLIENT_AREA);
 
+    virtual ~wxBufferedPaintDC();
+
 };
 
 
@@ -378,6 +382,7 @@ class wxAutoBufferedPaintDC : wxDC
 %End
 public:
     wxAutoBufferedPaintDC(wxWindow* win);
+    virtual ~wxAutoBufferedPaintDC();
 };
 
 class wxDCClipper
@@ -386,7 +391,7 @@ public:
     wxDCClipper(wxDC& dc, const wxRegion& r);
     wxDCClipper(wxDC& dc, const wxRect& r);
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
-    ~wxDCClipper();
+    virtual ~wxDCClipper();
 private:
     wxDCClipper(const wxDCClipper&);
 };
