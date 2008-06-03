@@ -22,6 +22,8 @@ class SipTrace(object):
 SipTrace.ALL = (SipTrace.VIRTUAL | SipTrace.CONSTRUCTOR | SipTrace.DESTRUCTOR
                 | SipTrace.PY_INIT | SipTrace.PY_DEL | SipTrace.PY_METHOD)
 
+sip.settracemask(SipTrace.ALL)
+
 def autorepr(s = None):
     if s is not None:
         assert isinstance(s, basestring)

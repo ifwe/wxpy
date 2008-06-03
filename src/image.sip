@@ -192,7 +192,7 @@ public:
     wxString GetOption(const wxString& name) const;
     int GetOptionInt(const wxString& name) const;
     bool HasOption(const wxString& name) const;
-    unsigned long CountColours( unsigned long stopafter = -1 );
+    //unsigned long CountColours( unsigned long stopafter = -1 );
 //  unsigned long ComputeHistogram( wxImageHistogram& h );
 
 //  static void AddHandler( wxImageHandler *handler );

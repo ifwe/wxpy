@@ -193,7 +193,7 @@ def different(file1, file2, start = 0):
 
     return file1.bytes() != file2.bytes()
 
-def manage_cache(gendir):
+def manage_cache(gendir, show_diffs = True):
     """
     This function keeps a cache of all sip-generated *.cpp and *.h files
     and restores the stats of the newly generated set whenever the content
@@ -214,9 +214,15 @@ def manage_cache(gendir):
         oldfile = cache / newfile.name
         if different(newfile, oldfile):
             changed_count += 1
-            shutil.copy2(newfile, oldfile)
-            if VERBOSE:
-                sipconfig.inform("--> changed: %s" % newfile.name)
+
+            #diff(newfile, oldfile)
+
+            assert newfile.mtime > oldfile.mtime
+            shutil.copy2(newfile, oldfile) # src, dest
+            a, b = newfile.stat().st_mtime, oldfile.stat().st_mtime
+            #assert a == b, "copy2 failed: mtimes are different! (%s and %s)" % (a, b)
+
+            sipconfig.inform("--> changed: %s" % newfile.name)
         else:
             #sipconfig.inform("--> same:    %s" % newfile.name)
             shutil.copystat(oldfile, newfile)
@@ -238,3 +244,6 @@ def cd(*path):
         yield
     finally:
         os.chdir(original_cwd)
+
+def diff(new, old):
+    run(r'c:\cygwin\bin\diff -d -u "%s" "%s"' % (str(new), str(old)))

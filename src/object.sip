@@ -20,7 +20,6 @@ class wxObject
      * entries here before build :( */
     if(0) ;
     #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
-
         C(wxKeyEvent)
         C(wxCommandEvent)
         C(wxMouseEvent)
@@ -37,6 +36,7 @@ class wxObject
         C(wxListEvent)
         C(wxDropFilesEvent)
         C(wxTreeEvent)
+        C(wxUpdateUIEvent)
 
         C(wxSizerItem)
         C(wxGBSizerItem)

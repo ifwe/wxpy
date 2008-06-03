@@ -319,16 +319,15 @@ public:
     //wxString GetToolTipText() const;
 %End
 %If (!wxUSE_TOOLTIPS)
-    void SetToolTip(const wxString & tip );
+    void SetToolTip(const wxString & tip);
 %End
 
 %If (wxUSE_DRAG_AND_DROP)
-    void SetDropTarget( wxDropTarget *dropTarget );
+    void SetDropTarget(wxDropTarget *dropTarget);
     wxDropTarget *GetDropTarget() const;
 %End
-/*
-%If (wxUSE_CONSTRAINTS)
 
+%If (wxUSE_CONSTRAINTS)
     void SetConstraints( wxLayoutConstraints *constraints );
     wxLayoutConstraints *GetConstraints() const;
 
@@ -349,41 +348,14 @@ public:
     void GetSizeConstraint(int *w, int *h) const;
     void GetClientSizeConstraint(int *w, int *h) const;
     void GetPositionConstraint(int *x, int *y) const;
-
 %End
-*/
-    void SetAutoLayout( bool autoLayout );
+
+    void SetAutoLayout(bool autoLayout);
     bool GetAutoLayout() const;
 
     bool Layout();
 
     void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true);
-%MethodCode
-        const bool deleteOld = a1;
-
-        printf("wxWindow::SetSizer(%p, deleteOld = %d)\n", a0, deleteOld);
-
-        wxSizer* oldSizerCpp = sipCpp->GetSizer();
-        if (oldSizerCpp) {
-            printf("oldSizer was not NULL: %p\n", oldSizerCpp);
-        }
-        /*
-            PyObject* oldSizerPy = sipGetWrapper(oldSizerCpp, sipClass_wxSizer);
-            if (oldSizerPy) {
-                printf("oldSizer had a Python object: %p", oldSizerPy);
-                if (deleteOld && sipWrapper_Check(oldSizerPy)) {
-                    sipWrapper* w = (sipWrapper*)oldSizerPy;
-                    printf("UNHOOKING SIP OBJECT\n");
-                    removeFromParent(w);
-                    sipResetPyOwned(w);
-                    w->u.cppPtr = NULL;
-                }
-            }
-        }
-*/
-        sipCpp->SetSizer(a0, deleteOld);
-%End
-
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
 
     wxSizer *GetSizer() const;
@@ -400,9 +372,9 @@ public:
     bool SetTransparent(wxByte alpha);
     bool CanSetTransparent();
 
-    void OnSysColourChanged( wxSysColourChangedEvent& event );
-    void OnInitDialog( wxInitDialogEvent &event );
-    void OnMiddleClick( wxMouseEvent& event );
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnInitDialog(wxInitDialogEvent &event);
+    void OnMiddleClick(wxMouseEvent& event);
 
 
 %If (wxUSE_PALETTE)
@@ -457,36 +429,6 @@ public:
     sipRes = (int)sipCpp->GetHWND();
 %End
 %End
-
-%If (WXMSW)
-    static int GetUserIdleTime();
-%MethodCode
-    typedef BOOL (WINAPI *_GetLastInputInfo_t)(PLASTINPUTINFO);
-
-    static _GetLastInputInfo_t s_pfn_GetLastInputInfo = 0;
-
-    wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM);
-    if (dllUser32.IsLoaded()) {
-        s_pfn_GetLastInputInfo = (_GetLastInputInfo_t)
-            dllUser32.GetSymbol(_T("GetLastInputInfo"));
-
-        if (s_pfn_GetLastInputInfo == 0) {
-            printf("ERROR: got 0 from GetSymbol\n");
-        } else {
-            printf("Got function pointer: %p\n", s_pfn_GetLastInputInfo);
-
-            LASTINPUTINFO info = {sizeof(LASTINPUTINFO), 0};
-            if (0 == (*s_pfn_GetLastInputInfo)(&info)) {
-                PyErr_SetString(PyExc_Exception, "GetLastInputInfo returned error");
-                sipIsErr = 1;
-            } else
-                sipRes = (int)info.dwTime;
-        }
-    } else
-        printf("could not load user32.dll\n");
-%End
-%End
-
 
 private:
     wxWindow(const wxWindow&);

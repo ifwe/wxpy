@@ -3,6 +3,7 @@
 #include <wx/wx.h>
 #include <wx/tooltip.h>
 #endif
+
 %End
 typedef unsigned int wxUint32;
 typedef int    wxInt32;

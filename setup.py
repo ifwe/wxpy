@@ -5,9 +5,10 @@ import genlisttypes
 from wxpybuild.wxpyext import build_extension, WXWIN
 
 wxpy_modules = [
-    ('_wxcore', ['src/wx.sip']),
-    ('_wxhtml', ['src/html.sip']),
-    ('_wxstc',  ['contrib/stc/stc.sip']),
+    ('_wxcore',  ['src/wx.sip']),
+    ('_wxhtml',  ['src/html.sip']),
+    ('_wxstc',   ['contrib/stc/stc.sip']),
+    #('_webview', ['src/webview.sip']),
 ]
 
 def main():

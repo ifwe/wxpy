@@ -34,14 +34,27 @@ public:
     ~wxPyApp();
 
     void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg);
+
+    PyObject* callAfterCbs;
 };
 
 %End // ModuleHeaderCode
 
 %ModuleCode
 
-wxPyApp::wxPyApp() {}
-wxPyApp::~wxPyApp() {}
+wxPyApp::wxPyApp()
+{
+    SIP_BLOCK_THREADS
+    callAfterCbs = PyList_New(0);
+    SIP_UNBLOCK_THREADS
+}
+wxPyApp::~wxPyApp()
+{
+    SIP_BLOCK_THREADS
+    Py_DECREF(callAfterCbs);
+    callAfterCbs = NULL;
+    SIP_UNBLOCK_THREADS
+}
 
 void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc, const wxChar *cond, const wxChar *szMsg)
 {

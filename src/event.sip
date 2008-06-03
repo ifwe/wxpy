@@ -11,7 +11,6 @@
 #ifndef WXPY_PREC
 #include <list>
 #endif
-typedef std::list<PyObject*> callAfterCbList;
 
 class CallAfterCallback: public wxObject
 {
@@ -28,14 +27,10 @@ void initializeCallAfter();
 
 %ModuleCode
 
-/* the global CallAfter callable object list */
-static callAfterCbList g_callAfterCbs;
-
 /* Connects a special event ID to the app through which CallAfter
    calls get routed. */
 void initializeCallAfter()
 {
-    // static wxEventType g_callAfterId = 0;
     static CallAfterCallback g_callafterEvent;
 
     if (!g_callAfterId)
@@ -48,30 +43,26 @@ void initializeCallAfter()
 }
 
 /* All wx.CallAfter calls are routed through here. */
-void CallAfterCallback::EventThunker(wxEvent& event)
+void CallAfterCallback::EventThunker(wxEvent&)
 {
     SIP_BLOCK_THREADS
+    PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
 
-    callAfterCbList::iterator iter;
-    for(iter = g_callAfterCbs.begin(); iter != g_callAfterCbs.end(); iter++)
+    const Py_ssize_t num_cbs = PyList_GET_SIZE(cbs);
+
+    for(Py_ssize_t i = 0; i < num_cbs; ++i)
     {
-        PyObject* func = *iter;
+        PyObject* func = PyList_GET_ITEM(cbs, i);
         PyObject* result = PyObject_CallObject(func, NULL);
-        if (result)
-        {
-            Py_DECREF(result);
 
-            if (PyErr_Occurred())
-                PyErr_Print();
-        } else
+        if (result)
+            Py_DECREF(result);
+        else
             PyErr_Print();
 
         Py_DECREF(func);
     }
-
-    g_callAfterCbs.clear();
-
-
+    PyList_SetSlice(cbs, 0, num_cbs, NULL);
     SIP_UNBLOCK_THREADS
 }
 %End
@@ -79,6 +70,8 @@ void CallAfterCallback::EventThunker(wxEvent& event)
 // may be called from any thread
 void CallAfter(SIP_PYCALLABLE);
 %MethodCode
+    int newSize;
+
     if (!wxTheApp)
     {
         SIP_BLOCK_THREADS
@@ -91,9 +84,12 @@ void CallAfter(SIP_PYCALLABLE);
         /* append the callable to the end of our list */
         SIP_BLOCK_THREADS
         Py_INCREF(a0);
-        g_callAfterCbs.push_back(a0);
-        SIP_UNBLOCK_THREADS
 
+        PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+        PyList_Append(cbs, a0);
+        newSize = PyList_GET_SIZE(cbs);
+
+        SIP_UNBLOCK_THREADS
         wxCommandEvent e(g_callAfterId, -1);
         wxTheApp->AddPendingEvent(e);
     }
@@ -257,7 +253,6 @@ public:
 
     virtual ~wxEvent();
 
-    //wxEvent *Clone(void) const = 0;
 private:
     wxEvent();
 
@@ -463,6 +458,11 @@ public:
 
     void SetShow(bool show);
     bool GetShow() const;
+
+    int __nonzero__();
+%MethodCode
+    sipRes = (int)sipCpp->GetShow();
+%End
 };
 
 class wxIconizeEvent: wxEvent

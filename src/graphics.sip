@@ -196,8 +196,8 @@ public:
 
     void DrawText(const wxString &str, wxDouble x, wxDouble y,
     const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush);
-//        void DrawRotatedText(const wxString &str, wxDouble x, wxDouble y, wxDouble angle,
-//            const wxGraphicsBrush& backgroundBrush = wxNullGraphicsBrush);
+    void DrawText(const wxString &str, wxDouble x, wxDouble y, wxDouble angle) /PyName=DrawRotatedText/;
+
     void GetTextExtent(const wxString &text,
                        wxDouble *width /*width*/,
                        wxDouble *height /*height*/,

@@ -264,7 +264,7 @@ public:
 
     sipRes = PyTuple_New(length);
     int c = 0;
-    int val;
+    int val = -1;
     int i;
 
     for (i = start; (step > 0 ? i < stop : i > stop); i += step) {

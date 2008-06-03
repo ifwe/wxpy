@@ -192,3 +192,7 @@ public:
 
 
 wxMouseState wxGetMouseState();
+unsigned long wxGetProcessId();
+wxString wxGetOsDescription();
+bool wxIsPlatformLittleEndian();
+bool wxIsPlatform64Bit();

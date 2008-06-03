@@ -34,6 +34,7 @@
 
         <include>../src</include>
         <include>c:\dev\wxWebKitBranch-2.8\contrib\include</include>
+        <define>WXPY=1</define>
 
         <runtime-libs>dynamic</runtime-libs>
 
@@ -55,11 +56,11 @@
         </if>
 
         <runtime-libs>dynamic</runtime-libs>
+
         <optimize>speed</optimize>
-        <define>WXPY=1</define>
         <if cond="FORMAT in ('msvc', 'msvs2005prj')">
             <cxxflags>/GL /Zi</cxxflags>
-            <ldflags>/DEBUG</ldflags>
+            <ldflags>/DEBUG /LTCG</ldflags>
         </if>
     </template>
 

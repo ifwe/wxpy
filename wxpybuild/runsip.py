@@ -72,6 +72,7 @@ def sip(module_name, sipfiles, build_dir, include_dirs, platform = None, feature
     # spawn the sip binary
     run([sip_cfg.sip_bin,
          '-z', args,
+        #'-r',          # generate trace statements
          ] + sipfiles)
 
     # TODO: spaces in filenames?

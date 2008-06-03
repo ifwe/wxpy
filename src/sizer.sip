@@ -176,9 +176,11 @@ public:
     bool IsShown(wxSizer *sizer) const;
     bool IsShown(size_t index) const;
 
+    /* deprecated
     bool Remove(wxWindow* window);
     bool Remove(wxSizer* sizer);
     bool Remove(size_t index);
+    */
 
     void SetDimension( int x, int y, int width, int height );
     void SetMinSize( const wxSize &size );
