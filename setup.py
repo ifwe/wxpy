@@ -19,16 +19,20 @@ def main():
         windows_install_pyds()
 
 def windows_install_pyds():
+    srcdir  = 'build/obj-msvs2005prj/'
+    destdir = 'wx/'
+
+    print 'copying binaries from %s to %s:' % (srcdir, destdir)
     for name, sources in wxpy_modules:
         for ext in ('.pyd', '.pdb'):
-            copy_with_prompt('build/obj-msvs2005prj/%s%s' % (name, ext),
-                             'wx/%s%s' % (name, ext))
+            print '  %s%s' % (name, ext)
+            copy_with_prompt('%s%s%s' % (srcdir,  name, ext),
+                             '%s%s%s' % (destdir, name, ext))
 
 def copy_with_prompt(src, dest):
     try_again = True
     while try_again:
         try:
-            print 'copy %s --> %s' % (src, dest)
             shutil.copy2(src, dest)
         except IOError, e:
             print e
