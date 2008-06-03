@@ -27,8 +27,14 @@
     </template>
 
     <template id="wxpy_extension" template="wxpy_build_settings,wx">
+        <!-- create .PYDs instead of .DLLs on windows -->
+        <if cond="FORMAT in ('msvc', 'msvs2005prj')">
+            <set var="DLLEXT">.pyd</set>
+        </if>
+
         <include>../src</include>
         <include>c:\dev\wxWebKitBranch-2.8\contrib\include</include>
+
         <runtime-libs>dynamic</runtime-libs>
 
         <wx-lib>core</wx-lib>
@@ -51,18 +57,30 @@
         <runtime-libs>dynamic</runtime-libs>
         <optimize>speed</optimize>
         <define>WXPY=1</define>
-
+        <if cond="FORMAT in ('msvc', 'msvs2005prj')">
+            <cxxflags>/GL /Zi</cxxflags>
+            <ldflags>/DEBUG</ldflags>
+        </if>
     </template>
 
     <template id="wxpy_core" template="wxpy_extension">
+        <!-- the next two lines cause stdwxpy.cpp to be compiled first, creating the PCH file -->
+        <precomp-headers-gen>../src/stdwxpy.cpp</precomp-headers-gen>
+        <sources>../src/stdwxpy.cpp</sources>
+
+        <!-- todo: moving this above, into wxpy_extension, should work - so
+             that extensions can use the PCH, but it results in the following
+             compiler error:
+
+..\src\generated\sip_wxstccmodule.cpp(6) : error C2859: c:\dev\wxpy\build\obj-ms
+vs2005prj\_wxstc.idb is not the idb file that was used when this precompiled hea
+der was created, recreate the precompiled header.
+        -->
+
         <define>WXPY_PREC</define>
         <precomp-headers>on</precomp-headers>
-
-        <sources>../src/stdwxpy.cpp</sources>
-        <precomp-headers-gen>../src/stdwxpy.cpp</precomp-headers-gen>
         <precomp-headers-header>stdwxpy.h</precomp-headers-header>
         <precomp-headers-file>../src/stdwxpy.cpp</precomp-headers-file>
-        <!--<precomp-headers-location>../src/generated</precomp-headers-location>-->
     </template>
 
 </makefile>

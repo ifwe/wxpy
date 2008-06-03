@@ -554,8 +554,10 @@ def _wxpy_init():
 _did_wxpy_init = False
 
 class App(_app):
-    def __init__(self, *a):
-        _app.__init__(self, *a)
+    def __init__(self, appname = None, redirect = None):
+        _app.__init__(self)
+        if appname is not None:
+            self.SetAppName(appname)
 
         global _did_wxpy_init
         if not _did_wxpy_init:

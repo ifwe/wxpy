@@ -19,26 +19,28 @@ def main():
         windows_install_pyds()
 
 def windows_install_pyds():
-
-    d = 'build/obj-msvs2005prj/'
     for name, sources in wxpy_modules:
-        src, dest = d + name + '.dll', 'wx/' + name + '.pyd'
-        print 'copy %s --> %s' % (src, dest)
+        for ext in ('.pyd', '.pdb'):
+            copy_with_prompt('build/obj-msvs2005prj/%s%s' % (name, ext),
+                             'wx/%s%s' % (name, ext))
 
-        try_again = True
-        while try_again:
-            try:
-                shutil.copy2(src, dest)
-            except IOError, e:
-                print e
-                inp = raw_input('Retry? [Y|n] ')
+def copy_with_prompt(src, dest):
+    try_again = True
+    while try_again:
+        try:
+            print 'copy %s --> %s' % (src, dest)
+            shutil.copy2(src, dest)
+        except IOError, e:
+            print e
+            inp = raw_input('Retry? [Y|n] ')
 
-                if inp and not inp.startswith('y'):
-                    raise SystemExit(1)
-                else:
-                    try_again = True
+            if inp and not inp.startswith('y'):
+                raise SystemExit(1)
             else:
-                try_again = False
+                try_again = True
+        else:
+            try_again = False
+
 
 
 

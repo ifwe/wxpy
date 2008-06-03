@@ -38,7 +38,7 @@ class wxDropTarget
 
     virtual bool OnDrop(wxCoord x, wxCoord y) = 0;
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) = 0;
-    virtual bool GetData() = 0;
+    virtual bool GetData();
 
     void SetDefaultAction(wxDragResult action);
     wxDragResult GetDefaultAction();
