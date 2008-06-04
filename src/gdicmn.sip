@@ -141,7 +141,7 @@ public:
 };
 
 
-wxRect RectPS(const wxPoint& topLeft, const wxPoint& bottomRight);
+wxRect RectPS(const wxPoint& topLeft, const wxSize& bottomRight);
 %MethodCode
     sipRes = new wxRect(*a0, *a1);
 %End
