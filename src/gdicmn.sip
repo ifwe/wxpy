@@ -320,24 +320,25 @@ public:
 class wxPen: wxGDIObject
 {
 public:
-    wxPen(wxColour& colour, int width=1, int style=wxSOLID);
+    wxPen(wxColour& colour, int width = 1, int style = wxSOLID);
     ~wxPen();
 
     int GetCap();
-    wxColour GetColour();
-    int GetJoin();
-    int GetStyle();
-    int GetWidth();
-
-    bool IsOk();
-
     void SetCap(int cap_style);
+
+    wxColour GetColour();
     void SetColour(wxColour& colour);
+
+    int GetJoin();
     void SetJoin(int join_style);
+
+    int GetStyle();
     void SetStyle(int style);
+
+    int GetWidth();
     void SetWidth(int width);
 
-    //void SetDashes(int dashes, wxDash* dashes_array);
+    bool IsOk();
 };
 
 class wxBrush: wxGDIObject

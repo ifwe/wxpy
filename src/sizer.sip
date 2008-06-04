@@ -202,22 +202,10 @@ public:
 
     size_t GetChildCount();
 %MethodCode
-        sipRes = sipCpp->GetChildren().GetCount();
+    sipRes = sipCpp->GetChildren().GetCount();
 %End
 
     wxSizerItemList& GetChildren();
-
-/*
-
-    %pythoncode {
-    def Hide(self, item, recursive=False):
-        """
-        A convenience method for `Show` (item, False, recursive).
-        """
-        return self.Show(item, False, recursive)
-    }
-*/
-
     void ShowItems(bool show);
 
 private:
@@ -237,7 +225,6 @@ public:
     int GetOrientation() const;
     void SetOrientation(int orient);
 };
-
 
 class wxGridSizer: wxSizer
 {

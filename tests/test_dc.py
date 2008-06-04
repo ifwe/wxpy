@@ -1,16 +1,30 @@
+import sip
 import wx
 
-def main():
+def test_dc():
     f = wx.Frame(None)
 
     def paint(e):
-        dc.DrawRectangle()
+        b = wx.Brush()
+        dc.SetBrush(b)
+        dc.DrawRectangle(50, 50, 300, 300)
 
-    t = wx.PyTimer(paint)
     f.Show()
-    a.MainLoop()
+    f.Refresh()
+    return f
 
-    pass
+def main():
+    a = wx.PySimpleApp()
+    f = test_dc()
+    sip.dump(f)
+    print 'Calling Destroy...'
+    #f.Destroy()
+    print '...called Destroy.'
+    sip.dump(f)
+
+    #assert sip.isdeleted(f)
+
+    a.MainLoop()
 
 if __name__ == '__main__':
     main()

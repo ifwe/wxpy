@@ -464,8 +464,8 @@ public:
     sipRes = (int)sipCpp->GetShow();
 %End
 };
-
 class wxIconizeEvent: wxEvent
+
 {
 public:
     wxIconizeEvent(int id = 0, bool iconized = true);

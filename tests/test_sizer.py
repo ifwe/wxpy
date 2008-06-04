@@ -3,7 +3,18 @@ import wx
 from testutil import assert_ownership
 
 def test_FlexGridSizer():
+    f = wx.Frame(None)
     s = wx.FlexGridSizer(2, 2)
+
+    assert s.FlexibleDirection == s.GetFlexibleDirection() == wx.BOTH
+    s.AddGrowableCol(1, 1)
+
+    for x in xrange(4):
+        b = wx.Button(f, -1, 'button %d' % x)
+        s.Add(b)
+
+    f.Sizer = s
+    return f
 
 
 def test_GridBagSizer():
@@ -61,7 +72,7 @@ def test_WindowSetSizer():
     assert sip.isdeleted(s1)
     return f
 
-def main():
+def main3():
     a = wx.PySimpleApp()
 
     tests = [#test_SizerClear,
@@ -70,6 +81,11 @@ def main():
 
     for f in tests:
         f().Destroy()
+
+def main():
+    a=wx.PySimpleApp()
+    test_FlexGridSizer().Show()
+    a.MainLoop()
 
 if __name__ == '__main__':
     main()

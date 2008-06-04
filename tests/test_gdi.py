@@ -2,7 +2,7 @@ import os.path
 import wx
 
 def test_Image():
-    imgpath = './tests/digsby_ascii_popup.png'
+    imgpath = './tests/images/digsby_ascii_popup.png'
 
     assert os.path.exists(imgpath)
     img = wx.Image(imgpath)
@@ -88,13 +88,28 @@ def test_Rect():
     assert r3 == r5 == (10, 20, 41, 41)
 
 
-
-
-
 def test_Colour():
     c = wx.Colour(33, 66, 99)
     assert c.Red() == 33
 
-    assert c == wx.Colour(33, 66, 99)
+    assert c == wx.Colour(33, 66, 99) != wx.Colour(33, 66, 99, 254)
     assert c != wx.Colour(99, 66, 33)
+
+    assert wx.Colour(*c) == c
+    assert (lambda *a: sum(a))(*wx.Colour(1,2,3,4)) == 10
+
+def test_Pen():
+    c = wx.Colour(213, 213, 213)
+    p = wx.Pen(c)
+    assert p.Colour == c == wx.Colour(213, 213, 213)
+
+    assert p.Width == 1
+    p.SetWidth(5)
+    assert p.Width == p.GetWidth() == 5
+
+    assert p.Style == p.GetStyle() == wx.SOLID
+
+    assert p.IsOk()
+
+
 

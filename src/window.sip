@@ -126,7 +126,7 @@ public:
     wxWindow *GetGrandParent() const;
 
     bool IsTopLevel() const;
-    bool Reparent(wxWindow *newParent);
+    bool Reparent(wxWindow *newParent /Transfer/);
 
     wxWindow *FindWindow(long winid) const;
     wxWindow *FindWindow(const wxString& name) const;

@@ -185,7 +185,7 @@ class GridSizer(_GridSizer):
 
 _FlexGridSizer = FlexGridSizer
 class FlexGridSizer(_FlexGridSizer):
-    def __init__(self, rows, cols, vgap = 0, hgap = 0):
+    def __init__(self, rows = 1, cols = 0, vgap = 0, hgap = 0):
         _FlexGridSizer.__init__(self, rows, cols, vgap, hgap)
 
 _ListCtrl = ListCtrl
@@ -568,6 +568,10 @@ class App(_app):
             _did_wxpy_init = True
 
         self.OnInit()
+
+    def MainLoop(self):
+        if len(GetTopLevelWindows()) > 0:
+            return _app.MainLoop(self)
 
 PySimpleApp = App
 

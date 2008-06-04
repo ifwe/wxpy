@@ -14,7 +14,7 @@ released under the wxWidgets License
 
 %UnitCode
 #include "stdwxpy.h"
-%End
+%End // UnitCode
 
 %ModuleHeaderCode
 #define WXSIP 1
@@ -91,10 +91,12 @@ AddItem("GREEN", wxGREEN, sipClass_wxColour);
 
 AddItem("TRANSPARENT_PEN",   wxTRANSPARENT_PEN,   sipClass_wxPen);
 AddItem("RED_PEN",           wxRED_PEN,           sipClass_wxPen);
+AddItem("BLACK_PEN",         wxBLACK_PEN,         sipClass_wxPen);
 
 AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
 AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
 AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
+AddItem("RED_BRUSH",         wxRED_BRUSH,         sipClass_wxBrush);
 
 AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
 

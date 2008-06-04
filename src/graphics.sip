@@ -111,38 +111,38 @@ class wxGraphicsPath : wxGraphicsObject
 {
 public :
 //    wxGraphicsPath();
-     virtual ~wxGraphicsPath();
+    virtual ~wxGraphicsPath();
 
-     void  MoveToPoint(wxDouble x, wxDouble y);
+    void  MoveToPoint(wxDouble x, wxDouble y);
     void MoveToPoint(const wxPoint2DDouble& p);
 
-     void AddLineToPoint(wxDouble x, wxDouble y);
+    void AddLineToPoint(wxDouble x, wxDouble y);
     void AddLineToPoint(const wxPoint2DDouble& p);
 
-     void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
-                                  wxDouble cx2, wxDouble cy2,
-                                  wxDouble x, wxDouble y);
+    void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
+                         wxDouble cx2, wxDouble cy2,
+                         wxDouble x, wxDouble y);
     void AddCurveToPoint(const wxPoint2DDouble& c1, const wxPoint2DDouble& c2, const wxPoint2DDouble& e);
 
-         void AddPath(const wxGraphicsPath& path);
-         void CloseSubpath();
-        wxPoint2DDouble GetCurrentPoint() const;
-     void AddArc(wxDouble x, wxDouble y, wxDouble r,
+    void AddPath(const wxGraphicsPath& path);
+    void CloseSubpath();
+    wxPoint2DDouble GetCurrentPoint() const;
+    void AddArc(wxDouble x, wxDouble y, wxDouble r,
                          wxDouble startAngle, wxDouble endAngle, bool clockwise=true);
     void AddArc(const wxPoint2DDouble& c, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise=true);
 
-         void AddQuadCurveToPoint(wxDouble cx, wxDouble cy, wxDouble x, wxDouble y);
-         void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-         void AddCircle(wxDouble x, wxDouble y, wxDouble r);
-         void AddArcToPoint(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, wxDouble r) ;
-         void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-         void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
+    void AddQuadCurveToPoint(wxDouble cx, wxDouble cy, wxDouble x, wxDouble y);
+    void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void AddCircle(wxDouble x, wxDouble y, wxDouble r);
+    void AddArcToPoint(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, wxDouble r) ;
+    void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
 
-         void * GetNativePath() const;
-         void UnGetNativePath(void *p) const;
-         void Transform(const wxGraphicsMatrix& matrix);
-        //wxRect2D GetBox() const;
-     bool Contains(wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
+    void * GetNativePath() const;
+    void UnGetNativePath(void *p) const;
+    void Transform(const wxGraphicsMatrix& matrix);
+    //wxRect2D GetBox() const;
+    bool Contains(wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
     bool Contains(const wxPoint2DDouble& c, int fillStyle = wxODDEVEN_RULE) const;
 };
 

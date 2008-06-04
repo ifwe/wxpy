@@ -6,9 +6,7 @@ def test_gc():
 
     def paint(e):
         self=f
-        dc = wx.PaintDC(self)
-        print 'HWND', f.Handle
-        print 'HDC ', dc.HDC
+        dc = wx.BufferedPaintDC(self)
 
         size = self.Size
         rect = wx.RectS(size)
@@ -18,6 +16,7 @@ def test_gc():
         dc.DrawRectangleRect(rect)
 
         gc = wx.GraphicsContext.Create(dc)
+        print gc.GetNativeContext()
         gc.SetBrush(wx.RED_BRUSH)
         gc.SetPen(wx.BLACK_PEN)
         gc.DrawRoundedRectangle(0, 0, 100, 100, 5)

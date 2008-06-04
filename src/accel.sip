@@ -83,7 +83,8 @@ public:
         wxAcceleratorEntry* entries = new wxAcceleratorEntry[length];
         for (size_t i = 0; i < length; ++i)
         {
-            if (!(fastitem = accel_check(PySequence_Fast_GET_ITEM(seq, i))))
+            fastitem = accel_check(PySequence_Fast_GET_ITEM(seq, i));
+            if (!fastitem)
             {
                 sipIsErr = 1;
                 break;

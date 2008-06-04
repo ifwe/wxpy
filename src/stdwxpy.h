@@ -66,5 +66,4 @@
 
 #include <vector>
 #include <list>
-
 #endif // WXPY_PREC
