@@ -52,7 +52,7 @@ def matchhelp(pattern, string, repl='_._'):
             elif m_start == m_end:   # zero-width match;
                 m_end += 1           #    keep things moving along
 
-            m = r.search(string, m_end)                
+            m = r.search(string, m_end)
 
         print( ('global replace (%s):\n%s') %
                (repl, re.sub(pattern, repl, string)) )

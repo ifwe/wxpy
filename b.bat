@@ -1,2 +1,16 @@
 @echo off
-python setup.py
+
+if "d"=="%1" goto debug
+
+:release
+echo building wxpy RELEASE
+echo ---------------------
+python setup.py %1 %2 %3 %4 %5 %6 %7 %8 %9
+goto done
+
+:debug
+echo building wxpy DEBUG
+echo -------------------
+python_d setup.py %1 %2 %3 %4 %5 %6 %7 %8 %9
+
+:done

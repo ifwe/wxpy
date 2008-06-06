@@ -62,8 +62,12 @@
 #include <wx/dcgraph.h>
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>
+#include <wx/msw/crashrpt.h>
 #endif
 
 #include <vector>
 #include <list>
+#include <Python.h>
+#include <sip.h>
+
 #endif // WXPY_PREC

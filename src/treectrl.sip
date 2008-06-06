@@ -453,34 +453,14 @@ public:
     wxTextCtrl* GetEditControl() const;
 
 %If (WXMSW)
-    // end editing and accept or discard the changes to item label
     void EndEditLabel(const wxTreeItemId& item, bool discardChanges = false);
 %End
 
     void SortChildren(const wxTreeItemId& item);
 
     wxTreeItemId HitTest(const wxPoint& point, int& where /Out/);
-/*
-
-    %extend {
-        // get the bounding rectangle of the item (or of its label only)
-        PyObject* GetBoundingRect(const wxTreeItemId& item,  bool textOnly = false) {
-             wxRect rect;
-            if (self->GetBoundingRect(item, rect, textOnly)) {
-                wxPyBlock_t blocked = wxPyBeginBlockThreads();
-                wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), true);
-                wxPyEndBlockThreads(blocked);
-                return val;
-            }
-            else
-                RETURN_NONE();
-        }
-    }
-*/
 
 %If (WXMSW)
-    // set/get the item state.image (state == -1 means cycle to the next one)
     void SetState(const wxTreeItemId& node, int state);
     int GetState(const wxTreeItemId& node);
 %End

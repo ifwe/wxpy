@@ -10,13 +10,13 @@
 #include "wx/webview.h"
 %End
 
-
+/*
 class WebViewFrameData
 {
     private:
     WebViewFrameData();
 };
-
+*/
 class wxWebView : wxWindow
 {
 
@@ -25,8 +25,8 @@ public:
               const wxPoint& point = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxWebViewNameStr,
-              WebViewFrameData* data = NULL);
+              const wxString& name = wxWebViewNameStr);
+              //WebViewFrameData* data = NULL);
 
     virtual ~wxWebView();
 

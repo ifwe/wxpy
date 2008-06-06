@@ -57,39 +57,46 @@ public:
 
 class wxGraphicsObject : wxObject
 {
-public :
+private:
     wxGraphicsObject(wxGraphicsRenderer* renderer = NULL);
+    wxGraphicsObject(const wxGraphicsObject&);
     virtual ~wxGraphicsObject();
-
+public:
     bool IsNull() const;
     wxGraphicsRenderer* GetRenderer() const;
 };
 
 class wxGraphicsPen : wxGraphicsObject
 {
-public :
+private:
     wxGraphicsPen();
+    wxGraphicsPen(const wxGraphicsPen&);
     virtual ~wxGraphicsPen();
 };
 
 class wxGraphicsBrush : wxGraphicsObject
 {
-public :
+private:
     wxGraphicsBrush();
+    wxGraphicsBrush(const wxGraphicsBrush&);
     virtual ~wxGraphicsBrush();
 };
 
 class wxGraphicsFont : wxGraphicsObject
 {
-public :
+private:
     wxGraphicsFont();
+    wxGraphicsFont(const wxGraphicsFont&);
     virtual ~wxGraphicsFont();
 };
 
 class wxGraphicsMatrix : wxGraphicsObject
 {
-public :
-//    wxGraphicsMatrix();
+private:
+    wxGraphicsMatrix();
+    wxGraphicsMatrix(const wxGraphicsMatrix&);
+
+public:
     virtual ~wxGraphicsMatrix();
     void Concat(const wxGraphicsMatrix& t);
     void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
@@ -109,8 +116,11 @@ public :
 
 class wxGraphicsPath : wxGraphicsObject
 {
-public :
-//    wxGraphicsPath();
+private:
+    wxGraphicsPath();
+    wxGraphicsPath(const wxGraphicsPath&);
+
+public:
     virtual ~wxGraphicsPath();
 
     void  MoveToPoint(wxDouble x, wxDouble y);
@@ -148,15 +158,18 @@ public :
 
 class wxGraphicsContext : wxGraphicsObject
 {
+private:
+    wxGraphicsContext();
+    wxGraphicsContext(const wxGraphicsContext&);
+
 public:
-    //wxGraphicsContext();         This is an ABC, use Create to make an instance...
     virtual ~wxGraphicsContext();
 
-    static wxGraphicsContext* Create(const wxWindowDC& dc);
-    static wxGraphicsContext* Create(wxWindow* window);
-    static wxGraphicsContext* Create();
-    static wxGraphicsContext* CreateFromNative(void * context);
-    static wxGraphicsContext* CreateFromNativeWindow(void * window);
+    static wxGraphicsContext* Create(const wxWindowDC& dc) /Factory/;
+    static wxGraphicsContext* Create(wxWindow* window) /Factory/;
+    static wxGraphicsContext* Create() /Factory/;
+    static wxGraphicsContext* CreateFromNative(void * context) /Factory/;
+    static wxGraphicsContext* CreateFromNativeWindow(void * window) /Factory/;
 
     wxGraphicsPath CreatePath();
     wxGraphicsPen CreatePen(const wxPen& pen);
@@ -207,44 +220,31 @@ public:
 
 SIP_PYOBJECT GetTextExtent(const wxString &text);
 %MethodCode
-            wxDouble width = 0.0,
-                     height = 0.0;
-            sipCpp->GetTextExtent(*a0, &width, &height, NULL, NULL);
+    wxDouble width = 0.0, height = 0.0;
+    sipCpp->GetTextExtent(*a0, &width, &height, NULL, NULL);
 
-            PyObject* rv = PyTuple_New(2);
-            PyTuple_SET_ITEM(rv, 0, PyFloat_FromDouble(width));
-            PyTuple_SET_ITEM(rv, 1, PyFloat_FromDouble(height));
-            sipRes = rv;
+    PyObject* rv = PyTuple_New(2);
+    PyTuple_SET_ITEM(rv, 0, PyFloat_FromDouble(width));
+    PyTuple_SET_ITEM(rv, 1, PyFloat_FromDouble(height));
+    sipRes = rv;
 %End
-/*
-    %extend {
-        DocAStr(GetPartialTextExtents,
-                "GetPartialTextExtents(self, text) -> [widths]";
-                "Returns a list of widths from the beginning of ``text`` to the
-coresponding character in ``text``.", "");
-        wxArrayDouble GetPartialTextExtents(const wxString& text) {
-            wxArrayDouble widths;
-            self->GetPartialTextExtents(text, widths);
-            return widths;
-        }
-    }
 
-*/
-         void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-         void DrawIcon(const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-         void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
-//         void StrokeLines(size_t points, const wxPoint2DDouble *points_array);
-         void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-         void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-         void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
-         bool ShouldOffset() const;
-    private:
-        wxGraphicsContext();
+    void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void DrawIcon(const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
+    void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
+    bool ShouldOffset() const;
 };
 
 class wxGraphicsRenderer : wxObject
 {
-public :
+private:
+    wxGraphicsRenderer();
+    wxGraphicsRenderer(const wxGraphicsRenderer&);
+
+public:
     // wxGraphicsRenderer();  This is an ABC, use GetDefaultRenderer
 
      ~wxGraphicsRenderer();
@@ -278,8 +278,7 @@ public :
                                                         const wxColour &oColor, const wxColour &cColor);
 
      wxGraphicsFont CreateFont(const wxFont &font, const wxColour &col);
-private:
-    wxGraphicsRenderer();
+
 };
 
 

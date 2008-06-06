@@ -28,7 +28,7 @@ private:
 
 
 %PostInitialisationCode
-PyDict_SetItemString(sipModuleDict, "wxTheClipboard",
+PyDict_SetItemString(sipModuleDict, "TheClipboard",
                      sipConvertFromInstance((void*)wxTheClipboard, sipClass_wxClipboard, NULL));
 %End
 

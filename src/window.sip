@@ -356,6 +356,23 @@ public:
     bool Layout();
 
     void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true);
+%MethodCode
+    if (!a1) // deleteOld = False
+    {
+        wxSizer* oldSizer = sipCpp->GetSizer();
+        if (oldSizer)
+        {
+            SIP_BLOCK_THREADS
+            PyObject* pySizer = sipGetWrapper(oldSizer, sipClass_wxSizer);
+            if (pySizer)
+                sipTransferBack(pySizer);
+            SIP_UNBLOCK_THREADS
+        }
+    }
+    sipCpp->SetSizer(a0, a1);
+%End
+
+
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
 
     wxSizer *GetSizer() const;

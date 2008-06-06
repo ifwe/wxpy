@@ -8,17 +8,17 @@ class wxTimer : wxEvtHandler
 public:
     wxTimer(wxEvtHandler* owner = NULL, int id = wxID_ANY);
     virtual ~wxTimer();
-    
+
     void SetOwner(wxEvtHandler* ownder, int id = wxID_ANY);
     wxEvtHandler* GetOwner() const;
-    
+
     bool Start(int milliseconds = -1, bool oneShot = false);
     void Stop();
-    
-    virtual void Notify();
-    
+
+    virtual void Notify() /ReleaseGIL/;
+
     bool IsRunning() const;
-    
+
     int GetInterval() const;
     int GetId() const;
     bool IsOneShot() const;

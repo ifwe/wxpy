@@ -10,7 +10,7 @@ released under the wxWidgets License
 
 // Enable stripping of "wx" from Python names, and auto generation of
 // properties from GetXXX() and SetXXX() methods.
-%SIPOptions (RenameWx, AutoProperties)
+%SIPOptions (RenameWx, AutoProperties, ThreadChecking)
 
 %UnitCode
 #include "stdwxpy.h"
@@ -52,7 +52,7 @@ void add_event(PyObject* module_dict, const char* name, ...)
     PyDict_SetItemString(module_dict, name, tuple);
     Py_DECREF(list);
 }
-%End
+%End // ModuleCode
 
 %PostInitialisationCode
 
@@ -82,6 +82,7 @@ AddItem("DefaultPosition",  &wxDefaultPosition,  sipClass_wxPoint);
 AddItem("DefaultValidator", &wxDefaultValidator, sipClass_wxValidator);
 PyDict_SetItemString(sipModuleDict, "TextEntryDialogStyle", PyInt_FromLong(wxTextEntryDialogStyle));
 
+AddItem("NORMAL_FONT", wxNORMAL_FONT, sipClass_wxFont);
 
 AddItem("BLACK", wxBLACK, sipClass_wxColour);
 AddItem("WHITE", wxWHITE, sipClass_wxColour);

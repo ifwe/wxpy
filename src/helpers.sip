@@ -1,14 +1,12 @@
 
 %ModuleHeaderCode
-bool sequence_2_ints_check(PyObject* obj);
-bool sequence_2_ints(PyObject* source, int* i1, int* i2);
+//inline bool sequence_2_ints_check(PyObject* obj);
+//inline bool sequence_2_ints(PyObject* source, int* i1, int* i2);
+//
+//inline bool sequence_4_ints_check(PyObject* obj);
+//inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
-bool sequence_4_ints_check(PyObject* obj);
-bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4);
-%End
-
-%ModuleCode
-bool sequence_2_ints_check(PyObject* obj)
+inline bool sequence_2_ints_check(PyObject* obj)
 {
     bool is_ints = false;
 
@@ -29,7 +27,7 @@ bool sequence_2_ints_check(PyObject* obj)
     return is_ints;
 }
 
-bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
+inline bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
     PyObject *o1, *o2;
 
     if (!(PySequence_Check(source) && PySequence_Length(source) == 2))
@@ -58,7 +56,7 @@ bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
 }
 
 
-bool sequence_4_ints_check(PyObject* obj)
+inline bool sequence_4_ints_check(PyObject* obj)
 {
     bool is_ints = false;
 
@@ -86,7 +84,7 @@ bool sequence_4_ints_check(PyObject* obj)
     return is_ints;
 }
 
-bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
+inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
     PyObject *o1, *o2, *o3, *o4;
 
     if (!(PySequence_Check(source) && PySequence_Length(source) == 4))

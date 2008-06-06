@@ -3,26 +3,40 @@
 <makefile>
     <set var="WX_UNICODE">1</set>
     <set var="WX_PYTHON">0</set>
-    <set var="WX_DEBUG">0</set>
     <set var="WX_SHARED">1</set>
     <include file="presets/wx.bkl"/>
-    <set var="DEBUG">0</set>
 
-    <set var="BUILDDIR">obj-$(FORMAT)</set>
+    <set var="DEBUG">$(WX_DEBUG)</set>
+
+    <!-- add _d to the build directory with DEBUG=='1' -->
+
+    <set var="WXPY_DEBUG_POSTFIX">
+        $(substituteFromDict(DEBUG, {'1':'_d','0':''}))
+    </set>
+
+    <set var="BUILDDIR">obj-$(FORMAT)$(WXPY_DEBUG_POSTFIX)</set>
 
     <template id="wxpy_build_settings">
+        <set var="DEBUG_DEFINE">$(substituteFromDict(DEBUG, {'1':'DEBUG','0':''}))</set>
+        <set var="PY_LIB">$(substituteFromDict(DEBUG, {'1':'python26_d','0':'python26'}))</set>
+
+        <define>$(DEBUG_DEFINE)</define>
+        <sys-lib>$(PY_LIB)</sys-lib>
+
         <warnings>max</warnings>
-        <cxx-rtti>off</cxx-rtti>
+
+        <cxx-rtti>on</cxx-rtti>
         <cxx-exceptions>off</cxx-exceptions>
-        <define>$(substituteFromDict(DEBUG, {'1':'','0':'NDEBUG'}))</define>
-        <optimize>
-            $(substituteFromDict(DEBUG, {'1':'off','0':'speed'}))
-        </optimize>
-        <debug-info>
-            $(substituteFromDict(DEBUG, {'1':'on','0':'off'}))
-        </debug-info>
+
+        <define>$(substituteFromDict(DEBUG, {'1':'_DEBUG','0':'NDEBUG'}))</define>
+
+        <optimize>$(substituteFromDict(DEBUG, {'1':'off','0':'speed'}))</optimize>
+        <debug-info>$(substituteFromDict(DEBUG, {'1':'on','0':'off'}))</debug-info>
+
         <if cond="FORMAT in ('msvc', 'msvs2005prj')">
-            <debug-runtime-libs>off</debug-runtime-libs>
+            <debug-runtime-libs>
+            $(substituteFromDict(DEBUG, {'1':'on','0':'off'}))
+            </debug-runtime-libs>
         </if>
     </template>
 
@@ -35,6 +49,7 @@
         <include>../src</include>
         <include>c:\dev\wxWebKitBranch-2.8\contrib\include</include>
         <define>WXPY=1</define>
+        <define>WXUSINGDLL_WEBKIT</define>
 
         <runtime-libs>dynamic</runtime-libs>
 
@@ -57,10 +72,10 @@
 
         <runtime-libs>dynamic</runtime-libs>
 
-        <optimize>speed</optimize>
         <if cond="FORMAT in ('msvc', 'msvs2005prj')">
             <cxxflags>/GL /Zi</cxxflags>
-            <ldflags>/DEBUG /LTCG</ldflags>
+            <ldflags>/LTCG</ldflags>
+            <ldflags>/DEBUG</ldflags>
         </if>
     </template>
 
@@ -81,7 +96,7 @@ der was created, recreate the precompiled header.
         <define>WXPY_PREC</define>
         <precomp-headers>on</precomp-headers>
         <precomp-headers-header>stdwxpy.h</precomp-headers-header>
-        <precomp-headers-file>../src/stdwxpy.cpp</precomp-headers-file>
+        <precomp-headers-file>stdwxpy.cpp</precomp-headers-file>
     </template>
 
 </makefile>

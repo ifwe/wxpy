@@ -19,7 +19,7 @@
 %End
 
 %PostInitialisationCode
-typedef void (*add_event_type)(PyObject* module_dict, const char* name, ...);
+typedef void (*add_event_type)(PyObject* moduple_dict, const char* name, ...);
 
 add_event_type add_event = (add_event_type)sipImportSymbol("wxpy_add_event");
 
@@ -98,6 +98,9 @@ public:
 
 class wxHtmlWindow : wxWindow
 {
+private:
+    wxHtmlWindow(const wxHtmlWindow&);
+    wxHtmlWindow();
 public:
     wxHtmlWindow(wxWindow *parent, int id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -372,34 +375,23 @@ public:
         PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
 
-        printf("FillHandlersTable for parser %p\n", parser);
-        printf("tag handler is ");
-        PyObject_Print(obj, stdout, 0);
-        printf("\n");
-
         // now figure out where it's C++ object is...
         wxHtmlWinTagHandler* thPtr = 0;
         int sipIsErr = 0;
 
         if (sipCanConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, SIP_NOT_NONE))
         {
-            thPtr = (wxHtmlWinTagHandler*)sipConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, NULL, SIP_NOT_NONE, NULL, &sipIsErr);
-            printf("sipConvertToInstance returned %p, sipIsErr is %d\n", thPtr, sipIsErr);
-        }
-        else
-        {
-            printf("ERROR: sipCanConvertToInstance returned false\n");
-            sipIsErr = 1;
-        }
-
-        if (!sipIsErr)
-        {
             // add it,
+            thPtr = (wxHtmlWinTagHandler*)sipConvertToInstance(obj, sipClass_wxHtmlWinTagHandler,
+                                                               NULL, SIP_NOT_NONE, NULL, &sipIsErr);
             parser->AddTagHandler(thPtr);
 
             // and track it.
             m_objArray.Add(obj);
+
         }
+        else
+            sipIsErr = 1;
 
         SIP_UNBLOCK_THREADS
     }

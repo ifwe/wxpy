@@ -2,6 +2,10 @@ typedef int wxBitmapType;
 
 class wxMask : wxObject
 {
+private:
+    wxMask(const wxMask&);
+    wxMask();
+
 public:
     wxMask(const wxBitmap& bitmap, const wxColour& colour = wxNullColour);
     virtual ~wxMask();
@@ -30,8 +34,11 @@ wxBitmap wxEmptyBitmap(int width, int height);
 
 class wxBitmap : wxGDIObject
 {
-public:
+private:
     wxBitmap();
+    wxBitmap(const wxBitmap&);
+
+public:
     wxBitmap(const wxString& filename, long type = wxBITMAP_TYPE_ANY);
 
     virtual ~wxBitmap();

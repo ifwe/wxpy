@@ -196,3 +196,5 @@ unsigned long wxGetProcessId();
 wxString wxGetOsDescription();
 bool wxIsPlatformLittleEndian();
 bool wxIsPlatform64Bit();
+
+bool wxHandleFatalExceptions();

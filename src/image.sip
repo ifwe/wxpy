@@ -104,6 +104,9 @@ done:
 
 class wxImage: wxObject
 {
+private:
+    wxImage(const wxImage& image);
+
 public:
 
     SIP_PYOBJECT GetData();

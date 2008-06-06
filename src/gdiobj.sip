@@ -1,11 +1,11 @@
 
-class wxGDIObject : wxObject {
-public:
-
-    virtual ~wxGDIObject();
-
-    bool IsNull();
+class wxGDIObject : wxObject
+{
 private:
     wxGDIObject();
-    
+    wxGDIObject(const wxGDIObject&);
+
+public:
+    virtual ~wxGDIObject();
+    bool IsNull();
 };

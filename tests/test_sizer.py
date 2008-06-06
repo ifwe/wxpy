@@ -1,19 +1,48 @@
+import gc
+from weakref import ref
 import sip
 import wx
 from testutil import assert_ownership
 
 def test_FlexGridSizer():
     f = wx.Frame(None)
-    s = wx.FlexGridSizer(2, 2)
 
-    assert s.FlexibleDirection == s.GetFlexibleDirection() == wx.BOTH
-    s.AddGrowableCol(1, 1)
+    buttons = []
+    labels = ['SetSizer', 'Collect Garbage', 'test', 'test']
+    for label in labels:
+        b = wx.Button(f, -1, label)
+        buttons.append(b)
 
-    for x in xrange(4):
-        b = wx.Button(f, -1, 'button %d' % x)
-        s.Add(b)
+    weakrefs = []
 
-    f.Sizer = s
+    def on_sizer(e=None):
+        print 'on_sizer'
+
+        oldSizer = f.Sizer
+        if oldSizer is not None:
+            weakrefs.append(ref(oldSizer))
+
+        s = wx.FlexGridSizer(2, 2)
+
+        assert s.FlexibleDirection == s.GetFlexibleDirection() == wx.BOTH
+        s.AddGrowableCol(1, 1)
+
+        for b in buttons:
+            s.Add(b)
+
+        f.SetSizer(s, False)
+        gc.collect()
+        print weakrefs
+
+    def on_gc(e=None):
+        print 'gc.collect()'
+        gc.collect()
+
+    buttons[0].Bind(wx.EVT_BUTTON, on_sizer)
+    buttons[1].Bind(wx.EVT_BUTTON, on_gc)
+
+    on_sizer()
+
     return f
 
 

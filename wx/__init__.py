@@ -6,7 +6,6 @@ python additions
 
 VERSION = (1, 0, 0, 0)
 USE_UNICODE = True
-
 import sip, new
 from functools import wraps
 
@@ -22,7 +21,7 @@ class SipTrace(object):
 SipTrace.ALL = (SipTrace.VIRTUAL | SipTrace.CONSTRUCTOR | SipTrace.DESTRUCTOR
                 | SipTrace.PY_INIT | SipTrace.PY_DEL | SipTrace.PY_METHOD)
 
-sip.settracemask(SipTrace.ALL)
+#sip.settracemask(SipTrace.ALL)
 
 def autorepr(s = None):
     if s is not None:
@@ -67,7 +66,7 @@ class Frame(wxFrame):
 wxDialog = wx.Dialog
 class Dialog(wxDialog):
     def __init__(self, parent, id = -1, title = '', pos = DefaultPosition, size = DefaultSize, style = DEFAULT_DIALOG_STYLE, name = wx.DialogNameStr):
-        wxDialog.__init__(self, parent, id, title, pos, size, style, name)
+        wxDialog.__init__(self, parent, id, title, Point(*pos), Size(*size), style, name)
 
 wxTextCtrl = wx.TextCtrl
 class TextCtrl(wxTextCtrl):
@@ -97,7 +96,7 @@ PyControl = Control
 _Window = wx.Window
 class Window(wx.Window):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = 0, name = 'Window'):
-        _Window.__init__(self, parent, id, pos, size, style, name)
+        _Window.__init__(self, parent, id, Point(*pos), Size(*size), style, name)
 
 _HyperlinkCtrl = wx.HyperlinkCtrl
 class HyperlinkCtrl(wx.HyperlinkCtrl):
@@ -107,7 +106,7 @@ class HyperlinkCtrl(wx.HyperlinkCtrl):
 _Panel = wx.Panel
 class Panel(wx.Panel):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = TAB_TRAVERSAL | NO_BORDER, name = 'Panel'):
-        _Panel.__init__(self, parent, id, pos, size, style, name)
+        _Panel.__init__(self, parent, id, Point(*pos), Size(*size), style, name)
 
 _MenuItem = wx.MenuItem
 class MenuItem(wx.MenuItem):
@@ -187,6 +186,12 @@ _FlexGridSizer = FlexGridSizer
 class FlexGridSizer(_FlexGridSizer):
     def __init__(self, rows = 1, cols = 0, vgap = 0, hgap = 0):
         _FlexGridSizer.__init__(self, rows, cols, vgap, hgap)
+
+_Gauge = Gauge
+class Gauge(_Gauge):
+    def __init__(self, parent, id = -1, range = 100, pos = DefaultPosition, size = DefaultSize, style = GA_HORIZONTAL,
+                 validator = DefaultValidator, name = "gauge"):
+        _Gauge.__init__(self, parent, id, range, pos, size, style, validator, name)
 
 _ListCtrl = ListCtrl
 class ListCtrl(_ListCtrl):
@@ -549,6 +554,14 @@ def _wxpy_init():
     except Exception:
         pass
 
+    try:
+        # make sure HTML tag modules get loaded
+        import lib.wxpTag
+    except Exception:
+        from traceback import print_exc; print_exc()
+
+    assert True == HandleFatalExceptions()
+
     _entrystart()
     _initallimagehandlers()
 
@@ -567,11 +580,8 @@ class App(_app):
             _wxpy_init()
             _did_wxpy_init = True
 
-        self.OnInit()
 
-    def MainLoop(self):
-        if len(GetTopLevelWindows()) > 0:
-            return _app.MainLoop(self)
+        self.OnInit()
 
 PySimpleApp = App
 

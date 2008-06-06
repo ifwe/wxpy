@@ -1,5 +1,6 @@
-import os
+import os.path
 import shutil
+import sys
 
 import genlisttypes
 from wxpybuild.wxpyext import build_extension, WXWIN
@@ -8,23 +9,48 @@ wxpy_modules = [
     ('_wxcore',  ['src/wx.sip']),
     ('_wxhtml',  ['src/html.sip']),
     ('_wxstc',   ['contrib/stc/stc.sip']),
-    #('_webview', ['src/webview.sip']),
 ]
+
+if not '--nowk' in sys.argv:
+    wxpy_modules.append(('_webview', ['src/webview.sip']))
+    BUILDING_WK = True
+else:
+    sys.argv.remove('--nowk')
+    BUILDING_WK = False
+
+
+from path import path
+WEBKITDIR   = path(r'c:\dev\digsby\build\msw\webkit')
+WEBKITBUILD = WEBKITDIR / 'WebKitBuild'
+
+DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
 
 def main():
     genlisttypes.generate()
-    build_extension('wxpy', wxpy_modules)
+
+    opts = {}
+
+    if BUILDING_WK:
+        opts.update(includes = [WEBKITDIR / 'WebKit'],
+                    libs     = ['wxwebkit'],
+                    libdirs  = [WEBKITBUILD / 'Release'])
+
+    build_extension('wxpy', wxpy_modules, **opts)
 
     import os
     if os.name == 'nt':
         windows_install_pyds()
 
 def windows_install_pyds():
-    srcdir  = 'build/obj-msvs2005prj/'
+    srcdir  = 'build/obj-msvs2005prj'
+    srcdir += '_d/' if DEBUG else '/'
+
     destdir = 'wx/'
 
     print 'copying binaries from %s to %s:' % (srcdir, destdir)
     for name, sources in wxpy_modules:
+        if DEBUG:
+            name = name + '_d'
         for ext in ('.pyd', '.pdb'):
             print '  %s%s' % (name, ext)
             copy_with_prompt('%s%s%s' % (srcdir,  name, ext),

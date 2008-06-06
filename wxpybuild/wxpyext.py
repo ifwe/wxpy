@@ -1,5 +1,5 @@
 from __future__ import with_statement
-import os
+import os.path
 import shutil
 import sipconfig
 import sys
@@ -19,6 +19,9 @@ GENERATED_SRC_DIR = SRC_DIR / 'generated'
 VERBOSE = True
 sip_cfg = sipconfig.Configuration()
 
+
+DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
+
 def wx_path():
     opts = {}
 
@@ -37,8 +40,18 @@ def wx_path():
 
 WXWIN = wx_path()
 
+class wxpyext(object):
+    def __init__(name, sources, includes = None, libs = None, libdirs = None):
+        self.name = name
+        self.sources = sources
+        self.includes = includes if includes is not None else []
+        self.libs = libs if libs is not None else []
+        self.libdirs = libdirs if libdirs is not None else []
 
-def build_extension(project_name, modules, includes = None):
+def build_extension(project_name, modules,
+                    includes = None,
+                    libs = None,
+                    libdirs = None):
     features = emit_features_file(WXWIN, 'src/generated/features.sip')
     feature_args = list(chain(*(('-x', feature)
                         for feature, enabled in features.iteritems() if not enabled)))
@@ -49,7 +62,7 @@ def build_extension(project_name, modules, includes = None):
 
         includes = [path(i).abspath() for i in includes]
 
-    sources = runsip(modules, feature_args, includes)
+    sources = runsip(modules, feature_args, includes, libs, libdirs)
     manage_cache(GENERATED_SRC_DIR)
 
     # The files we create below go in OUTPUT_DIR
@@ -63,7 +76,6 @@ def build_extension(project_name, modules, includes = None):
 def build_nt(solution_name):
     vcbuild_opts = [
         solution_name,
-        '/htmllog:build.html',
         '/nologo',    # leave out the MS copyright message
         '/showenv',
         '/time',
@@ -73,11 +85,11 @@ def build_nt(solution_name):
     if 'rebuild' in sys.argv:
         vcbuild_opts.append('/rebuild')
 
-    run('vcbuild %s Multilib|Win32' % ' '.join(vcbuild_opts))
+    config = '"%s Multilib|Win32"' % ('Debug' if DEBUG else 'Release')
 
-    output_dir = OUTPUT_DIR / 'obj-msvs2005prj'
+    run('vcbuild %s %s' % (' '.join(vcbuild_opts), config))
 
-def runsip(modules, features, includes = None):
+def runsip(modules, features, includes = None, libs = None, libdirs = None):
     sipgen = SIPGenerator(GENERATED_SRC_DIR, 'WXMSW', features)
     makefile = Element('makefile')
 
@@ -92,7 +104,7 @@ def runsip(modules, features, includes = None):
         else:
             template = 'wxpy_extension'
 
-        add_wxpy_module(makefile, module_name, sip_sources, includes, template)
+        add_wxpy_module(makefile, module_name, sip_sources, includes, template, libs, libdirs)
 
     return makefile
 
@@ -149,10 +161,17 @@ def build_path(p):
 def add_includes(module, inc_paths):
     return [xmlnode(module, 'include', p) for p in inc_paths]
 
-def add_wxpy_module(makefile, module_name, sources, include_paths = None, template = None):
+def add_wxpy_module(makefile, module_name, sources,
+                    include_paths = None,
+                    template = None,
+                    libs = None,
+                    libdirs = None):
+
     module = xmlnode(makefile, 'module',
                      id = module_name,
                      template = 'wxpy_extension' if template is None else template)
+
+    if DEBUG: module_name += '_d'
 
     dllname = xmlnode(module, 'dllname', '%s' % module_name)
 
@@ -165,7 +184,26 @@ def add_wxpy_module(makefile, module_name, sources, include_paths = None, templa
 
     add_includes(module, includes)
 
-    xmlnode(module, 'lib-path', sip_cfg.py_lib_dir)
+    if libs is not None:
+        for lib in libs:
+            xmlnode(module, 'sys-lib', lib)
+
+    if libdirs is None:
+        libdirs = []
+
+    # TODO: Where is PythonXX.lib
+    from distutils import sysconfig
+
+    if os.name == 'nt':
+        if DEBUG:
+            pylibdir = path(sysconfig.project_base) / 'PCBuild'
+        else:
+            pylibdir = path(sysconfig.project_base)
+    else:
+        assert False
+
+    for libdir in libdirs + [pylibdir]:
+        xmlnode(module, 'lib-path', libdir)
 
     source_elem = xmlnode(module, 'sources', '\n'.join(build_path(s) for s in sources))
 

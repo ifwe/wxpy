@@ -11,8 +11,8 @@ public:
 
 %ConvertToTypeCode
     if (sipIsErr == NULL)
-        return sequence_2_ints_check(sipPy)
-            || sipCanConvertToInstance(sipPy, sipClass_wxGBPosition, SIP_NO_CONVERTORS);
+        return sipCanConvertToInstance(sipPy, sipClass_wxGBPosition, SIP_NO_CONVERTORS)
+            || sequence_2_ints_check(sipPy);
 
     int _x, _y;
     if (sequence_2_ints(sipPy, &_x, &_y))
@@ -47,8 +47,8 @@ public:
 
 %ConvertToTypeCode
     if (sipIsErr == NULL)
-        return sequence_2_ints_check(sipPy)
-            || sipCanConvertToInstance(sipPy, sipClass_wxGBSpan, SIP_NO_CONVERTORS);
+        return sipCanConvertToInstance(sipPy, sipClass_wxGBSpan, SIP_NO_CONVERTORS)
+            || sequence_2_ints_check(sipPy);
 
     int _x, _y;
     if (sequence_2_ints(sipPy, &_x, &_y))

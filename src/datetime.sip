@@ -452,8 +452,9 @@ public:
         // sets the date to the given day of the given week in the year,
         // returns True on success and False if given date doesn't exist (e.g.
         // numWeek is > 53)
-    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
-    wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
+    // deprecated
+    //bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
+    //wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
 
         // returns the date corresponding to the given week day of the given
         // week (in ISO notation) of the specified year

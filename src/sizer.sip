@@ -133,7 +133,7 @@ public:
     //
 
     wxSizerItem* Insert(int index, wxWindow* item, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
-    wxSizerItem* Insert(int index, wxSizer* item,  int proportion = 0, int flag = 0, int border = 0) /Transfer/;
+    wxSizerItem* Insert(int index, wxSizer* item /Transfer/,  int proportion = 0, int flag = 0, int border = 0) /Transfer/;
 
     wxSizerItem* AddSpacer(SIP_PYTUPLE) /Transfer/;
 %MethodCode
@@ -166,6 +166,22 @@ public:
     // TODO: fix the object ownership issues here!
     bool Detach(wxWindow* window);
     bool Detach(wxSizer* sizer);
+%MethodCode
+    wxSizerItem* item = sipCpp->GetItem(a0);
+    if (item)
+    {
+
+        // if successfully removed, move ownership of the wxSizer object
+        // back to Python
+        PyObject* pySizer = sipGetWrapper(a0, sipClass_wxSizer);
+        if (pySizer)
+            sipTransferBack(pySizer);
+        PyObject* pySizerItem = sipGetWrapper(item, sipClass_wxSizerItem);
+        if (pySizerItem)
+            sipTransferBack(pySizerItem);
+    }
+%End
+
     bool Detach(size_t index);
 
     bool Show(wxWindow* item, bool show = true, bool recursive = false);
@@ -242,27 +258,6 @@ public:
     int GetRows();
     int GetVGap();
     int GetHGap();
-/*
-    %pythoncode {
-        def CalcRowsCols(self):
-            """
-            CalcRowsCols() -> (rows, cols)
-
-            Calculates how many rows and columns will be in the sizer based
-            on the current number of items and also the rows, cols specified
-            in the constructor.
-            """
-            nitems = len(self.GetChildren())
-            rows = self.GetRows()
-            cols = self.GetCols()
-            assert rows != 0 or cols != 0, "Grid sizer must have either rows or columns fixed"
-            if cols != 0:
-                rows = (nitems + cols - 1) / cols
-            elif rows != 0:
-                cols = (nitems + rows - 1) / rows
-            return (rows, cols)
-    }
-    */
 };
 
 

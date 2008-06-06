@@ -76,8 +76,6 @@ elif platform_name == 'msw':
                      '/GR',
                      ])
 
-
-
     lflags = ['/LIBPATH:' + str(wxdir / 'lib/vc_dll')]
 
     if WHOLE_PROGRAM_OPTIMIZATION:
@@ -85,9 +83,11 @@ elif platform_name == 'msw':
         lflags.append('/LTCG')
 
     if WXDEBUG:
-        cxxflags.extend(['/D__WXDEBUG__'])
+        cxxflags.append('/D__WXDEBUG__')
         if not DEBUG_RUNTIME:
-            cxxflags.extend(['/D__NO_VC_CRTDBG__'])
+            cxxflags.append('/D__NO_VC_CRTDBG__')
+    else:
+        cxxflags.append('/DNDEBUG')
 
     if DEBUG_SYMBOLS: # debug
         if '/Zi' not in cxxflags:
