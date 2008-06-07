@@ -63,6 +63,7 @@
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>
 #include <wx/msw/crashrpt.h>
+#include <wx/msw/seh.h>
 #endif
 
 #include <vector>

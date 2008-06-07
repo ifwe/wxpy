@@ -21,11 +21,10 @@ public:
 
 %ModuleCode
 
-
-#ifndef WXPY_PREC
 #ifdef __WXMSW__
+#ifndef WXPY_PREC
 #include <wx/msw/crashrpt.h>
-#endif
+#include <wx/msw/seh.h>
 #endif
 
 wxPyApp::wxPyApp()
@@ -60,8 +59,6 @@ static void traceback_print_stack()
     SIP_UNBLOCK_THREADS
 }
 
-#ifdef __WXMSW__
-
 extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
 
 #include <wx/msw/seh.h>
@@ -94,61 +91,8 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
     // this will execute our handler and terminate the process
     return EXCEPTION_EXECUTE_HANDLER;
 }
-/*
-void wxPyApp::OnFatalException()
-{
-    traceback_print_stack();
-    fprintf(stderr, "OnFatalException, generating minidump...\n");
 
-    wxString msg;
-
-    SIP_BLOCK_THREADS
-    fprintf(stderr, "Inside SIP_BLOCK_THREADS\n");
-
-    // grab sys.executable
-    PyObject *mod;
-    mod = PyImport_ImportModule("sys");
-    fprintf(stderr, "mod is %p\n", mod);
-
-    if (mod)
-    {
-        PyObject* sys_dict = PyModule_GetDict(mod);
-        fprintf(stderr, "sys_dict is %p\n", sys_dict);
-        if (sys_dict)
-        {
-            PyObject* pyExecutable = PyDict_GetItemString(sys_dict, "executable");
-            fprintf(stderr, "pyExecutable is %p\n", pyExecutable);
-            if (pyExecutable)
-            {
-                wxString pythonExc;
-                char* pyexechar = PyString_AsString(pyExecutable);
-
-                fprintf(stderr, "pexechar is %s\n", pyexechar);
-
-                pythonExc.FromAscii(pyexechar);
-                msg << wxT("Python excutable is ") << pythonExc << wxT("\n");
-            }
-            else
-                fprintf(stderr, "Coult not get sys.__dict__['executable']\n");
-        }
-        else
-            fprintf(stderr, "Could not get sys.__dict__\n");
-        Py_DECREF(mod);
-    }
-    else
-        fprintf(stderr, "Could not import 'sys'\n");
-    SIP_UNBLOCK_THREADS
-
-    msg << wxT("A crash dump was generated at ");
-    msg << wxCrashReport::GetFileName();
-    wxCrashReport::Generate(wxCRASH_REPORT_DEFAULT);
-
-    wxMessageBox(msg);
-}
-*/
-#else
-#error "No fatal exception handling."
-#endif
+#endif // __WXMSW__
 
 void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc, const wxChar *cond, const wxChar *szMsg)
 {

@@ -11,7 +11,7 @@ enum
 class wxMenu : wxEvtHandler
 {
 public:
-    wxMenu(const wxString& title = wxEmptyString, long style = 0) /Transfer/;
+    wxMenu(const wxString& title = wxEmptyString, long style = 0);
     virtual ~wxMenu();
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;
@@ -32,9 +32,9 @@ public:
                               const wxString& text,
                               const wxString& help = wxEmptyString);
 
-    wxMenuItem* Append(wxMenuItem *item) /PyName=AppendItem/;
-    wxMenuItem* Insert(size_t pos, wxMenuItem *item) /PyName=InsertItem/;
-    wxMenuItem* Prepend(wxMenuItem *item) /PyName=PrependItem/;
+    wxMenuItem* Append(wxMenuItem *item /Transfer/) /PyName=AppendItem/;
+    wxMenuItem* Insert(size_t pos, wxMenuItem *item /Transfer/) /PyName=InsertItem/;
+    wxMenuItem* Prepend(wxMenuItem *item /Transfer/) /PyName=PrependItem/;
 
     void Break();
     wxMenuItem* Insert(size_t pos,
@@ -185,8 +185,11 @@ public:
 
 };
 
-class wxMenuItem : wxObject
+class wxMenuItem : wxObject /NoDefaultCtors/
 {
+private:
+    wxMenuItem(const wxMenuItem&);
+
 public:
     wxMenuItem(wxMenu* parentMenu /TransferThis/ = NULL,
                int id = wxID_SEPARATOR,
@@ -277,6 +280,5 @@ public:
     wxString GetItemLabelText() const;
     static wxString GetLabelText(const wxString& label);
 
-private:
-    wxMenuItem(const wxMenuItem&);
+
 };
