@@ -269,3 +269,16 @@ wxApp* GetApp();
 %MethodCode
     sipRes = wxTheApp;
 %End
+
+%If (WXMSW)
+    SIP_PYOBJECT SEHGuard(SIP_PYCALLABLE cb);
+%MethodCode
+    wxSEH_TRY
+    {
+        SIP_BLOCK_THREADS
+        sipRes = PyObject_CallFunction(a0, NULL);
+        SIP_UNBLOCK_THREADS
+    }
+    wxSEH_HANDLE(-1)
+%End
+%End

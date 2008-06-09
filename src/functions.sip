@@ -198,3 +198,4 @@ bool wxIsPlatformLittleEndian();
 bool wxIsPlatform64Bit();
 
 bool wxHandleFatalExceptions();
+
