@@ -60,6 +60,18 @@
 #include <wx/taskbar.h>
 #include <wx/renderer.h>
 #include <wx/dcgraph.h>
+
+#include <wx/pickerbase.h>
+#if wxUSE_FONTPICKERCTRL
+#include <wx/fontpicker.h>
+#endif
+#if wxUSE_DIRPICKERCTRL
+#include <wx/filepicker.h>
+#endif
+#if wxUSE_COLOURPICKERCTRL
+#include <wx/clrpicker.h>
+#endif
+
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>
 #include <wx/msw/crashrpt.h>

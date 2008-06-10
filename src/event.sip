@@ -72,7 +72,7 @@ void CallAfter(SIP_PYCALLABLE);
 %MethodCode
     int newSize;
 
-    if (!wxTheApp)
+/*    if (!wxTheApp)
     {
         SIP_BLOCK_THREADS
         PyErr_SetString(PyExc_AssertionError, "No wx.App created yet");
@@ -80,7 +80,7 @@ void CallAfter(SIP_PYCALLABLE);
         sipIsErr = 1;
     }
     else
-    {
+    {*/
         /* append the callable to the end of our list */
         SIP_BLOCK_THREADS
         Py_INCREF(a0);
@@ -92,7 +92,7 @@ void CallAfter(SIP_PYCALLABLE);
         SIP_UNBLOCK_THREADS
         wxCommandEvent e(g_callAfterId, -1);
         wxTheApp->AddPendingEvent(e);
-    }
+//    }
 %End
 
 int wxNewEventType();
@@ -234,6 +234,35 @@ wxEVT_COMMAND_ENTER,
 
 class wxEvent : wxObject
 {
+%ConvertToSubClassCode
+    wxClassInfo* c = sipCpp -> GetClassInfo();
+
+    /* TODO: automate this by grepping for wxXXXEvent and putting
+     * entries here before build :( */
+    if(0) ;
+#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+        C(wxKeyEvent)
+        C(wxCommandEvent)
+        C(wxMouseEvent)
+        C(wxTimerEvent)
+        C(wxShowEvent)
+        C(wxMenuEvent)
+        C(wxShowEvent)
+        C(wxActivateEvent)
+        C(wxMaximizeEvent)
+        C(wxIconizeEvent)
+        C(wxHyperlinkEvent)
+        C(wxInitDialogEvent)
+        C(wxNotifyEvent)
+        C(wxListEvent)
+        C(wxDropFilesEvent)
+        C(wxTreeEvent)
+        C(wxUpdateUIEvent)
+    else
+        sipClass = NULL;
+#undef C
+%End
+
 public:
     wxEventType GetEventType() const;
     void SetEventType(wxEventType);

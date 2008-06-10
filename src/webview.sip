@@ -132,6 +132,7 @@ if(0) ;
     C(wxWebViewReceivedTitleEvent)
 else
     sipClass = NULL;
+#undef C
 %End
 
 public:

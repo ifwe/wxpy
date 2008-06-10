@@ -80,10 +80,14 @@ struct wxRendererVersion
     const int age;
 };
 */
-/*
+
 class wxRendererNative
 {
+private:
+    wxRendererNative();
+    wxRendererNative(const wxRendererNative&);
 public:
+    /*
     int DrawHeaderButton(wxWindow *win,
                          wxDC& dc,
                          const wxRect& rect,
@@ -144,11 +148,11 @@ public:
                                        int flags = 0);
 
     //virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
-
+*/
     static wxRendererNative& Get();
     static wxRendererNative& GetGeneric();
     static wxRendererNative& GetDefault();
     static wxRendererNative* Set(wxRendererNative *renderer);
     //virtual wxRendererVersion GetVersion() const;
 };
-*/
+

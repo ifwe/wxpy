@@ -44,6 +44,8 @@ def write_if_different(filename, content):
             orig = f.read()
 
     if orig != content:
+        if not os.path.isdir(os.path.dirname(filename)):
+            os.makedirs(os.path.dirname(filename))
         with open(filename, 'w') as f:
             f.write(content)
 

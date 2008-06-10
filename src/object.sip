@@ -19,30 +19,12 @@ class wxObject
     /* TODO: automate this by grepping for wxXXXEvent and putting
      * entries here before build :( */
     if(0) ;
-    #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
-        C(wxKeyEvent)
-        C(wxCommandEvent)
-        C(wxMouseEvent)
-        C(wxTimerEvent)
-        C(wxShowEvent)
-        C(wxMenuEvent)
-        C(wxShowEvent)
-        C(wxActivateEvent)
-        C(wxMaximizeEvent)
-        C(wxIconizeEvent)
-        C(wxHyperlinkEvent)
-        C(wxInitDialogEvent)
-        C(wxNotifyEvent)
-        C(wxListEvent)
-        C(wxDropFilesEvent)
-        C(wxTreeEvent)
-        C(wxUpdateUIEvent)
-
+#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
         C(wxSizerItem)
         C(wxGBSizerItem)
-
     else
         sipClass = NULL;
+#undef C
 %End
 
 

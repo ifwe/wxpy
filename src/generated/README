@@ -1,9 +1,0 @@
-wxList<T> may be a template type, but it is declared with a weird macro, and I
-couldn't get it to play nice with SIP's template MappedType support.
-
-So instead, genlisttypes.py in the root directory creates files based on
-list.sip.template (also in the root directory) and places the files in this
-directory.
-
-A file called "lists.sip" is also generated, including each of the generated
-files here.

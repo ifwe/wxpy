@@ -9,13 +9,30 @@ enum wxWindowVariant
 
 class wxWindow : wxEvtHandler
 {
-
 %TypeHeaderCode
 #ifndef WXPY_PREC
 #include <wx/window.h>
 #include <wx/dynlib.h>
 #endif
 %End
+
+%ConvertToSubClassCode
+wxClassInfo* c = sipCpp->GetClassInfo();
+
+if(0) ;
+#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+    C(wxWindow)
+    C(wxFrame)
+    C(wxDialog)
+    C(wxTopLevelWindow)
+    C(wxPopupWindow)
+else
+    sipClass = NULL;
+#undef C
+%End
+
+
+
 
 public:
     wxWindow(wxWindow* parent /TransferThis/,
@@ -28,8 +45,6 @@ public:
 
     void Raise();
     void Lower();
-
-
 
     void Destroy();
 

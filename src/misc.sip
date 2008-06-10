@@ -15,6 +15,7 @@
 %Include clipboard.sip
 %Include renderer.sip
 %Include datetime.sip
+%Include picker.sip
 
 %If (!WXMAC)
 %Include power.sip

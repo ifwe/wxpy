@@ -150,7 +150,7 @@ class TextEntryDialog(_TextEntryDialog):
 
 _CheckBox = CheckBox
 class CheckBox(_CheckBox):
-    def __init__(self, parent, id, label = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = DefaultValidator, name = 'checkBox'):
+    def __init__(self, parent, id = ID_ANY, label = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = DefaultValidator, name = 'checkBox'):
         _CheckBox.__init__(self, parent, id, label, pos, size, style, validator, name)
 
 _Choice = Choice
@@ -192,6 +192,25 @@ class Gauge(_Gauge):
     def __init__(self, parent, id = -1, range = 100, pos = DefaultPosition, size = DefaultSize, style = GA_HORIZONTAL,
                  validator = DefaultValidator, name = "gauge"):
         _Gauge.__init__(self, parent, id, range, pos, size, style, validator, name)
+
+wxDIRP_DEFAULT_STYLE = DIRP_DEFAULT_STYLE
+
+_DirPickerCtrl = DirPickerCtrl
+class DirPickerCtrl(_DirPickerCtrl):
+    def __init__(self, parent, id=-1, path='', message = 'Select a folder',
+                    pos = DefaultPosition, size = DefaultSize, style = wxDIRP_DEFAULT_STYLE,
+                    validator = DefaultValidator, name = 'dirpicker'):
+        _DirPickerCtrl.__init__(self)
+
+wxFLP_DEFAULT_STYLE = FLP_DEFAULT_STYLE
+
+_FilePickerCtrl = FilePickerCtrl
+class FilePickerCtrl(_FilePickerCtrl):
+    def __init__(self, parent, id=-1, path='', message = 'Select a file',
+                 wildcard = '*.*', pos = DefaultPosition,
+                 size = DefaultSize, style = wxFLP_DEFAULT_STYLE, validator = DefaultValidator,
+                 name = 'filepicker'):
+        _FilePickerCtrl.__init__(self)
 
 _ListCtrl = ListCtrl
 class ListCtrl(_ListCtrl):
@@ -412,6 +431,14 @@ def MenuBar_SetMenus(self, items):
 MenuBar.GetMenus = MenuBar_GetMenus
 MenuBar.SetMenus = MenuBar_SetMenus
 MenuBar.Menus    = property(MenuBar_GetMenus, MenuBar_SetMenus)
+
+#
+# Functions
+#
+
+_MessageBox = MessageBox
+def MessageBox(message, caption = 'Message', style = OK, parent = None, x = -1, y = -1):
+    _MessageBox(message, caption, style, parent, x, y)
 
 #
 # KeyEvent

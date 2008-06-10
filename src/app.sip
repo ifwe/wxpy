@@ -67,6 +67,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 {
     // store the pointer to exception info
     wxGlobalSEInformation = pExcPtrs;
+    wxString cmd;
 
     wxSEH_TRY
     {
@@ -77,7 +78,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
     wxSEH_TRY
     {
         wxPyApp* app = (wxPyApp*)wxTheApp;
-        wxString cmd(app->executable);
+        cmd = app->executable;
 
         wxCrashReport::Generate(wxCRASH_REPORT_DEFAULT, pExcPtrs);
 
@@ -169,6 +170,11 @@ public:
     void SetExecutable(const wxString& exc);
 %MethodCode
     sipCpp->executable = *a0;
+%End
+
+    void Abort();
+%MethodCode
+        abort();
 %End
 
     int MainLoop();

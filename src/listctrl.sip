@@ -150,7 +150,8 @@ public:
     void AssignFrom(const wxListItemAttr& source);
 };
 
-class wxListItem : wxObject {
+class wxListItem : wxObject
+{
 public:
     wxListItem();
     virtual ~wxListItem();
@@ -196,10 +197,13 @@ public:
     wxFont GetFont() const;
 };
 
-class wxListEvent: wxNotifyEvent {
+class wxListEvent: wxNotifyEvent
+{
 public:
     wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
     virtual ~wxListEvent();
+
+    wxString GetText();
 
     int GetKeyCode();
     long GetIndex();
