@@ -131,12 +131,12 @@ public:
                                wxDC& dc,
                                const wxRect& rect,
                                int flags = 0);
-
+*/
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0);
-
+                              int flags = 0) = 0;
+/*
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,

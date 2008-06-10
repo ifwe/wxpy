@@ -34,4 +34,8 @@ public:
     wxString GetLocalizedResourcesDir(const wxString& lang, ResourceCat category = ResourceCat_None) const;
     wxString GetDocumentsDir() const;
     wxString GetTempDir() const;
+
+%If (WXMSW)
+    wxString GetSpecialFolder(int) const;
+%End
 };

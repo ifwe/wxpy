@@ -1,8 +1,27 @@
 import gc
-from weakref import ref
-import sip
+import sys
 import wx
+
+from weakref import ref
+from time import clock
+
+import sip
 from testutil import assert_ownership
+
+
+
+def test_Detach():
+    f = wx.Frame(None)
+    s = wx.BoxSizer(wx.HORIZONTAL)
+
+    item = s.Add((50, 50))
+    weakitem = ref(item)
+    assert not sip.ispyowned(item)
+    assert s.Detach(0)
+    assert sip.isdeleted(item)
+    del item
+    gc.collect()
+    assert weakitem() is None
 
 def test_FlexGridSizer():
     f = wx.Frame(None)
@@ -101,20 +120,10 @@ def test_WindowSetSizer():
     assert sip.isdeleted(s1)
     return f
 
-def main3():
-    a = wx.PySimpleApp()
-
-    tests = [#test_SizerClear,
-             test_WindowSetSizer,
-             ]
-
-    for f in tests:
-        f().Destroy()
-
 def main():
     a=wx.PySimpleApp()
-    test_FlexGridSizer().Show()
-    a.MainLoop()
+    test_Detach()
+    #a.MainLoop()
 
 if __name__ == '__main__':
     main()

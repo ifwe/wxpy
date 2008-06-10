@@ -258,6 +258,8 @@ def manage_cache(gendir, show_diffs = True):
             if oldfile.exists():
                 assert newfile.mtime > oldfile.mtime
 
+
+
             shutil.copy2(newfile, oldfile) # src, dest
             a, b = newfile.stat().st_mtime, oldfile.stat().st_mtime
             #assert a == b, "copy2 failed: mtimes are different! (%s and %s)" % (a, b)

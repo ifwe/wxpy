@@ -200,7 +200,7 @@ class DirPickerCtrl(_DirPickerCtrl):
     def __init__(self, parent, id=-1, path='', message = 'Select a folder',
                     pos = DefaultPosition, size = DefaultSize, style = wxDIRP_DEFAULT_STYLE,
                     validator = DefaultValidator, name = 'dirpicker'):
-        _DirPickerCtrl.__init__(self)
+        _DirPickerCtrl.__init__(self, parent, id, path, message, pos, size, style, validator, name)
 
 wxFLP_DEFAULT_STYLE = FLP_DEFAULT_STYLE
 
@@ -210,7 +210,7 @@ class FilePickerCtrl(_FilePickerCtrl):
                  wildcard = '*.*', pos = DefaultPosition,
                  size = DefaultSize, style = wxFLP_DEFAULT_STYLE, validator = DefaultValidator,
                  name = 'filepicker'):
-        _FilePickerCtrl.__init__(self)
+        _FilePickerCtrl.__init__(self, parent, id, path, message, wildcard, pos, size, style, validator, name)
 
 _ListCtrl = ListCtrl
 class ListCtrl(_ListCtrl):

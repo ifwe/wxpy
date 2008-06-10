@@ -1,7 +1,13 @@
 
 class wxSizerItem: wxObject
 {
+private:
+    wxSizerItem(const wxSizerItem&);
+    wxSizerItem();
+
 public:
+    virtual ~wxSizerItem();
+
     wxSizerItem(wxWindow *window,
                 int proportion,
                 int flag,
@@ -28,13 +34,9 @@ public:
 
     // spacer with flags
     //wxSizerItem(int width, int height, const wxSizerFlags& flags);
-    wxSizerItem();
-    virtual ~wxSizerItem();
 
     void DeleteWindows();
     void DetachSizer();
-
-
 
     wxSize GetSize() const;
     wxSize CalcMin();
@@ -80,13 +82,9 @@ public:
     void SetWindow(wxWindow *window);
     void SetSizer(wxSizer *sizer);
 
-
-
     void SetSpacer(const wxSize& size);
     void SetSpacer(int width, int height);
 
-private:
-    wxSizerItem(const wxSizerItem&);
 };
 
 class wxSizer: wxObject {
@@ -171,24 +169,96 @@ public:
 
     // TODO: fix the object ownership issues here!
     bool Detach(wxWindow* window);
+
+
+%TypeHeaderCode
+static bool transferBack(void* cppObject, sipWrapperType* type);
+static void setDeleted(void* cppObject, sipWrapperType* type);
+static void removeFromParent(sipWrapper *self);
+%End
+
+%TypeCode
+
+// TODO: actually use the one from sip.h
+static void removeFromParent(sipWrapper *self)
+{
+    if (self->parent != NULL)
+    {
+        if (self->parent->first_child == self)
+            self->parent->first_child = self->sibling_next;
+
+        if (self->sibling_next != NULL)
+            self->sibling_next->sibling_prev = self->sibling_prev;
+
+        if (self->sibling_prev != NULL)
+            self->sibling_prev->sibling_next = self->sibling_next;
+
+        self->parent = NULL;
+        self->sibling_next = NULL;
+        self->sibling_prev = NULL;
+
+        /*
+         * We must do this last, after all the pointers are correct, because
+         * this is used by the clear slot.
+         */
+        Py_DECREF(self);
+    }
+}
+
+static void setDeleted(void* cppObject, sipWrapperType* type)
+{
+    sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
+    if (!w)
+        return;
+
+    removeFromParent(w);
+    sipResetPyOwned(w);
+    w->u.cppPtr = NULL;
+}
+
+static bool transferBack(void* cppObject, sipWrapperType* type)
+{
+    if (!cppObject)
+        return false;
+
+    PyObject* pyObject = sipGetWrapper(cppObject, type);
+    if (pyObject)
+        sipTransferBack(pyObject);
+
+    return !!pyObject;
+}
+%End
+
     bool Detach(wxSizer* sizer);
 %MethodCode
     wxSizerItem* item = sipCpp->GetItem(a0);
     if (item)
     {
+        wxSizer* sizer = item->GetSizer(); // will be delted
+        if (sizer)
+            setDeleted(sizer, sipClass_wxSizer);
 
-        // if successfully removed, move ownership of the wxSizer object
-        // back to Python
-        PyObject* pySizer = sipGetWrapper(a0, sipClass_wxSizer);
-        if (pySizer)
-            sipTransferBack(pySizer);
-        PyObject* pySizerItem = sipGetWrapper(item, sipClass_wxSizerItem);
-        if (pySizerItem)
-            sipTransferBack(pySizerItem);
+        setDeleted(item, sipClass_wxSizerItem);
     }
+
+    sipRes = sipCpp->Detach(a0);
 %End
 
     bool Detach(size_t index);
+%MethodCode
+    wxSizerItem* item = sipCpp->GetItem(a0);
+    if (item)
+    {
+        wxSizer* sizer = item->GetSizer(); // will be delted
+        if (sizer)
+            setDeleted(sizer, sipClass_wxSizer);
+
+        setDeleted(item, sipClass_wxSizerItem);
+    }
+
+    sipRes = sipCpp->Detach(a0);
+%End
+
 
     bool Show(wxWindow* item, bool show = true, bool recursive = false);
     bool Show(wxSizer*  item, bool show = true, bool recursive = false);
