@@ -8,17 +8,24 @@ from time import clock
 import sip
 from testutil import assert_ownership
 
-
-
 def test_Detach():
     f = wx.Frame(None)
     s = wx.BoxSizer(wx.HORIZONTAL)
 
     item = s.Add((50, 50))
     weakitem = ref(item)
+
+    assert len(s.Children) == 1
+    assert s.Children[0].Spacer == (50, 50)
+
     assert not sip.ispyowned(item)
+
     assert s.Detach(0)
+
+    assert len(s.Children) == 0
+
     assert sip.isdeleted(item)
+
     del item
     gc.collect()
     assert weakitem() is None

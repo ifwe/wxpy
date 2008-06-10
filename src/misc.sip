@@ -17,6 +17,10 @@
 %Include datetime.sip
 %Include picker.sip
 
+%If (wxUSE_CALENDARCTRL)
+%Include calendar.sip
+%End
+
 %If (!WXMAC)
 %Include power.sip
 %End

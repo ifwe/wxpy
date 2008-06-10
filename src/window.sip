@@ -425,7 +425,6 @@ public:
     void SetLabel(const wxString& label);
     wxString GetLabel() const;
 
-
     wxWindowID GetId() const;
     static int NewControlId();
     void SetSize(const wxSize& size);
@@ -441,7 +440,6 @@ public:
 %MethodCode
     sipCpp->Move(*a0);
 %End
-
 
     wxPoint GetScreenPosition() const;
     wxRect  GetScreenRect() const;

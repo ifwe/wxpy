@@ -71,6 +71,9 @@
 #if wxUSE_COLOURPICKERCTRL
 #include <wx/clrpicker.h>
 #endif
+#if wxUSE_CALENDARCTRL
+#include <wx/calctrl.h>
+#endif
 
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>
