@@ -2,6 +2,13 @@ import gc
 import wx
 from weakref import ref
 
+def button_event(event_object = None):
+    evt = wx.CommandEvent(wx.EVT_COMMAND_BUTTON_CLICKED)
+    if event_object is not None:
+        evt.SetEventObject(event_object)
+
+    return evt
+
 def test_skip():
     e = wx.CommandEvent()
 
@@ -26,7 +33,7 @@ def test_bind():
     b.Bind(wx.EVT_BUTTON, on_button)
     f.Bind(wx.EVT_BUTTON, on_frame)
 
-    b.Command(wx.CommandEvent(wx.EVT_COMMAND_BUTTON_CLICKED))
+    b.Command(button_event())
 
     assert flags['button'] == True
 
@@ -44,11 +51,11 @@ def test_unbind():
         count = count + 1
 
     b.Bind(wx.EVT_BUTTON, foo)
-    b.Command(wx.CommandEvent(wx.EVT_COMMAND_BUTTON_CLICKED))
+    b.Command(button_event())
     assert count == 1
 
     b.Unbind(wx.EVT_BUTTON)
-    b.Command(wx.CommandEvent(wx.EVT_COMMAND_BUTTON_CLICKED))
+    b.Command(button_event())
     assert count == 1
 
     # make sure the event handler doesn't hold a reference to foo still
@@ -59,6 +66,23 @@ def test_unbind():
 
     return f
 
+def test_EventObject():
+    f = wx.Frame(None)
+
+    def foo(e): assert e.EventObject is f
+
+    f.Bind(wx.EVT_BUTTON, foo)
+    f.ProcessEvent(button_event(event_object = f))
+
+    t=wx.TextCtrl(f)
+
+    def bar(e): assert e.EventObject is t
+
+    t.Bind(wx.EVT_TEXT, bar)
+    t.SetValue('test')
+    return f
+
 if __name__ == '__main__':
     a=wx.PySimpleApp()
-    test_unbind()
+    test_EventObject().Show()
+    a.MainLoop()

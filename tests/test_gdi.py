@@ -87,6 +87,10 @@ def test_Rect():
     r5 = r3.Inflate(10, 10)
     assert r3 == r5 == (10, 20, 41, 41)
 
+    r6 = wx.Rect(40, 40, 20, 20)
+    r6.Offset((20, -10))
+    assert r6 == (60, 30, 20, 20)
+
 
 def test_Colour():
     c = wx.Colour(33, 66, 99)
