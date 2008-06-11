@@ -353,19 +353,18 @@ static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPt
     bool EnsureVisible(long item) ;
 
     long FindItem(long start, const wxString& str, bool partial = false);
-
-    //%Rename(FindItemData,  long, FindItem(long start, long data));
-    long FindItem(long start, long data);
-
+    long FindItem(long start, long data) /PyName=FindItemData/;
 
     //%Rename(FindItemAtPoslong, FindItem(long start, const wxPoint& pt, int direction));
     long FindItem(long start, const wxPoint& pt, int direction);
 
-    // TODO: HitTest methods
+    long HitTest(const wxPoint& point, int& flags);
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem) /PyName=HitTestSubItem/;
 
     long InsertItem(wxListItem& info);
     long InsertItem(long index, const wxString& label, int imageIndex = -1) /PyName=InsertStringItem/;
     long InsertItem(long index, int imageIndex) /PyName=InsertImageItem/;
+    long InsertItem(long index, const wxString& label, int imageIndex) /PyName=InsertImageStringItem/;
 
     long InsertColumn(long col, wxListItem& info);
 
