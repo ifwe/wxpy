@@ -221,7 +221,7 @@ public:
 
 class wxTreeCtrl : wxControl {
 public:
-    wxTreeCtrl(wxWindow *parent, wxWindowID id,
+    wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxTR_DEFAULT_STYLE,

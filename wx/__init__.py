@@ -212,6 +212,14 @@ class FilePickerCtrl(_FilePickerCtrl):
                  name = 'filepicker'):
         _FilePickerCtrl.__init__(self, parent, id, path, message, wildcard, pos, size, style, validator, name)
 
+
+_FileDialog = FileDialog
+class FileDialog(_FileDialog):
+    def __init__(self, parent, message = 'Select a file', defaultDir = '', defaultFile = '',
+                             wildcard = '*.*', style = FD_DEFAULT_STYLE, pos = DefaultPosition):
+        _FileDialog.__init__(self, parent, message, defaultDir, defaultFile, wildcard, style, pos)
+
+
 _CustomDataObject = CustomDataObject
 class CustomDataObject(_CustomDataObject):
     def __init__(self, obj):
@@ -413,6 +421,7 @@ def DC_DrawLabel(self, text, rect, alignment = ALIGN_LEFT | ALIGN_TOP, indexAcce
     return _dc_drawlabel(self, text, rect, alignment, indexAccel)
 DC.DrawLabel = DC_DrawLabel
 del DC_DrawLabel
+
 
 _wxtimer = wx.Timer
 class PyTimer(_wxtimer):
@@ -657,6 +666,7 @@ NamedColor = wx.NamedColour
 PyBitmapDataObject = wx.BitmapDataObject
 PyDropTarget = wx.DropTarget
 PyValidator = wx.Validator
+CommandEvent.Checked = property(CommandEvent.IsChecked)
 PyCommandEvent = wx.CommandEvent
 
 PyScrolledWindow = ScrolledWindow

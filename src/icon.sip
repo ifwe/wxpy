@@ -30,5 +30,5 @@ public:
 
     void AddIcon(const wxIcon& icon);
     void AddIcon(const wxString& file, long type) /PyName=AddIconFromFile/;
-    const wxIcon& GetIcon( const wxSize& size ) const;
+    const wxIcon& GetIcon(const wxSize& size) const;
 };
