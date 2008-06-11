@@ -48,6 +48,10 @@ public:
 %MethodCode
         sipRes = sipCpp->IsOk();
 %End
+    int __nonzero__();
+%MethodCode
+    sipRes = (int)sipCpp->IsOk();
+%End
 
     int GetWidth();
     int GetHeight();
