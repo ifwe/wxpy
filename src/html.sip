@@ -1,9 +1,5 @@
 %Module _wxhtml
-//%Platforms {WXMSW WXCOCOA WXMAC WXGTK}
-//%SIPOptions (RenameWx, AutoProperties)
-
 %Import wx.sip
-
 %UnitCode
 #include "stdwxpy.h"
 %End
@@ -20,7 +16,6 @@
 
 %PostInitialisationCode
 typedef void (*add_event_type)(PyObject* moduple_dict, const char* name, ...);
-
 add_event_type add_event = (add_event_type)sipImportSymbol("wxpy_add_event");
 
 add_event(sipModuleDict, "EVT_HTML_CELL_CLICKED", wxEVT_COMMAND_HTML_CELL_CLICKED, 0);

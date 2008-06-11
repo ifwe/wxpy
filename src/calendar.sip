@@ -1,3 +1,9 @@
+%Module _wxcalendar
+%Import wx.sip
+%UnitCode
+#include "stdwxpy.h"
+%End
+
 %ModuleHeaderCode
 #ifndef WXPY_PREC
 #include <wx/calctrl.h>
@@ -76,6 +82,9 @@ enum
 };
 
 %PostInitialisationCode
+typedef void (*add_event_type)(PyObject* moduple_dict, const char* name, ...);
+add_event_type add_event = (add_event_type)sipImportSymbol("wxpy_add_event");
+
 add_event(sipModuleDict, "EVT_CALENDAR", wxEVT_CALENDAR_DOUBLECLICKED, 0);
 add_event(sipModuleDict, "EVT_CALENDAR_SEL_CHANGED", wxEVT_CALENDAR_SEL_CHANGED, 0);
 add_event(sipModuleDict, "EVT_CALENDAR_DAY", wxEVT_CALENDAR_DAY_CHANGED, 0);

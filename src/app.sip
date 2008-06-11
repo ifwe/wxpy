@@ -180,12 +180,12 @@ public:
     int MainLoop();
 %MethodCode
     Py_BEGIN_ALLOW_THREADS
-#if __WXMSW__
+#if 0 && __WXMSW__
     wxSEH_TRY
     {
 #endif
         sipRes = sipCpp->MainLoop();
-#if __WXMSW__
+#if 0 && __WXMSW__
     }
     wxSEH_HANDLE(-1)
 #endif

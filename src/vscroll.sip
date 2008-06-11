@@ -91,6 +91,7 @@ protected:
                const wxString& name = wxVListBoxNameStr);
 
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
+    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
     virtual void OnDrawSeparator(wxDC&, wxRect&, size_t) const;
     virtual wxCoord OnMeasureItem(size_t n) const = 0;
 

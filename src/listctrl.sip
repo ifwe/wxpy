@@ -325,9 +325,12 @@ static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPt
     void SetWindowStyleFlag(long style) ;
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const ;
 
-    //wxImageList *GetImageList(int which) const ;
-    //void SetImageList(wxImageList *imageList, int which);
-    //void AssignImageList(wxImageList *imageList, int which);
+%If (wxUSE_IMAGLIST)
+    wxImageList *GetImageList(int which) const ;
+    void SetImageList(wxImageList *imageList, int which);
+    void AssignImageList(wxImageList *imageList /Transfer/, int which);
+%End
+
     bool InReportView() const;
     bool IsVirtual() const;
     void RefreshItem(long item);

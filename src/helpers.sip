@@ -124,8 +124,51 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
 }
 
 
-
-
-
 %End
 
+
+%ModuleHeaderCode
+void setDeleted(void* cppObject, sipWrapperType* type);
+%End
+
+
+%ModuleCode
+
+// TODO: actually use the one from sip.h
+static void removeFromParent(sipWrapper *self)
+{
+    if (self->parent != NULL)
+    {
+        if (self->parent->first_child == self)
+            self->parent->first_child = self->sibling_next;
+
+        if (self->sibling_next != NULL)
+            self->sibling_next->sibling_prev = self->sibling_prev;
+
+        if (self->sibling_prev != NULL)
+            self->sibling_prev->sibling_next = self->sibling_next;
+
+        self->parent = NULL;
+        self->sibling_next = NULL;
+        self->sibling_prev = NULL;
+
+        /*
+         * We must do this last, after all the pointers are correct, because
+         * this is used by the clear slot.
+         */
+        Py_DECREF(self);
+    }
+}
+
+void setDeleted(void* cppObject, sipWrapperType* type)
+{
+    sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
+    if (!w)
+        return;
+
+    removeFromParent(w);
+    sipResetPyOwned(w);
+    w->u.cppPtr = NULL;
+}
+
+%End // %ModuleCode

@@ -74,6 +74,9 @@
 #if wxUSE_CALENDARCTRL
 #include <wx/calctrl.h>
 #endif
+#if wxUSE_IMAGLIST
+#include <wx/imaglist.h>
+#endif
 
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>

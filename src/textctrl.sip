@@ -216,6 +216,7 @@ public:
      wxPoint IndexToCoords(long pos) const;
 
 
+
      void Copy();
      void Cut();
      void Paste();

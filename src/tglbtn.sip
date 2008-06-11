@@ -5,6 +5,8 @@ void add_event(PyObject* module_dict, const char* name, ...);
 #endif
 %End
 
+enum { wxEVT_COMMAND_TOGGLEBUTTON_CLICKED };
+
 %PostInitialisationCode
 add_event(sipModuleDict, "EVT_TOGGLEBUTTON", wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 0);
 %End

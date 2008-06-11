@@ -6,9 +6,12 @@ import genlisttypes
 from wxpybuild.wxpyext import build_extension, WXWIN
 
 wxpy_modules = [
-    ('_wxcore',  ['src/wx.sip']),
-    ('_wxhtml',  ['src/html.sip']),
-    ('_wxstc',   ['contrib/stc/stc.sip']),
+    ('_wxcore',     ['src/wx.sip']),
+
+    # TODO: use wxUSE_XXX flags
+    ('_wxhtml',     ['src/html.sip']),
+    ('_wxcalendar', ['src/calendar.sip']),
+    ('_wxstc',      ['contrib/stc/stc.sip']),
 ]
 
 if not '--nowk' in sys.argv:
@@ -71,9 +74,6 @@ def copy_with_prompt(src, dest):
                 try_again = True
         else:
             try_again = False
-
-
-
 
 
 if __name__ == '__main__':

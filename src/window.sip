@@ -328,13 +328,13 @@ public:
 %End
 
 %If (wxUSE_TOOLTIPS)
-    void SetToolTip( const wxString &tip ) /PyName=SetToolTipString/;
-    //void SetToolTip( wxToolTip *tip );
-    //wxToolTip* GetToolTip() const;
+    void SetToolTip(const wxString &tip) /PyName=SetToolTipString/;
+    void SetToolTip( wxToolTip *tip );
+    wxToolTip* GetToolTip() const;
     //wxString GetToolTipText() const;
 %End
 %If (!wxUSE_TOOLTIPS)
-    void SetToolTip(const wxString & tip);
+    //void SetToolTip(const wxString & tip);
 %End
 
 %If (wxUSE_DRAG_AND_DROP)
@@ -343,7 +343,7 @@ public:
 %End
 
 %If (wxUSE_CONSTRAINTS)
-    void SetConstraints( wxLayoutConstraints *constraints );
+    void SetConstraints(wxLayoutConstraints *constraints);
     wxLayoutConstraints *GetConstraints() const;
 
     void UnsetConstraints(wxLayoutConstraints *c);
@@ -352,6 +352,8 @@ public:
     void RemoveConstraintReference(wxWindowBase *otherWin);
     void DeleteRelatedConstraints();
     void ResetConstraints();
+
+    void RemoveChild(wxWindow* child);
 
     void SetConstraintSizes(bool recurse = true);
     bool LayoutPhase1(int *noChanges);
@@ -380,7 +382,12 @@ public:
             SIP_BLOCK_THREADS
             PyObject* pySizer = sipGetWrapper(oldSizer, sipClass_wxSizer);
             if (pySizer)
+            {
                 sipTransferBack(pySizer);
+
+                if (a1)
+                    setDeleted(oldSizer, sipClass_wxSizer);
+            }
             SIP_UNBLOCK_THREADS
         }
     }

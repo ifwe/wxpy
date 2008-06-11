@@ -6,6 +6,8 @@ python additions
 
 VERSION = (1, 0, 0, 0)
 USE_UNICODE = True
+WXPY = True
+
 import sip, new
 from functools import wraps
 
@@ -33,8 +35,6 @@ def autorepr(s = None):
             return '<%s at %x>' % (self.__class__.__name__, id(self))
 
     return __repr__
-
-#sip.settracemask(SipTrace.ALL)
 
 #
 # import all names from _wxcore
@@ -212,6 +212,14 @@ class FilePickerCtrl(_FilePickerCtrl):
                  name = 'filepicker'):
         _FilePickerCtrl.__init__(self, parent, id, path, message, wildcard, pos, size, style, validator, name)
 
+_CustomDataObject = CustomDataObject
+class CustomDataObject(_CustomDataObject):
+    def __init__(self, obj):
+        if isinstance(obj, basestring):
+            return _CustomDataObject.__init__(self, CustomDataFormat(obj))
+        else:
+            return _CustomDataObject.__init__(self, obj)
+
 _ListCtrl = ListCtrl
 class ListCtrl(_ListCtrl):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize,
@@ -282,10 +290,15 @@ class Button(wx.Button):
                  validator = DefaultValidator, name = 'button'):
         _Button.__init__(self, parent, id, label, pos, size, style, validator, name)
 
-class SimplePanel(wx.Panel):
-    def __init__(self, parent, id, style):
-        Panel.__init__(self, parent, id, style = style)
-        self.SetBackgroundStyle(BG_STYLE_CUSTOM)
+_PopupTransientWindow = wx.PopupTransientWindow
+class PopupTransientWindow(_PopupTransientWindow):
+    def __init__(self, window, style = BORDER_NONE):
+        _PopupTransientWindow.__init__(self, window, style)
+
+#class SimplePanel(wx.Panel):
+#    def __init__(self, parent, id, style):
+#        Panel.__init__(self, parent, id, style = style)
+#        self.SetBackgroundStyle(BG_STYLE_CUSTOM)
 
 
 
@@ -551,10 +564,7 @@ class CallLater:
     Result = property(GetResult)
 
 
-class PyDeadObjectError(Exception):
-    pass
-
-
+PyDeadObjectError = sip.DeadObjectException
 
 '''
 wxDialog(wxWindow* parent,
@@ -628,6 +638,10 @@ wxEVT_COMMAND_LIST_ITEM_DESELECTED = EVT_COMMAND_LIST_ITEM_DESELECTED
 wxEVT_COMMAND_LISTBOX_DOUBLECLICKED = EVT_COMMAND_LIST_ITEM_DESELECTED
 wxEVT_COMMAND_LISTBOX_SELECTED = EVT_COMMAND_LISTBOX_SELECTED
 
+wxEVT_COMMAND_CHECKBOX_CLICKED = EVT_COMMAND_CHECKBOX_CLICKED
+
+wxEVT_COMMAND_TOGGLEBUTTON_CLICKED = EVT_COMMAND_TOGGLEBUTTON_CLICKED
+
 # CYAN didn't work, must be not in 2.8???
 CYAN_BRUSH = Brush(Colour(32, 178, 170))
 
@@ -663,7 +677,8 @@ GetDefaultPyEncoding = lambda: 'utf-8'
 TreeItemData = PyTreeItemData
 FutureCall = CallLater
 
+DateTimeFromDMY = DateTime
+
 TreeCtrl.GetPyData = new.instancemethod(TreeCtrl.GetItemPyData, None, TreeCtrl)
 
-WXPY = True
 del wx

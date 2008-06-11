@@ -26,6 +26,9 @@ bool wxIsDragResultOk(wxDragResult res);
 
 class wxDropTarget
 {
+private:
+    wxDropTarget(const wxDropTarget&);
+public:
     wxDropTarget(wxDataObject* = NULL) /Transfer/;
     virtual ~wxDropTarget();
 
@@ -68,6 +71,7 @@ public:
     wxDataObject *GetDataObject();
     void SetCursor(wxDragResult res, const wxCursor& cursor);
     virtual bool GiveFeedback(wxDragResult effect);
+    wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 private:
     wxDropSource(const wxDropSource&);
 };

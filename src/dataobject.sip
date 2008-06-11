@@ -261,61 +261,43 @@ public:
     wxFileDataObject();
     virtual ~wxFileDataObject();
 
-    const SIP_PYOBJECT GetFilenames();
-%MethodCode
-        PyErr_SetString(PyExc_NotImplementedError, "GetFilenames is not implemented");
-        sipIsErr = 1;
-%End
-
+    const wxArrayString& GetFilenames();
     void AddFile(const wxString &filename);
 private:
     wxFileDataObject(const wxFileDataObject&);
 };
 
-class wxCustomDataObject : wxDataObjectSimple {
+class wxCustomDataObject : wxDataObjectSimple
+{
 public:
     wxCustomDataObject(const wxDataFormat& format);
     wxCustomDataObject();
     virtual ~wxCustomDataObject();
 
-/*
-    %extend {
-        DocAStr(SetData,
-                "SetData(self, String data) -> bool",
-                "Copy the data value to the data object.", "");
-        bool SetData(PyObject* data) {
-            bool rval;
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            if (PyString_Check(data)) {
-                rval = self->SetData(PyString_Size(data), PyString_AsString(data));
-            }
-            else {
-                // raise a TypeError if not a string
-                PyErr_SetString(PyExc_TypeError, "String expected.");
-                rval = false;
-            }
-            wxPyEndBlockThreads(blocked);
-            return rval;
-        }
+    bool SetData(SIP_PYOBJECT data);
+%MethodCode
+    SIP_BLOCK_THREADS
+    if (PyString_Check(a0))
+        sipRes = sipCpp->SetData(PyString_Size(a0), PyString_AsString(a0));
+    else
+    {
+        PyErr_SetString(PyExc_TypeError, "SetData requires a single string argument");
+        sipIsErr = 1;
     }
-    %pythoncode { TakeData = SetData }
-    */
+    SIP_UNBLOCK_THREADS
+%End
+
+
+SIP_PYOBJECT GetData();
+%MethodCode
+    SIP_BLOCK_THREADS
+    sipRes = PyString_FromStringAndSize((char*)sipCpp->GetData(), sipCpp->GetSize());
+    SIP_UNBLOCK_THREADS
+%End
 
     size_t GetSize();
-/*
-    %extend {
-        DocAStr(GetData,
-                "GetData(self) -> String",
-                "Returns the data bytes from the data object as a string.", "");
-        PyObject* GetData() {
-            PyObject* obj;
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            obj = PyString_FromStringAndSize((char*)self->GetData(), self->GetSize());
-            wxPyEndBlockThreads(blocked);
-            return obj;
-        }
-    }
-*/
+
+
 private:
     wxCustomDataObject(const wxCustomDataObject&);
 };

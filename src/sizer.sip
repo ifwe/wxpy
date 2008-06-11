@@ -170,65 +170,6 @@ public:
     // TODO: fix the object ownership issues here!
     bool Detach(wxWindow* window);
 
-
-%TypeHeaderCode
-static bool transferBack(void* cppObject, sipWrapperType* type);
-static void setDeleted(void* cppObject, sipWrapperType* type);
-static void removeFromParent(sipWrapper *self);
-%End
-
-%TypeCode
-
-// TODO: actually use the one from sip.h
-static void removeFromParent(sipWrapper *self)
-{
-    if (self->parent != NULL)
-    {
-        if (self->parent->first_child == self)
-            self->parent->first_child = self->sibling_next;
-
-        if (self->sibling_next != NULL)
-            self->sibling_next->sibling_prev = self->sibling_prev;
-
-        if (self->sibling_prev != NULL)
-            self->sibling_prev->sibling_next = self->sibling_next;
-
-        self->parent = NULL;
-        self->sibling_next = NULL;
-        self->sibling_prev = NULL;
-
-        /*
-         * We must do this last, after all the pointers are correct, because
-         * this is used by the clear slot.
-         */
-        Py_DECREF(self);
-    }
-}
-
-static void setDeleted(void* cppObject, sipWrapperType* type)
-{
-    sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
-    if (!w)
-        return;
-
-    removeFromParent(w);
-    sipResetPyOwned(w);
-    w->u.cppPtr = NULL;
-}
-
-static bool transferBack(void* cppObject, sipWrapperType* type)
-{
-    if (!cppObject)
-        return false;
-
-    PyObject* pyObject = sipGetWrapper(cppObject, type);
-    if (pyObject)
-        sipTransferBack(pyObject);
-
-    return !!pyObject;
-}
-%End
-
     bool Detach(wxSizer* sizer);
 %MethodCode
     wxSizerItem* item = sipCpp->GetItem(a0);

@@ -117,8 +117,12 @@ protected:
 
 class wxPyTreeItemData
 {
+private:
+    wxPyTreeItemData();
+    wxPyTreeItemData(const wxPyTreeItemData&);
+
 public:
-    wxPyTreeItemData(SIP_PYOBJECT obj = NULL) /HoldGIL/;
+    wxPyTreeItemData(SIP_PYOBJECT obj) /HoldGIL/;
     virtual ~wxPyTreeItemData();
 
 %GCTraverseCode
@@ -140,8 +144,6 @@ public:
     delete sipCpp;
 %End
 
-private:
-    wxPyTreeItemData(const wxPyTreeItemData&);
 };
 
 /*

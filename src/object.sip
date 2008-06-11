@@ -30,4 +30,8 @@ class wxObject
 
 public:
     bool IsSameAs(const wxObject& p) const;
+//    int __nonzero__();
+//%MethodCode
+//	sipRes = !isDeleted(sipCpp);
+//%End
 };

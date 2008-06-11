@@ -27,9 +27,18 @@ wxBitmap wxBitmapFromImage(const wxImage& image, int depth = -1);
         sipRes = new wxBitmap(*a0, a1);
 %End
 
+wxBitmap wxTransparentBitmap(int w, int h);
+%MethodCode
+    sipRes = new wxBitmap(a0, a1, 32);
+    sipRes->UseAlpha();
+%End
+
+
+
 wxBitmap wxEmptyBitmap(int width, int height);
 %MethodCode
     sipRes = new wxBitmap(a0, a1);
+    sipRes->UseAlpha();
 %End
 
 class wxBitmap : wxGDIObject
@@ -55,6 +64,7 @@ public:
 
     int GetWidth();
     int GetHeight();
+
 
     wxSize GetSize();
 %MethodCode

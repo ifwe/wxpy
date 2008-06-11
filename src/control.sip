@@ -21,9 +21,9 @@ public:
               const wxString& name=wxControlNameStr);
     virtual ~wxControl();
 
-    //void Command(wxCommandEvent&);
-    //const wxString& GetLabel() const;
-    //const wxString& GetLabelText() const;
+    void Command(wxCommandEvent&);
+    const wxString& GetLabel() const;
+    const wxString& GetLabelText() const;
     void SetLabel(const wxString&);
 
 private:

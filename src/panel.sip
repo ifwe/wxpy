@@ -40,7 +40,15 @@ public:
     void SetScrollRate(int xstep, int ystep);
     void GetScrollPixelsPerUnit(int *x, int *y) const;
     void EnableScrolling(bool x_scrolling, bool y_scrolling);
-    void GetViewStart(int *x, int *y) const;
+
+    wxPoint GetViewStart() const;
+%MethodCode
+        int x = 0, y = 0;
+        sipCpp->GetViewStart(&x, &y);
+        sipRes = new wxPoint(x, y);
+%End
+
+    //void GetViewStart(int *x, int *y) const;
     void SetScale(double xs, double ys);
     double GetScaleX() const;
     double GetScaleY() const;

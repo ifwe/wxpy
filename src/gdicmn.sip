@@ -65,8 +65,12 @@ public:
     sipRes = PyString_FromFormat("<wx.Point (%d, %d)>", sipCpp->x, sipCpp->y);
 %End
 
+    wxPoint __neg__();
+%MethodCode
+    sipRes = new wxPoint(-sipCpp->x, -sipCpp->y);
+%End
+
     bool operator==(const wxPoint&);
-    //bool operator!=(const wxPoint &);
     wxPoint operator+(const wxPoint& pt);
     wxPoint operator-(const wxPoint& pt);
     wxPoint& operator+=(const wxPoint& pt);

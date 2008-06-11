@@ -234,6 +234,10 @@ wxEVT_COMMAND_ENTER,
 
 class wxEvent : wxObject
 {
+private:
+    wxEvent();
+    wxEvent(const wxEvent&);
+
 %ConvertToSubClassCode
     wxClassInfo* c = sipCpp -> GetClassInfo();
 
@@ -258,6 +262,7 @@ class wxEvent : wxObject
         C(wxDropFilesEvent)
         C(wxTreeEvent)
         C(wxUpdateUIEvent)
+        C(wxEvent)
     else
         sipClass = NULL;
 #undef C
@@ -281,10 +286,6 @@ public:
     bool GetSkipped() const;
 
     virtual ~wxEvent();
-
-private:
-    wxEvent();
-
 };
 
 %ModuleHeaderCode

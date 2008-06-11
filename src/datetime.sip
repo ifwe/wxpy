@@ -341,7 +341,16 @@ public:
     // ------------------------------------------------------------------------
     // constructors
 
-    wxDateTime();
+    //wxDateTime();
+
+    wxDateTime(wxDateTime_t day,
+                                         Month        month = Inv_Month,
+                                         int          year = Inv_Year,
+                                         wxDateTime_t hour = 0,
+                                         wxDateTime_t minute = 0,
+                                         wxDateTime_t second = 0,
+                                         wxDateTime_t millisec = 0);
+
     /*
     %RenameCtor(DateTimeFromTimeT, wxDateTime(time_t timet));
     %RenameCtor(DateTimeFromJDN, wxDateTime(double jdn));
@@ -349,6 +358,9 @@ public:
                                      wxDateTime_t minute = 0,
                                      wxDateTime_t second = 0,
                                      wxDateTime_t millisec = 0));
+
+
+
     %RenameCtor(DateTimeFromDMY, wxDateTime(wxDateTime_t day,
                                      Month        month = Inv_Month,
                                      int          year = Inv_Year,
@@ -910,6 +922,18 @@ public:
     wxDateSpan& operator*=(int factor);
 
 };
+//
+//wxDateTime DateTimeFromDMY(wxDateTime_t day,
+//                           int month = 0,
+//                           int          year = 0,
+//                           wxDateTime_t hour = 0,
+//                           wxDateTime_t minute = 0,
+//                           wxDateTime_t second = 0,
+//                           wxDateTime_t millisec = 0);
+//%MethodCode
+//    sipRes = new wxDateTime(a0, a1, a2, a3, a4, a5, a6);
+//%End
+
 
 long wxGetLocalTime();
 long wxGetUTCTime();

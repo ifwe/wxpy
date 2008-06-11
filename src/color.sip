@@ -30,6 +30,10 @@ public:
     unsigned Green() const;
     unsigned Alpha() const;
     bool Ok() const;
+    bool IsOk() const;
+%MethodCode
+    sipRes = sipCpp->Ok();
+%End
 
     SIP_PYOBJECT __repr__();
 %MethodCode

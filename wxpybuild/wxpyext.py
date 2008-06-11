@@ -2,6 +2,7 @@ from __future__ import with_statement
 import os.path
 import shutil
 import sipconfig
+import subprocess
 import sys
 
 from xml.etree.cElementTree import Element, SubElement, ElementTree
@@ -226,10 +227,15 @@ def different(file1, file2, start = 0):
     if not file1.exists() or not file2.exists():
         return True
 
-    if file1.size != file2.size:
-        return True
+    if file1.size != file2.size or file1.bytes() != file2.bytes():
+        if False and not diff_is_trivial(file1, file2):
+            # ignore minor changes to header files only involving
+            # diff that are "#line" numbers
+            sipconfig.inform('!!! ignoring: %s' % newfile.name)
+            return False
+        else:
+            return True
 
-    return file1.bytes() != file2.bytes()
 
 def manage_cache(gendir, show_diffs = True):
     """
@@ -253,11 +259,8 @@ def manage_cache(gendir, show_diffs = True):
         if different(newfile, oldfile):
             changed_count += 1
 
-            #diff(newfile, oldfile)
-
             if oldfile.exists():
                 assert newfile.mtime > oldfile.mtime
-
 
 
             shutil.copy2(newfile, oldfile) # src, dest
@@ -287,5 +290,26 @@ def cd(*path):
     finally:
         os.chdir(original_cwd)
 
-def diff(new, old):
-    run(r'c:\cygwin\bin\diff -d -u "%s" "%s"' % (str(new), str(old)))
+def diff_tool(f1, f2):
+    process = subprocess.Popen(['c:\\cygwin\\bin\\diff.exe', '-d', '-u',
+                                f1, f2], stdout = subprocess.PIPE)
+
+    stdout, stderr = process.communicate()
+    return stdout
+
+def diff_is_trivial(old, new):
+    for line in diff_tool(old, new).split('\n'):
+        if line.startswith('--- '):
+            in_header = False
+            filename = line[4:].split()[0]
+            ext = filename.rsplit('.', 1)
+            if len(ext) == 2 and ext[1] == 'h':
+                if ext[1] == 'h':
+                    in_header = True
+        elif line and not line.startswith('+++ '):
+            if line[0] in ('-', '+'):
+                if not in_header or not line[1:].startswith('#line'):
+                    return True
+
+    return False
+
