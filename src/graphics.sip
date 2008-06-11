@@ -165,7 +165,7 @@ private:
 public:
     virtual ~wxGraphicsContext();
 
-    static wxGraphicsContext* Create(const wxWindowDC& dc) /Factory/;
+    static wxGraphicsContext* Create(const wxDC& dc) /Factory/;
     static wxGraphicsContext* Create(wxWindow* window) /Factory/;
     static wxGraphicsContext* Create() /Factory/;
     static wxGraphicsContext* CreateFromNative(void * context) /Factory/;
