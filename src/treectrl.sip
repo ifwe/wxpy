@@ -100,6 +100,9 @@ public:
 
     PyObject* GetData() const
     {
+        if (!m_obj)
+            Py_RETURN_NONE;
+
         return m_obj;
     }
 
@@ -145,22 +148,6 @@ public:
 %End
 
 };
-
-/*
-class wxTreeItemData {
-public:
-    wxTreeItemData(SIP_PYOBJECT* obj = NULL);
-
-
-    ~wxTreeItemData();
-
-    PyObject* GetData();
-    void      SetData(SIP_PYOBJECT* obj);
-
-    const wxTreeItemId& GetId();
-    void                SetId(const wxTreeItemId& id);
-};
-*/
 
 %PostInitialisationCode
 
@@ -236,83 +223,57 @@ public:
     unsigned int GetSpacing() const;
     void SetSpacing(unsigned int spacing);
 
-//    wxImageList *GetImageList() const;
-//    wxImageList *GetStateImageList() const;
-//
-//    void SetImageList(wxImageList *imageList);
-//    void SetStateImageList(wxImageList *imageList);
+    wxImageList *GetImageList() const;
+    wxImageList *GetStateImageList() const;
 
-/*
-    %disownarg( wxImageList *imageList );
-    void AssignImageList(wxImageList *imageList);
-    void AssignStateImageList(wxImageList *imageList);
-    %cleardisown( wxImageList *imageList );
- */
+    void SetImageList(wxImageList *imageList);
+    void SetStateImageList(wxImageList *imageList);
+
+    void AssignImageList(wxImageList *imageList /Transfer/);
+    void AssignStateImageList(wxImageList *imageList /Transfer/);
+
     wxString GetItemText(const wxTreeItemId& item) const;
-
     int GetItemImage(const wxTreeItemId& item, wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
-/*
-    %extend {
-        // get the wxPyTreeItemData associated with the tree item
-        wxPyTreeItemData* GetItemData(const wxTreeItemId& item) {
-            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
-            if (data == NULL) {
-                data = new wxPyTreeItemData();
-                data->SetId(item); // set the id
-                self->SetItemData(item, data);
-            }
-            return data;
-        }
-        // Get the Python object associated with the tree item
-        PyObject* GetItemPyData(const wxTreeItemId& item) {
-            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
-            if (data == NULL) {
-                data = new wxPyTreeItemData();
-                data->SetId(item); // set the id
-                self->SetItemData(item, data);
-            }
-            return data->GetData();
-        }
-    }
-    %pythoncode { GetPyData = GetItemPyData }
- */
+
     wxColour GetItemTextColour(const wxTreeItemId& item) const;
     wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
     wxFont GetItemFont(const wxTreeItemId& item) const;
 
-    SIP_PYOBJECT GetItemPyData(const wxTreeItemId& item) const;
-%MethodCode
-    wxPyTreeItemData* data = (wxPyTreeItemData*)sipCpp->GetItemData(*a0);
-    sipRes = data->GetData();
-%End
-
     void SetItemText(const wxTreeItemId& item, const wxString& text);
     void SetItemImage(const wxTreeItemId& item, int image,
                       wxTreeItemIcon which = wxTreeItemIcon_Normal);
-/*
-    %extend {
-        // associate a wxPyTreeItemData with the tree item
-        %disownarg( wxPyTreeItemData* data );
-        void SetItemData(const wxTreeItemId& item, wxPyTreeItemData* data) {
-            data->SetId(item); // set the id
-            self->SetItemData(item, data);
-        }
-        %cleardisown( wxPyTreeItemData* data );
 
-        // associate a Python object with the tree item
-        void SetItemPyData(const wxTreeItemId& item, PyObject* obj) {
-            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
-            if (data == NULL) {
-                data = new wxPyTreeItemData(obj);
-                data->SetId(item); // set the id
-                self->SetItemData(item, data);
-            } else
-                data->SetData(obj);
-        }
-    }
-    %pythoncode { SetPyData = SetItemPyData }
 
-*/
+    SIP_PYOBJECT GetPyData(const wxTreeItemId& item);
+%MethodCode
+        SIP_BLOCK_THREADS
+        wxPyTreeItemData* data = (wxPyTreeItemData*)sipCpp->GetItemData(*a0);
+        if (data == NULL)
+        {
+            data = new wxPyTreeItemData();
+            data->SetId(*a0);
+            sipCpp->SetItemData(*a0, data);
+        }
+
+        sipRes = data->GetData();
+        SIP_UNBLOCK_THREADS
+%End
+
+    void SetPyData(const wxTreeItemId& item, SIP_PYOBJECT);
+%MethodCode
+        SIP_BLOCK_THREADS
+        wxPyTreeItemData* data = (wxPyTreeItemData*)sipCpp->GetItemData(*a0);
+        if (data == NULL)
+        {
+            data = new wxPyTreeItemData(a1);
+            data->SetId(*a0);
+            sipCpp->SetItemData(*a0, data);
+        }
+        else
+            data->SetData(a1);
+        SIP_UNBLOCK_THREADS
+%End
+
     void SetItemHasChildren(const wxTreeItemId& item, bool has = true);
     void SetItemBold(const wxTreeItemId& item, bool bold = true);
     void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = true);

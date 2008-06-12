@@ -689,6 +689,6 @@ FutureCall = CallLater
 
 DateTimeFromDMY = DateTime
 
-TreeCtrl.GetPyData = new.instancemethod(TreeCtrl.GetItemPyData, None, TreeCtrl)
+#TreeCtrl.GetPyData = new.instancemethod(TreeCtrl.GetItemPyData, None, TreeCtrl)
 
 del wx
