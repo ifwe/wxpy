@@ -13,7 +13,7 @@ enum {
 class wxGauge : wxControl
 {
 public:
-    wxGauge(wxWindow* parent, wxWindowID id=-1, int range=100,
+    wxGauge(wxWindow* parent /TransferThis/, wxWindowID id=-1, int range=100,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,

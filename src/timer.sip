@@ -9,7 +9,7 @@ public:
     wxTimer(wxEvtHandler* owner = NULL, int id = wxID_ANY);
     virtual ~wxTimer();
 
-    void SetOwner(wxEvtHandler* ownder, int id = wxID_ANY);
+    void SetOwner(wxEvtHandler* owner, int id = wxID_ANY);
     wxEvtHandler* GetOwner() const;
 
     bool Start(int milliseconds = -1, bool oneShot = false);

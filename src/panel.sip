@@ -19,7 +19,7 @@ public:
 class wxScrolledWindow : wxPanel
 {
 public:
-    wxScrolledWindow(wxWindow* parent,
+    wxScrolledWindow(wxWindow* parent /TransferThis/,
                      const wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,

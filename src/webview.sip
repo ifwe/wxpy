@@ -26,8 +26,6 @@ public:
               const wxSize& size = wxDefaultSize,
               long style = 0,
               const wxString& name = wxWebViewNameStr);
-              //WebViewFrameData* data = NULL);
-
     virtual ~wxWebView();
 
     void LoadURL(const wxString& url);

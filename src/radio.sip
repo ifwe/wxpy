@@ -1,7 +1,7 @@
 class wxRadioBox : wxControl
 {
 public:
-    wxRadioBox(wxWindow* parent, wxWindowID id=-1,
+    wxRadioBox(wxWindow* parent /TransferThis/, wxWindowID id=-1,
                const wxString& label = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,

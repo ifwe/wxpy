@@ -33,7 +33,8 @@ wxDataFormat CustomDataFormat(const wxString& format);
     sipRes = new wxDataFormat(*a0);
 %End
 
-class wxDataFormat {
+class wxDataFormat
+{
 public:
     wxDataFormat(wxDataFormatId type);
     //wxDataFormat(const wxString& format);
@@ -56,7 +57,8 @@ public:
     void SetId(const wxString& format);
 };
 
-class wxDataObject {
+class wxDataObject
+{
 public:
     enum Direction {
         Get  = 0x01,    // format is supported by GetDataHere()
@@ -158,7 +160,8 @@ private:
 };
 
 
-class wxDataObjectSimple : wxDataObject {
+class wxDataObjectSimple : wxDataObject
+{
 public:
     wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid);
     virtual ~wxDataObjectSimple();
@@ -231,7 +234,8 @@ private:
     wxDataObjectComposite(const wxDataObjectComposite&);
 };
 
-class wxTextDataObject : wxDataObjectSimple {
+class wxTextDataObject : wxDataObjectSimple
+{
 public:
     wxTextDataObject(const wxString& text = wxEmptyString);
     virtual ~wxTextDataObject();
@@ -243,7 +247,8 @@ private:
     wxTextDataObject(const wxTextDataObject&);
 };
 
-class wxBitmapDataObject : wxDataObjectSimple {
+class wxBitmapDataObject : wxDataObjectSimple
+{
 public:
     wxBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap);
     virtual ~wxBitmapDataObject();
@@ -302,7 +307,8 @@ private:
     wxCustomDataObject(const wxCustomDataObject&);
 };
 
-class wxURLDataObject : wxDataObject/*Composite*/ {
+class wxURLDataObject : wxDataObject/*Composite*/
+{
 public:
     wxURLDataObject(const wxString& url = wxEmptyString);
     virtual ~wxURLDataObject();

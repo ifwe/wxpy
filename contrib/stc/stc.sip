@@ -1759,7 +1759,7 @@ class wxStyledTextCtrl : wxControl
 {
 public:
 
-    wxStyledTextCtrl(wxWindow *parent, wxWindowID id=wxID_ANY,
+    wxStyledTextCtrl(wxWindow *parent /TransferThis/, wxWindowID id=wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxSTCNameStr);

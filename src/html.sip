@@ -77,7 +77,8 @@ enum wxHtmlURLType
 };
 
 
-class wxHtmlLinkInfo : wxObject {
+class wxHtmlLinkInfo : wxObject
+{
 public:
     wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString);
     virtual ~wxHtmlLinkInfo();
@@ -97,7 +98,7 @@ private:
     wxHtmlWindow(const wxHtmlWindow&);
     wxHtmlWindow();
 public:
-    wxHtmlWindow(wxWindow *parent, int id = -1,
+    wxHtmlWindow(wxWindow *parent /TransferThis/, int id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  int style = wxHW_DEFAULT_STYLE,

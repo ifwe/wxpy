@@ -23,7 +23,8 @@
 %End
 
 
-class wxToolTip : wxObject {
+class wxToolTip : wxObject
+{
 public:
     wxToolTip(const wxString &tip);
     virtual ~wxToolTip();

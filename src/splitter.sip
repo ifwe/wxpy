@@ -42,11 +42,12 @@ enum
 class wxSplitterWindow : wxWindow
 {
 public:
-    wxSplitterWindow(wxWindow* parent, wxWindowID id=-1,
+    wxSplitterWindow(wxWindow* parent /TransferThis/, wxWindowID id=-1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style=wxSP_3D,
                      const wxString& name = wxT("wxSplitterWindow"));
+
     virtual ~wxSplitterWindow();
 
     wxWindow * GetWindow1() const;

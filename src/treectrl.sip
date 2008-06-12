@@ -206,9 +206,10 @@ public:
     wxString GetToolTip();
 };
 
-class wxTreeCtrl : wxControl {
+class wxTreeCtrl : wxControl
+{
 public:
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
+    wxTreeCtrl(wxWindow *parent /TransferThis/, wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxTR_DEFAULT_STYLE,

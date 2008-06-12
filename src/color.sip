@@ -14,7 +14,8 @@ wxColour NamedColour(const wxString& name);
     sipRes = new wxColour(*a0);
 %End
 
-class wxColour : wxGDIObject {
+class wxColour : wxGDIObject
+{
 public:
     wxColour(byte red = 0, byte green = 0, byte blue = 0, byte alpha = wxALPHA_OPAQUE);
     virtual ~wxColour();
@@ -64,7 +65,8 @@ int __len__();
 };
 
 
-class wxColourDatabase {
+class wxColourDatabase
+{
 public:
     wxColourDatabase();
     virtual ~wxColourDatabase();

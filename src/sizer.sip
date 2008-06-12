@@ -7,7 +7,7 @@ private:
 
 public:
     virtual ~wxSizerItem();
-
+/*
     wxSizerItem(wxWindow *window,
                 int proportion,
                 int flag,
@@ -34,7 +34,7 @@ public:
 
     // spacer with flags
     //wxSizerItem(int width, int height, const wxSizerFlags& flags);
-
+*/
     void DeleteWindows();
     void DetachSizer();
 
@@ -87,7 +87,8 @@ public:
 
 };
 
-class wxSizer: wxObject {
+class wxSizer: wxObject
+{
 public:
     virtual ~wxSizer();
 

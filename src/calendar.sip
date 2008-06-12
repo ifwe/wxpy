@@ -108,7 +108,7 @@ public:
 class wxCalendarCtrl : wxControl
 {
 public:
-    wxCalendarCtrl(wxWindow *parent,
+    wxCalendarCtrl(wxWindow *parent /TransferThis/,
                    wxWindowID id=-1,
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,

@@ -20,7 +20,8 @@ enum {
 };
 
 
-class wxSlider : wxControl {
+class wxSlider : wxControl
+{
 public:
     wxSlider(wxWindow* parent /TransferThis/,
              wxWindowID id = -1,

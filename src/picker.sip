@@ -98,7 +98,7 @@ add_event(sipModuleDict, "EVT_FILEPICKER_CHANGED",   wxEVT_COMMAND_FILEPICKER_CH
 class wxFilePickerCtrl : wxPickerBase
 {
 public:
-    wxFilePickerCtrl(wxWindow *parent,
+    wxFilePickerCtrl(wxWindow *parent /TransferThis/,
                      wxWindowID id=-1,
                      const wxString& path = wxEmptyString,
                      const wxString& message = wxFileSelectorPromptStr,
@@ -143,7 +143,7 @@ class wxDirPickerCtrl : wxPickerBase
 {
 
 public:
-    wxDirPickerCtrl(wxWindow *parent, wxWindowID id=-1,
+    wxDirPickerCtrl(wxWindow *parent /TransferThis/, wxWindowID id=-1,
                     const wxString& path = wxEmptyString,
                     const wxString& message = wxDirSelectorPromptStr,
                     const wxPoint& pos = wxDefaultPosition,
@@ -202,7 +202,7 @@ add_event(sipModuleDict, "EVT_FONTPICKER_CHANGED", wxEVT_COMMAND_FONTPICKER_CHAN
 class wxFontPickerCtrl : wxPickerBase
 {
 public:
-    wxFontPickerCtrl(wxWindow *parent,
+    wxFontPickerCtrl(wxWindow *parent /TransferThis/,
                      wxWindowID id=-1,
                      const wxFont& initial = wxNullFont,
                      const wxPoint& pos = wxDefaultPosition,

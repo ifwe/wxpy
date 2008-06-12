@@ -28,7 +28,7 @@ public:
 class wxColourDialog : wxDialog
 {
 public:
-    wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
+    wxColourDialog(wxWindow* parent, wxColourData* data = NULL) /TransferThis/;
     wxColourData& GetColourData();
     virtual ~wxColourDialog();
 };
@@ -53,7 +53,8 @@ public:
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr);
+                const wxString& name = wxDirDialogNameStr) /Transfer/;
+
     virtual ~wxDirDialog();
 
     wxString GetPath();
@@ -94,7 +95,8 @@ public:
                  const wxString& defaultFile = wxEmptyString,
                  const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                  long style = wxFD_DEFAULT_STYLE,
-                 const wxPoint& pos = wxDefaultPosition);
+                 const wxPoint& pos = wxDefaultPosition) /Transfer/;
+
     virtual ~wxFileDialog();
 
     void SetMessage(const wxString& message);
@@ -127,7 +129,8 @@ public:
                         const wxString& caption,
                         int choices=0, wxString* choices_array=NULL,
                         long style = wxCHOICEDLG_STYLE,
-                        const wxPoint& pos = wxDefaultPosition);
+                        const wxPoint& pos = wxDefaultPosition) /Transfer/;
+
     virtual ~wxMultiChoiceDialog();
 
 
@@ -173,7 +176,7 @@ public:
                       const wxString& caption = wxGetTextFromUserPromptStr,
                       const wxString& defaultValue = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
-                      const wxPoint& pos = wxDefaultPosition);
+                      const wxPoint& pos = wxDefaultPosition) /Transfer/;
 
     virtual ~wxTextEntryDialog();
 
@@ -189,7 +192,7 @@ public:
                       const wxString& caption = wxGetPasswordFromUserPromptStr,
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
-                      const wxPoint& pos = wxDefaultPosition);
+                      const wxPoint& pos = wxDefaultPosition) /Transfer/;
     virtual ~wxPasswordEntryDialog();
 };
 
@@ -207,7 +210,7 @@ public:
                         const wxString& prompt,
                         const wxString& caption,
                         long value, long min, long max,
-                        const wxPoint& pos = wxDefaultPosition);
+                        const wxPoint& pos = wxDefaultPosition) /Transfer/;
     virtual ~wxNumberEntryDialog();
     long GetValue();
 };
@@ -242,7 +245,7 @@ public:
 class wxFontDialog : wxDialog
 {
 public:
-    wxFontDialog(wxWindow* parent, const wxFontData& data);
+    wxFontDialog(wxWindow* parent, const wxFontData& data) /Transfer/;
     wxFontData& GetFontData();
     virtual ~wxFontDialog();
 };
@@ -292,7 +295,7 @@ public:
                      const wxString& message,
                      int maximum = 100,
                      wxWindow* parent = NULL,
-                     int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL );
+                     int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL ) /Transfer/;
     virtual ~wxProgressDialog();
 
     bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip /Out/ = NULL);

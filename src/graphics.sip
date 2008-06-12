@@ -249,14 +249,13 @@ public:
 
      ~wxGraphicsRenderer();
 
-    // %newobject GetDefaultRenderer;  ???
     static wxGraphicsRenderer* GetDefaultRenderer();
 
-     wxGraphicsContext * CreateContext(const wxWindowDC& dc) ;
-     wxGraphicsContext * CreateContext(wxWindow* window);
+     wxGraphicsContext * CreateContext(const wxWindowDC& dc) /Factory/;
+     wxGraphicsContext * CreateContext(wxWindow* window) /Factory/;
 
     // create a context that can be used for measuring texts only, no drawing allowed
-     wxGraphicsContext * CreateMeasuringContext();
+     wxGraphicsContext * CreateMeasuringContext() /Factory/;
 
 
      wxGraphicsContext* CreateContextFromNativeContext(void * context) /Factory/;
@@ -265,11 +264,11 @@ public:
      wxGraphicsPath CreatePath();
 
      wxGraphicsMatrix CreateMatrix(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-                                           wxDouble tx=0.0, wxDouble ty=0.0);
+                                   wxDouble tx=0.0, wxDouble ty=0.0);
 
-     wxGraphicsPen CreatePen(const wxPen& pen) ;
+     wxGraphicsPen CreatePen(const wxPen& pen);
 
-     wxGraphicsBrush CreateBrush(const wxBrush& brush) ;
+     wxGraphicsBrush CreateBrush(const wxBrush& brush);
 
      wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                                                         const wxColour&c1, const wxColour&c2);
@@ -296,7 +295,7 @@ public:
     virtual ~wxGCDC();
 
     wxGraphicsContext* GetGraphicsContext();
-     void SetGraphicsContext(wxGraphicsContext* ctx);
+    void SetGraphicsContext(wxGraphicsContext* ctx);
 
     // flushing the content of this dc immediately onto screen
     void Flush();

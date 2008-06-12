@@ -48,11 +48,11 @@ class wxStaticLine : wxControl
 %End
 
 public:
-    wxStaticLine( wxWindow *parent /TransferThis/, wxWindowID id=-1,
-                  const wxPoint &pos = wxDefaultPosition,
-                  const wxSize &size = wxDefaultSize,
-                  long style = wxLI_HORIZONTAL,
-                  const wxString& name = wxStaticLineNameStr);
+    wxStaticLine(wxWindow *parent /TransferThis/, wxWindowID id=-1,
+                 const wxPoint &pos = wxDefaultPosition,
+                 const wxSize &size = wxDefaultSize,
+                 long style = wxLI_HORIZONTAL,
+                 const wxString& name = wxStaticLineNameStr);
     virtual ~wxStaticLine();
 
     bool IsVertical() const;

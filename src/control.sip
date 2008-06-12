@@ -12,7 +12,7 @@ class wxControl : wxWindow
 %End
 
 public:
-    wxControl(wxWindow *parent,
+    wxControl(wxWindow *parent /TransferThis/,
               wxWindowID id = -1,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
