@@ -417,6 +417,20 @@ private:
 
 class wxHtmlLinkEvent : wxCommandEvent
 {
+
+%ConvertToSubClassCode
+    wxClassInfo* c = sipCpp->GetClassInfo();
+
+    /* TODO: automate this by grepping for wxXXXEvent and putting
+     * entries here before build :( */
+    if(0) ;
+#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+        C(wxHtmlLinkEvent)
+    else
+        sipClass = NULL;
+#undef C
+%End
+
 public:
     wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo);
     const wxHtmlLinkInfo &GetLinkInfo() const;
