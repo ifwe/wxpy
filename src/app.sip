@@ -248,6 +248,8 @@ public:
     Py_END_ALLOW_THREADS
 %End
 
+    SIP_PYLIST callAfterCbs;
+
     virtual void OnFatalException();
 
     void ReleaseGIL();
