@@ -60,6 +60,7 @@
 #include <wx/taskbar.h>
 #include <wx/renderer.h>
 #include <wx/dcgraph.h>
+#include <wx/intl.h>
 
 #include <wx/pickerbase.h>
 #if wxUSE_FONTPICKERCTRL

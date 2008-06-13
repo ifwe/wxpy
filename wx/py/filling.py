@@ -105,11 +105,9 @@ class FillingTree(wx.TreeCtrl):
         frame.Show()
 
     def objHasChildren(self, obj):
-        """Return true if object has children."""
-        if self.objGetChildren(obj):
-            return True
-        else:
-            return False
+        'Return true if object has children.'
+
+        return bool(self.objGetChildren(obj))
 
     def objGetChildren(self, obj):
         """Return dictionary with attributes or contents of object."""
@@ -202,12 +200,17 @@ class FillingTree(wx.TreeCtrl):
 
     def getFullName(self, item, partial=''):
         """Return a syntactically proper name for item."""
+
         name = self.GetItemText(item)
+        print 'item name', name
         parent = None
         obj = None
+        print 'item != self.root? %r != %r?' % (item, self.root)
         if item != self.root:
             parent = self.GetItemParent(item)
+            print 'parent = %r' % parent
             obj = self.GetPyData(parent)
+            print 'parent.pydata = %r' % obj
         # Apply dictionary syntax to dictionary items, except the root
         # and first level children of a namepace.
         if (type(obj) is types.DictType \

@@ -33,10 +33,12 @@ def test_frame():
 
 
 def test_FrameDestroy():
-    f = wx.Frame(None)
-    f.Destroy()
-    assert sip.isdeleted(f)
-
+    @check_collected
+    def frame():
+        f = wx.Frame(None)
+        f.Destroy()
+        assert sip.isdeleted(f)
+        return f
 
 def main():
     a = wx.PySimpleApp()

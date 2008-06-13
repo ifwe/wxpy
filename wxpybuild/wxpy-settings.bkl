@@ -73,8 +73,8 @@
         <runtime-libs>dynamic</runtime-libs>
 
         <if cond="FORMAT in ('msvc', 'msvs2005prj')">
-            <cxxflags>/GL /Zi /Ob2 /GS- /Ox</cxxflags>
-            <ldflags>/LTCG</ldflags>
+            <!--<cxxflags>/GL /Zi /Ob2 /GS- /Ox</cxxflags>-->
+            <!--<ldflags>/LTCG</ldflags>-->
             <ldflags>/DEBUG</ldflags>
         </if>
     </template>

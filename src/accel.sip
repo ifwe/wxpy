@@ -70,7 +70,7 @@ public:
 
     wxAcceleratorTable(SIP_PYOBJECT);
 %MethodCode
-
+    SIP_BLOCK_THREADS
     PyObject* seq;
     PyObject* fastitem;
 
@@ -98,5 +98,6 @@ public:
 
         delete [] entries;
     }
+    SIP_UNBLOCK_THREADS
 %End
 };

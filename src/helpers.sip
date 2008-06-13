@@ -47,7 +47,8 @@ inline bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
         Py_DECREF(o2);
     }
 
-    if (PyErr_Occurred()) {
+    if (PyErr_Occurred())
+    {
         PyErr_Print();
         return false;
     }
@@ -79,18 +80,23 @@ inline bool sequence_4_ints_check(PyObject* obj)
     Py_DECREF(o4);
 
     if (PyErr_Occurred())
+    {
         PyErr_Print();
+        return false;
+    }
 
     return is_ints;
 }
 
-inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
+inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4)
+{
     PyObject *o1, *o2, *o3, *o4;
 
     if (!(PySequence_Check(source) && PySequence_Length(source) == 4))
         return false;
 
-    if (PyList_Check(source) || PyTuple_Check(source)) {
+    if (PyList_Check(source) || PyTuple_Check(source))
+    {
         o1 = PySequence_Fast_GET_ITEM(source, 0);
         o2 = PySequence_Fast_GET_ITEM(source, 1);
         o3 = PySequence_Fast_GET_ITEM(source, 2);
@@ -99,7 +105,9 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
         *i2 = PyInt_AsLong(o2);
         *i3 = PyInt_AsLong(o3);
         *i4 = PyInt_AsLong(o4);
-    } else {
+    }
+    else
+    {
         o1 = PySequence_GetItem(source, 0);
         o2 = PySequence_GetItem(source, 1);
         o3 = PySequence_GetItem(source, 2);
@@ -114,7 +122,8 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
         Py_DECREF(o4);
     }
 
-    if (PyErr_Occurred()) {
+    if (PyErr_Occurred())
+    {
         fprintf(stderr, "Exception in sequence_4_ints:\n");
         PyErr_Print();
         return false;
@@ -129,6 +138,8 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
 
 %ModuleHeaderCode
 void setDeleted(void* cppObject, sipWrapperType* type);
+void setDeletedWrapper(sipWrapper* w);
+void transferBack(void* cppObject, sipWrapperType* type);
 %End
 
 
@@ -160,15 +171,33 @@ static void removeFromParent(sipWrapper *self)
     }
 }
 
+
 void setDeleted(void* cppObject, sipWrapperType* type)
 {
     sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
+    setDeletedWrapper(w);
+}
+
+void setDeletedWrapper(sipWrapper* w)
+{
     if (!w)
         return;
 
     removeFromParent(w);
     sipResetPyOwned(w);
     w->u.cppPtr = NULL;
+}
+
+void transferBack(void* cppObject, sipWrapperType* type)
+{
+    if (!cppObject)
+        return;
+
+    sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
+    if (!w)
+        return;
+
+    sipTransferBack((PyObject*)w);
 }
 
 %End // %ModuleCode

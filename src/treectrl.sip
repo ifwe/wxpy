@@ -87,22 +87,31 @@ public:
 
 static wxTreeItemId wxNullTreeItemId;
 
+#include <sip.h>
+
 class wxPyTreeItemData : public wxTreeItemData
 {
 public:
     wxPyTreeItemData(PyObject* obj = NULL)
     {
+        SIP_BLOCK_THREADS
         Py_XINCREF(obj);
         m_obj = obj;
+        SIP_UNBLOCK_THREADS
     }
 
-    virtual ~wxPyTreeItemData() {}
+    virtual ~wxPyTreeItemData()
+    {
+        SIP_BLOCK_THREADS
+        Py_XDECREF(m_obj);
+        m_obj = NULL;
+        SIP_UNBLOCK_THREADS
+    }
+
 
     PyObject* GetData() const
     {
-        if (!m_obj)
-            Py_RETURN_NONE;
-
+        Py_XINCREF(m_obj);
         return m_obj;
     }
 
@@ -121,29 +130,31 @@ protected:
 class wxPyTreeItemData
 {
 private:
-    wxPyTreeItemData();
     wxPyTreeItemData(const wxPyTreeItemData&);
 
 public:
-    wxPyTreeItemData(SIP_PYOBJECT obj) /HoldGIL/;
+    wxPyTreeItemData(SIP_PYOBJECT obj = NULL) /HoldGIL/;
     virtual ~wxPyTreeItemData();
 
+    /*
 %GCTraverseCode
+    fprintf(stderr, "wxPyTreeItemData::GCTraverseCode\n");
     PyObject *obj = reinterpret_cast<PyObject *>(sipCpp->GetData());
     sipRes = obj ? sipVisit(obj, sipArg) : 0;
 %End
 
 %GCClearCode
+    fprintf(stderr, "wxPyTreeItemData::GCClearCode\n");
     sipCpp->SetData(0); // derefs for us
     sipRes = 0;
 %End
-
-
+*/
     SIP_PYOBJECT GetData() /HoldGIL/;
     void SetData(SIP_PYOBJECT) /HoldGIL/;
 
     void Destroy();
 %MethodCode
+    fprintf(stderr, "wxPyTreeItemData::Destroy\n");
     delete sipCpp;
 %End
 
@@ -206,6 +217,11 @@ public:
     wxString GetToolTip();
 };
 
+long PyAddress(SIP_PYOBJECT);
+%MethodCode
+    sipRes = (long)a0;
+%End
+
 class wxTreeCtrl : wxControl
 {
 public:
@@ -251,12 +267,18 @@ public:
         wxPyTreeItemData* data = (wxPyTreeItemData*)sipCpp->GetItemData(*a0);
         if (data == NULL)
         {
-            data = new wxPyTreeItemData();
+            data = new wxPyTreeItemData(NULL);
             data->SetId(*a0);
             sipCpp->SetItemData(*a0, data);
         }
 
         sipRes = data->GetData();
+        if (!sipRes)
+        {
+            Py_INCREF(Py_None);
+            sipRes = Py_None; // needs incref?
+        }
+
         SIP_UNBLOCK_THREADS
 %End
 
@@ -272,6 +294,7 @@ public:
         }
         else
             data->SetData(a1);
+
         SIP_UNBLOCK_THREADS
 %End
 

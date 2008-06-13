@@ -265,7 +265,8 @@ public:
 };
 
 
-class wxFontEnumerator {
+class wxFontEnumerator
+{
 %TypeHeaderCode
 #ifndef WXPY_PREC
 #include <wx/fontenum.h>

@@ -9,6 +9,8 @@ import sys
 
 sip_cfg = sipconfig.Configuration()
 
+SIP_TRACE_STATEMENTS = False
+
 class SIPGenerator(object):
     def __init__(self, build_dir, platform, features = None):
         self.build_dir = path(build_dir)
@@ -70,10 +72,14 @@ def sip(module_name, sipfiles, build_dir, include_dirs, platform = None, feature
     args = gen_args_file(build_dir, args)
 
     # spawn the sip binary
-    run([sip_cfg.sip_bin,
-         '-z', args,
-        #'-r',          # generate trace statements
-         ] + sipfiles)
+    sipargs = [sip_cfg.sip_bin,
+               '-z', args]
+
+    if SIP_TRACE_STATEMENTS:
+        print 'SIP: including traces'
+        sipargs.append('-r')          # generate trace statements
+
+    run(sipargs + sipfiles)
 
     # TODO: spaces in filenames?
     return parse_sbf(sbf_filename)

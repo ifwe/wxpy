@@ -17,6 +17,8 @@
 %Include datetime.sip
 %Include picker.sip
 %Include imagelist.sip
+%Include intl.sip
+%Include tests.sip
 
 %If (!WXMAC)
 %Include power.sip
@@ -30,7 +32,7 @@ public:
     virtual ~wxToolTip();
 
     void SetTip(const wxString& tip);
-    wxString GetTip();
+    wxString GetTip() const;
 
     wxWindow *GetWindow();
 

@@ -47,6 +47,9 @@ public:
     void Lower();
 
     void Destroy();
+%MethodCode
+    delete sipCpp;
+%End
 
     wxSize GetSize() const;
 
@@ -374,33 +377,50 @@ public:
 
     void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true);
 %MethodCode
-    if (!a1) // deleteOld = False
-    {
-        wxSizer* oldSizer = sipCpp->GetSizer();
-        if (oldSizer)
-        {
-            SIP_BLOCK_THREADS
-            PyObject* pySizer = sipGetWrapper(oldSizer, sipClass_wxSizer);
-            if (pySizer)
-            {
-                sipTransferBack(pySizer);
-
-                if (a1)
-                    setDeleted(oldSizer, sipClass_wxSizer);
-            }
-            SIP_UNBLOCK_THREADS
-        }
-    }
+    wxSizer* oldSizer = sipCpp->GetSizer();
     sipCpp->SetSizer(a0, a1);
+    if (oldSizer)
+    {
+        SIP_BLOCK_THREADS
+        PyObject* pySizer = sipGetWrapper(oldSizer, sipClass_wxSizer);
+        if (pySizer)
+        {
+            sipTransferBack(pySizer);
+
+            if (a1)
+                setDeleted(oldSizer, sipClass_wxSizer);
+        }
+        SIP_UNBLOCK_THREADS
+    }
 %End
 
 
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
+%MethodCode
+    //
+    // WARNING: copy and pasted from above
+    //
+    wxSizer* oldSizer = sipCpp->GetSizer();
+    sipCpp->SetSizer(a0, a1);
+    if (oldSizer)
+    {
+        SIP_BLOCK_THREADS
+        PyObject* pySizer = sipGetWrapper(oldSizer, sipClass_wxSizer);
+        if (pySizer)
+        {
+            sipTransferBack(pySizer);
+
+            if (a1)
+                setDeleted(oldSizer, sipClass_wxSizer);
+        }
+        SIP_UNBLOCK_THREADS
+    }
+%End
 
     wxSizer *GetSizer() const;
 
-    void SetContainingSizer(wxSizer* sizer);
-    wxSizer *GetContainingSizer() const;
+    //void SetContainingSizer(wxSizer* sizer /Transfer/);
+    wxSizer *GetContainingSizer() const /Transfer/;
 
 %If (wxUSE_ACCESSIBILITY)
     wxAccessible* CreateAccessible();

@@ -1,5 +1,6 @@
 import gc
 import sip
+import sys
 import weakref
 
 def assert_pyowned(factory):
@@ -9,7 +10,7 @@ def assert_pyowned(factory):
 
 def assert_cppowned(factory):
     'Asserts that an object returned by "factory" is owned by C++.'
-    
+
     assert_ownership(factory, False)
 
 def assert_ownership(factory, pyowned = True):
@@ -37,3 +38,13 @@ def assert_ownership(factory, pyowned = True):
         # make sure the weak reference is alive
         assert obj is not None
 
+def check_collected(func):
+    obj = func()
+    assert obj is not None, "function given to check_collected must return a value"
+    weakobj = weakref.ref(obj)
+    del obj
+    gc.collect()
+    if weakobj() is not None:
+        refs = '\n'.join('    %r' % r for r in gc.get_referrers(weakobj()))
+        raise AssertionError('In function %r, %s has %d references:\n%s' %
+                             (func.__name__, repr(weakobj()), sys.getrefcount(weakobj()), refs))

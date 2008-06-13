@@ -1,34 +1,59 @@
+from __future__ import with_statement
+
 import gc
 import sys
 import wx
 
 from weakref import ref
 from time import clock
+from contextlib import contextmanager
 
 import sip
-from testutil import assert_ownership
+from testutil import assert_ownership, check_collected
 
 def test_Detach():
     f = wx.Frame(None)
     s = wx.BoxSizer(wx.HORIZONTAL)
 
-    item = s.Add((50, 50))
-    weakitem = ref(item)
 
-    assert len(s.Children) == 1
-    assert s.Children[0].Spacer == (50, 50)
+    @check_collected
+    def spacer():
+        item = s.Add((50, 50))
+        #assert len(s.Children) == 1
+        #assert s.Children[0].Spacer == (50, 50)
+        s.Detach(0)
+        return item
+        #assert len(s.Children) == 1
+        #assert s.Children[0].Spacer == (50, 50)
+        #assert s.Children[0] is item
+        #s.Detach(0)
+   #     return item
 
-    assert not sip.ispyowned(item)
+#
+#        assert not sip.ispyowned(item)
+#        assert s.Detach(0)
+#        assert len(s.Children) == 0
+#        assert sip.isdeleted(item)
+#        return item
+    '''
+    @check_collected
+    def subsizer():
+        subsizer = wx.BoxSizer(wx.HORIZONTAL)
+        s.Add(subsizer)
+        s.Detach(subsizer)
+        return subsizer
 
-    assert s.Detach(0)
+    @check_collected
+    def subsizer_item():
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        assert sip.ispyowned(vsizer)
+        item = s.Add(vsizer)
+        assert not sip.ispyowned(vsizer)
+        assert s.Detach(item)
+        return item
+    '''
 
-    assert len(s.Children) == 0
-
-    assert sip.isdeleted(item)
-
-    del item
-    gc.collect()
-    assert weakitem() is None
+    f.Destroy()
 
 def test_FlexGridSizer():
     f = wx.Frame(None)
@@ -42,8 +67,6 @@ def test_FlexGridSizer():
     weakrefs = []
 
     def on_sizer(e=None):
-        print 'on_sizer'
-
         oldSizer = f.Sizer
         if oldSizer is not None:
             weakrefs.append(ref(oldSizer))
@@ -58,7 +81,6 @@ def test_FlexGridSizer():
 
         f.SetSizer(s, False)
         gc.collect()
-        print weakrefs
 
     def on_gc(e=None):
         print 'gc.collect()'
@@ -69,22 +91,20 @@ def test_FlexGridSizer():
 
     on_sizer()
 
-    return f
-
+    f.Destroy()
 
 def test_GridBagSizer():
+    f = wx.Frame(None)
     s = wx.GridBagSizer()
+    f.Sizer = s
+    f.Destroy()
 
 def test_BoxSizer():
-
-
-    s = wx.BoxSizer(wx.HORIZONTAL)
-
     f = wx.Frame(None)
     b = wx.Button(f)
 
+    s = wx.BoxSizer(wx.HORIZONTAL)
     assert_ownership(lambda: s.Add(b), pyowned = False)
-
     f.Destroy()
 
 def test_SizerClear():
@@ -99,16 +119,17 @@ def test_SizerClear():
     assert not sip.isdeleted(b1)
     assert not sip.isdeleted(b2)
 
-    print 'BEFORE: button1 title is', b1.Label
     s.Clear(True) # test deleteWindows argument
 
     assert sip.isdeleted(b1)
     assert sip.isdeleted(b2)
 
-    return f
+    f.Destroy()
 
 def test_WindowSetSizer():
     f = wx.Frame(None)
+    assert not sip.ispyowned(f)
+
     b = wx.Button(f, -1, 'test')
 
     s1 = wx.BoxSizer(wx.HORIZONTAL)
@@ -125,12 +146,26 @@ def test_WindowSetSizer():
 
     assert not sip.isdeleted(b)
     assert sip.isdeleted(s1)
-    return f
+    f.Destroy()
+    assert sip.isdeleted(f)
+
+
+
 
 def main():
     a=wx.PySimpleApp()
-    test_Detach()
-    #a.MainLoop()
+    import memleak
+
+    #test_Detach()
+    memleak.find(test_Detach)
+#    for func in globals().values():
+#        if callable(func) and func.__name__.startswith('test_'):
+#            print
+#            print func.__name__
+#            print
+#            memleak.find(func)
+
+    import pdb; pdb.set_trace()
 
 if __name__ == '__main__':
     main()

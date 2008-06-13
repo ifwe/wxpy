@@ -118,12 +118,6 @@ enum {
 wxWindowList wxGetTopLevelWindows();
 %MethodCode
     sipRes = new wxWindowList(wxTopLevelWindows);
-/*  wxWindowList* list = new wxWindowList();
-    wxWindowList::iterator iter;
-    for(iter = wxTopLevelWindows.begin(); iter != wxTopLevelWindows.end(); ++iter)
-        list->Append(*iter);
-
-    sipRes = list;*/
 %End
 
 class wxFrame : wxTopLevelWindow
@@ -147,7 +141,6 @@ public:
 
     void SetMenuBar(wxMenuBar* menuBar /Transfer/);
     wxMenuBar* GetMenuBar();
-    void Destroy();
 
 private:
     wxFrame(const wxFrame&);

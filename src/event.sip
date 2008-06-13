@@ -239,7 +239,7 @@ private:
     wxEvent(const wxEvent&);
 
 %ConvertToSubClassCode
-    wxClassInfo* c = sipCpp -> GetClassInfo();
+    wxClassInfo* c = sipCpp->GetClassInfo();
 
     /* TODO: automate this by grepping for wxXXXEvent and putting
      * entries here before build :( */

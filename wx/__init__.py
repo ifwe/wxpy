@@ -25,6 +25,9 @@ SipTrace.ALL = (SipTrace.VIRTUAL | SipTrace.CONSTRUCTOR | SipTrace.DESTRUCTOR
 
 #sip.settracemask(SipTrace.ALL)
 
+def tracing(enable):
+    sip.settracemask(SipTrace.ALL if enable else 0)
+
 def autorepr(s = None):
     if s is not None:
         assert isinstance(s, basestring)
@@ -53,7 +56,7 @@ def CallAfter(func, *a, **k):
     assert callable(func)
     return _old_callafter(lambda: func(*a, **k))
 
-wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
+#wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
 
 wx.FrameNameStr  = 'Frame'
 wx.DialogNameStr = 'Dialog'

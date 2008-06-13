@@ -2,6 +2,60 @@
 #ifndef WXPY_PREC
 #include <wx/app.h>
 #endif
+
+#include <sip.h>
+
+static const sipAPIDef *get_sip_api();
+%End
+
+%ModuleCode
+static const sipAPIDef *get_sip_api()
+{
+    PyObject *sip_module;
+    PyObject *sip_module_dict;
+    PyObject *c_api;
+
+    /* Import the SIP module. */
+    sip_module = PyImport_ImportModule("sip");
+
+    if (sip_module == NULL)
+        return NULL;
+
+    /* Get the module's dictionary. */
+    sip_module_dict = PyModule_GetDict(sip_module);
+
+    /* Get the "_C_API" attribute. */
+    c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
+
+    if (c_api == NULL)
+        return NULL;
+
+    /* Sanity check that it is the right type. */
+    if (!PyCObject_Check(c_api))
+        return NULL;
+
+    /* Get the actual pointer from the object. */
+    return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
+}
+
+%End
+
+
+//
+// inform SIP of new threads
+//
+void SipNewThread();
+%MethodCode
+    SIP_BLOCK_THREADS
+    get_sip_api()->api_start_thread();
+    SIP_UNBLOCK_THREADS
+%End
+
+void SipEndThread();
+%MethodCode
+    SIP_BLOCK_THREADS
+    get_sip_api()->api_end_thread();
+    SIP_UNBLOCK_THREADS
 %End
 
 %ModuleHeaderCode
@@ -75,6 +129,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
     }
     wxSEH_IGNORE
 
+    /*
     wxSEH_TRY
     {
         wxPyApp* app = (wxPyApp*)wxTheApp;
@@ -86,11 +141,12 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         wxExecute(cmd);
     }
     wxSEH_IGNORE
+    */
 
     wxGlobalSEInformation = NULL;
 
     // this will execute our handler and terminate the process
-    return EXCEPTION_EXECUTE_HANDLER;
+    return EXCEPTION_CONTINUE_SEARCH;//return EXCEPTION_EXECUTE_HANDLER;
 }
 
 #endif // __WXMSW__
@@ -180,12 +236,12 @@ public:
     int MainLoop();
 %MethodCode
     Py_BEGIN_ALLOW_THREADS
-#if 0 && __WXMSW__
+#if __WXMSW__
     wxSEH_TRY
     {
 #endif
         sipRes = sipCpp->MainLoop();
-#if 0 && __WXMSW__
+#if __WXMSW__
     }
     wxSEH_HANDLE(-1)
 #endif

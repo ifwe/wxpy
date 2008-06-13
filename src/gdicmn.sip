@@ -113,13 +113,17 @@ public:
             || sequence_2_ints_check(sipPy);
 
     int _x, _y;
-    if (sequence_2_ints(sipPy, &_x, &_y)) {
+    if (sequence_2_ints(sipPy, &_x, &_y))
+    {
         *sipCppPtr = new wxSize(_x, _y);
         return sipGetState(sipTransferObj);
     }
 
     *sipCppPtr = reinterpret_cast<wxSize *>(sipConvertToInstance(sipPy, sipClass_wxSize, sipTransferObj, SIP_NO_CONVERTORS, 0, sipIsErr));
+
+    // TODO!!
     return 0;
+    //return sipGetState(sipTransferObj);
 %End
 
     int __getitem__(int i);

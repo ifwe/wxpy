@@ -15,7 +15,7 @@ public:
     bool Start(int milliseconds = -1, bool oneShot = false);
     void Stop();
 
-    virtual void Notify() /ReleaseGIL/;
+    virtual void Notify();
 
     bool IsRunning() const;
 

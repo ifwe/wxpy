@@ -104,177 +104,179 @@ SUPPORTED_TAGS = WXPTAG+','+PARAMTAG
 
 #----------------------------------------------------------------------
 
-class wxpTagHandler(wx.html.HtmlWinTagHandler):
-    def __init__(self):
-        wx.html.HtmlWinTagHandler.__init__(self)
-        self.ctx = None
+if hasattr(wx.html, 'HtmlWinTagHandler'):
 
-    def GetSupportedTags(self):
-        return SUPPORTED_TAGS
-
-    def HandleTag(self, tag):
-        name = tag.GetName()
-        if name == WXPTAG:
-            return self.HandleWxpTag(tag)
-        elif name == PARAMTAG:
-            return self.HandleParamTag(tag)
-        else:
-            raise ValueError('unknown tag: %r' % name)
-
-
-    def HandleWxpTag(self, tag):
-        # create a new context object
-        self.ctx = _Context()
-
-        # find and import the module
-        modName = ''
-        if tag.HasParam('MODULE'):
-            modName = tag.GetParam('MODULE')
-        if modName:
-            self.ctx.classMod = _my_import(modName)
-        else:
-            self.ctx.classMod = wx
-
-        # find and verify the class
-        if not tag.HasParam('CLASS'):
-            raise AttributeError, "WXP tag requires a CLASS attribute"
-
-        className = tag.GetParam('CLASS')
-        self.ctx.classObj = getattr(self.ctx.classMod, className)
-        #if type(self.ctx.classObj) not in [ types.ClassType, types.TypeType]:
-        #    raise TypeError("WXP tag attribute CLASS must name a class: "
-        #                    "%r (instance: %r)" % (type(self.ctx.classObj), self.ctx.classObj))
-
-        # now look for width and height
-        width  = -1
-        height = -1
-        parent = self.GetParser().GetWindowInterface().GetHTMLWindow()
-
-        if tag.HasParam('WIDTH'):
-            width = tag.GetParam('WIDTH')
-            if width[-1] == '%':
-                self.ctx.floatWidth = int(width[:-1], 0)
-                if parent:
-                    # HACK: makes 100% work
-                    width = self.ctx.floatWidth * .01 * parent.Size.width
-                else:
-                    width = self.ctx.floatWidth
-            else:
-                width = int(width)
-        if tag.HasParam('HEIGHT'):
-            height = int(tag.GetParam('HEIGHT'))
-        self.ctx.kwargs['size'] = wx.Size(width, height)
-
-        # parse up to the closing tag, and gather any nested Param tags.
-        self.ParseInner(tag)
-
-        # create the object
-        if parent:
-            obj = self.ctx.classObj(parent, **self.ctx.kwargs)
-            obj.Show(True)
-
-            # add it to the HtmlWindow
-            self.GetParser().GetContainer().InsertCell(
-                wx.html.HtmlWidgetCell(obj, self.ctx.floatWidth))
+    class wxpTagHandler(wx.html.HtmlWinTagHandler):
+        def __init__(self):
+            wx.html.HtmlWinTagHandler.__init__(self)
             self.ctx = None
-        return True
+
+        def GetSupportedTags(self):
+            return SUPPORTED_TAGS
+
+        def HandleTag(self, tag):
+            name = tag.GetName()
+            if name == WXPTAG:
+                return self.HandleWxpTag(tag)
+            elif name == PARAMTAG:
+                return self.HandleParamTag(tag)
+            else:
+                raise ValueError('unknown tag: %r' % name)
 
 
-    def HandleParamTag(self, tag):
-        if not tag.HasParam('NAME'):
+        def HandleWxpTag(self, tag):
+            # create a new context object
+            self.ctx = _Context()
+
+            # find and import the module
+            modName = ''
+            if tag.HasParam('MODULE'):
+                modName = tag.GetParam('MODULE')
+            if modName:
+                self.ctx.classMod = _my_import(modName)
+            else:
+                self.ctx.classMod = wx
+
+            # find and verify the class
+            if not tag.HasParam('CLASS'):
+                raise AttributeError, "WXP tag requires a CLASS attribute"
+
+            className = tag.GetParam('CLASS')
+            self.ctx.classObj = getattr(self.ctx.classMod, className)
+            #if type(self.ctx.classObj) not in [ types.ClassType, types.TypeType]:
+            #    raise TypeError("WXP tag attribute CLASS must name a class: "
+            #                    "%r (instance: %r)" % (type(self.ctx.classObj), self.ctx.classObj))
+
+            # now look for width and height
+            width  = -1
+            height = -1
+            parent = self.GetParser().GetWindowInterface().GetHTMLWindow()
+
+            if tag.HasParam('WIDTH'):
+                width = tag.GetParam('WIDTH')
+                if width[-1] == '%':
+                    self.ctx.floatWidth = int(width[:-1], 0)
+                    if parent:
+                        # HACK: makes 100% work
+                        width = self.ctx.floatWidth * .01 * parent.Size.width
+                    else:
+                        width = self.ctx.floatWidth
+                else:
+                    width = int(width)
+            if tag.HasParam('HEIGHT'):
+                height = int(tag.GetParam('HEIGHT'))
+            self.ctx.kwargs['size'] = wx.Size(width, height)
+
+            # parse up to the closing tag, and gather any nested Param tags.
+            self.ParseInner(tag)
+
+            # create the object
+            if parent:
+                obj = self.ctx.classObj(parent, **self.ctx.kwargs)
+                obj.Show(True)
+
+                # add it to the HtmlWindow
+                self.GetParser().GetContainer().InsertCell(
+                    wx.html.HtmlWidgetCell(obj, self.ctx.floatWidth))
+                self.ctx = None
+            return True
+
+
+        def HandleParamTag(self, tag):
+            if not tag.HasParam('NAME'):
+                return False
+
+            name = tag.GetParam('NAME')
+            value = ""
+            if tag.HasParam('VALUE'):
+                value = tag.GetParam('VALUE')
+
+            # check for a param named 'id'
+            if name == 'id':
+                theID = -1
+                try:
+                    theID = int(value)
+                except ValueError:
+                    theID = getattr(self.ctx.classMod, value)
+                value = theID
+
+
+            # check for something that should be evaluated
+            elif value and value[0] in '[{(' or value[:2] == 'wx':
+                saveVal = value
+                try:
+                    value = eval(value, self.ctx.classMod.__dict__)
+                except:
+                    value = saveVal
+
+            # convert to wx.Colour
+            elif value and value[0] == '#':
+                try:
+                    red   = int('0x'+value[1:3], 16)
+                    green = int('0x'+value[3:5], 16)
+                    blue  = int('0x'+value[5:], 16)
+                    value = wx.Color(red, green, blue)
+                except:
+                    pass
+
+            if self.ctx:
+              self.ctx.kwargs[str(name)] = value
             return False
 
-        name = tag.GetParam('NAME')
-        value = ""
-        if tag.HasParam('VALUE'):
-            value = tag.GetParam('VALUE')
 
-        # check for a param named 'id'
-        if name == 'id':
-            theID = -1
-            try:
-                theID = int(value)
-            except ValueError:
-                theID = getattr(self.ctx.classMod, value)
-            value = theID
+    #----------------------------------------------------------------------
+    # just a place to hold some values
+    class _Context:
+        def __init__(self):
+            self.kwargs = {}
+            self.width = -1
+            self.height = -1
+            self.classMod = None
+            self.classObj = None
+            self.floatWidth = 0
 
 
-        # check for something that should be evaluated
-        elif value and value[0] in '[{(' or value[:2] == 'wx':
-            saveVal = value
-            try:
-                value = eval(value, self.ctx.classMod.__dict__)
-            except:
-                value = saveVal
-
-        # convert to wx.Colour
-        elif value and value[0] == '#':
-            try:
-                red   = int('0x'+value[1:3], 16)
-                green = int('0x'+value[3:5], 16)
-                blue  = int('0x'+value[5:], 16)
-                value = wx.Color(red, green, blue)
-            except:
-                pass
-
-        if self.ctx:
-          self.ctx.kwargs[str(name)] = value
-        return False
+    #----------------------------------------------------------------------
+    # Function to assist with importing packages
+    def _my_import(name):
+        mod = __import__(name)
+        components = name.split('.')
+        for comp in components[1:]:
+            mod = getattr(mod, comp)
+        return mod
 
 
-#----------------------------------------------------------------------
-# just a place to hold some values
-class _Context:
-    def __init__(self):
-        self.kwargs = {}
-        self.width = -1
-        self.height = -1
-        self.classMod = None
-        self.classObj = None
-        self.floatWidth = 0
+    #----------------------------------------------------------------------
+    # Function to parse a param string (of the form 'item=value item2="value etc"'
+    # and creates a dictionary
+    def _param2dict(param):
+        i = 0; j = 0; s = len(param); d = {}
+        while 1:
+            while i<s and param[i] == " " : i = i+1
+            if i>=s: break
+            j = i
+            while j<s and param[j] != "=": j=j+1
+            if j+1>=s:
+                break
+            word = param[i:j]
+            i=j+1
+            if (param[i] == '"'):
+                j=i+1
+                while j<s and param[j] != '"' : j=j+1
+                if j == s: break
+                val = param[i+1:j]
+            elif (param[i] != " "):
+                j=i+1
+                while j<s and param[j] != " " : j=j+1
+                val = param[i:j]
+            else:
+                val = ""
+            i=j+1
+            d[word] = val
+        return d
 
-
-#----------------------------------------------------------------------
-# Function to assist with importing packages
-def _my_import(name):
-    mod = __import__(name)
-    components = name.split('.')
-    for comp in components[1:]:
-        mod = getattr(mod, comp)
-    return mod
-
-
-#----------------------------------------------------------------------
-# Function to parse a param string (of the form 'item=value item2="value etc"'
-# and creates a dictionary
-def _param2dict(param):
-    i = 0; j = 0; s = len(param); d = {}
-    while 1:
-        while i<s and param[i] == " " : i = i+1
-        if i>=s: break
-        j = i
-        while j<s and param[j] != "=": j=j+1
-        if j+1>=s:
-            break
-        word = param[i:j]
-        i=j+1
-        if (param[i] == '"'):
-            j=i+1
-            while j<s and param[j] != '"' : j=j+1
-            if j == s: break
-            val = param[i+1:j]
-        elif (param[i] != " "):
-            j=i+1
-            while j<s and param[j] != " " : j=j+1
-            val = param[i:j]
-        else:
-            val = ""
-        i=j+1
-        d[word] = val
-    return d
-
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
 
 
 
-wx.html.HtmlWinParser.AddTagHandler(wxpTagHandler)
+    wx.html.HtmlWinParser.AddTagHandler(wxpTagHandler)
