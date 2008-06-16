@@ -41,10 +41,17 @@ def assert_ownership(factory, pyowned = True):
 def check_collected(func):
     obj = func()
     assert obj is not None, "function given to check_collected must return a value"
-    weakobj = weakref.ref(obj)
+
+    if isinstance(obj, tuple):
+        weakobjs = [weakref.ref(o) for o in obj]
+    else:
+        weakobjs = [weakref.ref(obj)]
+
     del obj
+
     gc.collect()
-    if weakobj() is not None:
-        refs = '\n'.join('    %r' % r for r in gc.get_referrers(weakobj()))
-        raise AssertionError('In function %r, %s has %d references:\n%s' %
-                             (func.__name__, repr(weakobj()), sys.getrefcount(weakobj()), refs))
+    for weakobj in weakobjs:
+        if weakobj() is not None:
+            refs = '\n'.join('    %r' % r for r in gc.get_referrers(weakobj()))
+            raise AssertionError('In function %r, %s has %d references:\n%s' %
+                                 (func.__name__, repr(weakobj()), sys.getrefcount(weakobj()), refs))

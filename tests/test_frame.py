@@ -1,5 +1,9 @@
+import gc
 import sip
+import weakref
 import wx
+
+from testutil import check_collected
 
 def check_toplevel(tlw):
     # test changing the title
@@ -39,6 +43,22 @@ def test_FrameDestroy():
         f.Destroy()
         assert sip.isdeleted(f)
         return f
+
+def test_cycle():
+    f1, f2 = wx.Frame(None), wx.Frame(None)
+    f1.f2, f2.f1 = f2, f1
+    f1.ident = 'frame 1'
+    f2.ident = 'frame 2'
+    wf1, wf2 = weakref.ref(f1), weakref.ref(f2)
+
+    f1.Destroy()
+    f2.Destroy()
+
+    del f1, f2
+    gc.collect()
+
+    assert wf1() is None
+    assert wf2() is None
 
 def main():
     a = wx.PySimpleApp()

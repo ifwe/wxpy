@@ -426,17 +426,6 @@ DC.DrawLabel = DC_DrawLabel
 del DC_DrawLabel
 
 
-_wxtimer = wx.Timer
-class PyTimer(_wxtimer):
-    def __init__(self, notify):
-        _wxtimer.__init__(self)
-
-        assert callable(notify)
-        self.notify = notify
-
-    def Notify(self):
-        if self.notify:
-            self.notify()
 
 #
 # MenuBar
@@ -473,9 +462,8 @@ def MessageBox(message, caption = 'Message', style = OK, parent = None, x = -1, 
 WXK_PRIOR = wx.WXK_PAGEUP
 WXK_NEXT  = wx.WXK_PAGEDOWN
 
-TIMER_ONE_SHOT = wx.TIMER_ONE_SHOT
 
-class CallLater:
+class CallLater(object):
     """
     A convenience class for `wx.Timer`, that calls the given callable
     object once after the given amount of milliseconds, passing any
@@ -502,14 +490,13 @@ class CallLater:
         self.timer = None
         self.Start()
 
-    def __del__(self):
-        self.Stop()
 
+#    def __del__(self):
+#        self.Stop()
 
     def Start(self, millis=None, *args, **kwargs):
-        """
-        (Re)start the timer
-        """
+        '(Re)start the timer'
+
         self.hasRun = False
         if millis is not None:
             self.millis = millis
@@ -519,24 +506,21 @@ class CallLater:
         self.timer = PyTimer(self.Notify)
         self.timer.Start(self.millis, TIMER_ONE_SHOT)
         self.running = True
+
     Restart = Start
 
 
     def Stop(self):
-        """
-        Stop and destroy the timer.
-        """
+        'Stop and destroy the timer.'
         if self.timer is not None:
             self.timer.Stop()
             self.timer = None
-
 
     def GetInterval(self):
         if self.timer is not None:
             return self.timer.GetInterval()
         else:
             return 0
-
 
     def IsRunning(self):
         return self.timer is not None and self.timer.IsRunning()

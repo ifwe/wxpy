@@ -5,6 +5,8 @@ enum {
 
 class wxTimer : wxEvtHandler
 {
+
+
 public:
     wxTimer(wxEvtHandler* owner = NULL, int id = wxID_ANY);
     virtual ~wxTimer();
@@ -22,6 +24,61 @@ public:
     int GetInterval() const;
     int GetId() const;
     bool IsOneShot() const;
+};
+
+class wxPyTimer : wxTimer
+{
+
+%TypeHeaderCode
+
+class wxPyTimer : wxTimer
+{
+public:
+    wxPyTimer(PyObject* cb)
+    {
+        callable = cb;
+        Py_XINCREF(callable);
+    }
+
+    virtual ~wxPyTimer()
+    {
+        Py_XDECREF(callable);
+        callable = NULL;
+    }
+
+    virtual void Notify()
+    {
+        if (callable != NULL)
+        {
+            SIP_BLOCK_THREADS
+            PyObject_CallObject(callable, NULL);
+            SIP_UNBLOCK_THREADS
+        }
+    }
+
+    PyObject* callable;
+};
+
+%End //TypeHeaderCode
+
+public:
+    wxPyTimer(SIP_PYCALLABLE cb);
+    virtual ~wxPyTimer();
+    void Notify();
+    SIP_PYOBJECT callable;
+
+
+%GCTraverseCode
+    sipRes = sipVisit(sipCpp->callable, sipArg);
+%End
+
+%GCClearCode
+    PyObject* callable = sipCpp->callable;
+    sipCpp->callable = NULL;
+    Py_XDECREF(callable);
+    sipRes = 0;
+%End
+
 };
 
 class wxTimerEvent : wxEvent

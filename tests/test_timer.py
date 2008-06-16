@@ -1,4 +1,5 @@
 import wx
+from testutil import check_collected
 
 def test_timer():
     f = wx.Frame(None)
@@ -17,6 +18,34 @@ def test_timer():
     f.Bind(wx.EVT_CLOSE, close)
 
     f.Show()
+
+def test_timerref():
+
+    @check_collected
+    def timer():
+        f = wx.Frame(None)
+        class SMDTimer(wx.Timer):
+            def __init__(self, menu):
+                self.menu = menu
+                wx.Timer.__init__(self)
+
+            def Start(self, hitrect, *args, **kwargs):
+                self.hitrect = hitrect
+                self.args   = args
+                self.kwargs = kwargs
+                wx.Timer.Start(self, 500, True)
+
+            def Notify(self):
+                if not self.menu.Shown and self.hitrect.Contains(wx.GetMousePosition()):
+                    self.menu.Display(*self.args,**self.kwargs)
+
+        f.timer = SMDTimer(f)
+        f.timer.Start(wx.Rect(30, 40, 50, 6))
+        f.Destroy()
+        return f, f.timer
+
+
+
 
 def main():
     a=wx.PySimpleApp()
