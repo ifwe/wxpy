@@ -262,6 +262,7 @@ private:
         C(wxDropFilesEvent)
         C(wxTreeEvent)
         C(wxUpdateUIEvent)
+        C(wxContextMenuEvent)
         C(wxEvent)
     else
         sipClass = NULL;
@@ -453,7 +454,7 @@ public:
                        const wxPoint& pt = wxDefaultPosition);
     virtual ~wxContextMenuEvent();
 
-    //const wxPoint& GetPosition() const;
+    const wxPoint& GetPosition() const;
     void SetPosition(const wxPoint& pos);
 };
 

@@ -13,6 +13,18 @@ class wxMenu : wxEvtHandler
 public:
     wxMenu(const wxString& title = wxEmptyString, long style = 0);
     virtual ~wxMenu();
+%MethodCode
+    wxMenuItemList items = sipCpp->GetMenuItems();
+
+    wxMenuItemList::iterator iter;
+    for (iter = items.begin(); iter != items.end(); ++iter)
+    {
+        // make sure all menu item wrappers are deleted
+        wxMenuItem* menuitem = *iter;
+        setDeleted(menuitem, sipClass_wxMenuItem);
+    }
+%End
+
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;
     wxMenuItem* AppendSeparator() /Transfer/;
@@ -128,6 +140,10 @@ public:
 %MethodCode
         sipRes = (long)sipCpp->GetHMenu();
 %End
+
+
+
+
 %End
 };
 

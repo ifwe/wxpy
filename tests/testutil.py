@@ -43,7 +43,9 @@ def check_collected(func):
     assert obj is not None, "function given to check_collected must return a value"
 
     if isinstance(obj, tuple):
-        weakobjs = [weakref.ref(o) for o in obj]
+        # don't use [a for a ...] syntax here, since it leaks a "magic" local
+        # like _[1] and the last item in the list won't be collected
+        weakobjs = list(weakref.ref(o) for o in obj)
     else:
         weakobjs = [weakref.ref(obj)]
 
