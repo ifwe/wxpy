@@ -142,6 +142,17 @@ public:
     void SetMenuBar(wxMenuBar* menuBar /Transfer/);
     wxMenuBar* GetMenuBar();
 
+    wxToolBar* CreateToolBar(long style = wxNO_BORDER | wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr) /Transfer/;
+    wxToolBar* GetToolBar();
+
+    void SetToolBar(wxToolBar* toolbar /Transfer/);
+%MethodCode
+    // any old wxToolBar becomes owned by Python
+    wxToolBar* oldToolBar = sipCpp->GetToolBar();
+    sipCpp->SetToolBar(a0);
+    transferBack(oldToolBar, sipClass_wxToolBar);
+%End
+
 private:
     wxFrame(const wxFrame&);
 };

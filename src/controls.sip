@@ -11,4 +11,4 @@
 %Include searchctrl.sip
 %Include treectrl.sip
 %Include notebook.sip
-
+%Include toolbar.sip

@@ -142,7 +142,6 @@ public:
     int GetNavigationType() const;
 
     wxWebViewBeforeLoadEvent( wxWindow* win = NULL );
-    //wxEvent *Clone(void) const;
 };
 
 class wxWebViewLoadEvent : wxCommandEvent
@@ -154,7 +153,6 @@ public:
     void SetURL(const wxString& url);
 
     wxWebViewLoadEvent( wxWindow* win = NULL );
-    //wxEvent *Clone(void) const;
 };
 
 class wxWebViewNewWindowEvent : wxCommandEvent
@@ -166,14 +164,12 @@ public:
     void SetTargetName(const wxString& name);
 
     wxWebViewNewWindowEvent( wxWindow* win = NULL);
-    //wxEvent *Clone(void) const;
 };
 
 class wxWebViewRightClickEvent : wxCommandEvent
 {
 public:
-    wxWebViewRightClickEvent( wxWindow* win = NULL);
-    //wxEvent *Clone(void) const;
+    wxWebViewRightClickEvent(wxWindow* win = NULL);
 
     wxWebViewDOMElementInfo GetInfo() const;
     void SetInfo(wxWebViewDOMElementInfo info);
@@ -185,6 +181,8 @@ public:
 class wxWebViewConsoleMessageEvent : wxCommandEvent
 {
 public:
+    wxWebViewConsoleMessageEvent(wxWindow* win = NULL);
+
     wxString GetMessage() const;
     void SetMessage(const wxString& message);
 
@@ -193,9 +191,6 @@ public:
 
     wxString GetSourceID() const;
     void SetSourceID(const wxString& sourceID);
-
-    wxWebViewConsoleMessageEvent( wxWindow* win = NULL );
-    //wxEvent *Clone(void) const;
 };
 
 class wxWebViewReceivedTitleEvent : wxCommandEvent
@@ -205,7 +200,6 @@ public:
     void SetTitle(const wxString& title);
 
     wxWebViewReceivedTitleEvent( wxWindow* win = static_cast<wxWindow*>(NULL));
-    //wxEvent *Clone(void) const;
 };
 
 
@@ -225,11 +219,11 @@ typedef void (*add_event_type)(PyObject* module_dict, const char* name, ...);
 
 add_event_type add_event = (add_event_type)sipImportSymbol("wxpy_add_event");
 
-add_event(sipModuleDict, "EVT_WEBVIEW_BEFORE_LOAD", wxEVT_WEBVIEW_BEFORE_LOAD);
-add_event(sipModuleDict, "EVT_WEBVIEW_LOAD", wxEVT_WEBVIEW_LOAD);
-add_event(sipModuleDict, "EVT_WEBVIEW_NEW_WINDOW", wxEVT_WEBVIEW_NEW_WINDOW);
-add_event(sipModuleDict, "EVT_WEBVIEW_RIGHT_CLICK", wxEVT_WEBVIEW_RIGHT_CLICK);
-add_event(sipModuleDict, "EVT_WEBVIEW_CONSOLE_MESSAGE", wxEVT_WEBVIEW_CONSOLE_MESSAGE);
-add_event(sipModuleDict, "EVT_WEBVIEW_RECEIVED_TITLE", wxEVT_WEBVIEW_RECEIVED_TITLE);
+add_event(sipModuleDict, "EVT_WEBVIEW_BEFORE_LOAD", wxEVT_WEBVIEW_BEFORE_LOAD, 0);
+add_event(sipModuleDict, "EVT_WEBVIEW_LOAD", wxEVT_WEBVIEW_LOAD, 0);
+add_event(sipModuleDict, "EVT_WEBVIEW_NEW_WINDOW", wxEVT_WEBVIEW_NEW_WINDOW, 0);
+add_event(sipModuleDict, "EVT_WEBVIEW_RIGHT_CLICK", wxEVT_WEBVIEW_RIGHT_CLICK, 0);
+add_event(sipModuleDict, "EVT_WEBVIEW_CONSOLE_MESSAGE", wxEVT_WEBVIEW_CONSOLE_MESSAGE, 0);
+add_event(sipModuleDict, "EVT_WEBVIEW_RECEIVED_TITLE", wxEVT_WEBVIEW_RECEIVED_TITLE, 0);
 %End
 

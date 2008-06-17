@@ -55,11 +55,9 @@ public:
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 //        void DrawRectangle(const wxPoint& pt, const wxSize& sz);
     void DrawRectangle(const wxRect& rect) /PyName=DrawRectangleRect/;
-    void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height,
-    double radius);
-    void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz,
-    double radius);
-                             void DrawRoundedRectangle(const wxRect& r, double radius);
+    void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius);
+    void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius) /PyName=DrawRoundedRectanglePS/;
+    void DrawRoundedRectangle(const wxRect& r, double radius) /PyName=DrawRoundedRectangleRect/;
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
     void DrawCircle(const wxPoint& pt, wxCoord radius);
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);

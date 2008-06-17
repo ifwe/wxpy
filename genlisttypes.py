@@ -7,7 +7,7 @@ from __future__ import with_statement
 import os.path
 
 types = [
-    ('wxSizerItem', 'wxSizerItemList', ['<wx/sizer.h>']),
+#   ('wxSizerItem', 'wxSizerItemList', ['<wx/sizer.h>'],  'sipSelf'),
     ('wxWindow',    'wxWindowList',    ['<wx/window.h>']),
 ]
 
@@ -25,11 +25,23 @@ header = '''\
 '''
 
 
-def gentype(typename, listtype, includes):
+def gentype(typename, listtype, includes, pyowner = None):
     includes = '\n'.join('#include %s' % i for i in includes)
 
+    repls = [
+        ('LISTTYPE',    listtype),
+        ('TYPE',        typename),
+        ('INCLUDES',    includes),
+        ('%%pyowner%%', 'sipTransferObj' if pyowner is None else pyowner),
+    ]
+
     with open('list.sip.template') as f:
-        return header + f.read().replace('LISTTYPE', listtype).replace('TYPE', typename).replace('INCLUDES', includes)
+        s = f.read()
+
+    for placeholder, repl in repls:
+        s = s.replace(placeholder, repl)
+
+    return header + s
 
 def filename(typename):
     if typename.startswith('wx'):

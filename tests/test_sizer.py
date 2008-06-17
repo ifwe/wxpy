@@ -15,27 +15,12 @@ def test_Detach():
     f = wx.Frame(None)
     s = wx.BoxSizer(wx.HORIZONTAL)
 
-
     @check_collected
     def spacer():
         item = s.Add((50, 50))
-        #assert len(s.Children) == 1
-        #assert s.Children[0].Spacer == (50, 50)
         s.Detach(0)
         return item
-        #assert len(s.Children) == 1
-        #assert s.Children[0].Spacer == (50, 50)
-        #assert s.Children[0] is item
-        #s.Detach(0)
-   #     return item
 
-#
-#        assert not sip.ispyowned(item)
-#        assert s.Detach(0)
-#        assert len(s.Children) == 0
-#        assert sip.isdeleted(item)
-#        return item
-    '''
     @check_collected
     def subsizer():
         subsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -51,9 +36,33 @@ def test_Detach():
         assert not sip.ispyowned(vsizer)
         assert s.Detach(item)
         return item
-    '''
 
     f.Destroy()
+
+def test_Children():
+    @check_collected
+    def sizer_children():
+        f = wx.Frame(None)
+        p = wx.Panel(f)
+        f.Sizer = s = wx.BoxSizer(wx.HORIZONTAL)
+
+        assert s.Add(p)
+
+        item = s.Children[0]
+        assert p is item.Window
+        assert not sip.ispyowned(item)
+        del item
+        gc.collect()
+        assert not sip.isdeleted(p)
+
+
+        assert 1 == len(s.Children)
+        s.Detach(0)
+        assert 0 == len(p.Children)
+
+        f.Destroy()
+        return f, s, p
+
 
 def test_FlexGridSizer():
     f = wx.Frame(None)
@@ -153,11 +162,12 @@ def test_WindowSetSizer():
 
 
 def main():
-    a=wx.PySimpleApp()
-    import memleak
+    a = wx.PySimpleApp()
+    test_Children()
+#    import memleak
 
     #test_Detach()
-    memleak.find(test_Detach)
+#    memleak.find(test_Detach)
 #    for func in globals().values():
 #        if callable(func) and func.__name__.startswith('test_'):
 #            print
@@ -165,7 +175,7 @@ def main():
 #            print
 #            memleak.find(func)
 
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
 
 if __name__ == '__main__':
     main()

@@ -235,6 +235,12 @@ SIP_PYOBJECT GetTextExtent(const wxString &text);
     void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
     void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
     void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
+    void DrawRoundedRectangle(const wxRect& rect, wxDouble radius) /PyName=DrawRoundedRectangleRect/;
+%MethodCode
+    sipCpp->DrawRoundedRectangle(a0->x, a0->y, a0->width, a0->height, a1);
+%End
+
+
     bool ShouldOffset() const;
 };
 

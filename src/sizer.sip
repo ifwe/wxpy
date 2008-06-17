@@ -97,6 +97,12 @@ public:
     //
 
     wxSizerItem* Add(wxWindow* item, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
+/*%MethodCode
+        printf("Sizer.Add(wxWindow* %p)\n", a0);
+        sipRes = sipCpp->Add(a0, a1, a2, a3);
+        printf("new child count is %d\n", sipCpp->GetChildren().size());
+%End*/
+
     wxSizerItem* Add(wxSizer* item /Transfer/,  int proportion = 0, int flag = 0, int border = 0) /Transfer/;
 
     wxSizerItem* Add(const wxSize& size, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
@@ -165,25 +171,22 @@ public:
     SIP_UNBLOCK_THREADS
 %End
 
-    // TODO: fix the object ownership issues here!
     bool Detach(wxWindow* window);
 %MethodCode
     wxSizerItem* item = sipCpp->GetItem(a0);
     sipRes = sipCpp->Detach(a0);
-    if (item)
+    if (sipRes)
         setDeleted(item, sipClass_wxSizerItem);
 %End
 
     bool Detach(wxSizer* sizer);
 %MethodCode
     wxSizerItem* item = sipCpp->GetItem(a0);
-    wxSizer* sizer = 0;
-    if (item)
-        sizer = item->GetSizer();
+    wxSizer* sizer = item ? item->GetSizer() : 0;
 
     sipRes = sipCpp->Detach(a0);
 
-    if (item)
+    if (sipRes)
     {
         transferBack(sizer, sipClass_wxSizer);
         setDeleted(item, sipClass_wxSizerItem);
@@ -194,16 +197,17 @@ public:
     bool Detach(size_t index);
 %MethodCode
     wxSizerItem* item = sipCpp->GetItem(a0);
-    wxSizer* sizer = 0;
+    wxSizer* sizer = item ? item->GetSizer() : 0;
+
     sipRes = sipCpp->Detach(a0);
-    if (item)
+
+    if (sipRes)
     {
         // the only owned item by a wxSizerItem is a wxSizer
         transferBack(sizer, sipClass_wxSizer);
         setDeleted(item, sipClass_wxSizerItem);
     }
 %End
-
 
     bool Show(wxWindow* item, bool show = true, bool recursive = false);
     bool Show(wxSizer*  item, bool show = true, bool recursive = false);
@@ -242,8 +246,34 @@ public:
     sipRes = sipCpp->GetChildren().GetCount();
 %End
 
-    wxSizerItemList& GetChildren();
-    void ShowItems(bool show);
+    SIP_PYLIST GetChildren();
+%MethodCode
+    wxSizerItemList& children = sipCpp->GetChildren();
+    if ((sipRes = PyList_New(children.size())) == NULL)
+        sipIsErr = 1;
+    else
+    {
+        wxSizerItemList::iterator iter;
+        size_t i = 0;
+        for (iter = children.begin(); iter != children.end(); ++iter, ++i)
+        {
+            wxSizerItem *t = *iter;
+            PyObject *tobj;
+
+            if ((tobj = sipConvertFromInstance(t, sipClass_wxSizerItem, sipSelf)) == NULL)
+            {
+                // There was an error so garbage collect the Python list.
+                Py_DECREF(sipRes);
+                sipIsErr = 1;
+                break;
+            }
+
+            PyList_SET_ITEM(sipRes, i, tobj);
+        }
+    }
+%End
+
+void ShowItems(bool show);
 
 private:
     wxSizer(); // abstract
