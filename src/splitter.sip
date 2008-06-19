@@ -55,8 +55,8 @@ public:
     void SetSplitMode(int mode);
     wxSplitMode GetSplitMode() const;
     void Initialize(wxWindow *window);
-    virtual bool SplitVertically(wxWindow *window1, wxWindow *window2, int sashPosition = 0);
-    virtual bool SplitHorizontally(wxWindow *window1, wxWindow *window2, int sashPosition = 0);
+    bool SplitVertically(wxWindow *window1, wxWindow *window2, int sashPosition = 0);
+    bool SplitHorizontally(wxWindow *window1, wxWindow *window2, int sashPosition = 0);
     bool Unsplit(wxWindow *toRemove = NULL);
     bool ReplaceWindow(wxWindow *winOld, wxWindow *winNew);
     void UpdateSize();
@@ -71,8 +71,8 @@ public:
     double GetSashGravity() const;
     void SetMinimumPaneSize(int min);
     int GetMinimumPaneSize() const;
-    virtual bool SashHitTest(int x, int y, int tolerance = 5);
-    virtual void SizeWindows();
+    bool SashHitTest(int x, int y, int tolerance = 5);
+    void SizeWindows();
     void SetNeedUpdating(bool needUpdating);
     bool GetNeedUpdating() const;
 };

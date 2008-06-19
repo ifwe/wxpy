@@ -42,7 +42,7 @@ public:
     static bool IsEnabled();
     static bool EnableLogging(bool doIt = true);
 //    static void OnLog(wxLogLevel level, const wxChar *szString, time_t t);
-    virtual void Flush();
+    void Flush();
     static void FlushActive();
     static wxLog *GetActiveTarget();
 
@@ -126,7 +126,7 @@ class wxLogBuffer : wxLog
 public:
     wxLogBuffer();
     //const wxString& GetBuffer() const;
-    virtual void Flush();
+    void Flush();
 private:
     wxLogBuffer(const wxLogBuffer&);
 };

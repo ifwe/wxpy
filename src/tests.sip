@@ -5,16 +5,11 @@ class Foo
     {
     public:
         Foo() {}
-        void bar() {}
-        int pyth(const wxSize& size)
-        {
-            return size.x * size.x + size.y * size.y;
-        }
+        int bar() { return 42; }
     };
 %End
 
 public:
     Foo();
-    virtual void bar() /NewThread/;
-    int pyth(const wxSize&);
+    virtual int bar();
 };
