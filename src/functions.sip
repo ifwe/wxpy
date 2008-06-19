@@ -51,9 +51,6 @@ void wxMilliSleep(unsigned long milliseconds);
 void wxMicroSleep(unsigned long microseconds);
 void wxEnableTopLevelWindows(bool enable);
 
-wxString wxStripMenuCodes(const wxString& in);
-
-/*
 wxString wxGetEmailAddress();
 wxString wxGetHostName();
 wxString wxGetFullHostName();
@@ -62,14 +59,9 @@ wxString wxGetUserName();
 wxString wxGetHomeDir();
 wxString wxGetUserHome(const wxString& user = wxEmptyString);
 
-
-unsigned long wxGetProcessId();
-wx
 void wxTrap();
-*/
 
 // Dialog Functions
-
 wxString wxFileSelector(const wxString& message = wxFileSelectorPromptStr,
                         const wxString& default_path = wxEmptyString,
                         const wxString& default_filename = wxEmptyString,
