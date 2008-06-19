@@ -50,11 +50,17 @@ from operator import attrgetter
 
 def PyEventBinder(evttype, n = None):
     return (evttype, )
-
-_old_callafter = wx.CallAfter
-def CallAfter(func, *a, **k):
-    assert callable(func)
-    return _old_callafter(lambda: func(*a, **k))
+#
+#_old_callafter = wx.CallAfter
+#def CallAfter(func, *a, **k):
+#    # todo: new.instancemethod curry hack?
+#    # todo: reimplement in C
+#    assert callable(func)
+#
+#    def _CallAfter():
+#        func(*a, **k)
+#
+#    return _old_callafter(_CallAfter)
 
 #wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
 

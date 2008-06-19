@@ -52,49 +52,93 @@ void CallAfterCallback::EventThunker(wxEvent&)
 
     for(Py_ssize_t i = 0; i < num_cbs; ++i)
     {
-        PyObject* func = PyList_GET_ITEM(cbs, i);
-        PyObject* result = PyObject_CallObject(func, NULL);
+        PyObject* args_kwargs = PyList_GET_ITEM(cbs, i);
+
+        PyObject* func_and_args   = PyTuple_GET_ITEM(args_kwargs, 0);
+        PyObject* kwargs = PyTuple_GET_ITEM(args_kwargs, 1);
+
+        PyObject* func = PyTuple_GET_ITEM(func_and_args, 0);
+
+        PyObject* args = NULL;
+        if (PyTuple_GET_SIZE(func_and_args) > 1)
+            args = PyTuple_GetSlice(func_and_args, 1, PyTuple_GET_SIZE(args));
+
+        PyObject* result = PyObject_Call(func, args, kwargs);
 
         if (result)
             Py_DECREF(result);
         else
+        {
+            fprintf(stderr, "~~~ exception during CallAfter thunk ~~~\n");
             PyErr_Print();
+        }
 
-        Py_DECREF(func);
+        Py_XDECREF(args);
+        Py_DECREF(args_kwargs);
     }
+
+    // empty out the callback list
     PyList_SetSlice(cbs, 0, num_cbs, NULL);
+
+    if (PyErr_Occurred())
+        fprintf(stderr, "THERE WAS AN EXCEPTION :(((\n");
+
     SIP_UNBLOCK_THREADS
 }
 %End
 
+void CallAfter(SIP_PYOBJECT args, SIP_PYOBJECT kwargs) /NoArgParser/;
+%MethodCode
+
+    SIP_BLOCK_THREADS // CallAfter can be called from other threads
+
+    if (PyTuple_GET_SIZE(sipArgs) < 1)
+    {
+        PyErr_SetString(PyExc_TypeError, "CallAfter requires at least one callable argument");
+        return NULL;
+    }
+    else
+    {
+        PyObject* callable = PyTuple_GET_ITEM(sipArgs, 0);
+        if (!PyCallable_Check(callable))
+        {
+            PyErr_SetString(PyExc_TypeError, "argument 1 to CallAfter must be callable");
+            return NULL;
+        }
+        else
+        {
+            PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+            PyList_Append(cbs, PyTuple_Pack(2, sipArgs, sipKwds ? sipKwds : PyDict_New()));
+        }
+    }
+
+    Py_INCREF(Py_None);
+    SIP_UNBLOCK_THREADS
+
+    wxCommandEvent e(g_callAfterId, -1);
+    wxTheApp->AddPendingEvent(e);
+
+    return Py_None;
+%End
+/*
 // may be called from any thread
 void CallAfter(SIP_PYCALLABLE);
 %MethodCode
     int newSize;
 
-/*    if (!wxTheApp)
-    {
-        SIP_BLOCK_THREADS
-        PyErr_SetString(PyExc_AssertionError, "No wx.App created yet");
-        SIP_UNBLOCK_THREADS
-        sipIsErr = 1;
-    }
-    else
-    {*/
-        /* append the callable to the end of our list */
-        SIP_BLOCK_THREADS
-        Py_INCREF(a0);
+    // append the callable to the end of our list
+    SIP_BLOCK_THREADS
+    Py_INCREF(a0);
 
-        PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
-        PyList_Append(cbs, a0);
-        newSize = PyList_GET_SIZE(cbs);
+    PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+    PyList_Append(cbs, a0);
+    newSize = PyList_GET_SIZE(cbs);
 
-        SIP_UNBLOCK_THREADS
-        wxCommandEvent e(g_callAfterId, -1);
-        wxTheApp->AddPendingEvent(e);
-//    }
+    SIP_UNBLOCK_THREADS
+    wxCommandEvent e(g_callAfterId, -1);
+    wxTheApp->AddPendingEvent(e);
 %End
-
+*/
 int wxNewEventType();
 
 enum {
