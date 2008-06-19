@@ -110,29 +110,6 @@ public:
     sipRes = sipCpp->Add(a0->x, a0->y, a1, a2, a3);
 %End
 
-//
-//    // TODO: transfer ownership for the return value of this function
-//    wxSizerItem* Add(SIP_PYTUPLE spacerSize, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
-//%MethodCode
-//    printf("in wxSizer::Add(tuple)\n");
-//    //printf("yes\n");
-//    if (PySequence_Fast_GET_SIZE(a0) != 2)
-//    {
-//        PyErr_SetString(PyExc_TypeError, "wx.Sizer.Add: first argument size must be 2 integers");
-//        sipIsErr = 1;
-//    }
-//    else
-//    {
-//        int w = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 0));
-//        int h = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 1));
-//
-//        if ((w == -1 || h == -1) && PyErr_Occurred())
-//            sipIsErr = 1;
-//        else
-//            sipRes = sipCpp->Add(w, h, a1, a2, a3);
-//    }
-//%End
-
     wxSizerItem* AddStretchSpacer(int prop = 1) /Transfer/;
     wxSizerItem* AddSpacer(int size) /Transfer/;
 
@@ -142,6 +119,10 @@ public:
 
     wxSizerItem* Insert(int index, wxWindow* item, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
     wxSizerItem* Insert(int index, wxSizer* item /Transfer/,  int proportion = 0, int flag = 0, int border = 0) /Transfer/;
+    wxSizerItem* Insert(int index, const wxSize& size, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
+%MethodCode
+    sipRes = sipCpp->Insert(a0, a1->x, a1->y, a2, a3, a4);
+%End
 
     wxSizerItem* AddSpacer(SIP_PYTUPLE) /Transfer/;
 %MethodCode
