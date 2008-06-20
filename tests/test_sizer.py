@@ -34,7 +34,7 @@ def test_Detach():
         assert sip.ispyowned(vsizer)
         item = s.Add(vsizer)
         assert not sip.ispyowned(vsizer)
-        assert s.Detach(item)
+        assert s.Detach(vsizer)
         return item
 
     f.Destroy()
