@@ -55,6 +55,8 @@ public:
 
     wxString RunScript(const wxString& javascript);
 
+    bool FindString(const wxString& string, bool forward, bool caseSensitive, bool wrapSelection, bool startInSelection);
+
     bool CanIncreaseTextSize() const;
     void IncreaseTextSize();
     bool CanDecreaseTextSize() const;
