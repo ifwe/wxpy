@@ -188,8 +188,8 @@ public:
      //wxStdDialogButtonSizer* CreateStdDialogButtonSizer( long flags );
 
      bool IsModal() const;
-     int ShowModal();
-     void EndModal(int retCode);
+     int ShowModal() /ReleaseGIL/;
+     void EndModal(int retCode) /ReleaseGIL/;
 private:
     wxDialog(const wxDialog&);
 };
