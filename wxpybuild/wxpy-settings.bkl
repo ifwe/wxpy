@@ -76,6 +76,9 @@
             <!--<cxxflags>/GL /Zi /Ob2 /GS- /Ox</cxxflags>-->
             <!--<ldflags>/LTCG</ldflags>-->
             <ldflags>/DEBUG</ldflags>
+            <ldflags>/OPT:REF</ldflags> <!-- remove unused functions -->
+            <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
+
         </if>
     </template>
 
