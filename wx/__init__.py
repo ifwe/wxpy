@@ -51,10 +51,10 @@ from operator import attrgetter
 def PyEventBinder(evttype, n = None):
     return (evttype, )
 
-_old_callafter = wx.CallAfter
+_callafter = wx.CallAfter
 def CallAfter(func, *a, **k):
     assert callable(func)
-    return _old_callafter(lambda: func(*a, **k))
+    return _callafter(lambda: func(*a, **k))
 
 #wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
 
@@ -674,7 +674,7 @@ GetDefaultPyEncoding = lambda: 'utf-8'
 TreeItemData = PyTreeItemData
 FutureCall = CallLater
 
-DateTimeFromDMY = DateTime
+#DateTimeFromDMY = DateTime
 
 #TreeCtrl.GetPyData = new.instancemethod(TreeCtrl.GetItemPyData, None, TreeCtrl)
 

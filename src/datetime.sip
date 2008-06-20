@@ -10,6 +10,12 @@
 typedef int wxDateTime_t;
 typedef long time_t;
 
+wxDateTime wxDateTimeFromDMY(int day, int month, int year);
+%MethodCode
+    sipRes = new wxDateTime(a0, (wxDateTime::Month)a1, a2);
+%End
+
+
 // wxDateTime represents an absolute moment in the time
 class wxDateTime
 {
@@ -302,8 +308,10 @@ public:
 
         // get the full (default) or abbreviated month name in the current
         // locale, returns empty string on error
-    static wxString GetMonthName(Month month,
-                                 NameFlags flags = Name_Full);
+    static wxString GetMonthName(int month, NameFlags flags = Name_Full);
+%MethodCode
+        sipRes = new wxString(wxDateTime::GetMonthName((wxDateTime::Month)a0, a1));
+%End
 
         // get the full (default) or abbreviated weekday name in the current
         // locale, returns empty string on error
@@ -342,6 +350,7 @@ public:
     // constructors
 
     //wxDateTime();
+
 
     wxDateTime(wxDateTime_t day,
                                          Month        month = Inv_Month,
@@ -565,28 +574,28 @@ public:
     time_t GetTicks() const;
 
         // get the year (returns Inv_Year if date is invalid)
-//    int GetYear(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
+    int GetYear() const;
 
         // get the month (Inv_Month if date is invalid)
-//    Month GetMonth(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
+    Month GetMonth() const;
 
         // get the month day (in 1..31 range, 0 if date is invalid)
-//    wxDateTime_t GetDay(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
+      wxDateTime_t GetDay() const;
 
         // get the day of the week (Inv_WeekDay if date is invalid)
 //    WeekDay GetWeekDay(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
 
         // get the hour of the day
-//    wxDateTime_t GetHour(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
+    wxDateTime_t GetHour() const;
 
         // get the minute
-//    wxDateTime_t GetMinute(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
+    wxDateTime_t GetMinute() const;
 
         // get the second
-//    wxDateTime_t GetSecond(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
+    wxDateTime_t GetSecond() const;
 
         // get milliseconds
-//    wxDateTime_t GetMillisecond(const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
+    wxDateTime_t GetMillisecond() const;
 
 
         // get the day since the year start (1..366, 0 if date is invalid)

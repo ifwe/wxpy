@@ -136,17 +136,9 @@ public:
     void SetHolidayColours(const wxColour& colFg, const wxColour& colBg);
     wxColour GetHolidayColourFg() const;
     wxColour GetHolidayColourBg() const;
-/*
-        wxCalendarDateAttr*, GetAttr(size_t day) const,
+    wxCalendarDateAttr* GetAttr(size_t day) const /Transfer/;
 
-    %disownarg(wxCalendarDateAttr *attr);
-    DocDeclStr(
-        void, SetAttr(size_t day, wxCalendarDateAttr *attr),
-        "Associates the attribute with the specified date (in the range
-1...31).  If the attribute passed is None, the items attribute is
-cleared.", "");
-    %cleardisown(wxCalendarDateAttr *attr);
-*/
+    void SetAttr(size_t day, wxCalendarDateAttr* attr /Transfer/);
     void SetHoliday(size_t day);
     void ResetAttr(size_t day);
 /*
