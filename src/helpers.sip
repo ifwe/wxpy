@@ -22,7 +22,10 @@ inline bool sequence_2_ints_check(PyObject* obj)
     Py_DECREF(o2);
 
     if (PyErr_Occurred())
+    {
         PyErr_Print();
+        PyErr_Clear();
+    }
 
     return is_ints;
 }
@@ -50,6 +53,7 @@ inline bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
     if (PyErr_Occurred())
     {
         PyErr_Print();
+        PyErr_Clear();
         return false;
     }
 
@@ -82,6 +86,7 @@ inline bool sequence_4_ints_check(PyObject* obj)
     if (PyErr_Occurred())
     {
         PyErr_Print();
+        PyErr_Clear();
         return false;
     }
 
@@ -126,6 +131,7 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
     {
         fprintf(stderr, "Exception in sequence_4_ints:\n");
         PyErr_Print();
+        PyErr_Clear();
         return false;
     }
 

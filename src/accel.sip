@@ -64,7 +64,7 @@ void accel_from_tuple(PyObject* fast, wxAcceleratorEntry* entry)
 public:
     wxAcceleratorTable();
     // TODO: why does this break?
-    //virtual ~wxAcceleratorTable();
+    virtual ~wxAcceleratorTable();
 
     bool IsOk() const;
 

@@ -124,7 +124,7 @@ public:
     sipRes = sipCpp->Insert(a0, a1->x, a1->y, a2, a3, a4);
 %End
 
-    wxSizerItem* AddSpacer(SIP_PYTUPLE) /Transfer/;
+    wxSizerItem* AddSpacer(SIP_PYTUPLE, int proportion = 0, int flag = 0, int border = 0) /Transfer/;
 %MethodCode
     static const char* AddSpacerMsg = "AddSpacer expects an integer or a sequence of 2 integers";
 
@@ -138,7 +138,7 @@ public:
             int height = PyInt_AsLong(PySequence_Fast_GET_ITEM(fast, 1));
 
             if (width != -1 && height != -1 && !PyErr_Occurred())
-                sipRes = sipCpp->Add(width, height, 0);
+                sipRes = sipCpp->Add(width, height, a1, a2, a3);
         }
         Py_DECREF(fast);
     }

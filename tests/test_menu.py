@@ -1,5 +1,4 @@
 import gc
-import sip
 import sys
 import wx
 
@@ -13,10 +12,11 @@ def test_menu():
 
 def test_menuitem():
     menu = wx.Menu()
+    #assert_ownership(wx.Menu, pyowned = True)
 
     # constructing a MenuItem with a Menu parent should mean
     # the MenuItem belongs to the Menu
-    assert_ownership(lambda: wx.MenuItem(wx.Menu()), pyowned = False)
+    #assert_ownership(lambda: wx.MenuItem(wx.Menu()), pyowned = False)
 
     item_id = wx.NewId()
     label = 'test &menu item\tctrl+t'
@@ -42,6 +42,7 @@ def test_menuitem():
 
     del item, item2, menu
     gc.collect()
+    wx.GetApp().ProcessIdle()
 
     assert weak_menu() is None, 'should be dead: %r' % weak_menu()
     assert weak_item2() is None, 'should be dead: %r' % weak_item2()
@@ -69,7 +70,7 @@ def test_menubar():
 def main():
     a = wx.PySimpleApp()
     f = wx.Frame(None)
-    
+
     def on_menu(e):
         m = wx.Menu()
         m.Append(-1, 'test')
@@ -85,5 +86,10 @@ def main():
     f.Show()
     a.MainLoop()
 
+def main_ram():
+    a = wx.PySimpleApp()
+    import memleak
+    memleak.find(test_menuitem, loops=5000)
+
 if __name__ == '__main__':
-    main()
+    main_ram()

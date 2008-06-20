@@ -1,5 +1,10 @@
 import gc
-import sip
+try:
+    import sip
+except ImportError:
+    SIP = False
+else:
+    SIP = True
 import sys
 import weakref
 
@@ -24,7 +29,8 @@ def assert_ownership(factory, pyowned = True):
     weak_obj = weakref.ref(obj)
 
     # use sip.ispyowned(obj) to check ownership trivially
-    assert pyowned == sip.ispyowned(obj)
+    if SIP:
+        assert pyowned == sip.ispyowned(obj)
 
     # delete the strong reference and collect any garbage
     del obj

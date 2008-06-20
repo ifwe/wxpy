@@ -55,9 +55,16 @@ void wxPyCallback::EventThunker(wxEvent& event) {
         Py_DECREF(result); // result is ignored, but we still need to decref it
 
         if (PyErr_Occurred())
+        {
             PyErr_Print();
-    } else
+            PyErr_Clear();
+        }
+    }
+    else
+    {
         PyErr_Print();
+        PyErr_Clear();
+    }
 
     Py_DECREF(tuple);
 

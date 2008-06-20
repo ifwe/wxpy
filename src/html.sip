@@ -442,8 +442,8 @@ class wxHtmlWindowInterface
 private:
     wxHtmlWindowInterface();
     wxHtmlWindowInterface(const wxHtmlWindowInterface&);
-    virtual ~wxHtmlWindowInterface();
 public:
+    virtual ~wxHtmlWindowInterface();
 
     virtual void SetHTMLWindowTitle(const wxString& title) = 0;
     //virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell, const wxPoint& pos) const = 0;

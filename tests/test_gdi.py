@@ -116,21 +116,11 @@ def test_Pen():
     assert p.IsOk()
 
 
-def test_SizeTuple():
-    assert 50 == wx.Foo().pyth(wx.Size(5, 5))
-    assert 32 == wx.Foo().pyth(wx.Size(4, 4))
-    s= wx.Size(3,4)
-    assert 25 == wx.Foo().pyth(s)
-
-    assert 50 == wx.Foo().pyth((5, 5))
-    assert 32 == wx.Foo().pyth((4, 4))
-    s=(3,4)
-    assert 25 == wx.Foo().pyth(s)
-
 
 def main():
+    app = wx.PySimpleApp()
     import memleak
-    memleak.find(test_SizeTuple, loops=100000)
+    memleak.find(test_Rect, loops=50000)
 
 
 

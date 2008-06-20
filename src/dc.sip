@@ -319,6 +319,8 @@ private:
 
 class wxMemoryDC: wxWindowDC
 {
+private:
+    wxMemoryDC(const wxMemoryDC&);
 public:
     wxMemoryDC(wxBitmap& bitmap = wxNullBitmap);
     virtual ~wxMemoryDC();
@@ -336,6 +338,9 @@ class wxBufferedDC : wxMemoryDC
 #include <wx/dcbuffer.h>
 #endif
 %End
+
+private:
+    wxBufferedDC(const wxBufferedDC&);
 
 public:
     wxBufferedDC(wxDC* dc,
@@ -359,6 +364,9 @@ class wxBufferedPaintDC : wxBufferedDC
 #include <wx/dcbuffer.h>
 #endif
 %End
+
+private:
+    wxBufferedPaintDC(const wxBufferedPaintDC&);
 
 public:
     // TODO: ownership of wxBitmap argument?

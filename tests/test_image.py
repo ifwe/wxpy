@@ -2,7 +2,7 @@ import os.path
 import wx
 
 def test_imageformats():
-    
+
     image_folder = 'tests/images'
     images = [
         'digsbybig.bmp',
@@ -16,7 +16,13 @@ def test_imageformats():
         assert os.path.isfile(imgfile)
         assert wx.Image(imgfile).IsOk()
 
+def main():
+    app = wx.PySimpleApp()
+    import memleak
+    memleak.find(test_imageformats, loops=50)
 
 
+if __name__ == '__main__':
+    main()
 
 

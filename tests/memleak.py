@@ -3,7 +3,7 @@ from collections import defaultdict
 from ctypes import *
 from ctypes.wintypes import *
 from operator import itemgetter
-import sys
+import sys, time
 ################################################################
 
 class PROCESS_MEMORY_COUNTERS(Structure):
@@ -50,7 +50,11 @@ def nicebytecount(bytes):
 def find(func, loops=LOOPS):
     # call 'func' several times, so that memory consumption
     # stabilizes:
+    name = func.__name__
+    before = time.clock()
     w=sys.stdout.write
+
+    print 'repeating', name, loops, 'times for warmup...'
     for j in xrange(loops):
 #        w('.')
         func()
@@ -63,6 +67,7 @@ def find(func, loops=LOOPS):
     # memory consumption before and after the call.  Repeat this a
     # few times, and return a list containing the memory
     # consumption differences.
+    print 'repeating', name, loops, 'times with measurements'
     for j in xrange(loops):
 #        w('.')
         func()
@@ -76,6 +81,9 @@ def find(func, loops=LOOPS):
     ram_leaked = max(result, 0)
     print class_counts()
     print nicebytecount(ram_leaked), result_objs
+    if ram_leaked > 100 * 1024:
+        print name, 'leaked!'
+    print 'took %s secs' % (time.clock() - before)
 
     return ram_leaked
 
@@ -85,4 +93,4 @@ def class_counts():
         counts[t] += 1
 
     sorted_counts = sorted(counts.iteritems(), key = itemgetter(1))
-    return '\n'.join('%s: %d' % (item[0], item[1]) for item in sorted_counts[-7:])
+    return '\n'.join('%s: %d' % (item[0], item[1]) for item in sorted_counts[-10:])

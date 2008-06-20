@@ -290,7 +290,10 @@ static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPt
     SIP_BLOCK_THREADS
     PyObject* result = PyObject_CallFunction((PyObject*)funcPtr, "ii", item1, item2);
     if (!result)
+    {
         PyErr_Print();
+        PyErr_Clear();
+    }
     else
     {
         retval = PyInt_AsLong(result);

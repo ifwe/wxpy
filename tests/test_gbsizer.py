@@ -34,7 +34,6 @@ def test_GBSpan():
     assert s.Colspan == s.GetColspan() == 4
 
 def test_GridBagSizer():
-    a = wx.PySimpleApp()
     f = wx.Frame(None, -1, 'Test')
 
     s = f.Sizer = wx.GridBagSizer()
@@ -81,21 +80,29 @@ def test_GridBagSizer():
 
 
     sizer.Layout()
+    f.Destroy()
 
-    print 'CalcMin:', sizer.CalcMin()
-    print 'GetEmptyCellSize():', sizer.GetEmptyCellSize()
+#    print 'CalcMin:', sizer.CalcMin()
+#    print 'GetEmptyCellSize():', sizer.GetEmptyCellSize()
 
-    f.Show()
+    #f.Show()
 
-    for n, b in enumerate(buttons):
-        print n, b, b.Rect
+#    for n, b in enumerate(buttons):
+#        print n, b, b.Rect
 
-    if __name__ == '__main__':
-        a.MainLoop()
-    else:
-        f.Destroy()
+#    if __name__ == '__main__':
+#        a.MainLoop()
+#    else:
+#        f.Destroy()
+
+
+def main():
+    a = wx.PySimpleApp()
+    import memleak
+    memleak.find(test_GridBagSizer, loops=5000)
 
 
 if __name__ == '__main__':
-    test_GridBagSizer()
+    #test_GridBagSizer()
+    main()
 

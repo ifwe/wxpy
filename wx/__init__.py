@@ -52,9 +52,17 @@ def PyEventBinder(evttype, n = None):
     return (evttype, )
 
 _callafter = wx.CallAfter
+from traceback import print_exc
 def CallAfter(func, *a, **k):
     assert callable(func)
-    return _callafter(lambda: func(*a, **k))
+
+    def CallAfterCallback():
+        try:
+            func(*a, **k)
+        except Exception:
+            print_exc()
+
+    return _callafter(CallAfterCallback)
 
 #wx.TopLevelWindow.__repr__ = lambda tlw: '<wx.%s "%s" at %x>' % (type(tlw).__name__, tlw.GetTitle(), id(tlw))
 

@@ -15,7 +15,6 @@ def test_Popup():
     assert p.Rect == (40, 40, 100, 100), repr(p.Rect)
     assert p.GetPosition() == p.Position == r2.Position == (40, 40)
     assert p.GetSize() == p.Size == r2.Size == (100, 100)
-    f.Show()
 
 
 

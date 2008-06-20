@@ -4,7 +4,6 @@
 
 class wxObject
 {
-    virtual ~wxObject();
 
 %TypeHeaderCode
 #ifndef WXPY_PREC
@@ -29,6 +28,7 @@ class wxObject
 
 
 public:
+    virtual ~wxObject();
     bool IsSameAs(const wxObject& p) const;
 //    int __nonzero__();
 //%MethodCode

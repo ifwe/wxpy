@@ -60,8 +60,9 @@ class wxGraphicsObject : wxObject
 private:
     wxGraphicsObject(wxGraphicsRenderer* renderer = NULL);
     wxGraphicsObject(const wxGraphicsObject&);
-    virtual ~wxGraphicsObject();
+
 public:
+    virtual ~wxGraphicsObject();
     bool IsNull() const;
     wxGraphicsRenderer* GetRenderer() const;
 };
@@ -71,6 +72,7 @@ class wxGraphicsPen : wxGraphicsObject
 private:
     wxGraphicsPen();
     wxGraphicsPen(const wxGraphicsPen&);
+public:
     virtual ~wxGraphicsPen();
 };
 
@@ -79,6 +81,7 @@ class wxGraphicsBrush : wxGraphicsObject
 private:
     wxGraphicsBrush();
     wxGraphicsBrush(const wxGraphicsBrush&);
+public:
     virtual ~wxGraphicsBrush();
 };
 
@@ -87,6 +90,7 @@ class wxGraphicsFont : wxGraphicsObject
 private:
     wxGraphicsFont();
     wxGraphicsFont(const wxGraphicsFont&);
+public:
     virtual ~wxGraphicsFont();
 };
 
@@ -252,8 +256,8 @@ private:
 
 public:
     // wxGraphicsRenderer();  This is an ABC, use GetDefaultRenderer
-
      ~wxGraphicsRenderer();
+
 
     static wxGraphicsRenderer* GetDefaultRenderer();
 

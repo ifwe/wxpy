@@ -122,6 +122,11 @@ public:
         Py_XINCREF(m_obj);
     }
 
+    bool operator==(const wxPyTreeItemData& other) const
+    {
+        return m_obj == other.m_obj;
+    }
+
 protected:
     PyObject* m_obj;
 };
@@ -149,6 +154,9 @@ public:
     sipRes = 0;
 %End
 */
+
+    bool operator==(const wxPyTreeItemData& other) const;
+
     SIP_PYOBJECT GetData() /HoldGIL/;
     void SetData(SIP_PYOBJECT) /HoldGIL/;
 

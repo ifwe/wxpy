@@ -62,8 +62,10 @@ def test_cycle():
 
 def main():
     a = wx.PySimpleApp()
-    test_frame().Show()
-    a.MainLoop()
+
+
+    import memleak
+    memleak.find(test_FrameDestroy, loops=500)
 
 if __name__ == '__main__':
     main()

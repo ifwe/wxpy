@@ -64,7 +64,10 @@ void CallAfterCallback::EventThunker(wxEvent&)
         if (result)
             Py_DECREF(result);
         else
+        {
             PyErr_Print();
+            PyErr_Clear();
+        }
 
         Py_DECREF(func);
     }

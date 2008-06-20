@@ -9,14 +9,20 @@ def test_BoxSizer():
     s = wx.BoxSizer(wx.VERTICAL)
     s.AddMany(buttons)
     f.Sizer = s
-    f.Show()
+    f.Layout()
 
     # check button positioning
     for n, b in enumerate(buttons[:-1]):
         y1, y2 = b.Position.y, buttons[n+1].Position.y
         assert y1 < y2, '%r should be less than %r' % (y1, y2)
 
-if __name__ == '__main__':
+    f.Destroy()
+
+def main():
     a = wx.PySimpleApp()
-    test_BoxSizer()
-    a.MainLoop()
+    import memleak
+    memleak.find(test_BoxSizer, loops=1000)
+
+
+if __name__ == '__main__':
+    main()

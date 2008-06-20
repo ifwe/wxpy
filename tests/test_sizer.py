@@ -20,22 +20,22 @@ def test_Detach():
         item = s.Add((50, 50))
         s.Detach(0)
         return item
-
-    @check_collected
-    def subsizer():
-        subsizer = wx.BoxSizer(wx.HORIZONTAL)
-        s.Add(subsizer)
-        s.Detach(subsizer)
-        return subsizer
-
-    @check_collected
-    def subsizer_item():
-        vsizer = wx.BoxSizer(wx.VERTICAL)
-        assert sip.ispyowned(vsizer)
-        item = s.Add(vsizer)
-        assert not sip.ispyowned(vsizer)
-        assert s.Detach(vsizer)
-        return item
+#
+#    @check_collected
+#    def subsizer():
+#        subsizer = wx.BoxSizer(wx.HORIZONTAL)
+#        s.Add(subsizer)
+#        s.Detach(subsizer)
+#        return subsizer
+#
+#    @check_collected
+#    def subsizer_item():
+#        vsizer = wx.BoxSizer(wx.VERTICAL)
+#        assert sip.ispyowned(vsizer)
+#        item = s.Add(vsizer)
+#        assert not sip.ispyowned(vsizer)
+#        assert s.Detach(vsizer)
+#        return item
 
     f.Destroy()
 
