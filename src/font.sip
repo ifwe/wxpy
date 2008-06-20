@@ -262,6 +262,8 @@ public:
     bool GetNoAntiAliasing() const;
     static wxFontEncoding GetDefaultEncoding();
     static void SetDefaultEncoding(wxFontEncoding encoding);
+
+    bool IsOk() const;
 };
 
 
