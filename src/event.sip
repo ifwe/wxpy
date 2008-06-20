@@ -48,11 +48,17 @@ void CallAfterCallback::EventThunker(wxEvent&)
     SIP_BLOCK_THREADS
     PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
 
+
+
     const Py_ssize_t num_cbs = PyList_GET_SIZE(cbs);
+
+    PyObject* temp_list = PyList_New(num_cbs);
+    PyList_SetSlice(temp_list, 0, num_cbs, cbs);
+    PyList_SetSlice(cbs, 0, num_cbs, NULL);
 
     for(Py_ssize_t i = 0; i < num_cbs; ++i)
     {
-        PyObject* func = PyList_GET_ITEM(cbs, i);
+        PyObject* func = PyList_GET_ITEM(temp_list, i);
         PyObject* result = PyObject_CallObject(func, NULL);
 
         if (result)
@@ -62,7 +68,8 @@ void CallAfterCallback::EventThunker(wxEvent&)
 
         Py_DECREF(func);
     }
-    PyList_SetSlice(cbs, 0, num_cbs, NULL);
+
+    Py_DECREF(temp_list);
     SIP_UNBLOCK_THREADS
 }
 %End
@@ -70,29 +77,16 @@ void CallAfterCallback::EventThunker(wxEvent&)
 // may be called from any thread
 void CallAfter(SIP_PYCALLABLE);
 %MethodCode
-    int newSize;
+    /* append the callable to the end of our list */
+    SIP_BLOCK_THREADS
+    Py_INCREF(a0);
 
-/*    if (!wxTheApp)
-    {
-        SIP_BLOCK_THREADS
-        PyErr_SetString(PyExc_AssertionError, "No wx.App created yet");
-        SIP_UNBLOCK_THREADS
-        sipIsErr = 1;
-    }
-    else
-    {*/
-        /* append the callable to the end of our list */
-        SIP_BLOCK_THREADS
-        Py_INCREF(a0);
+    PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+    PyList_Append(cbs, a0);
 
-        PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
-        PyList_Append(cbs, a0);
-        newSize = PyList_GET_SIZE(cbs);
-
-        SIP_UNBLOCK_THREADS
-        wxCommandEvent e(g_callAfterId, -1);
-        wxTheApp->AddPendingEvent(e);
-//    }
+    SIP_UNBLOCK_THREADS
+    wxCommandEvent e(g_callAfterId, -1);
+    wxTheApp->AddPendingEvent(e);
 %End
 
 int wxNewEventType();
