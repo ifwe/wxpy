@@ -61,43 +61,46 @@ void accel_from_tuple(PyObject* fast, wxAcceleratorEntry* entry)
 }
 %End // TypeCode
 
-public:
+private:
     wxAcceleratorTable();
     // TODO: why does this break?
+public:
     virtual ~wxAcceleratorTable();
 
     bool IsOk() const;
 
-    wxAcceleratorTable(SIP_PYOBJECT);
-%MethodCode
-    SIP_BLOCK_THREADS
-    PyObject* seq;
-    PyObject* fastitem;
-
-    if (!(seq = PySequence_Fast(a0, ACCEL_TYPE_ERROR)))
-        sipIsErr = 1;
-    else
-    {
-        size_t length = PySequence_Fast_GET_SIZE(seq);
-
-        wxAcceleratorEntry* entries = new wxAcceleratorEntry[length];
-        for (size_t i = 0; i < length; ++i)
-        {
-            fastitem = accel_check(PySequence_Fast_GET_ITEM(seq, i));
-            if (!fastitem)
-            {
-                sipIsErr = 1;
-                break;
-            }
-            accel_from_tuple(fastitem, &entries[i]);
-            Py_DECREF(fastitem);
-        }
-        Py_DECREF(seq);
-        if (!sipIsErr)
-            sipCpp = new wxAcceleratorTable(length, entries);
-
-        delete [] entries;
-    }
-    SIP_UNBLOCK_THREADS
-%End
 };
+
+wxAcceleratorTable wxAcceleratorTableFromSequence (SIP_PYOBJECT);
+%MethodCode
+SIP_BLOCK_THREADS
+PyObject* seq;
+PyObject* fastitem;
+
+if (!(seq = PySequence_Fast(a0, ACCEL_TYPE_ERROR)))
+    sipIsErr = 1;
+else
+{
+    size_t length = PySequence_Fast_GET_SIZE(seq);
+
+    wxAcceleratorEntry* entries = new wxAcceleratorEntry[length];
+    for (size_t i = 0; i < length; ++i)
+    {
+        fastitem = accel_check(PySequence_Fast_GET_ITEM(seq, i));
+        if (!fastitem)
+        {
+            sipIsErr = 1;
+            break;
+        }
+        accel_from_tuple(fastitem, &entries[i]);
+        Py_DECREF(fastitem);
+    }
+    Py_DECREF(seq);
+    if (!sipIsErr)
+        sipRes = new wxAcceleratorTable(length, entries);
+
+    delete [] entries;
+}
+SIP_UNBLOCK_THREADS
+%End
+
