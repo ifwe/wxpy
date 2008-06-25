@@ -241,7 +241,7 @@ private:
     /* TODO: automate this by grepping for wxXXXEvent and putting
      * entries here before build :( */
     if(0) ;
-#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+#define C(clz) else if (c == CLASSINFO(clz)) { sipClass = sipClass_ ## clz; }
         C(wxKeyEvent)
         C(wxCommandEvent)
         C(wxMouseEvent)

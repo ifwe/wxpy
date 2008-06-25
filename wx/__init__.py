@@ -54,7 +54,7 @@ def PyEventBinder(evttype, n = None):
 _callafter = wx.CallAfter
 from traceback import print_exc
 def CallAfter(func, *a, **k):
-    assert callable(func)
+    assert callable(func), repr(func)
 
     def CallAfterCallback():
         try:
@@ -488,9 +488,10 @@ class CallLater(object):
 
     :see: `wx.CallAfter`
     """
-    def __init__(self, millis, callable, *args, **kwargs):
+    def __init__(self, millis, cb, *args, **kwargs):
         self.millis = millis
-        self.callable = callable
+        self.callable = cb
+
         self.SetArgs(*args, **kwargs)
         self.runCount = 0
         self.running = False

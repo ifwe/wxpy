@@ -217,6 +217,24 @@ class wxPyApp : wxApp
 %End
 
 
+// expose the CallAfter list to the cyclic garbage collector
+
+%GCTraverseCode
+    PyObject *obj = sipCpp->callAfterCbs;
+    sipRes = obj ? sipVisit(obj, sipArg) : 0;
+%End
+
+%GCClearCode
+    PyObject* obj = sipCpp->callAfterCbs;
+    if (obj)
+    {
+        Py_DECREF(obj);
+        sipCpp->callAfterCbs = 0;
+    }
+    sipRes = 0;
+%End
+
+
 public:
     wxPyApp() /Transfer/;
     ~wxPyApp();
@@ -326,6 +344,8 @@ public:
     static void SetMacExitMenuItemId(long val);
     static void SetMacHelpMenuTitleName(const wxString& val);
 */
+
+
 };
 
 
