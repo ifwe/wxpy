@@ -34,7 +34,7 @@ def wx_path():
         print >> sys.stderr, 'Please specifiy --wx=PATH_TO_WX on the command line'
         sys.exit(-1)
 
-    wxdir = path(wxwin).abspath()
+    wxdir = path(wxdir).abspath()
     if not wxdir.isdir(): raise AssertionError('cannot find WXWIN at %s' % wxdir)
     return wxdir
 
