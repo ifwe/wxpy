@@ -22,11 +22,27 @@ else:
     BUILDING_WK = False
 
 
-from path import path
-WEBKITDIR   = path(r'c:\dev\digsby\build\msw\webkit')
-WEBKITBUILD = WEBKITDIR / 'WebKitBuild'
 
 DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
+
+def get_webkit_dir():
+    from path import path
+
+    for arg in sys.argv[:]:
+        if arg.startswith('--webkit='):
+            WEBKITDIR = path(arg[len('--webkit='):])
+            break
+    else:
+        WEBKITDIR = path(os.environ.get('WEBKITDIR', 'webkit'))
+
+    if not WEBKITDIR.isdir():
+        raise Exception('%r is not a valid path\nplease set WEBKITDIR in the environment or pass --webkit=PATH to this script' % str(WEBKITDIR))
+
+    return WEBKITDIR
+
+def fatal(msg):
+    print >> sys.stderr, msg
+    raise SystemExit(-1)
 
 def main():
     genlisttypes.generate()
@@ -34,11 +50,17 @@ def main():
     opts = {}
 
     if BUILDING_WK:
+        WEBKITDIR = get_webkit_dir()
+        WEBKITBUILD = WEBKITDIR / 'WebKitBuild'
+
+        wk_libdir = WEBKITBUILD / 'Release'
+        wk_lib = wk_libdir / 'wxwebkit.lib'
+        if os.name == 'nt' and not wk_lib.isfile():
+            fatal('could not find webkit libraries in %s' % wk_libdir)
+
         opts.update(includes = [WEBKITDIR / 'WebKit'],
                     libs     = ['wxwebkit'],
-                    libdirs  = [WEBKITBUILD / 'Release'])
-
-
+                    libdirs  = [wk_libdir])
 
         outputdir = path('wx').abspath()
         assert outputdir.isdir()
