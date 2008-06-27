@@ -24,18 +24,17 @@ sip_cfg = sipconfig.Configuration()
 DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
 
 def wx_path():
-    opts = {}
+    wxopt = '--wx='
+    wxdir = None
+    for arg in sys.argv[:]:
+        if arg.startswith(wxopt):
+            wxdir = arg[len(wxopt):]
 
-    try:
-        execfile('wxpy.cfg', opts)
-        wxwin = opts['WXWIN']
-    except Exception:
-        if 'WXWIN' in os.environ:
-            wxwin = os.environ['WXWIN']
-        else:
-            raise
+    if wxdir is None:
+        print >> sys.stderr, 'Please specifiy --wx=PATH_TO_WX on the command line'
+        sys.exit(-1)
 
-    wxdir = path(wxwin)
+    wxdir = path(wxwin).abspath()
     if not wxdir.isdir(): raise AssertionError('cannot find WXWIN at %s' % wxdir)
     return wxdir
 
