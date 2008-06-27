@@ -12,3 +12,5 @@
 %Include treectrl.sip
 %Include notebook.sip
 %Include toolbar.sip
+
+%Include axbase.sip

@@ -1,9 +1,29 @@
 <?xml version="1.0" ?>
 
 <makefile>
+    <!-- set some variables early to limit the combination of configuration
+         possibilities outputted to makefiles -->
+
     <set var="WX_UNICODE">1</set>
     <set var="WX_PYTHON">0</set>
     <set var="WX_SHARED">1</set>
+
+    <option name="PGO">
+        <values>off,instrument,optimize</values>
+        <default-value>off</default-value>
+        <values-description>,PGOInstrument,PGOOptimize</values-description>
+        <description>
+            Use profile guided optimization?
+        </description>
+    </option>
+
+    <set var="PGO_INSTRUMENT">0</set>
+    <set var="PGO_OPTIMIZE">0</set>
+
+    <set var="PGO_INSTRUMENT" cond="PGO=='instrument'">1</set>
+    <set var="PGO_OPTIMIZE"   cond="PGO=='optimize'">1</set>
+
+
     <include file="presets/wx.bkl"/>
 
     <set var="DEBUG">$(WX_DEBUG)</set>
@@ -78,8 +98,18 @@
             <ldflags>/DEBUG</ldflags>
             <ldflags>/OPT:REF</ldflags> <!-- remove unused functions -->
             <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
-
         </if>
+
+        <!-- profile guided optimization flags 
+        <if cond="PGO_INSTRUMENT=='1'">
+            <cxxflags>/GL</cxxflags>
+            <ldflags>/LTCG:PGINSTRUMENT</ldflags>
+        </if>
+        <if cond="PGO_OPTIMIZE=='1'">
+            <cxxflags>/GL</cxxflags>
+            <ldflags>/LTCG:PGOPTIMIZE</ldflags>
+        </if>
+        -->
     </template>
 
     <template id="wxpy_core" template="wxpy_extension">

@@ -52,7 +52,8 @@ class wxpyext(object):
 def build_extension(project_name, modules,
                     includes = None,
                     libs = None,
-                    libdirs = None):
+                    libdirs = None,
+                    outputdir = None):
     features = emit_features_file(WXWIN, 'src/generated/features.sip')
     feature_args = list(chain(*(('-x', feature)
                         for feature, enabled in features.iteritems() if not enabled)))
@@ -63,7 +64,7 @@ def build_extension(project_name, modules,
 
         includes = [path(i).abspath() for i in includes]
 
-    sources = runsip(modules, feature_args, includes, libs, libdirs)
+    sources = runsip(modules, feature_args, includes, libs, libdirs, outputdir)
     manage_cache(GENERATED_SRC_DIR)
 
     # The files we create below go in OUTPUT_DIR
@@ -90,14 +91,24 @@ def build_nt(solution_name):
 
     run('vcbuild %s %s' % (' '.join(vcbuild_opts), config))
 
-def runsip(modules, features, includes = None, libs = None, libdirs = None):
+def runsip(modules, features,
+           includes = None,
+           libs = None,
+           libdirs = None,
+           outputdir = None):
+
     sipgen = SIPGenerator(GENERATED_SRC_DIR, 'WXMSW', features)
     makefile = Element('makefile')
 
     include = xmlnode(makefile, 'include', file = 'wxpy-settings.bkl')
 
     for module_name, sources in modules:
-        sip_sources = sipgen.generate_sources(module_name, sources, [os.path.abspath('./src'), path(__file__).parent.parent / 'src'])
+        sip_includes = [
+            path('./src').abspath(),
+            path('./src/generated').abspath(),
+            path(__file__).parent.parent / 'src',
+        ]
+        sip_sources = sipgen.generate_sources(module_name, sources, sip_includes)
 
         # TODO: remove this awful hack
         if module_name == '_wxcore':
@@ -105,7 +116,8 @@ def runsip(modules, features, includes = None, libs = None, libdirs = None):
         else:
             template = 'wxpy_extension'
 
-        add_wxpy_module(makefile, module_name, sip_sources, includes, template, libs, libdirs)
+        add_wxpy_module(makefile, module_name, sip_sources,
+                        includes, template, libs, libdirs, outputdir)
 
     return makefile
 
@@ -123,7 +135,7 @@ def bakefile_gen(input, formats):
 
     return bakefile_gen
 
-def bakefile(project_name, makefile):
+def bakefile(project_name, makefile, outputdir = None):
     # First, create the BKL file which will tell bakefile how to create platform
     # specific makefiles.
     bkl = project_name + '.bkl'
@@ -166,7 +178,8 @@ def add_wxpy_module(makefile, module_name, sources,
                     include_paths = None,
                     template = None,
                     libs = None,
-                    libdirs = None):
+                    libdirs = None,
+                    outputdir = None):
 
     module = xmlnode(makefile, 'module',
                      id = module_name,
@@ -178,6 +191,10 @@ def add_wxpy_module(makefile, module_name, sources,
 
     includes = [sip_cfg.sip_inc_dir,    # for sip.h
                 sip_cfg.py_inc_dir]     # for python.h
+
+    if os.name == 'nt':
+        # on windows, pyconfig.h is in Python/PC
+        includes.append(os.path.join(os.path.split(sip_cfg.py_inc_dir)[0], 'PC'))
 
     if include_paths is not None:
         assert not isinstance(include_paths, basestring)
@@ -192,23 +209,40 @@ def add_wxpy_module(makefile, module_name, sources,
     if libdirs is None:
         libdirs = []
 
-    # TODO: Where is PythonXX.lib
-    from distutils import sysconfig
+    # Make sure the linker can find PythonXX.lib
+    libdirs.append(get_pylibdir())
 
-    if os.name == 'nt':
-        if DEBUG:
-            pylibdir = path(sysconfig.project_base) / 'PCBuild'
-        else:
-            pylibdir = path(sysconfig.project_base)
-    else:
-        assert False
-
-    for libdir in libdirs + [pylibdir]:
+    for libdir in libdirs:
         xmlnode(module, 'lib-path', libdir)
+
+    if outputdir is not None:
+        xmlnode(module, 'dirname', outputdir)
 
     source_elem = xmlnode(module, 'sources', '\n'.join(build_path(s) for s in sources))
 
     return module
+
+def get_pylibdir():
+    'Return the location of pythonXX.lib'
+
+    if os.name == 'nt':
+        from distutils import sysconfig
+        projbase = path(sysconfig.project_base)
+
+        if DEBUG:
+            pylibdir = projbase / 'PCBuild'
+        else:
+            if projbase.endswith('-pgo'):
+                # PGO builds have pythonXX.lib one directory up from the
+                # executable.
+                pylibdir = projbase.parent
+            else:
+                pylibdir = projbase
+    else:
+        assert False, 'get_pylibdir needs to be implemented for this platform'
+
+    return pylibdir
+
 
 def xmlnode(root, name, text = '', **attrs):
     'Simple way to attach an ElementTree node.'

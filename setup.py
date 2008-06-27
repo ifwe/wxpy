@@ -38,11 +38,17 @@ def main():
                     libs     = ['wxwebkit'],
                     libdirs  = [WEBKITBUILD / 'Release'])
 
+
+
+        outputdir = path('wx').abspath()
+        assert outputdir.isdir()
+        opts['outputdir'] = outputdir
+
     build_extension('wxpy', wxpy_modules, **opts)
 
-    import os
-    if os.name == 'nt':
-        windows_install_pyds()
+    #import os
+    #if os.name == 'nt':
+    #    windows_install_pyds()
 
 def windows_install_pyds():
     srcdir  = 'build/obj-msvs2005prj'

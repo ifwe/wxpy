@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-import re
+import os, re
 from path import path
 import wxpyconfig
 
@@ -18,7 +18,8 @@ def find_setup_h(wxdir):
     setups   = []
 
     # TODO
-    return path(wxdir) / 'include' / 'wx' / 'msw' / 'setup.h'
+    if os.name == 'nt':
+        return path(wxdir) / 'include' / 'wx' / 'msw' / 'setup.h'
 
     for include in iterincludes(cxxflags):
         p = path(include[2:]) / 'wx' / 'setup.h'
