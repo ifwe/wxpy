@@ -62,6 +62,7 @@ def main():
                     libs     = ['wxwebkit'],
                     libdirs  = [wk_libdir])
 
+        from path import path
         outputdir = path('wx').abspath()
         assert outputdir.isdir()
         opts['outputdir'] = outputdir
