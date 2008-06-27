@@ -4,6 +4,15 @@ wxpy
 python additions
 '''
 
+import os.path, sys
+
+# make sure "wx" is on the syspath
+_wxpy_dir = os.path.split(os.path.abspath(__file__))[0]
+if not _wxpy_dir in sys.path:
+    sys.path.append(_wxpy_dir)
+del _wxpy_dir
+
+
 VERSION = (1, 0, 0, 0)
 USE_UNICODE = True
 WXPY = True
