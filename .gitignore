@@ -15,6 +15,10 @@ build/
 *.exe.manifest
 *.pyd
 *.pyd.manifest
+*.exp
+*.idb
+*.lib
+
 
 
 .project
