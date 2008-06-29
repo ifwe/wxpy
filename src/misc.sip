@@ -74,10 +74,13 @@ class wxSingleInstanceChecker
 #endif
 %End
 
+private:
+    wxSingleInstanceChecker();
+
 public:
     wxSingleInstanceChecker(const wxString& name,
                             const wxString& path = wxEmptyString);
-    ~wxSingleInstanceChecker();
+    virtual ~wxSingleInstanceChecker();
     bool Create(const wxString& name, const wxString& path = wxEmptyString);
     bool IsAnotherRunning() const;
 };
