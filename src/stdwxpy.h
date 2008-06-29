@@ -79,6 +79,11 @@
 #include <wx/imaglist.h>
 #endif
 
+#if wxUSE_SNGLINST_CHECKER
+#include <wx/snglinst.h>
+#endif
+
+
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>
 #include <wx/msw/crashrpt.h>

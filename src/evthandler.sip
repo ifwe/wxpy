@@ -25,7 +25,10 @@ wxPyCallback::wxPyCallback(PyObject* func) {
 }
 
 wxPyCallback::~wxPyCallback() {
+    // may be called at any time
+    SIP_BLOCK_THREADS
     Py_DECREF(m_func);
+    SIP_UNBLOCK_THREADS
 }
 
 // All wxEvtHandler::Connect calls made from Python are routed through

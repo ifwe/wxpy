@@ -64,3 +64,21 @@ public:
 private:
     wxCaret(const wxCaret&);
 };
+
+%If (wxUSE_SNGLINST_CHECKER)
+class wxSingleInstanceChecker
+{
+%TypeCode
+#ifndef WXPY_PREC
+#include <wx/snglinst.h>
+#endif
+%End
+
+public:
+    wxSingleInstanceChecker(const wxString& name,
+                            const wxString& path = wxPyEmptyString);
+    ~wxSingleInstanceChecker();
+    bool Create(const wxString& name, const wxString& path = wxEmptyString);
+    bool IsAnotherRunning() const;
+};
+%End
