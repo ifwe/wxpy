@@ -67,7 +67,7 @@
         </if>
 
         <include>../src</include>
-        <include>c:\dev\wxWebKitBranch-2.8\contrib\include</include>
+        <include>$(WXDIR)/contrib/include</include>
         <define>WXPY=1</define>
         <define>WXUSINGDLL_WEBKIT</define>
 
@@ -100,7 +100,7 @@
             <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
         </if>
 
-        <!-- profile guided optimization flags 
+        <!-- profile guided optimization flags
         <if cond="PGO_INSTRUMENT=='1'">
             <cxxflags>/GL</cxxflags>
             <ldflags>/LTCG:PGINSTRUMENT</ldflags>
