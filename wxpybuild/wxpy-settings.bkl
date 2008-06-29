@@ -67,7 +67,7 @@
         </if>
 
         <include>../src</include>
-        <include>$(WXDIR)/contrib/include</include>
+        <include>$(WX_DIR)/contrib/include</include>
         <define>WXPY=1</define>
         <define>WXUSINGDLL_WEBKIT</define>
 
