@@ -76,7 +76,7 @@ class wxSingleInstanceChecker
 
 public:
     wxSingleInstanceChecker(const wxString& name,
-                            const wxString& path = wxPyEmptyString);
+                            const wxString& path = wxEmptyString);
     ~wxSingleInstanceChecker();
     bool Create(const wxString& name, const wxString& path = wxEmptyString);
     bool IsAnotherRunning() const;
