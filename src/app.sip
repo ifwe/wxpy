@@ -236,7 +236,7 @@ class wxPyApp : wxApp
 
 
 public:
-    wxPyApp() /Transfer/;
+    wxPyApp();
     ~wxPyApp();
     virtual bool OnInit();
     virtual bool OnInitGui();
