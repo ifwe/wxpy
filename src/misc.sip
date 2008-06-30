@@ -76,6 +76,7 @@ class wxSingleInstanceChecker
 
 private:
     wxSingleInstanceChecker();
+    wxSingleInstanceChecker(const wxSingleInstanceChecker&);
 
 public:
     wxSingleInstanceChecker(const wxString& name,
