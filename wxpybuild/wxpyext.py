@@ -1,27 +1,17 @@
+'''
+Utilities for building WXPY extensions, including the core library.
+'''
+
 from __future__ import with_statement
 import os.path
 import shutil
-import sipconfig
 import subprocess
 import sys
 
 from xml.etree.cElementTree import Element, SubElement, ElementTree
 from itertools import chain
 from contextlib import contextmanager
-
-from wxpybuild.runsip import SIPGenerator, run
 from wxpybuild.path import path
-from wxpyfeatures import emit_features_file
-
-OUTPUT_DIR        = path('build')
-SRC_DIR           = path('src')
-GENERATED_SRC_DIR = SRC_DIR / 'generated'
-
-VERBOSE = True
-sip_cfg = sipconfig.Configuration()
-
-
-DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
 
 def wx_path():
     wxopt = '--wx='
@@ -38,7 +28,33 @@ def wx_path():
     if not wxdir.isdir(): raise AssertionError('cannot find WXWIN at %s' % wxdir)
     return wxdir
 
+# Path to wxWidgets source and include files
 WXWIN = wx_path()
+
+from wxpyfeatures import emit_features_file
+
+VERBOSE = True
+OUTPUT_DIR        = path('build')
+SRC_DIR           = path('src')
+GENERATED_SRC_DIR = SRC_DIR / 'generated'
+DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
+
+try:
+    import sipconfig
+except ImportError:
+    sys.modules.pop('sipconfig', None)
+    sip_dir = os.environ.get('SIP_DIR')
+    if sip_dir is not None:
+        sys.path.append(sip_dir)
+        import sipconfig
+    else:
+        raise ImportError('Make sure SIP is on the PYTHONPATH, or set SIP_DIR in the environment.')
+
+
+from wxpybuild.runsip import SIPGenerator, run
+
+import sipconfig
+sip_cfg = sipconfig.Configuration()
 
 class wxpyext(object):
     def __init__(name, sources, includes = None, libs = None, libdirs = None):

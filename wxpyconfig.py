@@ -55,15 +55,7 @@ if platform_name in ('mac',):
     sip_platform = 'WXMAC'
 
 elif platform_name == 'msw':
-    import sys
-    for arg in sys.argv[:]:
-        if arg.startswith('--wx='):
-            wxdir = path(arg[len('--wx='):])
-            break
-    else:
-        print >> sys.stderr, 'Please specify --wx=PATH_TO_WX on the commandline'
-        sys.exit(-1)
-
+    from wxpybuild.wxpyext import WXWIN as wxdir
     assert wxdir.exists(), '%s does not exist!' % wxdir
 
     print 'using wxwidgets dir:', wxdir
