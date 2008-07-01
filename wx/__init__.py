@@ -100,6 +100,16 @@ class StaticText(_StaticText):
     def __init__(self, parent, id = -1, label = '', pos = DefaultPosition, size = DefaultSize, style = 0, name = 'static text'):
         _StaticText.__init__(self, parent, id, label, pos, size, style, name)
 
+_StaticBox = wx.StaticBox
+class StaticBox(_StaticBox):
+    def __init__(self, parent, id, label, pos = DefaultPosition, size = DefaultSize, style = 0, name = "staticBox"):
+        _StaticBox.__init__(self, parent, id, label, pos, size, style, name)
+
+_StaticBoxSizer = wx.StaticBoxSizer
+class StaticBoxSizer(_StaticBoxSizer):
+    def __init__(self, box, orient):
+        _StaticBoxSizer.__init__(self, box, orient)
+
 #wxFont = wx.Font
 #class Font(wxFont):
 #    def __init__(self, pointSize, family, style, weight, underline = False, faceName = "", encoding = wx.FONTENCODING_DEFAULT):
