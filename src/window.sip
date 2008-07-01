@@ -20,12 +20,14 @@ class wxWindow : wxEvtHandler
 wxClassInfo* c = sipCpp->GetClassInfo();
 
 if(0) ;
-#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+#define C(clz) else if (c == CLASSINFO(clz)) { sipClass = sipClass_ ## clz; }
     C(wxWindow)
     C(wxFrame)
     C(wxDialog)
     C(wxTopLevelWindow)
     C(wxPopupWindow)
+    C(wxTextCtrl)
+    C(wxButton)
 else
     sipClass = NULL;
 #undef C
