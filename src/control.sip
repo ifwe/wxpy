@@ -48,6 +48,8 @@ public:
     wxString GetString(unsigned int n) const = 0;
     void SetSelection(int n) = 0;
 
+    void Append(const wxArrayString& strings) /PyName=AppendItems/;
+
 private:
     wxItemContainer();
 };
