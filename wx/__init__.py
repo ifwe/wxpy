@@ -78,25 +78,27 @@ def CallAfter(func, *a, **k):
 wx.FrameNameStr  = 'Frame'
 wx.DialogNameStr = 'Dialog'
 
-wxFrame = wx.Frame
-class Frame(wxFrame):
+_Frame = wx.Frame
+class Frame(_Frame):
     def __init__(self, parent, id = -1, title = '', pos = DefaultPosition, size = DefaultSize, style = DEFAULT_FRAME_STYLE, name = wx.FrameNameStr):
-        wxFrame.__init__(self, parent, id, title, pos, size, style, name)
+        _Frame.__init__(self, parent, id, title, pos, size, style, name)
 
-wxDialog = wx.Dialog
-class Dialog(wxDialog):
+_Frame.CentreOnScreen = new.instancemethod(_Frame.CenterOnScreen, None, _Frame)
+
+_Dialog = wx.Dialog
+class Dialog(_Dialog):
     def __init__(self, parent, id = -1, title = '', pos = DefaultPosition, size = DefaultSize, style = DEFAULT_DIALOG_STYLE, name = wx.DialogNameStr):
-        wxDialog.__init__(self, parent, id, title, Point(*pos), Size(*size), style, name)
+        _Dialog.__init__(self, parent, id, title, Point(*pos), Size(*size), style, name)
 
-wxTextCtrl = wx.TextCtrl
-class TextCtrl(wxTextCtrl):
+_TextCtrl = wx.TextCtrl
+class TextCtrl(_TextCtrl):
     def __init__(self, parent, id = -1, value = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = wx.DefaultValidator, name = 'text control'):
-        wxTextCtrl.__init__(self, parent, id, value, pos, size, style, validator, name)
+        _TextCtrl.__init__(self, parent, id, value, pos, size, style, validator, name)
 
-wxStaticText = wx.StaticText
-class StaticText(wxStaticText):
+_StaticText = wx.StaticText
+class StaticText(_StaticText):
     def __init__(self, parent, id = -1, label = '', pos = DefaultPosition, size = DefaultSize, style = 0, name = 'static text'):
-        wxStaticText.__init__(self, parent, id, label, pos, size, style, name)
+        _StaticText.__init__(self, parent, id, label, pos, size, style, name)
 
 #wxFont = wx.Font
 #class Font(wxFont):
@@ -106,10 +108,10 @@ class StaticText(wxStaticText):
 
 Font.init_args = init_args = ('pointSize', 'family', 'style', 'weight', 'underline', 'faceName', 'encoding')
 
-wxControl = wx.Control
-class Control(wx.Control):
+_Control = wx.Control
+class Control(_Control):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = 0, validator = wx.DefaultValidator, name = 'Control'):
-        wxControl.__init__(self, parent, id, pos, size, style, validator, name)
+        _Control.__init__(self, parent, id, pos, size, style, validator, name)
 
 PyControl = Control
 
