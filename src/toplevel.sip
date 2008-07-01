@@ -106,6 +106,10 @@ public:
     wxWindow* GetDefaultItem() const;
     wxWindow* SetDefaultItem(wxWindow * child);
 
+%If (wxMSW)
+    bool ShowNoActivate(bool show);
+%End
+
 private:
     wxTopLevelWindow();
     wxTopLevelWindow(const wxTopLevelWindow&);
@@ -122,7 +126,6 @@ wxWindowList wxGetTopLevelWindows();
 
 class wxFrame : wxTopLevelWindow
 {
-
 %TypeHeaderCode
 #ifndef WXPY_PREC
 #include <wx/frame.h>
