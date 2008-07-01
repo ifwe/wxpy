@@ -470,7 +470,7 @@ MenuBar.Menus    = property(MenuBar_GetMenus, MenuBar_SetMenus)
 
 _MessageBox = MessageBox
 def MessageBox(message, caption = 'Message', style = OK, parent = None, x = -1, y = -1):
-    _MessageBox(message, caption, style, parent, x, y)
+    return _MessageBox(message, caption, style, parent, x, y)
 
 #
 # KeyEvent
