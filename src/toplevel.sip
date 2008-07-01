@@ -106,7 +106,7 @@ public:
     wxWindow* GetDefaultItem() const;
     wxWindow* SetDefaultItem(wxWindow * child);
 
-%If (wxMSW)
+%If (WXMSW)
     bool ShowNoActivate(bool show);
 %End
 
