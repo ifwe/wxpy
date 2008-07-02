@@ -159,11 +159,24 @@ def test_WindowSetSizer():
     assert sip.isdeleted(f)
 
 
+def test_HiddenItem():
+    f = wx.Frame(None)
+    s = f.Sizer = wx.BoxSizer(wx.VERTICAL)
+
+    st = wx.StaticText(f, -1, 'test')
+    st.Hide()
+
+
+    st2 = wx.StaticText(f, -1, 'test2')
+    s.Add(st)
+    s.Add(st2)
+    return f
 
 
 def main():
     a = wx.PySimpleApp()
-    test_Children()
+    test_EmptyItem().Show()
+    a.MainLoop()
 #    import memleak
 
     #test_Detach()

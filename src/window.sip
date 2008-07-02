@@ -28,6 +28,9 @@ if(0) ;
     C(wxPopupWindow)
     C(wxTextCtrl)
     C(wxButton)
+    C(wxListCtrl)
+    C(wxRadioButton)
+    C(wxCheckBox)
 else
     sipClass = NULL;
 #undef C

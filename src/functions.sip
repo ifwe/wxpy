@@ -99,14 +99,17 @@ wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& default_value = wxEmptyString,
                                wxWindow *parent = NULL);
 
-/*
-wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
-                           int choices, wxString* choices_array,
-                           wxWindow *parent = NULL,
-                           int x = -1, int y = -1,
-                           bool centre = true,
-                           int width=150, int height=200);
 
+wxString wxGetSingleChoice(const wxString& message,
+                           const wxString& caption,
+                           const wxArrayString& aChoices,
+                           wxWindow *parent = NULL,
+                           int x = -1,
+                           int y = -1,
+                           bool centre = true,
+                           int width=150,
+                           int height=200);
+/*
 int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
                            int choices, wxString* choices_array,
                            wxWindow *parent = NULL,
@@ -120,7 +123,7 @@ int wxMessageBox(const wxString& message,
                  int style = wxOK | wxCENTRE,
                  wxWindow *parent = NULL,
                  int x = -1, int y = -1);
-/*
+
 long wxGetNumberFromUser(const wxString& message,
                          const wxString& prompt,
                          const wxString& caption,
@@ -128,7 +131,7 @@ long wxGetNumberFromUser(const wxString& message,
                          long min = 0, long max = 100,
                          wxWindow *parent = NULL,
                          const wxPoint& pos = wxDefaultPosition);
-*/
+
 
 void wxSetCursor(wxCursor& cursor);
 //void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
