@@ -489,6 +489,9 @@ public:
 %End
 %End
 
+    virtual wxLayoutDirection GetLayoutDirection() const;
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
+
 private:
     wxWindow(const wxWindow&);
 };

@@ -709,6 +709,9 @@ PyScrolledWindow = ScrolledWindow
 
 SystemSettings_GetColour = wx.SystemSettings.GetColour
 
+# until enum properties work correctly
+_Window.LayoutDirection = property(_Window.GetLayoutDirection, _Window.SetLayoutDirection)
+
 wx.Window.Enabled  = property(wx.Window.IsEnabled, wx.Window.Enable)
 wx.Window.Shown    = property(wx.Window.IsShown)
 wx.Window.TopLevel = property(wx.Window.IsTopLevel)
