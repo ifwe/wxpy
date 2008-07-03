@@ -53,11 +53,13 @@ PyObject* accel_check(PyObject* item)
 
 void accel_from_tuple(PyObject* fast, wxAcceleratorEntry* entry)
 {
-    entry->Set(
-        PyInt_AS_LONG(PySequence_Fast_GET_ITEM(fast, 0)),
-        PyInt_AS_LONG(PySequence_Fast_GET_ITEM(fast, 1)),
-        PyInt_AS_LONG(PySequence_Fast_GET_ITEM(fast, 2)));
+    long flags   = PyInt_AS_LONG(PySequence_Fast_GET_ITEM(fast, 0));
+    long keycode = PyInt_AS_LONG(PySequence_Fast_GET_ITEM(fast, 1));
 
+    PyObject* pyid = PySequence_Fast_GET_ITEM(fast, 2);
+    long command = PyLong_Check(pyid) ? PyLong_AsLong(pyid) : PyInt_AS_LONG(pyid);
+
+    entry->Set(flags, keycode, command);
 }
 %End // TypeCode
 

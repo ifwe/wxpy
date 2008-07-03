@@ -300,7 +300,9 @@ enum wxFlexSizerGrowMode
     wxFLEX_GROWMODE_ALL
 };
 
-class wxFlexGridSizer : wxSizer
+
+
+class wxFlexGridSizer : wxGridSizer
 {
 public:
     wxFlexGridSizer(int rows, int cols, int vgap = 0, int hgap = 0);

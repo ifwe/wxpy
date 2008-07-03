@@ -171,15 +171,13 @@ public:
     bool SetItemSpan(wxSizer *sizer, const wxGBSpan& span);
     bool SetItemSpan(size_t index, const wxGBSpan& span);
 
-    wxGBSizerItem* FindItem(wxWindow* window);
-    wxGBSizerItem* FindItem(wxSizer* sizer);
-    wxGBSizerItem* FindItemAtPosition(const wxGBPosition& pos);
-    wxGBSizerItem* FindItemAtPoint(const wxPoint& pt);
+    wxGBSizerItem* FindItem(wxWindow* window) /Transfer/;
+    wxGBSizerItem* FindItem(wxSizer* sizer) /Transfer/;
+    wxGBSizerItem* FindItemAtPosition(const wxGBPosition& pos) /Transfer/;
+    wxGBSizerItem* FindItemAtPoint(const wxPoint& pt) /Transfer/;
 
     bool CheckForIntersection(wxGBSizerItem* item, wxGBSizerItem* excludeItem = NULL);
-
     bool CheckForIntersection(const wxGBPosition& pos, const wxGBSpan& span, wxGBSizerItem* excludeItem = NULL);
-
 
     void RecalcSizes();
 private:

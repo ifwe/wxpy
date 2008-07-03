@@ -252,6 +252,13 @@ class FileDialog(_FileDialog):
         _FileDialog.__init__(self, parent, message, defaultDir, defaultFile, wildcard, style, pos)
 
 
+_ComboBox = ComboBox
+class ComboBox(_ComboBox):
+    def __init__(self, parent, id, value = '', pos = DefaultPosition, size = DefaultSize,
+                 choices = None, style = 0, validator = DefaultValidator, name = "comboBox"):
+        _ComboBox.__init__(self, parent, id, value, pos, size, [] if choices is None else choices,
+                           style, validator, name)
+
 _CustomDataObject = CustomDataObject
 class CustomDataObject(_CustomDataObject):
     def __init__(self, obj):
@@ -323,6 +330,17 @@ class ListCtrl(_ListCtrl):
                 self.SetStringItem(pos, i, cvtfunc(entry[i]))
             return pos
 
+ItemContainer.GetItems = lambda self: [self.GetString(i) for i in xrange(self.GetCount())]
+
+def SetItems(self, items):
+    self.Clear()
+    for item in items:
+        self.Append(item)
+
+ItemContainer.SetItems = SetItems
+del SetItems
+
+ItemContainer.Items = property(ItemContainer.GetItems, ItemContainer.SetItems)
 
 _Button = wx.Button
 class Button(wx.Button):
@@ -690,6 +708,9 @@ PyCommandEvent = wx.CommandEvent
 PyScrolledWindow = ScrolledWindow
 
 SystemSettings_GetColour = wx.SystemSettings.GetColour
+
+# until enum properties work correctly
+_Window.LayoutDirection = property(_Window.GetLayoutDirection, _Window.SetLayoutDirection)
 
 wx.Window.Enabled  = property(wx.Window.IsEnabled, wx.Window.Enable)
 wx.Window.Shown    = property(wx.Window.IsShown)

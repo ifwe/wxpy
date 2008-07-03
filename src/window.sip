@@ -20,12 +20,17 @@ class wxWindow : wxEvtHandler
 wxClassInfo* c = sipCpp->GetClassInfo();
 
 if(0) ;
-#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+#define C(clz) else if (c == CLASSINFO(clz)) { sipClass = sipClass_ ## clz; }
     C(wxWindow)
     C(wxFrame)
     C(wxDialog)
     C(wxTopLevelWindow)
     C(wxPopupWindow)
+    C(wxTextCtrl)
+    C(wxButton)
+    C(wxListCtrl)
+    C(wxRadioButton)
+    C(wxCheckBox)
 else
     sipClass = NULL;
 #undef C
@@ -486,6 +491,9 @@ public:
     sipRes = (int)sipCpp->GetHWND();
 %End
 %End
+
+    virtual wxLayoutDirection GetLayoutDirection() const;
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
 
 private:
     wxWindow(const wxWindow&);

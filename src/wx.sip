@@ -246,6 +246,7 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     PyDict_SetItemString(sipModuleDict, "Platform", PyString_FromString(wxPlatform));
     PyDict_SetItemString(sipModuleDict, "USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
     PyDict_SetItemString(sipModuleDict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
+    PyDict_SetItemString(sipModuleDict, "ABI_VERSION", PyInt_FromLong(wxABI_VERSION));
 
     // Make a tuple of strings that gives more info about the platform.
     PyObject* PlatInfo = PyList_New(0);

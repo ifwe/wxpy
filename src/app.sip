@@ -129,7 +129,6 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
     }
     wxSEH_IGNORE
 
-    /*
     wxSEH_TRY
     {
         wxPyApp* app = (wxPyApp*)wxTheApp;
@@ -141,7 +140,6 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         wxExecute(cmd);
     }
     wxSEH_IGNORE
-    */
 
     wxGlobalSEInformation = NULL;
 

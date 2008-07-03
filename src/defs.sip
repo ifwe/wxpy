@@ -348,16 +348,18 @@ enum wxAlignment
 
 enum wxStretch
 {
-    wxSTRETCH_NOT,
-    wxSHRINK,
-    wxGROW,
-    wxEXPAND,
-    wxSHAPED,
-    wxFIXED_MINSIZE,
-    wxTILE,
-    wxADJUST_MINSIZE,
+    wxSTRETCH_NOT             = 0x0000,
+    wxSHRINK                  = 0x1000,
+    wxGROW                    = 0x2000,
+    wxEXPAND                  = wxGROW,
+    wxSHAPED                  = 0x4000,
+    wxFIXED_MINSIZE           = 0x8000,
+//#if wxABI_VERSION >= 20808
+//    wxRESERVE_SPACE_EVEN_IF_HIDDEN = 0x0002,
+//#endif
+    wxTILE                    = 0xc000,
+    wxADJUST_MINSIZE          = 0
 };
-
 
 enum wxBorder
 {
