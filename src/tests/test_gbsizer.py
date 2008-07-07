@@ -100,14 +100,14 @@ def test_HiddenItem():
 
     fx = wx.GridBagSizer(6, 6)
     fx.SetEmptyCellSize((0, 0))
-    
+
     s1 = wx.StaticText(f, -1, 'Test one two three')
     s2 = wx.StaticText(f, -1, 'Test four five six')
     s2.Hide()
     s3 = wx.StaticText(f, -1, 'Test seven eight nine')
 
     fx.Add(s1, (0, 0))
-    fx.Add(s2, (1, 0))
+    item = fx.Add(s2, (1, 0))
     fx.Add(s3, (2, 0))
 
     print 'CalcMin', fx.CalcMin()
@@ -117,6 +117,8 @@ def test_HiddenItem():
     assert 1 == fx.GetCols()
     assert 3 == fx.GetRows()
 
+    assert not item.IsShown()
+
     f.Sizer = fx
     f.Sizer.Layout()
     f.Layout()
@@ -124,8 +126,7 @@ def test_HiddenItem():
 
 def main():
     a = wx.PySimpleApp()
-#    import memleak
-#    memleak.find(test_GridBagSizer, loops=5000)
+
     test_HiddenItem().Show()
     a.MainLoop()
 

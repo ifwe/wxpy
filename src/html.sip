@@ -105,6 +105,10 @@ public:
                  const wxString& name = wxT("HtmlWindow"));
     virtual ~wxHtmlWindow();
 
+%If (WXMSW)
+    void SetMaxWordLength(int length);
+    int GetMaxWordLength() const;
+%End
 
     bool SetPage(const wxString& source);
     bool LoadPage(const wxString& location);

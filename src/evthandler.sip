@@ -27,7 +27,8 @@ wxPyCallback::wxPyCallback(PyObject* func) {
 wxPyCallback::~wxPyCallback() {
     // may be called at any time
     SIP_BLOCK_THREADS
-    Py_DECREF(m_func);
+
+    Py_XDECREF(m_func);
     SIP_UNBLOCK_THREADS
 }
 
@@ -37,6 +38,9 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     wxPyCallback* cb = (wxPyCallback*)event.m_callbackUserData;
     PyObject* func = cb->m_func;
 
+    if (!func)
+        return;
+
     // TODO: should the last argument (PyObject* transferObj) be NULL?
     // (NULL means C++ has ownership)
     SIP_BLOCK_THREADS
@@ -44,7 +48,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyObject* event_arg = sipConvertFromInstance(&event, sipClass_wxEvent, NULL);
     if (!event_arg)
     {
-        printf("WARNING: could not convert to sipClass_wxEvent\n");
+        fprintf(stderr, "WARNING: could not convert to sipClass_wxEvent\n");
         return;
     }
 
@@ -188,6 +192,62 @@ public:
     }
     SIP_UNBLOCK_THREADS
 %End
+
+//
+// TODO: this gets pretty ugly, partially because the event tables weren't
+// designed to be poked at from the outside. Maybe we can do more of this
+// in Python, and avoid the necessity of the GCTraverseCode and GCClearCode
+// stuff entirely?
+//
+
+%GCTraverseCode
+    sipRes = 0;
+
+    wxList* events = sipCpp->GetDynamicEventTable();
+    if (events)
+    {
+        wxList::compatibility_iterator node = events->GetFirst();
+        while (node)
+        {
+            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+            node = node->GetNext();
+            if (entry->m_fn == &wxPyCallback::EventThunker)
+            {
+                wxPyCallback* wxpy_cb = (wxPyCallback*)entry->m_callbackUserData;
+                PyObject* func = wxpy_cb->m_func;
+
+                if (func && (sipRes = sipVisit(func, sipArg)))
+                    goto traverse_done;
+            }
+        }
+    }
+    traverse_done:
+%End
+
+%GCClearCode
+    wxList* events = sipCpp->GetDynamicEventTable();
+    if (events)
+    {
+        wxList::compatibility_iterator node = events->GetFirst();
+        while (node)
+        {
+            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+            node = node->GetNext();
+            if (entry->m_fn == &wxPyCallback::EventThunker)
+            {
+                wxPyCallback* wxpy_cb = (wxPyCallback*)entry->m_callbackUserData;
+                PyObject* func = wxpy_cb->m_func;
+
+                // zero out the m_func reference before calling X_DECREF, since
+                // that may trigger the GCTraverseCode above.
+                wxpy_cb->m_func = 0;
+                Py_XDECREF(func);
+            }
+        }
+    }
+    sipRes = 0;
+%End
+
 
 private:
     wxEvtHandler(const wxEvtHandler &);

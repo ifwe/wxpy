@@ -249,6 +249,7 @@ private:
         C(wxShowEvent)
         C(wxMenuEvent)
         C(wxShowEvent)
+        C(wxMoveEvent)
         C(wxActivateEvent)
         C(wxMaximizeEvent)
         C(wxIconizeEvent)
@@ -331,7 +332,14 @@ public:
     void SetPosition(int pos);
 };
 
+class wxMoveEvent : wxEvent
+{
+public:
+    wxMoveEvent(const wxPoint& pt, int id = 0);
+    virtual ~wxMoveEvent();
 
+    wxPoint GetPosition() const;
+};
 
 class wxMouseEvent : wxEvent
 {

@@ -83,6 +83,9 @@
 #include <wx/snglinst.h>
 #endif
 
+#if wxUSE_MINIFRAME
+#include <wx/minifram.h>
+#endif
 
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>

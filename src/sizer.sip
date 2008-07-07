@@ -218,7 +218,24 @@ public:
     void FitInside(wxWindow *window);
     void SetSizeHints( wxWindow *window );
     void SetVirtualSizeHints( wxWindow *window );
+
     void Clear(bool deleteWindows = false);
+%MethodCode
+    if (a0)
+    {
+        wxSizerItemList& children = sipCpp->GetChildren();
+        wxSizerItemList::iterator iter;
+        for (iter = children.begin(); iter != children.end(); ++iter)
+        {
+            wxSizerItem* item = *iter;
+            wxWindow* window = item->GetWindow();
+            if (window)
+                setDeleted(window, sipClass_wxWindow);
+        }
+    }
+
+    sipCpp->Clear(a0);
+%End
 
     void DeleteWindows();
 

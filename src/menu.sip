@@ -12,25 +12,20 @@ class wxMenu : wxEvtHandler
 {
 public:
     wxMenu(const wxString& title = wxEmptyString, long style = 0);
+
     virtual ~wxMenu();
-    /*
 %MethodCode
     wxMenuItemList items = sipCpp->GetMenuItems();
 
     wxMenuItemList::iterator iter;
-    printf("trying to delete %d menuitems", items.size());
     for (iter = items.begin(); iter != items.end(); ++iter)
     {
         // make sure all menu item wrappers are deleted
         wxMenuItem* menuitem = *iter;
-        printf(".");
         setDeleted(menuitem, sipClass_wxMenuItem);
     }
-    printf("\n");
-
     delete sipCpp;
 %End
-*/
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;
     wxMenuItem* AppendSeparator() /Transfer/;
@@ -50,52 +45,52 @@ public:
                               const wxString& text,
                               const wxString& help = wxEmptyString);
 
-    wxMenuItem* Append(wxMenuItem *item /Transfer/) /PyName=AppendItem/;
-    wxMenuItem* Insert(size_t pos, wxMenuItem *item /Transfer/) /PyName=InsertItem/;
-    wxMenuItem* Prepend(wxMenuItem *item /Transfer/) /PyName=PrependItem/;
+    wxMenuItem* Append(wxMenuItem *item /Transfer/) /PyName=AppendItem, Transfer/;
+    wxMenuItem* Insert(size_t pos, wxMenuItem *item /Transfer/) /PyName=InsertItem, Transfer/;
+    wxMenuItem* Prepend(wxMenuItem *item /Transfer/) /PyName=PrependItem, Transfer/;
 
     void Break();
     wxMenuItem* Insert(size_t pos,
                        int id,
                        const wxString& text = wxEmptyString,
                        const wxString& help = wxEmptyString,
-                       wxItemKind kind = wxITEM_NORMAL);
-    wxMenuItem* InsertSeparator(size_t pos);
+                       wxItemKind kind = wxITEM_NORMAL) /Transfer/;
+    wxMenuItem* InsertSeparator(size_t pos) /Transfer/;
     wxMenuItem* InsertCheckItem(size_t pos,
                                 int id,
                                 const wxString& text,
-                                const wxString& help = wxEmptyString);
+                                const wxString& help = wxEmptyString) /Transfer/;
     wxMenuItem* InsertRadioItem(size_t pos,
                                 int id,
                                 const wxString& text,
-                                const wxString& help = wxEmptyString);
+                                const wxString& help = wxEmptyString) /Transfer/;
     wxMenuItem* Insert(size_t pos,
                        int id,
                        const wxString& text,
                        wxMenu *submenu /Transfer/,
-                       const wxString& help = wxEmptyString) /PyName=InsertMenu/;
+                       const wxString& help = wxEmptyString) /PyName=InsertMenu, Transfer/;
 
     wxMenuItem* Prepend(int id,
                         const wxString& text = wxEmptyString,
                         const wxString& help = wxEmptyString,
-                        wxItemKind kind = wxITEM_NORMAL);
+                        wxItemKind kind = wxITEM_NORMAL) /Transfer/;
 
-    wxMenuItem*  PrependSeparator();
+    wxMenuItem*  PrependSeparator() /Transfer/;
     wxMenuItem* PrependCheckItem(int id,
                                  const wxString& text,
-                                 const wxString& help = wxEmptyString);
+                                 const wxString& help = wxEmptyString) /Transfer/;
 
     wxMenuItem*  PrependRadioItem(int id,
                                   const wxString& text,
-                                  const wxString& help = wxEmptyString);
+                                  const wxString& help = wxEmptyString) /Transfer/;
 
     wxMenuItem* Prepend(int id,
                         const wxString& text,
                         wxMenu *submenu /Transfer/,
-                        const wxString& help = wxEmptyString) /PyName=PrependMenu/;
+                        const wxString& help = wxEmptyString) /PyName=PrependMenu, Transfer/;
 
     wxMenuItem *Remove(int id) /Factory/;
-    wxMenuItem* Remove(wxMenuItem *item) /PyName=RemoveItem/;
+    wxMenuItem* Remove(wxMenuItem *item) /PyName=RemoveItem, Factory/;
 
     bool Delete(int id);
     bool Delete(wxMenuItem* item) /PyName=DeleteItem/;

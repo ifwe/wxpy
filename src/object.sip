@@ -13,11 +13,12 @@ class wxObject
 %End
 
 %ConvertToSubClassCode
-    wxClassInfo* c = sipCpp -> GetClassInfo();
+     wxClassInfo* c = sipCpp -> GetClassInfo();
 
     /* TODO: automate this by grepping for wxXXXEvent and putting
      * entries here before build :( */
     if(0) ;
+
 #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
         C(wxSizerItem)
         C(wxGBSizerItem)

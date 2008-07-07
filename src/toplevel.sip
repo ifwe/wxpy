@@ -196,3 +196,39 @@ public:
 private:
     wxDialog(const wxDialog&);
 };
+
+
+%If (wxUSE_MINIFRAME)
+
+%ModuleHeaderCode
+#define wxDEFAULT_MINIFRAME_STYLE wxCAPTION | wxRESIZE_BORDER | wxTINY_CAPTION_HORIZ
+%End
+
+enum  {
+    wxDEFAULT_MINIFRAME_STYLE
+};
+
+class wxMiniFrame : wxFrame
+{
+%TypeHeaderCode
+#ifndef WXPY_PREC
+#include <wx/minifram.h>
+#endif
+%End
+
+private:
+    wxMiniFrame();
+    wxMiniFrame(const wxMiniFrame&);
+public:
+    wxMiniFrame(wxWindow* parent,
+                const wxWindowID id = -1,
+                const wxString& title = wxEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_MINIFRAME_STYLE,
+                const wxString& name = wxFrameNameStr) /Transfer/;
+
+    virtual ~wxMiniFrame();
+};
+
+%End // wxUSE_MINIFRAME

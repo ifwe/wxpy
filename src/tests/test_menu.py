@@ -89,7 +89,7 @@ def main():
 def main_ram():
     a = wx.PySimpleApp()
     import memleak
-    memleak.find(test_menuitem, loops=5000)
+    memleak.find(test_menuitem, loops=500)
 
 if __name__ == '__main__':
     main_ram()

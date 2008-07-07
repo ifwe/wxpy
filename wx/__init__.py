@@ -656,14 +656,17 @@ class App(_app):
         if appname is not None:
             self.SetAppName(appname)
 
+
+
         global _did_wxpy_init
         if not _did_wxpy_init:
             # Only call wxEntryStart and other init code once.
             _wxpy_init()
             _did_wxpy_init = True
 
-
+        self.SetExitOnFrameDelete(True)
         self.OnInit()
+
 
 PySimpleApp = App
 
