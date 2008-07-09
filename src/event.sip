@@ -261,6 +261,7 @@ private:
         C(wxTreeEvent)
         C(wxUpdateUIEvent)
         C(wxContextMenuEvent)
+        C(wxWindowDestroyEvent)
         C(wxEvent)
     else
         sipClass = NULL;
@@ -603,6 +604,11 @@ public:
     wxDC * GetDC() const;
 };
 
+class wxWindowDestroyEvent : wxCommandEvent
+{
+    wxWindowDestroyEvent(wxWindow* win = NULL);
+    virtual ~wxWindowDestroyEvent();
+};
 
 class wxDateEvent : wxCommandEvent
 {
