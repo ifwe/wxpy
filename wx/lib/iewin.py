@@ -91,6 +91,9 @@ class IEHtmlWindow(wx.lib.activex.ActiveXCtrl):
         Returns the contents of the selected portion of the document as
         either html or plain text.
         """
+
+        assert False
+
         if self.ctrl.Document is None:
             return ""
         if not hasattr(sys, 'frozen'): cc.GetModule('mshtml.tlb')
@@ -108,6 +111,9 @@ class IEHtmlWindow(wx.lib.activex.ActiveXCtrl):
         """
         Returns the contents of the the html document as either html or plain text.
         """
+
+        assert False
+
         if self.ctrl.Document is None:
             return ""
         if not hasattr(sys, 'frozen'): cc.GetModule('mshtml.tlb')

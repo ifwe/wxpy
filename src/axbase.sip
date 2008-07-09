@@ -1,6 +1,6 @@
 %If (WXMSW)
 
-class _AxBaseWindow : wxWindow
+class _AxBaseWindow : wxWindow /PyName=AxBaseWindow/
 {
 
 typedef void* WXMSG;
@@ -26,11 +26,11 @@ public:
 
     bool MSWTranslateMessage(WXMSG* msg)
     {
-        return PyMSWTranslateMessage(msg);
+        return PyMSWTranslateMessage((long)msg);
     }
 
 
-    virtual bool PyMSWTranslateMessage(void* msg)
+    virtual bool PyMSWTranslateMessage(long msg)
     {
         return wxWindow::MSWTranslateMessage((WXMSG*)msg);
     }
@@ -42,29 +42,30 @@ IMPLEMENT_DYNAMIC_CLASS(_AxBaseWindow, wxWindow);
 %End
 
 public:
-    _AxBaseWindow(wxWindow* parent, const wxWindowID id=-1,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = 0,
-                    const wxString& name = wxPanelNameStr);
+//    _AxBaseWindow(wxWindow* parent, const wxWindowID id=-1,
+//                    const wxPoint& pos = wxDefaultPosition,
+//                    const wxSize& size = wxDefaultSize,
+//                    long style = 0,
+//                    const wxString& name = wxPanelNameStr);
 
-    virtual bool PyMSWTranslateMessage(WXMSG msg) /PyName=MSWTranslateMessage/;
+    _AxBaseWindow();
+    _AxBaseWindow(wxWindow* parent /TransferThis/, unsigned long _hWnd);
+%MethodCode
+        WXHWND hWnd = (WXHWND)a1;
+        sipCpp = new sip_AxBaseWindow;
+        if (a0)
+            a0->AddChild(sipCpp);
+        sipCpp->SetEventHandler(sipCpp);
+        sipCpp->SetHWND(hWnd);
+        sipCpp->SubclassWin(hWnd);
+        sipCpp->AdoptAttributesFromHWND();
+        sipCpp->SetupColours();
+%End
+
+    virtual bool PyMSWTranslateMessage(long msg) /PyName=MSWTranslateMessage/;
 };
 
 
-_AxBaseWindow* _AxBaseWindow_FromHWND(wxWindow* parent, unsigned long _hWnd);
-%MethodCode
-    WXHWND hWnd = (WXHWND)a1;
-    _AxBaseWindow* win = new _AxBaseWindow;
-    if (a0)
-        a0->AddChild(win);
-    win->SetEventHandler(win);
-    win->SetHWND(hWnd);
-    win->SubclassWin(hWnd);
-    win->AdoptAttributesFromHWND();
-    win->SetupColours();
-    sipRes = win;
-%End
 
 
 %End // If (WXMSW)
