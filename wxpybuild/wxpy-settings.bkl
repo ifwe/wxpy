@@ -7,22 +7,14 @@
     <set var="WX_UNICODE">1</set>
     <set var="WX_PYTHON">0</set>
     <set var="WX_SHARED">1</set>
+    <set var="WX_MONOLITHIC">0</set>
 
     <option name="PGO">
-        <values>off,instrument,optimize</values>
-        <default-value>off</default-value>
+        <values>0,1,2</values>
+        <default-value>0</default-value>
         <values-description>,PGOInstrument,PGOOptimize</values-description>
-        <description>
-            Use profile guided optimization?
-        </description>
+        <description>Use profile guided optimization?</description>
     </option>
-
-    <set var="PGO_INSTRUMENT">0</set>
-    <set var="PGO_OPTIMIZE">0</set>
-
-    <set var="PGO_INSTRUMENT" cond="PGO=='instrument'">1</set>
-    <set var="PGO_OPTIMIZE"   cond="PGO=='optimize'">1</set>
-
 
     <include file="presets/wx.bkl"/>
 
@@ -100,7 +92,10 @@
             <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
         </if>
 
-        <!-- profile guided optimization flags
+        <!-- profile guided optimization flags -->
+        <set var="PGO_INSTRUMENT"><if cond="PGO=='1'">1</if></set>
+        <set var="PGO_OPTIMIZE"><if cond="PGO=='2'">1</if></set>
+
         <if cond="PGO_INSTRUMENT=='1'">
             <cxxflags>/GL</cxxflags>
             <ldflags>/LTCG:PGINSTRUMENT</ldflags>
@@ -109,7 +104,7 @@
             <cxxflags>/GL</cxxflags>
             <ldflags>/LTCG:PGOPTIMIZE</ldflags>
         </if>
-        -->
+
     </template>
 
     <template id="wxpy_core" template="wxpy_extension">

@@ -78,6 +78,12 @@ def CallAfter(func, *a, **k):
 wx.FrameNameStr  = 'Frame'
 wx.DialogNameStr = 'Dialog'
 
+_MiniFrame = MiniFrame
+class MiniFrame(_MiniFrame):
+    def __init__(self, parent, id = -1, title = '', pos = DefaultPosition, size = DefaultSize,
+                 style = CAPTION | RESIZE_BORDER, name = 'frame'):
+        _MiniFrame.__init__(self, parent, id, title, pos, size, style, name)
+
 _Frame = wx.Frame
 class Frame(_Frame):
     def __init__(self, parent, id = -1, title = '', pos = DefaultPosition, size = DefaultSize, style = DEFAULT_FRAME_STYLE, name = wx.FrameNameStr):
@@ -729,8 +735,8 @@ GetDefaultPyEncoding = lambda: 'utf-8'
 TreeItemData = PyTreeItemData
 FutureCall = CallLater
 
-#DateTimeFromDMY = DateTime
-
 #TreeCtrl.GetPyData = new.instancemethod(TreeCtrl.GetItemPyData, None, TreeCtrl)
+
+_AxBaseWindow = AxBaseWindow
 
 del wx

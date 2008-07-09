@@ -1,5 +1,9 @@
 '''
 Utilities for building WXPY extensions, including the core library.
+
+TODO: use distutils to track dependencies (i.e, every Python build
+system will contain an ad hoc, informally-specified bug-ridden,
+slow implementation of half of distutils :[)
 '''
 
 from __future__ import with_statement
@@ -48,7 +52,7 @@ except ImportError:
         sys.path.append(sip_dir)
         import sipconfig
     else:
-        raise ImportError('Make sure SIP is on the PYTHONPATH, or set SIP_DIR in the environment.')
+        raise ImportError('Make sure SIP is on the PYTHONPATH, or set SIP_DIR in the enviro0ent.')
 
 
 from wxpybuild.runsip import SIPGenerator, run
@@ -102,9 +106,14 @@ def build_nt(solution_name):
     if 'rebuild' in sys.argv:
         vcbuild_opts.append('/rebuild')
 
-    config = '"%s Multilib|Win32"' % ('Debug' if DEBUG else 'Release')
+    config = '%s|Win32' % ('Debug' if DEBUG else 'Release')
 
-    run('vcbuild %s %s' % (' '.join(vcbuild_opts), config))
+    if 'pgooptimize' in sys.argv:
+        config = 'PGOOptimize ' + config
+    elif 'pgoinstrument' in sys.argv:
+        config = 'PGOInstrument ' + config
+
+    run('vcbuild %s "%s"' % (' '.join(vcbuild_opts), config))
 
 def runsip(modules, features,
            includes = None,
@@ -173,7 +182,7 @@ def bakefile(project_name, makefile, outputdir = None):
 
     # This results in Makefile (autotools), SLN (Visual Studio), or other
     # platform specific files.
-    run('bakefile_gen')
+    run('bakefile_gen -V')
 
     if len(formats) > 1:
         raise AssertionError('figure out a better way to return the name of the sln')
