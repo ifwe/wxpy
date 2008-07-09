@@ -21,6 +21,18 @@ class wxDateTime
 {
 public:
 
+    SIP_PYOBJECT __repr__();
+%MethodCode
+    wxString d(sipCpp->FormatISODate());
+    sipRes = PyString_FromFormat("<wx.DateTime %s>", d.ToAscii());
+%End
+    // symbolic names for the months
+    enum Month
+    {
+        Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec, Inv_Month
+    };
+
+
     enum TZ
     {
         Local,
@@ -226,12 +238,6 @@ public:
         USA
     };
 
-        // symbolic names for the months
-    enum Month
-    {
-        Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec, Inv_Month
-    };
-
         // symbolic names for the weekdays
     enum WeekDay
     {
@@ -243,6 +249,8 @@ public:
     {
         Inv_Year = SHRT_MIN    // should hold in wxDateTime_t
     };
+
+
 
         // flags for GetWeekDayName and GetMonthName
     enum NameFlags
@@ -680,11 +688,11 @@ public:
     wxDateTime& operator-=(const wxDateSpan& diff);
 
 
-//     bool operator<(const wxDateTime& dt) const;
+     bool operator<(const wxDateTime& dt) const;
 //     bool operator<=(const wxDateTime& dt) const;
 //     bool operator>(const wxDateTime& dt) const;
 //     bool operator>=(const wxDateTime& dt) const;
-//     bool operator==(const wxDateTime& dt) const;
+     bool operator==(const wxDateTime& dt) const;
 //     bool operator!=(const wxDateTime& dt) const;
 
     // ------------------------------------------------------------------------
@@ -826,6 +834,11 @@ public:
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
 //    wxString Format(const wxString& format = wxPyDefaultTimeSpanFormat) const;
+
+
+
+
+
 };
 
 
@@ -929,6 +942,9 @@ public:
     wxDateSpan& operator-=(const wxDateSpan& other);
     wxDateSpan& operator-();
     wxDateSpan& operator*=(int factor);
+
+
+
 
 };
 //
