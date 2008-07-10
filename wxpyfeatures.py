@@ -70,6 +70,8 @@ def write_features(features, fileobj):
 
 def emit_features_file(wxdir, destfile):
     features = get_enabled_features(find_setup_h(wxdir))
+    if not os.path.isdir(os.path.split(destfile)[0]):
+        os.makedirs(os.path.split(destfile)[0])
     with open(destfile, 'w') as f:
         f.write(features_header)
         write_features(features, f)
