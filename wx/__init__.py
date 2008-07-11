@@ -12,7 +12,6 @@ if not _wxpy_dir in sys.path:
     sys.path.append(_wxpy_dir)
 del _wxpy_dir
 
-
 VERSION = (1, 0, 0, 0)
 USE_UNICODE = True
 WXPY = True
