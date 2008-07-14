@@ -561,6 +561,14 @@ class CallLater(object):
         self.timer.Start(self.millis, TIMER_ONE_SHOT)
         self.running = True
 
+        import wx
+        try:
+            timers = wx.GetApp()._calllater_timers
+        except AttributeError:
+            timers = wx.GetApp()._calllater_timers = set()
+
+        timers.add(self)
+
     Restart = Start
 
 
@@ -569,6 +577,11 @@ class CallLater(object):
         if self.timer is not None:
             self.timer.Stop()
             self.timer = None
+
+            import wx
+            timers = wx.GetApp()._calllater_timers
+            timers.discard(self)
+
 
     def GetInterval(self):
         if self.timer is not None:
