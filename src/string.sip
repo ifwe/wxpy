@@ -34,8 +34,8 @@
     // str -> unicode via utf-8
     if (PyString_Check(sipPy))
     {
-        unicode = PyUnicode_FromEncodedObject(sipPy, "utf-8", "strict");
-        if (PyErr_Occurred())
+        unicode = PyUnicode_FromEncodedObject(sipPy, "utf-8", "replace");
+        if (!unicode)
             return 0;
 
         needsDeref = true;
