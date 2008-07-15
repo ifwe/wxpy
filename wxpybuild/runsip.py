@@ -9,7 +9,7 @@ import sys
 
 sip_cfg = sipconfig.Configuration()
 
-SIP_TRACE_STATEMENTS = False
+SIP_TRACE_STATEMENTS = True
 
 class SIPGenerator(object):
     def __init__(self, build_dir, platform, features = None):
