@@ -12,6 +12,12 @@ if not _wxpy_dir in sys.path:
     sys.path.append(_wxpy_dir)
 del _wxpy_dir
 
+# make sure directory with wx DLLs is in os.environ['PATH']
+if os.name == 'nt':
+    os.environ['PATH'] = os.pathsep.join([
+        os.path.abspath(os.path.join(os.path.split(__file__)[0], '..')),
+        os.environ['PATH']])
+
 VERSION = (1, 0, 0, 0)
 USE_UNICODE = True
 WXPY = True
@@ -249,6 +255,18 @@ class FilePickerCtrl(_FilePickerCtrl):
                  name = 'filepicker'):
         _FilePickerCtrl.__init__(self, parent, id, path, message, wildcard, pos, size, style, validator, name)
 
+
+_FileSelector = FileSelector
+def FileSelector(message = 'Choose a file',
+                 default_path = '',
+                 default_filename = '',
+                 default_extension = '',
+                 wildcard = '*.*',
+                 flags = 0,
+                 parent = None,
+                 x = -1,
+                 y = -1):
+    return _FileSelector(message, default_path, default_filename, default_extension, wildcard, flags, parent, x, y)
 
 _FileDialog = FileDialog
 class FileDialog(_FileDialog):
@@ -691,6 +709,7 @@ PySimpleApp = App
 wxEVT_ACTIVATE = wx.EVT_ACTIVATE
 wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
 wxEVT_SIZE = wx.EVT_SIZE
+wxEVT_CHAR = wx.EVT_CHAR
 wxEVT_MENU_CLOSE = wx.EVT_MENU_CLOSE
 wxEVT_MENU_OPEN = wx.EVT_MENU_OPEN
 wxEVT_COMMAND_MENU_SELECTED = wx.EVT_COMMAND_MENU_SELECTED
