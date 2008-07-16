@@ -79,6 +79,11 @@ public:
     wxImage ConvertToImage() const;
     wxMask* GetMask() const;
     void SetMask(wxMask* mask /Transfer/);
+    void SetMaskColour(const wxColour& color);
+%MethodCode
+        wxMask *mask = new wxMask(*sipCpp, *a0);
+        sipCpp->SetMask(mask);
+%End
 
     wxBitmap GetSubBitmap(const wxRect& rect) const;
 //  bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
