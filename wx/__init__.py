@@ -560,7 +560,8 @@ class CallLater(object):
         self.hasRun = False
         self.result = None
         self.timer = None
-        self.Start()
+
+        CallAfter(self.Start) # since wx.CallLater may be used from other threads.
 
 
 #    def __del__(self):
