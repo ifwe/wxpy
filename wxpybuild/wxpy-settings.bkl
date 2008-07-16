@@ -8,6 +8,9 @@
     <set var="WX_PYTHON">0</set>
     <set var="WX_SHARED">1</set>
     <set var="WX_MONOLITHIC">0</set>
+    <set var="WX_DEBUG">1</set>
+    <set var="WX_PYTHON">1</set>
+    <!--<set var="DEBUG">0</set>-->
 
     <option name="PGO">
         <values>0,1,2</values>
@@ -18,14 +21,14 @@
 
     <include file="presets/wx.bkl"/>
 
-    <set var="DEBUG">$(WX_DEBUG)</set>
-
+    <set var="DEBUG">0</set>
     <!-- add _d to the build directory with DEBUG=='1' -->
 
     <set var="WXPY_DEBUG_POSTFIX">
         $(substituteFromDict(DEBUG, {'1':'_d','0':''}))
     </set>
 
+    <set var="WX3RDPARTYLIBPOSTFIX">h</set>
     <set var="BUILDDIR">obj-$(FORMAT)$(WXPY_DEBUG_POSTFIX)</set>
 
     <template id="wxpy_build_settings">
@@ -39,6 +42,11 @@
 
         <cxx-rtti>on</cxx-rtti>
         <cxx-exceptions>off</cxx-exceptions>
+
+        <!-- NDEBUG and __WXDEBUG__ is a mess -->
+        <if cond="WX_DEBUG=='1'">
+            <cxxflags>/UNDEBUG</cxxflags>
+        </if>
 
         <define>$(substituteFromDict(DEBUG, {'1':'_DEBUG','0':'NDEBUG'}))</define>
 

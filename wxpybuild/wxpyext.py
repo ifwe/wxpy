@@ -106,7 +106,8 @@ def build_nt(solution_name):
     if 'rebuild' in sys.argv:
         vcbuild_opts.append('/rebuild')
 
-    config = '%s|Win32' % ('Debug' if DEBUG else 'Release')
+    config = 'Default|Win32'
+    #config = '%s|Win32' % ('Debug' if DEBUG else 'Release')
 
     if 'pgooptimize' in sys.argv:
         config = 'PGOOptimize ' + config
