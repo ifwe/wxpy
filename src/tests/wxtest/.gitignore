@@ -1,7 +1,5 @@
-wxtest.bkl
 wxtest.sln
 wxtest.vcproj
-wx.bat
 makefile.vc
-b.bat
 Release
+Default
