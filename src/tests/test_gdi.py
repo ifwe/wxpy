@@ -102,6 +102,10 @@ def test_Colour():
     assert wx.Colour(*c) == c
     assert (lambda *a: sum(a))(*wx.Colour(1,2,3,4)) == 10
 
+    # test color slicing
+    assert c[:2] == (33, 66)
+    assert c[:4] == (33, 66, 99, 255)
+
 def test_Pen():
     c = wx.Colour(213, 213, 213)
     p = wx.Pen(c)
@@ -119,8 +123,9 @@ def test_Pen():
 
 def main():
     app = wx.PySimpleApp()
-    import memleak
-    memleak.find(test_Rect, loops=50000)
+    test_Colour()
+    #import memleak
+    #memleak.find(test_Rect, loops=50000)
 
 
 
