@@ -117,6 +117,29 @@ extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
 
 #include <wx/msw/seh.h>
 
+static void call_crashreport_process(const wxString& cmd)
+{
+#ifdef __WXMSW__
+    STARTUPINFO si = { sizeof(STARTUPINFO) };
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
+
+    PROCESS_INFORMATION pi;
+
+
+
+    if (CreateProcessW(NULL, (LPWSTR)cmd.wc_str(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    } else
+        wxLogError(L"  error: Could not run \"%ws\"\n", cmd);
+#else
+#error call_crashreport_process is not implemented on this platform
+#endif
+}
+
+static bool did_crash_report = false;
+
 unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 {
     // store the pointer to exception info
@@ -131,13 +154,17 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 
     wxSEH_TRY
     {
-        wxPyApp* app = (wxPyApp*)wxTheApp;
-        cmd = app->executable;
+        if (!did_crash_report) {
+            did_crash_report = true;
 
-        wxCrashReport::Generate(wxCRASH_REPORT_DEFAULT, pExcPtrs);
+            wxPyApp* app = (wxPyApp*)wxTheApp;
+            cmd = app->executable;
 
-        cmd << wxT(" --crashreport ") << wxCrashReport::GetFileName();
-        wxExecute(cmd);
+            wxCrashReport::Generate(wxCRASH_REPORT_DEFAULT, pExcPtrs);
+
+            cmd << wxT(" --crashreport ") << wxCrashReport::GetFileName();
+            call_crashreport_process(cmd);
+        }
     }
     wxSEH_IGNORE
 
