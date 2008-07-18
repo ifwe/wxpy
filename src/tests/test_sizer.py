@@ -163,19 +163,19 @@ def test_HiddenItem():
     f = wx.Frame(None)
     s = f.Sizer = wx.BoxSizer(wx.VERTICAL)
 
-    st = wx.StaticText(f, -1, 'test')
-    st.Hide()
+    for x in xrange(10):
+        st = wx.StaticText(f, -1, 'test %d' % x)
+        if x % 2 == 0:
+            st.Hide()
 
+        s.Add(st)
 
-    st2 = wx.StaticText(f, -1, 'test2')
-    s.Add(st)
-    s.Add(st2)
     return f
 
 
 def main():
     a = wx.PySimpleApp()
-    test_EmptyItem().Show()
+    test_HiddenItem().Show()
     a.MainLoop()
 #    import memleak
 

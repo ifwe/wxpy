@@ -19,6 +19,7 @@
 %Include imagelist.sip
 %Include intl.sip
 %Include artprov.sip
+%Include process.sip
 %Include tests.sip
 
 %If (!WXMAC)

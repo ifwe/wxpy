@@ -271,6 +271,11 @@ public:
     sipCpp->executable = *a0;
 %End
 
+    wxString GetExecutable() const;
+%MethodCode
+    sipRes = new wxString(sipCpp->executable);
+%End
+
     void Abort();
 %MethodCode
         abort();
