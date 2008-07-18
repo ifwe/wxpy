@@ -11,7 +11,7 @@ enum
 class wxMenu : wxEvtHandler
 {
 public:
-    wxMenu(const wxString& title = wxEmptyString, long style = 0);
+    wxMenu(const wxString& title = wxEmptyString, long style = 0) /Transfer/;
 
     virtual ~wxMenu();
 %MethodCode
