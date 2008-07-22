@@ -36,24 +36,32 @@ class wxPyTimer : wxTimer
 public:
     wxPyTimer(PyObject* cb)
     {
+        SIP_BLOCK_THREADS
         callable = cb;
         Py_XINCREF(callable);
+        SIP_UNBLOCK_THREADS
     }
 
     virtual ~wxPyTimer()
     {
-        Py_XDECREF(callable);
+        SIP_BLOCK_THREADS
+
+        // null out the member reference before XDECREF
+        PyObject* cb = callable;
         callable = NULL;
+        Py_XDECREF(cb);
+
+        SIP_UNBLOCK_THREADS
     }
 
     virtual void Notify()
     {
-        if (callable != NULL)
-        {
-            SIP_BLOCK_THREADS
-            PyObject_CallObject(callable, NULL);
-            SIP_UNBLOCK_THREADS
-        }
+        if (callable == NULL)
+            return;
+
+        SIP_BLOCK_THREADS
+        PyObject_CallObject(callable, NULL);
+        SIP_UNBLOCK_THREADS
     }
 
     PyObject* callable;
