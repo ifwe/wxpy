@@ -415,6 +415,16 @@ public:
     wxPoint GetPosition();
     wxCoord GetX() const;
     wxCoord GetY() const;
+
+    long          m_keyCode;
+    bool          m_controlDown;
+    bool          m_shiftDown;
+    bool          m_altDown;
+    bool          m_metaDown;
+    bool          m_scanCode;
+    wxChar        m_uniChar;
+    wxUint32      m_rawCode;
+    wxUint32      m_rawFlags;
 };
 
 class wxCommandEvent : wxEvent
