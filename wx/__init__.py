@@ -236,6 +236,12 @@ class Gauge(_Gauge):
                  validator = DefaultValidator, name = "gauge"):
         _Gauge.__init__(self, parent, id, range, pos, size, style, validator, name)
 
+_StaticLine = StaticLine
+class StaticLine(_StaticLine):
+    def __init__(self, parent, id = -1, pos = DefaultPosition,
+                 size = DefaultSize, style = LI_HORIZONTAL, name = 'static line'):
+        _StaticLine.__init__(self, parent, id, pos, size, style, name)
+
 wxDIRP_DEFAULT_STYLE = DIRP_DEFAULT_STYLE
 
 _DirPickerCtrl = DirPickerCtrl
