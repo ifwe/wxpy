@@ -289,6 +289,15 @@ private:
     wxDC(const wxDC&);
 };
 
+class wxScreenDC : wxDC
+{
+public:
+    wxScreenDC();
+    virtual ~wxScreenDC();
+private:
+    wxScreenDC(const wxScreenDC&);
+};
+
 class wxWindowDC: wxDC
 {
 public:
