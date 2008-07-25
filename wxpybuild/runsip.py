@@ -133,10 +133,6 @@ def run(args, checkret = True, expect_return_code = 0):
     retcode = process.returncode
 
     if checkret and retcode != expect_return_code:
-        raise SystemExit
-        #print >> sys.stderr, '\n'
-
-        #out = stdout if not stderr else stderr
-        #raise Exception('"%s" returned error code %d' % (args[0], retcode))
+        sys.exit(retcode)
 
     return stdout
