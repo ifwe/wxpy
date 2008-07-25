@@ -1,3 +1,4 @@
+import sys
 import wx
 
 from weakref import ref
@@ -7,7 +8,9 @@ def setup():
     Setup code run before all tests in this package.
     '''
     assert not wx.GetApp() # make sure an app is created ONCE
-    assert wx.App() == wx.GetApp()
+    sys.app = wx.PySimpleApp()
+    assert sys.app == wx.GetApp()
+    assert wx.GetApp() is not None
 
 def teardown():
     '''

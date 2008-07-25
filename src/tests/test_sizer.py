@@ -11,6 +11,20 @@ from contextlib import contextmanager
 import sip
 from testutil import assert_ownership, check_collected
 
+def test_DetachSpacer():
+    f = wx.Frame(None)
+    s = wx.BoxSizer(wx.HORIZONTAL)
+
+    s.AddSpacer((50, 50))
+    s.AddSpacer((60, 60))
+    s.AddSpacer((70, 70))
+
+    assert s.Detach(1)
+    assert s.Detach(0)
+    assert s.Children[0].Spacer == (70, 70)
+
+    f.Destroy()
+
 def test_Detach():
     f = wx.Frame(None)
     s = wx.BoxSizer(wx.HORIZONTAL)
@@ -20,24 +34,29 @@ def test_Detach():
         item = s.Add((50, 50))
         s.Detach(0)
         return item
-#
-#    @check_collected
-#    def subsizer():
-#        subsizer = wx.BoxSizer(wx.HORIZONTAL)
-#        s.Add(subsizer)
-#        s.Detach(subsizer)
-#        return subsizer
-#
-#    @check_collected
-#    def subsizer_item():
-#        vsizer = wx.BoxSizer(wx.VERTICAL)
-#        assert sip.ispyowned(vsizer)
-#        item = s.Add(vsizer)
-#        assert not sip.ispyowned(vsizer)
-#        assert s.Detach(vsizer)
-#        return item
 
+    @check_collected
+    def subsizer():
+        subsizer = wx.BoxSizer(wx.HORIZONTAL)
+        assert sip.ispyowned(subsizer)
+        s.Add(subsizer)
+        assert not sip.ispyowned(subsizer)
+        assert s.Detach(subsizer)
+        assert sip.ispyowned(subsizer)
+        return subsizer
+
+    @check_collected
+    def subsizer_item():
+        vsizer = wx.BoxSizer(wx.VERTICAL)
+        assert sip.ispyowned(vsizer)
+        item = s.Add(vsizer)
+        assert not sip.ispyowned(vsizer)
+        assert s.Detach(vsizer)
+        return item
+
+    print 'calling Destroy'
     f.Destroy()
+    print 'done Destroy'
 
 def test_Children():
     @check_collected
@@ -175,12 +194,11 @@ def test_HiddenItem():
 
 def main():
     a = wx.PySimpleApp()
-    test_HiddenItem().Show()
-    a.MainLoop()
-#    import memleak
+    test_DetachSpacer()
+    #import memleak
 
     #test_Detach()
-#    memleak.find(test_Detach)
+    #memleak.find(test_Detach, loops = 3)
 #    for func in globals().values():
 #        if callable(func) and func.__name__.startswith('test_'):
 #            print

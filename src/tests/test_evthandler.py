@@ -1,8 +1,10 @@
 from testutil import check_collected
+import wx
 
 def test_selfcycle():
     class MyEventHandler(wx.EvtHandler):
         def __init__(self):
+            wx.EvtHandler.__init__(self)
             self.Bind(wx.EVT_MENU, self.on_menu)
 
         def on_menu(self, e):
@@ -11,3 +13,4 @@ def test_selfcycle():
     @check_collected
     def cycle():
         return MyEventHandler()
+

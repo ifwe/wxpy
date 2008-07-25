@@ -6,8 +6,6 @@ sip.settracemask(wx.SipTrace.ALL)
 
 def test_scope():
     s = wx.StockGDI.instance()
-    sip.dump(s)
-
     assert not sip.ispyowned(s)
     assert_ownership(wx.StockGDI.instance, pyowned = False)
     import gc
@@ -15,10 +13,6 @@ def test_scope():
 
 def test_StockGDI():
     test_scope()
-
-    print 'after test_scope:'
-    sip.dump(wx.StockGDI.instance())
-
     # wxBrush
     #b = s.GetBrush(wx.StockGDI.BRUSH_BLUE)
     #print b.Colour

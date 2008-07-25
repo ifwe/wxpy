@@ -58,6 +58,7 @@ def check_collected(func):
     del obj
 
     gc.collect()
+
     for weakobj in weakobjs:
         if weakobj() is not None:
             refs = '\n'.join('    %r' % r for r in gc.get_referrers(weakobj()))

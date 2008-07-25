@@ -19,7 +19,6 @@ def test_wrapper():
     wx.GetApp().ProcessIdle()
 
     assert sip.isdeleted(f)
-    assert not f
 
 def main():
     app = wx.PySimpleApp()
