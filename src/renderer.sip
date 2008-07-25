@@ -147,8 +147,15 @@ public:
                                        const wxRect& rect,
                                        int flags = 0);
 
+
+
     //virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 */
+    virtual void DrawFocusRect(wxWindow* win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) = 0;
+
     static wxRendererNative& Get();
     static wxRendererNative& GetGeneric();
     static wxRendererNative& GetDefault();
