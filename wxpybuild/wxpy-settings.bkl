@@ -33,7 +33,7 @@
 
     <template id="wxpy_build_settings">
         <set var="DEBUG_DEFINE">$(substituteFromDict(DEBUG, {'1':'DEBUG','0':''}))</set>
-        <set var="PY_LIB">$(substituteFromDict(DEBUG, {'1':'python26_d','0':'python26'}))</set>
+        <set var="PY_LIB">$(substituteFromDict(DEBUG, {'1':'python$(WXPY_PYTHON_VERSION)_d','0':'python$(WXPY_PYTHON_VERSION)'}))</set>
 
         <define>$(DEBUG_DEFINE)</define>
         <sys-lib>$(PY_LIB)</sys-lib>

@@ -125,6 +125,9 @@ def runsip(modules, features,
     sipgen = SIPGenerator(GENERATED_SRC_DIR, 'WXMSW', features)
     makefile = Element('makefile')
 
+    pyver = sys.version[:3].replace('.', '')
+    xmlnode(makefile, 'set', pyver, var='WXPY_PYTHON_VERSION')
+
     include = xmlnode(makefile, 'include', file = 'wxpy-settings.bkl')
 
     for module_name, sources in modules:
@@ -172,6 +175,7 @@ def bakefile(project_name, makefile, outputdir = None):
     # create Bakefiles.bkgen
     ElementTree(bakefile_gen(bkl, formats)).write('Bakefiles.bkgen', 'utf-8')
 
+
     # Bakefile needs to be told the locations of some .bkl files we need--
     # 1) wx.bkl (and related files)
     # 2) wxpy-settings.bkl, which will provide a template for all wxpy based extensions
@@ -180,6 +184,7 @@ def bakefile(project_name, makefile, outputdir = None):
 
     os.environ.update(WXWIN = WXWIN,
                       BAKEFILE_PATHS = os.pathsep.join(bakefile_paths))
+
 
     # This results in Makefile (autotools), SLN (Visual Studio), or other
     # platform specific files.
@@ -252,7 +257,11 @@ def get_pylibdir():
 
     if os.name == 'nt':
         from distutils import sysconfig
-        projbase = path(sysconfig.project_base)
+
+        try:
+            projbase = path(sysconfig.project_base)
+        except AttributeError:
+            projbase = path(sysconfig.get_python_inc()).parent / 'pcbuild'
 
         if DEBUG:
             pylibdir = projbase / 'PCBuild'
