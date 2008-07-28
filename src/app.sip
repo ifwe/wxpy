@@ -126,8 +126,6 @@ static void call_crashreport_process(const wxString& cmd)
 
     PROCESS_INFORMATION pi;
 
-
-
     if (CreateProcessW(NULL, (LPWSTR)cmd.wc_str(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
@@ -251,11 +249,8 @@ class wxPyApp : wxApp
 
 %GCClearCode
     PyObject* obj = sipCpp->callAfterCbs;
-    if (obj)
-    {
-        Py_DECREF(obj);
-        sipCpp->callAfterCbs = 0;
-    }
+    sipCpp->callAfterCbs = 0;
+    Py_XDECREF(obj);
     sipRes = 0;
 %End
 
@@ -276,11 +271,6 @@ public:
     sipRes = new wxString(sipCpp->executable);
 %End
 
-    void Abort();
-%MethodCode
-        abort();
-%End
-
     int MainLoop();
 %MethodCode
     Py_BEGIN_ALLOW_THREADS
@@ -296,24 +286,7 @@ public:
     Py_END_ALLOW_THREADS
 %End
 
-    SIP_PYLIST callAfterCbs;
-
     virtual void OnFatalException();
-
-    void ReleaseGIL();
-%MethodCode
-    Py_BEGIN_ALLOW_THREADS
-    Py_END_ALLOW_THREADS
-%End
-
-    int Crash();
-%MethodCode
-    int a = 1;
-    int b = 1;
-    b--;
-    int c = a/b;
-    sipRes = c;
-%End
 
     wxString GetAppName() const;
     void SetAppName(const wxString& name);
@@ -324,11 +297,9 @@ public:
     const wxString& GetVendorName() const;
     void SetVendorName(const wxString& name);
 
-//  wxAppTraits*, GetTraits(),
     bool Yield(bool onlyIfNeeded = false) /ReleaseGIL/;
     void WakeUpIdle() /ReleaseGIL/;
     static bool IsMainLoopRunning() const /ReleaseGIL/;
-
 
     void Exit();
     void ExitMainLoop();
@@ -351,31 +322,8 @@ public:
 
     static void SetInstance(wxApp* app);
     wxLayoutDirection GetLayoutDirection() const;
-/*
-%If (WXMAC)
-    virtual void         MacOpenFile(const wxString &fileName) ;
-    virtual void         MacPrintFile(const wxString &fileName) ;
-    virtual void         MacNewFile() ;
-    virtual void         MacReopenApp() ;
-    void MacHideApp();
-%End
-*/
-/*
 
-    static bool GetMacSupportPCMenuShortcuts();  // TODO, deprecate this
-    static long GetMacAboutMenuItemId();
-    static long GetMacPreferencesMenuItemId();
-    static long GetMacExitMenuItemId();
-    static wxString GetMacHelpMenuTitleName();
-
-    static void SetMacSupportPCMenuShortcuts(bool val);  // TODO, deprecate this
-    static void SetMacAboutMenuItemId(long val);
-    static void SetMacPreferencesMenuItemId(long val);
-    static void SetMacExitMenuItemId(long val);
-    static void SetMacHelpMenuTitleName(const wxString& val);
-*/
-
-
+    SIP_PYLIST callAfterCbs;
 };
 
 
