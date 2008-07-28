@@ -170,6 +170,7 @@ public:
     SIP_BLOCK_THREADS
     if (PyTuple_Check(events))
     {
+        // Event types is a tuple of multiple types
         for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
         {
             event = PyInt_AsLong(PyTuple_GET_ITEM(events, i));
@@ -184,6 +185,7 @@ public:
     }
     else
     {
+        // Event type is a single integer
         event = PyInt_AsLong(events);
         if (event == -1 && PyErr_Occurred())
             sipIsErr = 1;
@@ -245,6 +247,7 @@ public:
             }
         }
     }
+
     sipRes = 0;
 %End
 
