@@ -195,3 +195,12 @@ bool wxIsPlatform64Bit();
 bool wxHandleFatalExceptions();
 
 bool wxYieldIfNeeded();
+
+int Crash();
+%MethodCode
+    int a = 1;
+    int b = 1;
+    b--;
+    int c = a/b;
+    sipRes = c;
+%End
