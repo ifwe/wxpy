@@ -48,7 +48,7 @@ public:
 
         // null out the member reference before XDECREF
         PyObject* cb = callable;
-        callable = NULL;
+        callable = 0;
         Py_XDECREF(cb);
 
         SIP_UNBLOCK_THREADS
@@ -56,10 +56,10 @@ public:
 
     virtual void Notify()
     {
-        if (callable == NULL)
+        SIP_BLOCK_THREADS
+        if (!callable)
             return;
 
-        SIP_BLOCK_THREADS
         PyObject_CallObject(callable, NULL);
         SIP_UNBLOCK_THREADS
     }
@@ -75,14 +75,13 @@ public:
     void Notify();
     SIP_PYOBJECT callable;
 
-
 %GCTraverseCode
     sipRes = sipVisit(sipCpp->callable, sipArg);
 %End
 
 %GCClearCode
     PyObject* callable = sipCpp->callable;
-    sipCpp->callable = NULL;
+    sipCpp->callable = 0;
     Py_XDECREF(callable);
     sipRes = 0;
 %End
