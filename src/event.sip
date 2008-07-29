@@ -81,13 +81,10 @@ void CallAfterCallback::EventThunker(wxEvent&)
 void CallAfter(SIP_PYCALLABLE);
 %MethodCode
     /* append the callable to the end of our list */
-    SIP_BLOCK_THREADS
-    Py_INCREF(a0);
-
     PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+    Py_INCREF(a0);
     PyList_Append(cbs, a0);
 
-    SIP_UNBLOCK_THREADS
     wxCommandEvent e(g_callAfterId, -1);
     wxTheApp->AddPendingEvent(e);
 %End
