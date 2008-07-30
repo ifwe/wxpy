@@ -199,7 +199,7 @@ class CheckBox(_CheckBox):
 _Choice = Choice
 class Choice(_Choice):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, choices = None, style = 0, validator = DefaultValidator, name = 'choice'):
-        _Choice.__init__(self, parent, id, pos, size, choices, style, validator, name)
+        _Choice.__init__(self, parent, id, pos, size, choices if choices is not None else [], style, validator, name)
 
 _Slider = Slider
 class Slider(_Slider):
@@ -539,6 +539,15 @@ def MessageBox(message, caption = 'Message', style = OK, parent = None, x = -1, 
 WXK_PRIOR = wx.WXK_PAGEUP
 WXK_NEXT  = wx.WXK_PAGEDOWN
 
+
+class PyTimer(Timer):
+    def __init__(self, cb):
+        Timer.__init__(self)
+        assert callable(cb)
+        self.cb = cb
+
+    def Notify(self):
+        self.cb()
 
 class CallLater(object):
     """

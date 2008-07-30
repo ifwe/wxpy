@@ -25,13 +25,13 @@ public:
     int GetId() const;
     bool IsOneShot() const;
 };
-
+/*
 class wxPyTimer : wxTimer
 {
 
 %TypeHeaderCode
 
-class wxPyTimer : wxTimer
+class wxPyTimer : public wxTimer
 {
 public:
     wxPyTimer(PyObject* cb)
@@ -80,6 +80,7 @@ public:
 %End
 
 %GCClearCode
+    sipCpp->Stop();
     PyObject* callable = sipCpp->callable;
     sipCpp->callable = 0;
     Py_XDECREF(callable);
@@ -87,7 +88,7 @@ public:
 %End
 
 };
-
+*/
 class wxTimerEvent : wxEvent
 {
 public:

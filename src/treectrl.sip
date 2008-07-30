@@ -162,7 +162,6 @@ public:
 
     void Destroy();
 %MethodCode
-    fprintf(stderr, "wxPyTreeItemData::Destroy\n");
     delete sipCpp;
 %End
 

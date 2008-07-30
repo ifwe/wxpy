@@ -21,8 +21,6 @@ else:
     sys.argv.remove('--nowk')
     BUILDING_WK = False
 
-
-
 DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
 
 def get_webkit_dir():
@@ -68,10 +66,6 @@ def main():
         opts['outputdir'] = outputdir
 
     build_extension('wxpy', wxpy_modules, **opts)
-
-    #import os
-    #if os.name == 'nt':
-    #    windows_install_pyds()
 
 def windows_install_pyds():
     srcdir  = 'build/obj-msvs2005prj'

@@ -128,7 +128,6 @@ public:
 %MethodCode
     static const char* AddSpacerMsg = "AddSpacer expects an integer or a sequence of 2 integers";
 
-    SIP_BLOCK_THREADS
     PyObject* fast = PySequence_Fast(a0, AddSpacerMsg);
     if (fast)
     {
@@ -149,14 +148,13 @@ public:
         sipIsErr = 1;
     }
 
-    SIP_UNBLOCK_THREADS
 %End
 
     bool Detach(wxWindow* window);
 %MethodCode
     wxSizerItem* item = sipCpp->GetItem(a0);
     sipRes = sipCpp->Detach(a0);
-    if (sipRes)
+    if (0 && sipRes)
         setDeleted(item, sipClass_wxSizerItem);
 %End
 
@@ -170,7 +168,7 @@ public:
     if (sipRes)
     {
         transferBack(sizer, sipClass_wxSizer);
-        setDeleted(item, sipClass_wxSizerItem);
+        //setDeleted(item, sipClass_wxSizerItem);
     }
 
 %End
@@ -186,7 +184,7 @@ public:
     {
         // the only owned item by a wxSizerItem is a wxSizer
         transferBack(sizer, sipClass_wxSizer);
-        setDeleted(item, sipClass_wxSizerItem);
+        //setDeleted(item, sipClass_wxSizerItem);
     }
 %End
 

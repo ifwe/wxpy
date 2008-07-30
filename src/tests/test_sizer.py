@@ -11,6 +11,20 @@ from contextlib import contextmanager
 import sip
 from testutil import assert_ownership, check_collected
 
+def test_DetachItem():
+    f = wx.Frame(None)
+    s = wx.BoxSizer(wx.HORIZONTAL)
+    buttons = []
+
+    for x in xrange(3):
+        buttons.append(wx.Button(f, -1, str(x)))
+        s.Add(buttons[x])
+
+    s.Detach(1)
+    assert [c.Window for c in s.Children] == [buttons[0], buttons[2]]
+    assert not sip.isdeleted(buttons[1])
+
+
 def test_DetachSpacer():
     f = wx.Frame(None)
     s = wx.BoxSizer(wx.HORIZONTAL)
@@ -194,7 +208,7 @@ def test_HiddenItem():
 
 def main():
     a = wx.PySimpleApp()
-    test_DetachSpacer()
+    test_DetachItem()
     #import memleak
 
     #test_Detach()
