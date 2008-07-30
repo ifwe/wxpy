@@ -281,7 +281,6 @@ public:
 
     bool SetData(SIP_PYOBJECT data);
 %MethodCode
-    SIP_BLOCK_THREADS
     if (PyString_Check(a0))
         sipRes = sipCpp->SetData(PyString_Size(a0), PyString_AsString(a0));
     else
@@ -289,15 +288,12 @@ public:
         PyErr_SetString(PyExc_TypeError, "SetData requires a single string argument");
         sipIsErr = 1;
     }
-    SIP_UNBLOCK_THREADS
 %End
 
 
 SIP_PYOBJECT GetData();
 %MethodCode
-    SIP_BLOCK_THREADS
     sipRes = PyString_FromStringAndSize((char*)sipCpp->GetData(), sipCpp->GetSize());
-    SIP_UNBLOCK_THREADS
 %End
 
     size_t GetSize();

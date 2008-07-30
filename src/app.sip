@@ -46,16 +46,12 @@ static const sipAPIDef *get_sip_api()
 //
 void SipNewThread();
 %MethodCode
-    SIP_BLOCK_THREADS
     get_sip_api()->api_start_thread();
-    SIP_UNBLOCK_THREADS
 %End
 
 void SipEndThread();
 %MethodCode
-    SIP_BLOCK_THREADS
     get_sip_api()->api_end_thread();
-    SIP_UNBLOCK_THREADS
 %End
 
 %ModuleHeaderCode

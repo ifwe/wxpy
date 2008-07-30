@@ -18,6 +18,7 @@ public:
     wxMenuItemList items = sipCpp->GetMenuItems();
 
     wxMenuItemList::iterator iter;
+    SIP_BLOCK_THREADS
     for (iter = items.begin(); iter != items.end(); ++iter)
     {
         // make sure all menu item wrappers are deleted
@@ -25,6 +26,7 @@ public:
         setDeleted(menuitem, sipClass_wxMenuItem);
     }
     delete sipCpp;
+    SIP_UNBLOCK_THREADS
 %End
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;

@@ -270,7 +270,6 @@ public:
 
     SIP_PYOBJECT GetPyData(const wxTreeItemId& item);
 %MethodCode
-        SIP_BLOCK_THREADS
         wxPyTreeItemData* data = (wxPyTreeItemData*)sipCpp->GetItemData(*a0);
         if (data == NULL)
         {
@@ -286,12 +285,10 @@ public:
             sipRes = Py_None; // needs incref?
         }
 
-        SIP_UNBLOCK_THREADS
 %End
 
     void SetPyData(const wxTreeItemId& item, SIP_PYOBJECT);
 %MethodCode
-        SIP_BLOCK_THREADS
         wxPyTreeItemData* data = (wxPyTreeItemData*)sipCpp->GetItemData(*a0);
         if (data == NULL)
         {
@@ -301,8 +298,6 @@ public:
         }
         else
             data->SetData(a1);
-
-        SIP_UNBLOCK_THREADS
 %End
 
     void SetItemHasChildren(const wxTreeItemId& item, bool has = true);

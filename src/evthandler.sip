@@ -167,7 +167,6 @@ public:
     PyObject* events = a0;
     int event;
 
-    SIP_BLOCK_THREADS
     if (PyTuple_Check(events))
     {
         // Event types is a tuple of multiple types
@@ -192,7 +191,6 @@ public:
         else
             sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
     }
-    SIP_UNBLOCK_THREADS
 %End
 
 //

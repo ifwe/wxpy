@@ -124,7 +124,6 @@ public:
                      int flag = 0,
                      int border = 0) /Transfer/;
 %MethodCode
-    SIP_BLOCK_THREADS
     if (PySequence_Fast_GET_SIZE(a0) != 2)
     {
         PyErr_SetString(PyExc_TypeError, "wx.GridBagSizer.Add (with size argument): first argument must be a sequence of 2 integers");
@@ -140,7 +139,6 @@ public:
         else
             sipRes = sipCpp->Add(w, h, *a1, *a2, a3, a4);
     }
-    SIP_UNBLOCK_THREADS
 %End
 
 /*        wxGBSizerItem* Add(PyObject* item,
