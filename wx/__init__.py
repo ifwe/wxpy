@@ -541,13 +541,13 @@ WXK_NEXT  = wx.WXK_PAGEDOWN
 
 
 class PyTimer(Timer):
-    def __init__(self, cb):
+    def __init__(self, notify):
         Timer.__init__(self)
-        assert callable(cb)
-        self.cb = cb
+        assert callable(notify)
+        self.notify = notify
 
     def Notify(self):
-        self.cb()
+        self.notify()
 
 class CallLater(object):
     """
