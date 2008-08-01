@@ -145,6 +145,10 @@ public:
     void SetMenuBar(wxMenuBar* menuBar /Transfer/);
     wxMenuBar* GetMenuBar();
 
+    wxStatusBar* CreateStatusBar(int number = 1,
+                                 long style = wxDEFAULT_STATUSBAR_STYLE,
+                                 wxWindowID winid = 0,
+                                 const wxString& name = wxStatusLineNameStr);
     wxToolBar* CreateToolBar(long style = wxNO_BORDER | wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr) /Transfer/;
     wxToolBar* GetToolBar();
 
@@ -184,6 +188,7 @@ public:
 
      void SetEscapeId(int escapeId);
      int GetEscapeId() const;
+
 
      wxSizer* CreateTextSizer(const wxString &message) /Transfer/;
      wxSizer* CreateButtonSizer(long flags) /Transfer/;
