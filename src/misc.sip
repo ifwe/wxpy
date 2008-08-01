@@ -20,7 +20,6 @@
 %Include intl.sip
 %Include artprov.sip
 %Include process.sip
-%Include thunk.sip
 
 %If (!WXMAC)
 %Include power.sip
