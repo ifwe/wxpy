@@ -10,7 +10,7 @@ released under the wxWidgets License
 
 // Enable stripping of "wx" from Python names, and auto generation of
 // properties from GetXXX() and SetXXX() methods.
-%SIPOptions (RenameWx, AutoProperties)
+%SIPOptions (RenameWx, AutoProperties, ThreadChecking)
 
 %UnitCode
 #include "stdwxpy.h"
@@ -98,6 +98,7 @@ AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
 AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
 AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
 AddItem("RED_BRUSH",         wxRED_BRUSH,         sipClass_wxBrush);
+AddItem("BLUE_BRUSH",        wxBLUE_BRUSH,        sipClass_wxBrush);
 
 AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
 

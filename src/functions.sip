@@ -196,6 +196,8 @@ bool wxHandleFatalExceptions();
 
 bool wxYieldIfNeeded();
 
+bool wxIsMainThread();
+
 int Crash();
 %MethodCode
     int a = 1;

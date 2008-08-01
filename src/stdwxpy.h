@@ -89,6 +89,10 @@
 #include <wx/minifram.h>
 #endif
 
+#if wxUSE_STATUSBAR
+#include <wx/statusbr.h>
+#endif
+
 #ifdef __WXMSW__
 #include <wx/msw/regconf.h>
 #include <wx/msw/crashrpt.h>

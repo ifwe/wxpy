@@ -38,12 +38,13 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     wxPyCallback* cb = (wxPyCallback*)event.m_callbackUserData;
     PyObject* func = cb->m_func;
 
+    SIP_BLOCK_THREADS
+
     if (!func)
-        return;
+        goto skip_event;
 
     // TODO: should the last argument (PyObject* transferObj) be NULL?
     // (NULL means C++ has ownership)
-    SIP_BLOCK_THREADS
 
     PyObject* event_arg = sipConvertFromInstance(&event, sipClass_wxEvent, NULL);
     if (!event_arg)
@@ -72,9 +73,9 @@ void wxPyCallback::EventThunker(wxEvent& event) {
         PyErr_Print();
         PyErr_Clear();
     }
-
     Py_DECREF(tuple);
 
+skip_event:
     SIP_UNBLOCK_THREADS
 }
 
@@ -111,10 +112,8 @@ public:
     PyObject* func = a3;
 
     // func must be callable
-    SIP_BLOCK_THREADS
-        sipCpp->Connect(id, lastId, eventType,
-            (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
-    SIP_UNBLOCK_THREADS
+    sipCpp->Connect(id, lastId, eventType,
+        (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
 %End
 
     void Bind(SIP_PYOBJECT event, SIP_PYCALLABLE func, wxWindow* source = NULL, int id = wxID_ANY, int id2 = wxID_ANY);
@@ -129,7 +128,6 @@ public:
         id = source->GetId();
 
     int event;
-    SIP_BLOCK_THREADS
     if (PyTuple_Check(events))
     {
         for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
@@ -154,7 +152,6 @@ public:
             sipCpp->Connect(id, id2, event,
                 (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
     }
-    SIP_UNBLOCK_THREADS
 %End
 
     void Disconnect(int id, int id2, int eventType);

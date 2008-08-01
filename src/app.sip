@@ -64,7 +64,7 @@ public:
 
     virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg);
     PyObject* callAfterCbs;
-    wxString executable;
+    wxString crash_cmd;
 };
 
 %End // TypeHeaderCode
@@ -151,12 +151,16 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         if (!did_crash_report) {
             did_crash_report = true;
 
-            wxPyApp* app = (wxPyApp*)wxTheApp;
-            cmd = app->executable;
-
             wxCrashReport::Generate(wxCRASH_REPORT_DEFAULT, pExcPtrs);
+            wxPyApp* app = (wxPyApp*)wxTheApp;
 
-            cmd << wxT(" --crashreport ") << wxCrashReport::GetFileName();
+            // Turn a "%s" in the crash command string into the filename
+            // of the dump file.
+            if (app->crash_cmd.Find(wxT("%s")) != wxNOT_FOUND)
+                cmd.Printf(app->crash_cmd, wxCrashReport::GetFileName());
+            else
+                cmd = app->crash_cmd;
+
             call_crashreport_process(cmd);
         }
     }
@@ -257,14 +261,14 @@ public:
     virtual bool OnInit();
     virtual bool OnInitGui();
 
-    void SetExecutable(const wxString& exc);
+    void SetCrashCommand(const wxString& exc);
 %MethodCode
-    sipCpp->executable = *a0;
+    sipCpp->crash_cmd = *a0;
 %End
 
-    wxString GetExecutable() const;
+    wxString GetCrashCommand() const;
 %MethodCode
-    sipRes = new wxString(sipCpp->executable);
+    sipRes = new wxString(sipCpp->crash_cmd);
 %End
 
     int MainLoop();
@@ -320,6 +324,13 @@ public:
     wxLayoutDirection GetLayoutDirection() const;
 
     SIP_PYLIST callAfterCbs;
+
+
+    wxString GetCrashFile();
+%MethodCode
+    sipRes = new wxString(wxCrashReport::GetFileName());
+%End
+
 };
 
 

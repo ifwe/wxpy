@@ -68,7 +68,7 @@ def PyEventBinder(evttype, n = None):
 _callafter = wx.CallAfter
 from traceback import print_exc
 def CallAfter(func, *a, **k):
-    assert callable(func), repr(func)
+    assert callable(func), (repr(func) % '%s is not callable')
 
     def CallAfterCallback():
         try:
@@ -382,18 +382,13 @@ class PopupTransientWindow(_PopupTransientWindow):
     def __init__(self, window, style = BORDER_NONE):
         _PopupTransientWindow.__init__(self, window, style)
 
-#class SimplePanel(wx.Panel):
-#    def __init__(self, parent, id, style):
-#        Panel.__init__(self, parent, id, style = style)
-#        self.SetBackgroundStyle(BG_STYLE_CUSTOM)
 
-
-
-
-#_ScrolledWindow = ScrolledWindow
-#class ScrolledWindow(ScrolledWindow):
-#    def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = HSCROLL | VSCROLL, name = 'scrolledWindow'):
-#        _ScrolledWindow.__init__(self, parent, id, pos, size, style, name)
+_FileConfig = wx.FileConfig
+class FileConfig(_FileConfig):
+    def __init__(self, appName = '', vendorName = '', localFilename = '', globalFilename = '',
+                 style = CONFIG_USE_LOCAL_FILE | CONFIG_USE_GLOBAL_FILE):
+        _FileConfig.__init__(self, appName, vendorName, localFilename, globalFilename,
+                             style)
 
 #
 # Window
@@ -680,21 +675,20 @@ _entrystart = wx.EntryStart
 _initallimagehandlers = wx.InitAllImageHandlers
 _getapp = wx.GetApp
 
-def _wxpy_init():
-    try:
-        # Allows Ctrl+C to kill apps started by a console.
-        import signal
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
-    except Exception:
-        pass
+def _wxpy_init(clearSigInt=True):
+    if clearSigInt:
+        try:
+            # Allows Ctrl+C to kill apps started by a console.
+            import signal
+            signal.signal(signal.SIGINT, signal.SIG_DFL)
+        except Exception:
+            pass
 
     try:
         # make sure HTML tag modules get loaded
         import lib.wxpTag
     except Exception:
         from traceback import print_exc; print_exc()
-
-    assert True == HandleFatalExceptions()
 
     _entrystart()
     _initallimagehandlers()
@@ -703,17 +697,14 @@ def _wxpy_init():
 _did_wxpy_init = False
 
 class App(_app):
-    def __init__(self, appname = None, redirect = None):
+    def __init__(self, redirect=False, filename=None,
+                 useBestVisual=False, clearSigInt=True):
         _app.__init__(self)
-        if appname is not None:
-            self.SetAppName(appname)
-
-
 
         global _did_wxpy_init
         if not _did_wxpy_init:
             # Only call wxEntryStart and other init code once.
-            _wxpy_init()
+            _wxpy_init(clearSigInt)
             _did_wxpy_init = True
 
         self.SetExitOnFrameDelete(True)
