@@ -6,6 +6,8 @@ python additions
 
 import os.path, sys
 
+VERSION = (2, 8, 7, 1)
+
 # make sure "wx" is on the syspath
 _wxpy_dir = os.path.split(os.path.abspath(__file__))[0]
 if not _wxpy_dir in sys.path:
@@ -18,7 +20,6 @@ if os.name == 'nt':
         os.path.abspath(os.path.join(os.path.split(__file__)[0], '..')),
         os.environ['PATH']])
 
-VERSION = (1, 0, 0, 0)
 USE_UNICODE = True
 WXPY = True
 
@@ -390,6 +391,18 @@ class FileConfig(_FileConfig):
         _FileConfig.__init__(self, appName, vendorName, localFilename, globalFilename,
                              style)
 
+
+_PyWindow = wx.PyWindow
+class PyWindow(_PyWindow):
+    def __init__(self, parent, id=-1, pos = DefaultPosition, size = DefaultSize,
+                 style = 0, name = 'panel'):
+        _PyWindow.__init__(self, parent, id, pos, size, style, name)
+
+_PyPanel = wx.PyPanel
+class PyPanel(_PyPanel):
+    def __init__(self, parent, id=-1, pos = DefaultPosition, size = DefaultSize,
+                 style = TAB_TRAVERSAL | NO_BORDER, name = 'panel'):
+        _PyPanel.__init__(self, parent, id, pos, size, style, name)
 #
 # Window
 #
@@ -431,7 +444,11 @@ del GridBagSizer_Add
 #
 _sizer_add = Sizer.Add
 def Sizer_Add(self, item, proportion = 0, flag = 0, border = 0):
+    try:
         return _sizer_add(self, item, proportion, flag, border)
+    except TypeError:
+        if isinstance(item, WindowBase):
+            return _sizer_add(self, WindowBaseDowncast(item), proportion, flag, border)
 Sizer.Add = Sizer_Add
 del Sizer_Add
 

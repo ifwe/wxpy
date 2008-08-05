@@ -193,7 +193,7 @@ public:
      wxSizer* CreateTextSizer(const wxString &message) /Transfer/;
      wxSizer* CreateButtonSizer(long flags) /Transfer/;
      wxSizer *CreateSeparatedButtonSizer(long flags) /Transfer/;
-     //wxStdDialogButtonSizer* CreateStdDialogButtonSizer( long flags );
+     wxStdDialogButtonSizer* CreateStdDialogButtonSizer(long flags);
 
      bool IsModal() const;
      int ShowModal() /ReleaseGIL/;

@@ -25,7 +25,9 @@ public:
 
     void Destroy();
 %MethodCode
-    delete sipCpp;
+    wxCriticalSectionLocker locker(wxPendingDeleteCS);
+    if (!wxPendingDelete.Member(sipCpp))
+        wxPendingDelete.Append(sipCpp);
 %End
 
     bool IsOk() const;

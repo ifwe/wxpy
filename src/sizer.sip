@@ -1,3 +1,28 @@
+%ModuleHeaderCode
+class wxPyData : public wxObject
+{
+private:
+    wxPyData(const wxPyData&);
+public:
+    wxPyData() { m_obj = 0; }
+    wxPyData(PyObject* obj)
+    {
+        Py_XINCREF(obj);
+        m_obj = obj;
+    }
+
+    ~wxPyData()
+    {
+        SIP_BLOCK_THREADS // may be called not from Python
+        PyObject* obj = reinterpret_cast<PyObject*>(m_obj);
+        m_obj = 0;
+        Py_XDECREF(obj);
+        SIP_UNBLOCK_THREADS
+    }
+
+    PyObject* m_obj;
+};
+%End
 
 class wxSizerItem: wxObject
 {
@@ -74,8 +99,39 @@ public:
     bool IsShown() const;
     void Show(bool show);
 
-//    void SetUserData(wxObject* userData);
-//    wxObject* GetUserData() const;
+    void SetUserData(SIP_PYOBJECT userData);
+%MethodCode
+        wxPyData* obj = reinterpret_cast<wxPyData*>(sipCpp->GetUserData());
+        Py_XINCREF(a0);
+        if (!obj) {
+            sipCpp->SetUserData(new wxPyData(a0));
+        } else {
+            Py_XDECREF(obj->m_obj);
+            obj->m_obj = a0;
+        }
+%End
+
+    SIP_PYOBJECT GetUserData() const;
+%MethodCode
+        wxPyData* obj = reinterpret_cast<wxPyData*>(sipCpp->GetUserData());
+        sipRes = obj ? obj->m_obj : 0;
+%End
+
+//%GCTraverseCode
+//    wxPyData* obj = reinterpret_cast<wxPyData*>(sipCpp->GetUserData());
+//    if (!obj)
+//        return 0;
+//
+//    sipRes = obj->m_obj ? sipVisit(obj->m_obj, sipArg) : 0;
+//%End
+//
+//%GCClearCode
+//    PyObject* obj;
+//    obj = reinterpret_cast<PyObject *>(sipCpp->GetUserData());
+//    if (obj)
+//        sipCpp->SetUserData(0); // calls delete on the wxPyData
+//    sipRes = 0;
+//%End
 
     wxPoint GetPosition() const;
 
@@ -155,7 +211,11 @@ public:
     wxSizerItem* item = sipCpp->GetItem(a0);
     sipRes = sipCpp->Detach(a0);
     if (0 && sipRes)
+    {
+        SIP_BLOCK_THREADS
         setDeleted(item, sipClass_wxSizerItem);
+        SIP_UNBLOCK_THREADS
+    }
 %End
 
     bool Detach(wxSizer* sizer);
@@ -167,7 +227,9 @@ public:
 
     if (sipRes)
     {
+        SIP_BLOCK_THREADS
         transferBack(sizer, sipClass_wxSizer);
+        SIP_UNBLOCK_THREADS
         //setDeleted(item, sipClass_wxSizerItem);
     }
 
@@ -183,10 +245,16 @@ public:
     if (sipRes)
     {
         // the only owned item by a wxSizerItem is a wxSizer
+        SIP_BLOCK_THREADS
         transferBack(sizer, sipClass_wxSizer);
+        SIP_UNBLOCK_THREADS
         //setDeleted(item, sipClass_wxSizerItem);
     }
 %End
+
+    wxSizerItem* GetItem(wxWindow* window, bool recursive = false) /Transfer/;
+    wxSizerItem* GetItem(wxSizer* sizer, bool recursive = false) /Transfer/;
+    //wxSizerItem* GetItem(size_t index) /Transfer/;
 
     bool Show(wxWindow* item, bool show = true, bool recursive = false);
     bool Show(wxSizer*  item, bool show = true, bool recursive = false);
@@ -223,6 +291,7 @@ public:
     {
         wxSizerItemList& children = sipCpp->GetChildren();
         wxSizerItemList::iterator iter;
+        SIP_BLOCK_THREADS
         for (iter = children.begin(); iter != children.end(); ++iter)
         {
             wxSizerItem* item = *iter;
@@ -230,6 +299,7 @@ public:
             if (window)
                 setDeleted(window, sipClass_wxWindow);
         }
+        SIP_UNBLOCK_THREADS
     }
 
     sipCpp->Clear(a0);
@@ -269,11 +339,43 @@ public:
     }
 %End
 
-void ShowItems(bool show);
+    void ShowItems(bool show);
 
 private:
     wxSizer(); // abstract
 };
+
+//
+// wxPySizer: a custom sizer with overridable CalcMin and RecalcSizes
+//
+
+%ModuleHeaderCode
+
+class wxPySizer : public wxSizer
+{
+public:
+    wxPySizer() {}
+    virtual ~wxPySizer() {}
+
+    virtual wxSize CalcMin() = 0;
+    virtual void RecalcSizes() = 0;
+};
+
+%End
+
+class wxPySizer : wxSizer
+{
+public:
+    wxPySizer();
+    virtual ~wxPySizer();
+
+    virtual wxSize CalcMin() = 0;
+    virtual void RecalcSizes() = 0;
+};
+
+//
+// wxBoxSizer
+//
 
 class wxBoxSizer: wxSizer
 {
@@ -355,4 +457,27 @@ public:
     wxStaticBox* GetStaticBox();
 private:
     wxStaticBoxSizer(const wxStaticBoxSizer&);
+};
+
+
+class wxStdDialogButtonSizer : wxBoxSizer
+{
+private:
+    wxStdDialogButtonSizer();
+    wxStdDialogButtonSizer(const wxStdDialogButtonSizer&);
+public:
+    virtual ~wxStdDialogButtonSizer();
+
+    void AddButton(wxButton *button);
+    void Realize();
+
+    void SetAffirmativeButton(wxButton *button);
+    void SetNegativeButton(wxButton *button);
+    void SetCancelButton(wxButton *button);
+
+    wxButton* GetAffirmativeButton() const;
+    wxButton* GetApplyButton() const;
+    wxButton* GetNegativeButton() const;
+    wxButton* GetCancelButton() const;
+    wxButton* GetHelpButton() const;
 };

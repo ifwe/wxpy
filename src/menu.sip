@@ -25,8 +25,16 @@ public:
         wxMenuItem* menuitem = *iter;
         setDeleted(menuitem, sipClass_wxMenuItem);
     }
-    delete sipCpp;
     SIP_UNBLOCK_THREADS
+
+    if (!wxIsMainThread())
+    {
+        wxCriticalSectionLocker locker(wxPendingDeleteCS);
+        if (!wxPendingDelete.Member(sipCpp))
+            wxPendingDelete.Append(sipCpp);
+    }
+    else
+        delete sipCpp;
 %End
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;

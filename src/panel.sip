@@ -60,3 +60,121 @@ public:
     wxWindow *GetTargetWindow() const;
 };
 
+%ModuleHeaderCode
+
+typedef wxWindow wxPyWindow;
+typedef wxPanel wxPyPanel;
+
+%End
+
+class wxPyWindow : wxWindow
+{
+public:
+    wxPyWindow();
+    wxPyWindow(wxWindow* parent, const wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxPanelNameStr);
+        //: wxWindow(parent, id, pos, size, style, name) {}
+//
+//
+//    bool DoEraseBackground(wxDC* dc) {
+//#ifdef __WXMSW__
+//        return wxWindow::DoEraseBackground(dc->GetHDC());
+//#else
+//        dc->SetBackground(wxBrush(GetBackgroundColour()));
+//        dc->Clear();
+//        return true;
+//#endif
+//    }
+
+protected:
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
+    virtual void DoSetClientSize(int width, int height);
+    virtual void DoSetVirtualSize(int x, int y);
+
+    virtual void DoGetSize(int* x, int* y);
+    virtual void DoGetClientSize(int *x, int* y);
+    virtual void DoGetPosition(int* x, int* y);
+    virtual wxPoint GetClientAreaOrigin() const;
+
+    virtual wxSize DoGetVirtualSize() const;
+    virtual wxSize DoGetBestSize() const;
+
+public:
+
+    virtual void InitDialog();
+    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow();
+    virtual bool Validate();
+
+    virtual bool AcceptsFocus() const;
+    virtual bool AcceptsFocusFromKeyboard() const;
+    virtual wxSize GetMaxSize() const;
+
+    virtual void AddChild(wxWindowBase* child);
+    virtual void RemoveChild(wxWindowBase* child);
+
+    virtual bool ShouldInheritColours() const;
+    //DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
+
+    virtual bool HasTransparentBackground();
+
+    virtual void OnInternalIdle();
+};
+
+class wxPyPanel : wxPanel
+{
+public:
+    wxPyPanel(wxWindow* parent, const wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+               const wxString& name = wxPanelNameStr);
+
+//    bool DoEraseBackground(wxDC* dc) {
+//#ifdef __WXMSW__
+//        return wxWindow::DoEraseBackground(dc->GetHDC());
+//#else
+//        dc->SetBackground(wxBrush(GetBackgroundColour()));
+//        dc->Clear();
+//        return true;
+//#endif
+//    }
+
+protected:
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
+    virtual void DoSetClientSize(int width, int height);
+    virtual void DoSetVirtualSize(int x, int y);
+
+    virtual void DoGetSize(int* x, int* y);
+    virtual void DoGetClientSize(int *x, int* y);
+    virtual void DoGetPosition(int* x, int* y);
+    virtual wxPoint GetClientAreaOrigin() const;
+
+    virtual wxSize DoGetVirtualSize() const;
+    virtual wxSize DoGetBestSize() const;
+
+public:
+    virtual void InitDialog();
+    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow();
+    virtual bool Validate();
+
+    virtual bool AcceptsFocus() const;
+    virtual bool AcceptsFocusFromKeyboard() const;
+    virtual wxSize GetMaxSize() const;
+
+    virtual void AddChild(wxWindowBase* child);
+    virtual void RemoveChild(wxWindowBase* child);
+
+    virtual bool ShouldInheritColours() const;
+    //DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
+
+    virtual bool HasTransparentBackground();
+    virtual void OnInternalIdle();
+};
+

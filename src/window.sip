@@ -7,7 +7,21 @@ enum wxWindowVariant
     wxWINDOW_VARIANT_MAX
 };
 
-class wxWindow : wxEvtHandler
+
+class wxWindowBase : wxEvtHandler
+{
+private:
+    wxWindowBase();
+    ~wxWindowBase();
+    wxWindowBase(const wxWindowBase&);
+};
+
+wxWindow* WindowBaseDowncast(wxWindowBase* window);
+%MethodCode
+    sipRes = dynamic_cast<wxWindow*>(a0);
+%End
+
+class wxWindow : wxWindowBase
 {
 %TypeHeaderCode
 #ifndef WXPY_PREC
@@ -53,7 +67,9 @@ public:
 
     void Destroy();
 %MethodCode
-    delete sipCpp;
+    wxCriticalSectionLocker locker(wxPendingDeleteCS);
+    if (!wxPendingDelete.Member(sipCpp))
+        wxPendingDelete.Append(sipCpp);
 %End
 
     wxSize GetSize() const;
@@ -198,11 +214,10 @@ public:
     bool UnregisterHotKey(int hotkeyId);
 %End
 
-    wxPoint ConvertPixelsToDialog( const wxPoint& pt );
-    wxPoint ConvertDialogToPixels( const wxPoint& pt );
-    wxSize ConvertPixelsToDialog( const wxSize& sz );
-
-    wxSize ConvertDialogToPixels( const wxSize& sz );
+    wxPoint ConvertPixelsToDialog(const wxPoint& pt);
+    wxPoint ConvertDialogToPixels(const wxPoint& pt) /PyName=ConvertDialogPointToPixels/;
+    wxSize ConvertPixelsToDialog(const wxSize& sz);
+    wxSize ConvertDialogToPixels(const wxSize& sz);
 
     void WarpPointer(int x, int y);
 
