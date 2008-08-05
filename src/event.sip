@@ -244,6 +244,7 @@ private:
         C(wxMouseEvent)
         C(wxTimerEvent)
         C(wxShowEvent)
+        C(wxSizeEvent)
         C(wxMenuEvent)
         C(wxShowEvent)
         C(wxMoveEvent)
@@ -337,6 +338,15 @@ public:
     virtual ~wxMoveEvent();
 
     wxPoint GetPosition() const;
+};
+
+class wxSizeEvent : wxEvent
+{
+public:
+    wxSizeEvent(const wxSize& sz, int id = 0);
+    virtual ~wxSizeEvent();
+
+    wxSize GetSize() const;
 };
 
 class wxMouseEvent : wxEvent
