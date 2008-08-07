@@ -10,16 +10,9 @@
 #include "wx/webview.h"
 %End
 
-/*
-class WebViewFrameData
-{
-    private:
-    WebViewFrameData();
-};
-*/
+
 class wxWebView : wxWindow
 {
-
 public:
     wxWebView(wxWindow* parent /TransferThis/, int id = wxID_ANY,
               const wxPoint& point = wxDefaultPosition,
@@ -69,10 +62,6 @@ public:
     void SetPageTitle(const wxString& title);
 
 };
-
-// ----------------------------------------------------------------------------
-// Web Kit Events
-// ----------------------------------------------------------------------------
 
 enum {
     wxWEBVIEW_LOAD_STARTED = 1,
