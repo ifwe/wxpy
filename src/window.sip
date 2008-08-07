@@ -186,11 +186,10 @@ public:
 */
 
     wxEvtHandler *GetEventHandler() const;
-    void SetEventHandler( wxEvtHandler *handler );
+    void SetEventHandler(wxEvtHandler *handler /Transfer/);
 
-    void PushEventHandler( wxEvtHandler *handler );
-    wxEvtHandler *PopEventHandler( bool deleteHandler = false );
-
+    void PushEventHandler(wxEvtHandler *handler /Transfer/);
+    wxEvtHandler *PopEventHandler( bool deleteHandler = false ) /Factory/;
     bool RemoveEventHandler(wxEvtHandler *handler);
 
 %If (wxUSE_VALIDATORS)
