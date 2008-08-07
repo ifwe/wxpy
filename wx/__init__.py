@@ -102,6 +102,14 @@ class Dialog(_Dialog):
     def __init__(self, parent, id = -1, title = '', pos = DefaultPosition, size = DefaultSize, style = DEFAULT_DIALOG_STYLE, name = wx.DialogNameStr):
         _Dialog.__init__(self, parent, id, title, Point(*pos), Size(*size), style, name)
 
+    # provides support for the with statement
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.Hide()
+        self.Destroy()
+
 _TextCtrl = wx.TextCtrl
 class TextCtrl(_TextCtrl):
     def __init__(self, parent, id = -1, value = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = wx.DefaultValidator, name = 'text control'):
@@ -794,4 +802,12 @@ FutureCall = CallLater
 
 _AxBaseWindow = AxBaseWindow
 
+def IsDestroyed(win):
+    if win is None:
+        raise ValueError('IsDestroyed does not take None')
+
+    return sip.isdeleted(win)
+
 del wx
+
+
