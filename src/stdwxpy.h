@@ -64,6 +64,14 @@
 #include <wx/artprov.h>
 #include <wx/utils.h>
 
+#if wxUSE_COMBOCTRL
+#include <wx/combo.h>
+#endif
+
+#if wxUSE_ODCOMBOBOX
+#include <wx/odcombo.h>
+#endif
+
 #include <wx/pickerbase.h>
 #if wxUSE_FONTPICKERCTRL
 #include <wx/fontpicker.h>
