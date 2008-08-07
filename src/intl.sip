@@ -335,3 +335,8 @@ enum
     wxPLATFORM_OS2,
     wxPLATFORM_MAC
 };
+
+wxString wxGetTranslation(const wxString& str);
+wxString wxGetTranslation(const wxString& str, const wxString& domain);
+wxString wxGetTranslation(const wxString& str, const wxString& strPlural, size_t n);
+wxString wxGetTranslation(const wxString& str, const wxString& strPlural, size_t n, const wxString& domain);
