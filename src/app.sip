@@ -248,9 +248,7 @@ class wxPyApp : wxApp
 %End
 
 %GCClearCode
-    PyObject* obj = sipCpp->callAfterCbs;
-    sipCpp->callAfterCbs = 0;
-    Py_XDECREF(obj);
+    Py_CLEAR(sipCpp->callAfterCbs);
     sipRes = 0;
 %End
 
@@ -324,8 +322,6 @@ public:
     wxLayoutDirection GetLayoutDirection() const;
 
     SIP_PYLIST callAfterCbs;
-
-
     wxString GetCrashFile();
 %MethodCode
     sipRes = new wxString(wxCrashReport::GetFileName());
