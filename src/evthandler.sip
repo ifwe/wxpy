@@ -11,6 +11,12 @@ public:
     wxPyCallback(PyObject* func);
     ~wxPyCallback();
     void EventThunker(wxEvent& event);
+
+    PyObject* callback() const {
+        return m_func;
+    }
+
+protected:
     PyObject* m_func;
 };
 
@@ -27,8 +33,7 @@ wxPyCallback::wxPyCallback(PyObject* func) {
 wxPyCallback::~wxPyCallback() {
     // may be called at any time
     SIP_BLOCK_THREADS
-
-    Py_XDECREF(m_func);
+    Py_CLEAR(m_func);
     SIP_UNBLOCK_THREADS
 }
 
@@ -47,8 +52,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     // (NULL means C++ has ownership)
 
     PyObject* event_arg = sipConvertFromInstance(&event, sipClass_wxEvent, NULL);
-    if (!event_arg)
-    {
+    if (!event_arg) {
         fprintf(stderr, "WARNING: could not convert to sipClass_wxEvent\n");
         return;
     }
@@ -58,18 +62,14 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyTuple_SET_ITEM(tuple, 0, event_arg); // steals ref to arg
 
     PyObject* result = PyEval_CallObject(func, tuple);
-    if (result)
-    {
+    if (result) {
         Py_DECREF(result); // result is ignored, but we still need to decref it
 
-        if (PyErr_Occurred())
-        {
+        if (PyErr_Occurred()) {
             PyErr_Print();
             PyErr_Clear();
         }
-    }
-    else
-    {
+    } else {
         PyErr_Print();
         PyErr_Clear();
     }
@@ -128,13 +128,10 @@ public:
         id = source->GetId();
 
     int event;
-    if (PyTuple_Check(events))
-    {
-        for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
-        {
+    if (PyTuple_Check(events)) {
+        for (int i = 0; i < PyTuple_GET_SIZE(events); ++i) {
             event = PyInt_AsLong(PyTuple_GET_ITEM(events, i));
-            if (event == -1 && PyErr_Occurred())
-            {
+            if (event == -1 && PyErr_Occurred()) {
                 sipIsErr = 1;
                 break;
             }
@@ -142,9 +139,7 @@ public:
                 sipCpp->Connect(id, id2, event,
                         (wxObjectEventFunction)&wxPyCallback::EventThunker, new wxPyCallback(func));
         }
-    }
-    else
-    {
+    } else {
         event = PyInt_AsLong(events);
         if (event == -1 && PyErr_Occurred())
             sipIsErr = 1;
@@ -164,23 +159,17 @@ public:
     PyObject* events = a0;
     int event;
 
-    if (PyTuple_Check(events))
-    {
+    if (PyTuple_Check(events)) {
         // Event types is a tuple of multiple types
-        for (int i = 0; i < PyTuple_GET_SIZE(events); ++i)
-        {
+        for (int i = 0; i < PyTuple_GET_SIZE(events); ++i) {
             event = PyInt_AsLong(PyTuple_GET_ITEM(events, i));
-            if (event == -1 && PyErr_Occurred())
-            {
+            if (event == -1 && PyErr_Occurred()) {
                 sipIsErr = 1;
                 break;
-            }
-            else
+            } else
                 sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
         }
-    }
-    else
-    {
+    } else {
         // Event type is a single integer
         event = PyInt_AsLong(events);
         if (event == -1 && PyErr_Occurred())
@@ -190,13 +179,6 @@ public:
     }
 %End
 
-//
-// TODO: this gets pretty ugly, partially because the event tables weren't
-// designed to be poked at from the outside. Maybe we can do more of this
-// in Python, and avoid the necessity of the GCTraverseCode and GCClearCode
-// stuff entirely?
-//
-
 %GCTraverseCode
     sipRes = 0;
 
@@ -204,18 +186,15 @@ public:
     if (events)
     {
         wxList::compatibility_iterator node = events->GetFirst();
-        while (node)
-        {
+        while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-            node = node->GetNext();
-            if (entry->m_fn == &wxPyCallback::EventThunker)
-            {
-                wxPyCallback* wxpy_cb = (wxPyCallback*)entry->m_callbackUserData;
-                PyObject* func = wxpy_cb->m_func;
+            if (entry->m_eventType == g_callAfterId && entry->m_callbackUserData) {
+                PyObject* func = (wxPyCallback*)(entry->m_callbackUserData)->callback();
 
                 if (func && (sipRes = sipVisit(func, sipArg)))
                     goto traverse_done;
             }
+            node = node->GetNext();
         }
     }
     traverse_done:
@@ -223,23 +202,16 @@ public:
 
 %GCClearCode
     wxList* events = sipCpp->GetDynamicEventTable();
-    if (events)
-    {
+    if (events) {
         wxList::compatibility_iterator node = events->GetFirst();
-        while (node)
-        {
+        while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-            node = node->GetNext();
-            if (entry->m_fn == &wxPyCallback::EventThunker)
-            {
-                wxPyCallback* wxpy_cb = (wxPyCallback*)entry->m_callbackUserData;
-                PyObject* func = wxpy_cb->m_func;
-
-                // zero out the m_func reference before calling X_DECREF, since
-                // that may trigger the GCTraverseCode above.
-                wxpy_cb->m_func = 0;
-                Py_XDECREF(func);
+            if (entry->m_eventType == g_callAfterId && entry->m_callbackUserData) {
+                wxObject* obj = entry->m_callbackUserData;
+                entry->m_callbackUserData = 0;
+                delete obj; // will DECREF the callback
             }
+            node = node->GetNext();
         }
     }
 

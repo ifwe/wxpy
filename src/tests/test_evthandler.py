@@ -1,7 +1,10 @@
-from testutil import check_collected
+from testutil import check_collected, main
 import wx
 
 def test_selfcycle():
+
+    f = wx.Frame(None)
+
     class MyEventHandler(wx.EvtHandler):
         def __init__(self):
             wx.EvtHandler.__init__(self)
@@ -14,3 +17,9 @@ def test_selfcycle():
     def cycle():
         return MyEventHandler()
 
+    f.Destroy()
+
+    print 'no cycle!'
+
+if __name__ == '__main__':
+    main(test_selfcycle)

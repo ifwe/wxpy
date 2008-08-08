@@ -64,3 +64,12 @@ def check_collected(func):
             refs = '\n'.join('    %r' % r for r in gc.get_referrers(weakobj()))
             raise AssertionError('In function %r, %s has %d references:\n%s' %
                                  (func.__name__, repr(weakobj()), sys.getrefcount(weakobj()), refs))
+
+def main(*funcs):
+    import wx
+    app = wx.PySimpleApp()
+    for func in funcs:
+        func()
+    return app.MainLoop()
+
+
