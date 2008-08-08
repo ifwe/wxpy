@@ -188,8 +188,8 @@ public:
         wxList::compatibility_iterator node = events->GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-            if (entry->m_eventType == g_callAfterId && entry->m_callbackUserData) {
-                PyObject* func = (wxPyCallback*)(entry->m_callbackUserData)->callback();
+            if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
+                PyObject* func = ((wxPyCallback*)(entry->m_callbackUserData))->callback();
 
                 if (func && (sipRes = sipVisit(func, sipArg)))
                     goto traverse_done;
@@ -206,7 +206,7 @@ public:
         wxList::compatibility_iterator node = events->GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-            if (entry->m_eventType == g_callAfterId && entry->m_callbackUserData) {
+            if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
                 wxObject* obj = entry->m_callbackUserData;
                 entry->m_callbackUserData = 0;
                 delete obj; // will DECREF the callback
