@@ -1,3 +1,2 @@
-from _wxstc import *
+from wx._wxstc import *
 import wx
-

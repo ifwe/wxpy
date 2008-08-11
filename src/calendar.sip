@@ -1,4 +1,4 @@
-%Module _wxcalendar
+%Module wx._wxcalendar
 %Import wx.sip
 %UnitCode
 #include "stdwxpy.h"

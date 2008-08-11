@@ -1,4 +1,4 @@
-%Module _wxhtml
+%Module wx._wxhtml
 %Import wx.sip
 %UnitCode
 #include "stdwxpy.h"
@@ -9,11 +9,6 @@
 #include <wx/html/htmlwin.h>
 %End
 
-
-%PreInitialisationCode
-
-%End
-
 %PostInitialisationCode
 typedef void (*add_event_type)(PyObject* moduple_dict, const char* name, ...);
 add_event_type add_event = (add_event_type)sipImportSymbol("wxpy_add_event");
@@ -21,7 +16,6 @@ add_event_type add_event = (add_event_type)sipImportSymbol("wxpy_add_event");
 add_event(sipModuleDict, "EVT_HTML_CELL_CLICKED", wxEVT_COMMAND_HTML_CELL_CLICKED, 0);
 add_event(sipModuleDict, "EVT_HTML_CELL_HOVER",   wxEVT_COMMAND_HTML_CELL_HOVER, 0);
 add_event(sipModuleDict, "EVT_HTML_LINK_CLICKED", wxEVT_COMMAND_HTML_LINK_CLICKED, 0);
-
 %End
 
 enum {

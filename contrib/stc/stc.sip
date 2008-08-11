@@ -2,7 +2,7 @@
 // stc.sip
 //
 
-%Module _wxstc
+%Module wx._wxstc
 %Import wx.sip
 
 %UnitCode

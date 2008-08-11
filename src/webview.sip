@@ -1,5 +1,4 @@
-%Module _webview
-
+%Module wx._webview
 %Import wx.sip
 
 %ModuleHeaderCode

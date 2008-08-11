@@ -1,1 +1,1 @@
-from _wxcalendar import *
+from wx._wxcalendar import *
