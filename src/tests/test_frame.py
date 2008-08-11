@@ -63,7 +63,6 @@ def test_cycle():
 def main():
     a = wx.PySimpleApp()
 
-
     import memleak
     memleak.find(test_FrameDestroy, loops=500)
 

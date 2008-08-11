@@ -1,8 +1,10 @@
 import os.path
 import wx
 
+image_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
+
 def test_Image():
-    imgpath = './tests/images/digsby_ascii_popup.png'
+    imgpath = os.path.join(image_folder, 'digsby_ascii_popup.png')
 
     assert os.path.exists(imgpath)
     img = wx.Image(imgpath)

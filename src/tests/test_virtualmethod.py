@@ -1,10 +1,10 @@
-from wx import Foo
 import new
 import gc
 from testutil import check_collected
 
-def test_virtualmethod():
+def xxx_virtualmethod():
 
+    from wx import Foo
     f = Foo()
     res = f.bar()
     assert res == 42, 'got %s' % res
@@ -40,10 +40,10 @@ def test_virtualmethod():
         assert flub.bar() == 3
 
         return flub, return_two, return_three
-        
+
 
 def main():
-    test_virtualmethod()
+    xxx_virtualmethod()
 
 if __name__ == '__main__':
     main()

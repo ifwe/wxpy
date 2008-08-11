@@ -1,9 +1,9 @@
 import os
 import wx
 
-from wx.lib.flashwin import FlashWindow
 
 class TestPanel(wx.Panel):
+    __test__ = False
     def __init__(self, parent, log):
         wx.Panel.__init__(self, parent, -1)
         self.pdf = None
@@ -11,6 +11,7 @@ class TestPanel(wx.Panel):
         sizer = wx.BoxSizer(wx.VERTICAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
+        from wx.lib.flashwin import FlashWindow
         self.flash = FlashWindow(self, style=wx.SUNKEN_BORDER)
 
         vars = '?c=abcde12345&STATE=creator'

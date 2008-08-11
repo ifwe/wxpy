@@ -3,6 +3,9 @@ import sip
 from random import randint
 
 def test_gc():
+    assert wx.GetApp() is not None
+    print wx.GetApp().GetAppName()
+
     f = wx.Frame(None, style = wx.DEFAULT_FRAME_STYLE | wx.FULL_REPAINT_ON_RESIZE)
     f.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
     f.pen = wx.Pen(wx.Colour(213,213,213))

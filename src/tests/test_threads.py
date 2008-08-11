@@ -25,7 +25,7 @@ def forall(seq):
     return _forallobj(seq)
 
 
-def test_threads():
+def xxx_threads():
     f = wx.Frame(None)
 
 
@@ -110,7 +110,7 @@ def main():
     gc.set_debug(gc.DEBUG_STATS)
 
     a = wx.PySimpleApp()
-    test_threads()
+    xxx_threads()
     a.MainLoop()
 
 if __name__ == '__main__':
