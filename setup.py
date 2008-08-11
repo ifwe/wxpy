@@ -39,9 +39,9 @@ def get_webkit_dir():
 
     return WEBKITDIR
 
-def fatal(msg):
+def fatal(msg, returncode = -1):
     print >> sys.stderr, msg
-    raise SystemExit(-1)
+    sys.exit(returncode)
 
 def main():
     genlisttypes.generate()
