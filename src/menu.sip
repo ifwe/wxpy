@@ -126,8 +126,8 @@ public:
     void SetTitle(const wxString& title);
     const wxString GetTitle() const;
 
-    void SetEventHandler(wxEvtHandler *handler);
-    wxEvtHandler *GetEventHandler() const;
+    void SetEventHandler(wxEvtHandler *handler /Transfer/);
+    wxEvtHandler *GetEventHandler() const /Transfer/;
 
     void SetInvokingWindow(wxWindow *win);
     wxWindow *GetInvokingWindow() const;

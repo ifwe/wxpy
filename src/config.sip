@@ -24,9 +24,8 @@ enum
 class wxConfigBase {
 private:
     wxConfigBase();
-public:
     virtual ~wxConfigBase();
-
+public:
     enum EntryType
     {
         Type_Unknown,
@@ -100,6 +99,7 @@ class wxConfig : wxConfigBase
 {
 private:
     wxConfig(const wxConfig&);
+    virtual ~wxConfig();
 public:
     wxConfig(const wxString& appName = wxEmptyString,
              const wxString& vendorName = wxEmptyString,
@@ -107,22 +107,21 @@ public:
              const wxString& globalFilename = wxEmptyString,
              long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE);
 
-    virtual ~wxConfig();
+
 };
 
 class wxFileConfig : wxConfigBase
 {
 private:
     wxFileConfig(const wxFileConfig&);
+    virtual ~wxFileConfig();
 
 public:
     wxFileConfig(const wxString& appName = wxEmptyString,
                  const wxString& vendorName = wxEmptyString,
                  const wxString& localFilename = wxEmptyString,
                  const wxString& globalFilename = wxEmptyString,
-                 long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE);
-
-    virtual ~wxFileConfig();
+                 long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE) /Transfer/;
 };
 
 /*

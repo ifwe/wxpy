@@ -1,4 +1,4 @@
-%Module _wxcore
+%Module wx._wxcore
 
 %Copying
 

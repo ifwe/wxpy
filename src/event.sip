@@ -31,24 +31,25 @@ void initializeCallAfter();
    calls get routed. */
 void initializeCallAfter()
 {
-    static CallAfterCallback g_callafterEvent;
+    static CallAfterCallback* g_callAfterEvent = 0;
 
     if (!g_callAfterId)
     {
+        g_callAfterEvent = new CallAfterCallback;
         g_callAfterId = wxNewEventType();
+        wxASSERT_MSG(wxTheApp, wxT("initializeCallAfter(): wxTheApp is NULL"));
         wxTheApp->Connect(-1, -1, g_callAfterId,
                           (wxObjectEventFunction)&CallAfterCallback::EventThunker,
-                          &g_callafterEvent, NULL);
+                          g_callAfterEvent, NULL);
     }
 }
 
 /* All wx.CallAfter calls are routed through here. */
 void CallAfterCallback::EventThunker(wxEvent&)
 {
+    fprintf(stderr, "In EventThunker\n");
     SIP_BLOCK_THREADS
     PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
-
-
 
     const Py_ssize_t num_cbs = PyList_GET_SIZE(cbs);
 
@@ -56,15 +57,13 @@ void CallAfterCallback::EventThunker(wxEvent&)
     PyList_SetSlice(temp_list, 0, num_cbs, cbs);
     PyList_SetSlice(cbs, 0, num_cbs, NULL);
 
-    for(Py_ssize_t i = 0; i < num_cbs; ++i)
-    {
+    for(Py_ssize_t i = 0; i < num_cbs; ++i) {
         PyObject* func = PyList_GET_ITEM(temp_list, i);
         PyObject* result = PyObject_CallObject(func, NULL);
 
         if (result)
             Py_DECREF(result);
-        else
-        {
+        else {
             PyErr_Print();
             PyErr_Clear();
         }

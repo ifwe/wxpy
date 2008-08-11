@@ -38,7 +38,7 @@ class SipTrace(object):
 SipTrace.ALL = (SipTrace.VIRTUAL | SipTrace.CONSTRUCTOR | SipTrace.DESTRUCTOR
                 | SipTrace.PY_INIT | SipTrace.PY_DEL | SipTrace.PY_METHOD)
 
-#sip.settracemask(SipTrace.ALL)
+sip.settracemask(SipTrace.ALL)
 
 def tracing(enable):
     sip.settracemask(SipTrace.ALL if enable else 0)
@@ -57,8 +57,8 @@ def autorepr(s = None):
 #
 # import all names from _wxcore
 #
-from _wxcore import *
-import _wxcore as wx
+from wx._wxcore import *
+import wx._wxcore as wx
 
 import sys as _sys
 from operator import attrgetter
@@ -631,9 +631,7 @@ class CallLater(object):
         if self.timer is not None:
             self.timer.Stop()
             self.timer = None
-
-            import wx
-            timers = wx.GetApp()._calllater_timers
+            timers = GetApp()._calllater_timers
             timers.discard(self)
 
 
@@ -683,15 +681,6 @@ class CallLater(object):
 
 PyDeadObjectError = sip.DeadObjectException
 
-'''
-wxDialog(wxWindow* parent,
-         const wxWindowID id = -1,
-         const wxString& title = wxEmptyString,
-         const wxPoint& pos = wxDefaultPosition,
-         const wxSize& size = wxDefaultSize,
-         long style = wxDEFAULT_DIALOG_STYLE,
-         const wxString& name = wxDialogNameStr) /Transfer/;
-'''
 
 # wxPySimpleApp -- calls wxpEntry function
 
@@ -738,6 +727,7 @@ class App(_app):
 
 PySimpleApp = App
 
+# compatibility constants
 wxEVT_ACTIVATE = wx.EVT_ACTIVATE
 wxEVT_KEY_DOWN = wx.EVT_KEY_DOWN
 wxEVT_SIZE = wx.EVT_SIZE
@@ -771,6 +761,7 @@ FindWindowByName = wx.Window.FindWindowByName
 
 Color = wx.Colour
 NamedColor = wx.NamedColour
+
 PyBitmapDataObject = wx.BitmapDataObject
 PyDropTarget = wx.DropTarget
 PyValidator = wx.Validator

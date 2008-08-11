@@ -87,15 +87,17 @@ skip_event:
 #endif
 %End
 
+private:
+    wxEvtHandler(const wxEvtHandler &);
+
 public:
     wxEvtHandler();
     virtual ~wxEvtHandler();
 
-
-    wxEvtHandler* GetNextHandler();
-    wxEvtHandler* GetPreviousHandler();
-    void SetNextHandler(wxEvtHandler *handler);
-    void SetPreviousHandler(wxEvtHandler *handler);
+    wxEvtHandler* GetNextHandler() /Transfer/;
+    wxEvtHandler* GetPreviousHandler() /Transfer/;
+    void SetNextHandler(wxEvtHandler *handler /Transfer/);
+    void SetPreviousHandler(wxEvtHandler *handler /Transfer/);
 
     void SetEvtHandlerEnabled(bool enabled);
     bool GetEvtHandlerEnabled() const;
@@ -183,21 +185,22 @@ public:
     sipRes = 0;
 
     wxList* events = sipCpp->GetDynamicEventTable();
-    if (events)
-    {
+    if (events) {
         wxList::compatibility_iterator node = events->GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+            node = node->GetNext();
             if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
                 PyObject* func = ((wxPyCallback*)(entry->m_callbackUserData))->callback();
 
-                if (func && (sipRes = sipVisit(func, sipArg)))
-                    goto traverse_done;
+                if (func) {
+                    sipRes = sipVisit(func, sipArg);
+                    if (sipRes)
+                        break;
+                }
             }
-            node = node->GetNext();
         }
     }
-    traverse_done:
 %End
 
 %GCClearCode
@@ -218,8 +221,5 @@ public:
     sipRes = 0;
 %End
 
-
-private:
-    wxEvtHandler(const wxEvtHandler &);
 
 };

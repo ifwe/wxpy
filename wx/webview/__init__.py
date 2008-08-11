@@ -1,5 +1,5 @@
 
-from _webview import *
+from wx._webview import *
 import wx
 
 _WebView = WebView
