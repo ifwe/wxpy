@@ -9,7 +9,8 @@ import sys
 
 sip_cfg = sipconfig.Configuration()
 
-SIP_TRACE_STATEMENTS = False
+SIP_TRACE_STATEMENTS = True   # causes SIP to emit tracing statements at every call (SLOW)
+SIP_RELEASE_GIL      = False  # causes the GIL to be released before every call (slow?)
 
 class SIPGenerator(object):
     def __init__(self, build_dir, platform, features = None):
@@ -78,6 +79,9 @@ def sip(module_name, sipfiles, build_dir, include_dirs, platform = None, feature
     if SIP_TRACE_STATEMENTS:
         print 'SIP: including traces'
         sipargs.append('-r')          # generate trace statements
+    if SIP_RELEASE_GIL:
+        print 'SIP: always releasing GIL'
+        sip_args.append('-g')
 
     run(sipargs + sipfiles)
 

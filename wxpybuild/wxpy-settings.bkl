@@ -9,8 +9,8 @@
     <set var="WX_SHARED">1</set>
     <set var="WX_MONOLITHIC">0</set>
     <set var="WX_DEBUG">1</set>
-    <set var="WX_PYTHON">1</set>
-    <!--<set var="DEBUG">0</set>-->
+    <set var="WX_PYTHON">0</set>
+    <set var="DEBUG">1</set>
 
     <option name="PGO">
         <values>0,1,2</values>
@@ -21,7 +21,7 @@
 
     <include file="presets/wx.bkl"/>
 
-    <set var="DEBUG">0</set>
+    <set var="DEBUG">1</set>
     <!-- add _d to the build directory with DEBUG=='1' -->
 
     <set var="WXPY_DEBUG_POSTFIX">

@@ -38,6 +38,7 @@ WXWIN = wx_path()
 from wxpyfeatures import emit_features_file
 
 VERBOSE = True
+BAKEFILES_VERBOSE = False
 OUTPUT_DIR        = path('build')
 SRC_DIR           = path('src')
 GENERATED_SRC_DIR = SRC_DIR / 'generated'
@@ -188,7 +189,7 @@ def bakefile(project_name, makefile, outputdir = None):
 
     # This results in Makefile (autotools), SLN (Visual Studio), or other
     # platform specific files.
-    run('bakefile_gen -V')
+    run('bakefile_gen' + (' -V' if BAKEFILES_VERBOSE else ''))
 
     if len(formats) > 1:
         raise AssertionError('figure out a better way to return the name of the sln')
@@ -263,15 +264,12 @@ def get_pylibdir():
         except AttributeError:
             projbase = path(sysconfig.get_python_inc()).parent / 'pcbuild'
 
-        if DEBUG:
-            pylibdir = projbase / 'PCBuild'
+        if projbase.endswith('-pgo'):
+            # PGO builds have pythonXX.lib one directory up from the
+            # executable.
+            pylibdir = projbase.parent
         else:
-            if projbase.endswith('-pgo'):
-                # PGO builds have pythonXX.lib one directory up from the
-                # executable.
-                pylibdir = projbase.parent
-            else:
-                pylibdir = projbase
+            pylibdir = projbase
     else:
         assert False, 'get_pylibdir needs to be implemented for this platform'
 
