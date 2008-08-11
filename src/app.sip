@@ -86,8 +86,7 @@ wxPyApp::wxPyApp()
 wxPyApp::~wxPyApp()
 {
     SIP_BLOCK_THREADS
-    Py_DECREF(callAfterCbs);
-    callAfterCbs = NULL;
+    Py_CLEAR(callAfterCbs);
     SIP_UNBLOCK_THREADS
 }
 
@@ -148,11 +147,11 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 
     wxSEH_TRY
     {
-        if (!did_crash_report) {
+        wxPyApp* app = (wxPyApp*)wxTheApp;
+        if (!app->crash_cmd.IsEmpty() && !did_crash_report) {
             did_crash_report = true;
 
             wxCrashReport::Generate(wxCRASH_REPORT_DEFAULT, pExcPtrs);
-            wxPyApp* app = (wxPyApp*)wxTheApp;
 
             // Turn a "%s" in the crash command string into the filename
             // of the dump file.
@@ -242,15 +241,15 @@ class wxPyApp : wxApp
 
 // expose the CallAfter list to the cyclic garbage collector
 
-%GCTraverseCode
-    PyObject *obj = sipCpp->callAfterCbs;
-    sipRes = obj ? sipVisit(obj, sipArg) : 0;
-%End
-
-%GCClearCode
-    Py_CLEAR(sipCpp->callAfterCbs);
-    sipRes = 0;
-%End
+//%GCTraverseCode
+//    PyObject *obj = sipCpp->callAfterCbs;
+//    sipRes = obj ? sipVisit(obj, sipArg) : 0;
+//%End
+//
+//%GCClearCode
+//    Py_CLEAR(sipCpp->callAfterCbs);
+//    sipRes = 0;
+//%End
 
 
 public:
