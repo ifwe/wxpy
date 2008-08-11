@@ -8,6 +8,7 @@ build/
 *.swp
 
 # windows binaries/project files
+Thumbs.db
 *.pdb
 *.ilk
 *.suo
