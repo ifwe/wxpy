@@ -189,6 +189,7 @@ public:
         wxList::compatibility_iterator node = dynamicEvents->GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+            node = node->GetNext();
 
             // find the match
             if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
@@ -210,6 +211,7 @@ public:
         wxList::compatibility_iterator node = dynamicEvents->GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+            node = node->GetNext();
 
             // find the match
             if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
