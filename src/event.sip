@@ -257,6 +257,7 @@ private:
         C(wxTreeEvent)
         C(wxUpdateUIEvent)
         C(wxContextMenuEvent)
+        C(wxCloseEvent)
         C(wxWindowDestroyEvent)
         C(wxEvent)
     else
