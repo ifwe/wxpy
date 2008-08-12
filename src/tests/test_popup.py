@@ -16,7 +16,7 @@ def test_Popup():
     assert p.GetPosition() == p.Position == r2.Position == (40, 40)
     assert p.GetSize() == p.Size == r2.Size == (100, 100)
 
-
+    p.Hide()
 
 
 if __name__ == '__main__':

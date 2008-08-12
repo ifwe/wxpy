@@ -184,14 +184,15 @@ public:
 %GCTraverseCode
     sipRes = 0;
 
-    wxList* events = sipCpp->GetDynamicEventTable();
-    if (events) {
-        wxList::compatibility_iterator node = events->GetFirst();
+    wxList *dynamicEvents = sipCpp->GetDynamicEventTable() ;
+    if (dynamicEvents) {
+        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-            node = node->GetNext();
+
+            // find the match
             if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
-                PyObject* func = ((wxPyCallback*)(entry->m_callbackUserData))->callback();
+                PyObject* func = (reinterpret_cast<wxPyCallback*>(entry->m_callbackUserData))->callback();
 
                 if (func) {
                     sipRes = sipVisit(func, sipArg);
@@ -204,17 +205,19 @@ public:
 %End
 
 %GCClearCode
-    wxList* events = sipCpp->GetDynamicEventTable();
-    if (events) {
-        wxList::compatibility_iterator node = events->GetFirst();
+    wxList *dynamicEvents = sipCpp->GetDynamicEventTable() ;
+    if (dynamicEvents) {
+        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+
+            // find the match
             if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
                 wxObject* obj = entry->m_callbackUserData;
                 entry->m_callbackUserData = 0;
-                delete obj; // will DECREF the callback
+                if (obj)
+                    delete obj; // will DECREF the callback
             }
-            node = node->GetNext();
         }
     }
 

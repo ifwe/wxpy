@@ -47,7 +47,6 @@ void initializeCallAfter()
 /* All wx.CallAfter calls are routed through here. */
 void CallAfterCallback::EventThunker(wxEvent&)
 {
-    fprintf(stderr, "In EventThunker\n");
     SIP_BLOCK_THREADS
     PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
 

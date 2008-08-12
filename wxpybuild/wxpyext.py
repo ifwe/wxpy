@@ -107,15 +107,18 @@ def build_nt(solution_name):
     if 'rebuild' in sys.argv:
         vcbuild_opts.append('/rebuild')
 
-    config = 'Default|Win32'
-    #config = '%s|Win32' % ('Debug' if DEBUG else 'Release')
-
     if 'pgooptimize' in sys.argv:
-        config = 'PGOOptimize ' + config
+        config = 'PGOOptimize'
     elif 'pgoinstrument' in sys.argv:
-        config = 'PGOInstrument ' + config
+        config = 'PGOInstrument'
+    elif DEBUG:
+        config = 'Debug'
+    else:
+        config = 'Release'
 
-    run('vcbuild %s "%s"' % (' '.join(vcbuild_opts), config))
+    platform = 'Win32'
+
+    run('vcbuild %s "%s|%s"' % (' '.join(vcbuild_opts), config, platform))
 
 def runsip(modules, features,
            includes = None,

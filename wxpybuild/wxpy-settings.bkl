@@ -4,24 +4,28 @@
     <!-- set some variables early to limit the combination of configuration
          possibilities outputted to makefiles -->
 
+    <option name="WXPYBUILD">
+        <values>0,1,2,3</values>
+        <default-value>1</default-value>
+        <values-description>Debug,Release,PGOInstrument,PGOOptimize</values-description>
+        <description>WXPY build setting</description>
+    </option>
+
     <set var="WX_UNICODE">1</set>
-    <set var="WX_PYTHON">0</set>
     <set var="WX_SHARED">1</set>
     <set var="WX_MONOLITHIC">0</set>
     <set var="WX_DEBUG">1</set>
+
+    <!-- debug
     <set var="WX_PYTHON">0</set>
     <set var="DEBUG">1</set>
+    -->
 
-    <option name="PGO">
-        <values>0,1,2</values>
-        <default-value>0</default-value>
-        <values-description>,PGOInstrument,PGOOptimize</values-description>
-        <description>Use profile guided optimization?</description>
-    </option>
+    <set var="WX_PYTHON">1</set>
+    <set var="DEBUG">0</set>
 
     <include file="presets/wx.bkl"/>
 
-    <set var="DEBUG">1</set>
     <!-- add _d to the build directory with DEBUG=='1' -->
 
     <set var="WXPY_DEBUG_POSTFIX">
@@ -95,14 +99,14 @@
         <if cond="FORMAT in ('msvc', 'msvs2005prj')">
             <!--<cxxflags>/GL /Zi /Ob2 /GS- /Ox</cxxflags>-->
             <!--<ldflags>/LTCG</ldflags>-->
-            <ldflags>/DEBUG</ldflags>
+            <ldflags>/DEBUG</ldflags>   <!-- always link debugging information -->
             <ldflags>/OPT:REF</ldflags> <!-- remove unused functions -->
             <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
         </if>
 
         <!-- profile guided optimization flags -->
-        <set var="PGO_INSTRUMENT"><if cond="PGO=='1'">1</if></set>
-        <set var="PGO_OPTIMIZE"><if cond="PGO=='2'">1</if></set>
+        <set var="PGO_INSTRUMENT"><if cond="WXPYBUILD=='1'">1</if></set>
+        <set var="PGO_OPTIMIZE"><if cond="WXPYBUILD=='2'">1</if></set>
 
         <if cond="PGO_INSTRUMENT=='1'">
             <cxxflags>/GL</cxxflags>
