@@ -64,7 +64,9 @@ public:
 
     virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg);
     PyObject* callAfterCbs;
+
     wxString crash_cmd;
+    int crash_report_flags;
 };
 
 %End // TypeHeaderCode
@@ -78,6 +80,7 @@ public:
 #endif
 
 wxPyApp::wxPyApp()
+    : crash_report_flags(wxCRASH_REPORT_DEFAULT)
 {
     SIP_BLOCK_THREADS
     callAfterCbs = PyList_New(0);
@@ -151,7 +154,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         if (!app->crash_cmd.IsEmpty() && !did_crash_report) {
             did_crash_report = true;
 
-            wxCrashReport::Generate(wxCRASH_REPORT_DEFAULT, pExcPtrs);
+            wxCrashReport::Generate(app->crash_report_flags, pExcPtrs);
 
             // Turn a "%s" in the crash command string into the filename
             // of the dump file.
@@ -268,6 +271,8 @@ public:
     sipRes = new wxString(sipCpp->crash_cmd);
 %End
 
+    int crash_report_flags;
+
     int MainLoop();
 %MethodCode
     Py_BEGIN_ALLOW_THREADS
@@ -275,7 +280,7 @@ public:
     wxSEH_TRY
     {
 #endif
-        sipRes = sipCpp->MainLoop();
+        sipRes = sipCpp->wxApp::MainLoop();
 #if __WXMSW__
     }
     wxSEH_HANDLE(-1)
@@ -301,9 +306,9 @@ public:
     void Exit();
     void ExitMainLoop();
 
-    bool Pending() /ReleaseGIL/;
+    bool Pending();
     bool ProcessIdle() /ReleaseGIL/;
-    bool IsActive() const /ReleaseGIL/;
+    bool IsActive();
 
     void SetTopWindow(wxWindow *win);
     wxWindow* GetTopWindow() const;
@@ -320,10 +325,23 @@ public:
     static void SetInstance(wxApp* app);
     wxLayoutDirection GetLayoutDirection() const;
 
+    void GILCrash();
+%MethodCode
+    Py_BEGIN_ALLOW_THREADS
+        static const int N = 100;
+        PyObject* o = PyList_New(N);
+        for (int i = 0; i < N; ++i)
+            PyList_SetItem(o, i, PyLong_FromLong(i));
+        Py_DECREF(o);
+    Py_END_ALLOW_THREADS
+%End
+
     SIP_PYLIST callAfterCbs;
     wxString GetCrashFile();
 %MethodCode
     sipRes = new wxString(wxCrashReport::GetFileName());
+
+
 %End
 
 };
