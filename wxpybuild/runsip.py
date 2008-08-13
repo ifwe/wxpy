@@ -9,7 +9,7 @@ import sys
 
 sip_cfg = sipconfig.Configuration()
 
-SIP_TRACE_STATEMENTS = True   # causes SIP to emit tracing statements at every call (SLOW)
+SIP_TRACE_STATEMENTS = False  # causes SIP to emit tracing statements at every call (SLOW)
 SIP_RELEASE_GIL      = False  # causes the GIL to be released before every call (slow?)
 
 class SIPGenerator(object):

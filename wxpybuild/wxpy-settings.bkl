@@ -97,8 +97,8 @@
         <runtime-libs>dynamic</runtime-libs>
 
         <if cond="FORMAT in ('msvc', 'msvs2005prj')">
-            <!--<cxxflags>/GL /Zi /Ob2 /GS- /Ox</cxxflags>-->
-            <!--<ldflags>/LTCG</ldflags>-->
+            <cxxflags>/GL /Zi /Ob2 /GS- /Ox</cxxflags>
+            <ldflags>/LTCG</ldflags>
             <ldflags>/DEBUG</ldflags>   <!-- always link debugging information -->
             <ldflags>/OPT:REF</ldflags> <!-- remove unused functions -->
             <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
