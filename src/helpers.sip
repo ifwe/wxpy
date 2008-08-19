@@ -1,10 +1,5 @@
 
 %ModuleHeaderCode
-//inline bool sequence_2_ints_check(PyObject* obj);
-//inline bool sequence_2_ints(PyObject* source, int* i1, int* i2);
-//
-//inline bool sequence_4_ints_check(PyObject* obj);
-//inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
 inline bool sequence_2_ints_check(PyObject* obj)
 {
@@ -21,8 +16,7 @@ inline bool sequence_2_ints_check(PyObject* obj)
     Py_DECREF(o1);
     Py_DECREF(o2);
 
-    if (PyErr_Occurred())
-    {
+    if (PyErr_Occurred()) {
         PyErr_Print();
         PyErr_Clear();
     }
@@ -50,8 +44,7 @@ inline bool sequence_2_ints(PyObject* source, int* i1, int* i2) {
         Py_DECREF(o2);
     }
 
-    if (PyErr_Occurred())
-    {
+    if (PyErr_Occurred()) {
         PyErr_Print();
         PyErr_Clear();
         return false;
@@ -100,8 +93,7 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
     if (!(PySequence_Check(source) && PySequence_Length(source) == 4))
         return false;
 
-    if (PyList_Check(source) || PyTuple_Check(source))
-    {
+    if (PyList_Check(source) || PyTuple_Check(source)) {
         o1 = PySequence_Fast_GET_ITEM(source, 0);
         o2 = PySequence_Fast_GET_ITEM(source, 1);
         o3 = PySequence_Fast_GET_ITEM(source, 2);
@@ -110,9 +102,7 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
         *i2 = PyInt_AsLong(o2);
         *i3 = PyInt_AsLong(o3);
         *i4 = PyInt_AsLong(o4);
-    }
-    else
-    {
+    } else {
         o1 = PySequence_GetItem(source, 0);
         o2 = PySequence_GetItem(source, 1);
         o3 = PySequence_GetItem(source, 2);
@@ -127,8 +117,7 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
         Py_DECREF(o4);
     }
 
-    if (PyErr_Occurred())
-    {
+    if (PyErr_Occurred()) {
         fprintf(stderr, "Exception in sequence_4_ints:\n");
         PyErr_Print();
         PyErr_Clear();

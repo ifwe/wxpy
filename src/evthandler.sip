@@ -69,7 +69,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
             PyErr_Print();
             PyErr_Clear();
         }
-    } else {
+    } else if (PyErr_Occurred()) {
         PyErr_Print();
         PyErr_Clear();
     }

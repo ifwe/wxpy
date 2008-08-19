@@ -40,9 +40,13 @@ public:
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
     void DrawLines(const wxList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0);
-    void DrawPolygon(int n, wxPoint points[],
-                     wxCoord xoffset = 0, wxCoord yoffset = 0,
-                     int fillStyle = wxODDEVEN_RULE)
+                   */
+//    void DrawPolygon(SIP_PYLIST points, wxCoord xoffset = 0, wxCoord yoffset = 0,
+//                     int fillStyle = wxODDEVEN_RULE);
+//    %MethodCode
+//        a0
+//    %End
+    /*
     void DrawPolygon(const wxList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE);

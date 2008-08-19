@@ -13,10 +13,8 @@ public:
 
     ~wxPyData()
     {
-        SIP_BLOCK_THREADS // may be called not from Python
-        PyObject* obj = reinterpret_cast<PyObject*>(m_obj);
-        m_obj = 0;
-        Py_XDECREF(obj);
+        SIP_BLOCK_THREADS
+        Py_CLEAR(m_obj);
         SIP_UNBLOCK_THREADS
     }
 
@@ -98,24 +96,6 @@ public:
 
     bool IsShown() const;
     void Show(bool show);
-
-    void SetUserData(SIP_PYOBJECT userData);
-%MethodCode
-        wxPyData* obj = reinterpret_cast<wxPyData*>(sipCpp->GetUserData());
-        Py_XINCREF(a0);
-        if (!obj) {
-            sipCpp->SetUserData(new wxPyData(a0));
-        } else {
-            Py_XDECREF(obj->m_obj);
-            obj->m_obj = a0;
-        }
-%End
-
-    SIP_PYOBJECT GetUserData() const;
-%MethodCode
-        wxPyData* obj = reinterpret_cast<wxPyData*>(sipCpp->GetUserData());
-        sipRes = obj ? obj->m_obj : 0;
-%End
 
 //%GCTraverseCode
 //    wxPyData* obj = reinterpret_cast<wxPyData*>(sipCpp->GetUserData());
@@ -286,24 +266,6 @@ public:
     void SetVirtualSizeHints( wxWindow *window );
 
     void Clear(bool deleteWindows = false);
-%MethodCode
-    if (a0)
-    {
-        wxSizerItemList& children = sipCpp->GetChildren();
-        wxSizerItemList::iterator iter;
-        SIP_BLOCK_THREADS
-        for (iter = children.begin(); iter != children.end(); ++iter)
-        {
-            wxSizerItem* item = *iter;
-            wxWindow* window = item->GetWindow();
-            if (window)
-                setDeleted(window, sipClass_wxWindow);
-        }
-        SIP_UNBLOCK_THREADS
-    }
-
-    sipCpp->Clear(a0);
-%End
 
     void DeleteWindows();
 
