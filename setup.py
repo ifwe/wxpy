@@ -45,7 +45,6 @@ def fatal(msg, returncode = -1):
 
 def main():
     genlisttypes.generate()
-
     opts = {}
 
     if BUILDING_WK:
