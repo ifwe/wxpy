@@ -186,7 +186,8 @@ public:
 
     wxList *dynamicEvents = sipCpp->GetDynamicEventTable() ;
     if (dynamicEvents) {
-        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
+        wxList list(*dynamicEvents);
+        wxList::compatibility_iterator node = list.GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
             node = node->GetNext();
@@ -208,7 +209,8 @@ public:
 %GCClearCode
     wxList *dynamicEvents = sipCpp->GetDynamicEventTable() ;
     if (dynamicEvents) {
-        wxList::compatibility_iterator node = dynamicEvents->GetFirst();
+        wxList list(*dynamicEvents);
+        wxList::compatibility_iterator node = list.GetFirst();
         while (node) {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
             node = node->GetNext();
