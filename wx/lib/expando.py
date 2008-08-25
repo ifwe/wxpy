@@ -27,7 +27,6 @@ import wx.lib.newevent
 wxEVT_ETC_LAYOUT_NEEDED = wx.NewEventType()
 EVT_ETC_LAYOUT_NEEDED = wx.PyEventBinder( wxEVT_ETC_LAYOUT_NEEDED, 1 )
 
-
 #---------------------------------------------------------------------------
 
 class ExpandoTextCtrl(wx.TextCtrl):
@@ -47,7 +46,7 @@ class ExpandoTextCtrl(wx.TextCtrl):
     other layout adjustments that may be needed.
     """
     _defaultHeight = -1
-    
+
     def __init__(self, parent, id=-1, value="",
                  pos=wx.DefaultPosition,  size=wx.DefaultSize,
                  style=0, validator=wx.DefaultValidator, name="expando"):
@@ -66,10 +65,21 @@ class ExpandoTextCtrl(wx.TextCtrl):
         self.extraHeight = self.defaultHeight - self.GetCharHeight()
         self.numLines = 1
         self.maxHeight = -1
+
+        self.minHeight = -1
+
         if value:
             wx.CallAfter(self._adjustCtrl)
-                        
+
         self.Bind(wx.EVT_TEXT, self.OnTextChanged)
+
+    def SetMinHeight(self,h):
+        self.minHeight = h
+        if h != -1 and self.GetSize().height < h:
+            self.SetSize((-1, h))
+
+    def GetMinHeight(self):
+        return self.minHeight
 
 
     def SetMaxHeight(self, h):
@@ -80,7 +90,7 @@ class ExpandoTextCtrl(wx.TextCtrl):
         self.maxHeight = h
         if h != -1 and self.GetSize().height > h:
             self.SetSize((-1, h))
-        
+
     def GetMaxHeight(self):
         """Sets the max height that the control will expand to on its own"""
         return self.maxHeight
@@ -110,17 +120,27 @@ class ExpandoTextCtrl(wx.TextCtrl):
         # check if any adjustments are needed on every text update
         self._adjustCtrl()
         evt.Skip()
-        
+
 
     def _adjustCtrl(self):
         # if the current number of lines is different than before
         # then recalculate the size needed and readjust
         numLines = self.GetNumberOfLines()
+
+
         if numLines != self.numLines:
             self.numLines = numLines
             charHeight = self.GetCharHeight()
             height = numLines * charHeight + self.extraHeight
-            if not (self.maxHeight != -1 and height > self.maxHeight):
+
+            #TODO: should be more precise
+            if self.minHeight != -1 and height < self.minHeight and self.Size.height > self.minHeight:
+                height = self.minHeight
+
+            if self.maxHeight != -1 and height > self.maxHeight and self.Size.height < self.maxHeight:
+                height = self.maxHeight
+
+            if not (self.maxHeight != -1 and height > self.maxHeight) and not (self.minHeight != -1 and height < self.minHeight):
                 # The size is changing...  if the control is not in a
                 # sizer then we just want to change the size and
                 # that's it, the programmer will need to deal with
@@ -144,7 +164,7 @@ class ExpandoTextCtrl(wx.TextCtrl):
                 evt.height = height
                 evt.numLines = numLines
                 self.GetEventHandler().ProcessEvent(evt)
-                
+
 
     def _getDefaultHeight(self, parent):
         # checked for cached value
@@ -167,7 +187,7 @@ class ExpandoTextCtrl(wx.TextCtrl):
             width = self.GetSize().width
             dc = wx.ClientDC(self)
             dc.SetFont(self.GetFont())
-            count = 0 
+            count = 0
             for line in text.split('\n'):
                 count += 1
                 w, h = dc.GetTextExtent(line)
@@ -175,7 +195,7 @@ class ExpandoTextCtrl(wx.TextCtrl):
                     # the width of the text is wider than the control,
                     # calc how many lines it will be wrapped to
                     count += self._wrapLine(line, dc, width)
-                    
+
             if not count:
                 count = 1
             return count
@@ -184,7 +204,7 @@ class ExpandoTextCtrl(wx.TextCtrl):
         def _wrapLine(self, line, dc, width):
             # Estimate where the control will wrap the lines and
             # return the count of extra lines needed.
-            pte = dc.GetPartialTextExtents(line)            
+            pte = dc.GetPartialTextExtents(line)
             width -= wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
             idx = 0
             start = 0
