@@ -9,8 +9,15 @@ wxIcon IconFromFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY,
     sipRes = new wxIcon(*a0, a1, a2, a3);
 %End
 
+
 class wxIcon: wxGDIObject
 {
+%TypeHeaderCode
+#if wxUSE_MIMETYPE
+    #include <wx/mimetype.h>
+#endif
+%End
+
 public:
     wxIcon();
     virtual ~wxIcon();
@@ -19,6 +26,19 @@ public:
     int GetWidth() const;
     int GetDepth() const;
     bool IsOk() const;
+
+%If (wxUSE_MIMETYPE)
+    static wxIcon ForFileType(const wxString& extension);
+%MethodCode
+    wxIconLocation loc;
+    wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension(*a0);
+
+    if (filetype && filetype->GetIcon(&loc))
+        sipRes = new wxIcon(loc);
+    else
+        sipRes = new wxIcon(wxNullIcon);
+%End
+%End
 };
 
 
