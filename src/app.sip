@@ -56,6 +56,13 @@ void SipEndThread();
 
 %ModuleHeaderCode
 
+enum {
+    wxPYAPP_ASSERT_SUPPRESS  = 1,
+    wxPYAPP_ASSERT_EXCEPTION = 2,
+    wxPYAPP_ASSERT_DIALOG    = 4,
+    wxPYAPP_ASSERT_LOG       = 8
+};
+
 class wxPyApp : public wxApp
 {
 public:
@@ -63,10 +70,16 @@ public:
     ~wxPyApp();
 
     virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg);
+
+    int  GetAssertMode() { return m_assertMode; }
+    void SetAssertMode(int mode) { m_assertMode = mode; }
+
     PyObject* callAfterCbs;
 
     wxString crash_cmd;
     int crash_report_flags;
+protected:
+    int m_assertMode;
 };
 
 %End // TypeHeaderCode
@@ -81,6 +94,7 @@ public:
 
 wxPyApp::wxPyApp()
     : crash_report_flags(wxCRASH_REPORT_DEFAULT)
+    , m_assertMode(wxPYAPP_ASSERT_EXCEPTION)
 {
     SIP_BLOCK_THREADS
     callAfterCbs = PyList_New(0);
@@ -90,24 +104,6 @@ wxPyApp::~wxPyApp()
 {
     SIP_BLOCK_THREADS
     Py_CLEAR(callAfterCbs);
-    SIP_UNBLOCK_THREADS
-}
-
-static void traceback_print_stack()
-{
-    SIP_BLOCK_THREADS
-    PyObject* traceback = PyImport_ImportModule("traceback");
-    if (traceback)
-    {
-        PyObject* dict = PyModule_GetDict(traceback);
-        if (dict)
-        {
-            PyObject* print_stack = PyDict_GetItemString(dict, "print_stack");
-            if (print_stack)
-                Py_DECREF(PyObject_CallFunction(print_stack, NULL));
-        }
-        Py_DECREF(traceback);
-    }
     SIP_UNBLOCK_THREADS
 }
 
@@ -178,15 +174,13 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 
 void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc, const wxChar *cond, const wxChar *szMsg)
 {
-    traceback_print_stack();
-
     wxString msg;
-    msg.reserve(2048);
+    msg.Alloc(2048);
 
-    // make life easier for people using VC++ IDE by using this format: like
-    // this, clicking on the message will take us immediately to the place of
-    // the failed assert
-    msg.Printf(wxT("%s(%d): assert \"%s\" failed"), file, line, cond);
+    if (m_assertMode & wxPYAPP_ASSERT_SUPPRESS)
+        return;
+
+    msg.Printf(wxT("C++ assertion \"%s\" failed at %s(%d)"), cond, file, line);
 
     // add the function name, if any
     if ( szFunc && *szFunc )
@@ -198,11 +192,16 @@ void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc
     else // no message given
         msg << _T('.');
 
-#if wxUSE_STACKTRACE
-    msg << "\n" << GetAssertStackTrace();
-#endif
+    if (m_assertMode & wxPYAPP_ASSERT_EXCEPTION) {
+        SIP_BLOCK_THREADS
+        PyErr_SetString(PyExc_AssertionError, msg.ToAscii());
+        SIP_UNBLOCK_THREADS
+    }
 
-    fprintf(stderr, "%s", msg.ToAscii());
+    if (m_assertMode & wxPYAPP_ASSERT_LOG && !(m_assertMode & wxPYAPP_ASSERT_DIALOG))
+        wxLogDebug(msg);
+    else if (m_assertMode & wxPYAPP_ASSERT_DIALOG)
+        wxApp::OnAssertFailure(file, line, szFunc, cond, szMsg);
 }
 
 %End // ModuleCode
@@ -232,6 +231,13 @@ class wxApp : wxEvtHandler
 {
     wxApp();
     ~wxApp();
+};
+
+enum {
+    wxPYAPP_ASSERT_SUPPRESS,
+    wxPYAPP_ASSERT_EXCEPTION,
+    wxPYAPP_ASSERT_DIALOG,
+    wxPYAPP_ASSERT_LOG
 };
 
 class wxPyApp : wxApp
