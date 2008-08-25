@@ -212,7 +212,17 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
 
     //wxSize GetMultiLineTextExtent(const wxString& string) const;
 
-    //bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
+    SIP_PYLIST GetPartialTextExtents(const wxString& text) const;
+%MethodCode
+        wxArrayInt widths;
+        sipCpp->GetPartialTextExtents(*a0, widths);
+
+        sipRes = PyList_New(widths.size());
+
+        for (unsigned int i=0; i < widths.size(); ++i)
+            PyList_SET_ITEM(sipRes, i, PyInt_FromLong(widths[i]));
+%End
+
     wxSize GetSize() const;
     wxSize GetSizeMM() const;
 
