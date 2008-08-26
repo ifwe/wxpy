@@ -60,6 +60,8 @@ public:
     wxString GetPageTitle() const;
     void SetPageTitle(const wxString& title);
 
+    void SetTransparent(bool transparent);
+    bool IsTransparent() const;
 };
 
 enum {
