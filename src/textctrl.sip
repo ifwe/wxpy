@@ -243,6 +243,8 @@ public:
      void SetEditable(bool editable);
 
     void SendTextUpdatedEvent();
+
+    void ShowScrollbar(int orientation, bool show);
 private:
     wxTextCtrl(const wxTextCtrl&);
 };
