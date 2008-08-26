@@ -18,6 +18,9 @@ released under the wxWidgets License
 
 %ModuleHeaderCode
 #define WXSIP 1
+
+#include <windows.h>
+#define WXPY_ASSERT(x) do { if(!(x)) DebugBreak(); } while (0)
 %End
 
 

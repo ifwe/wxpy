@@ -227,10 +227,13 @@ SIP_PYOBJECT GetTextExtent(const wxString &text);
     wxDouble width = 0.0, height = 0.0;
     sipCpp->GetTextExtent(*a0, &width, &height, NULL, NULL);
 
-    PyObject* rv = PyTuple_New(2);
-    PyTuple_SET_ITEM(rv, 0, PyFloat_FromDouble(width));
-    PyTuple_SET_ITEM(rv, 1, PyFloat_FromDouble(height));
-    sipRes = rv;
+    sipRes = PyTuple_New(2);
+    if (!sipRes)
+        sipIsErr = 1;
+    else {
+        PyTuple_SET_ITEM(sipRes, 0, PyFloat_FromDouble(width));
+        PyTuple_SET_ITEM(sipRes, 1, PyFloat_FromDouble(height));
+    }
 %End
 
     void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h);
@@ -295,7 +298,7 @@ class wxGCDC :  wxDC
 {
 %TypeHeaderCode
 #ifndef WXPY_PREC
-#include "wx/dcgraph.h"
+#include <wx/dcgraph.h>
 #endif
 %End
 public:

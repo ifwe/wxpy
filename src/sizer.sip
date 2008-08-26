@@ -165,10 +165,8 @@ public:
     static const char* AddSpacerMsg = "AddSpacer expects an integer or a sequence of 2 integers";
 
     PyObject* fast = PySequence_Fast(a0, AddSpacerMsg);
-    if (fast)
-    {
-        if (PySequence_Fast_GET_SIZE(fast) == 2)
-        {
+    if (fast) {
+        if (PySequence_Fast_GET_SIZE(fast) == 2) {
             int width  = PyInt_AsLong(PySequence_Fast_GET_ITEM(fast, 0));
             int height = PyInt_AsLong(PySequence_Fast_GET_ITEM(fast, 1));
 
@@ -178,8 +176,7 @@ public:
         Py_DECREF(fast);
     }
 
-    if (!sipRes)
-    {
+    if (!sipRes) {
         PyErr_SetString(PyExc_TypeError, AddSpacerMsg);
         sipIsErr = 1;
     }
@@ -277,25 +274,22 @@ public:
     SIP_PYLIST GetChildren();
 %MethodCode
     wxSizerItemList& children = sipCpp->GetChildren();
-    if ((sipRes = PyList_New(children.size())) == NULL)
+    sipRes = PyList_New(children.size());
+    if (!sipRes)
         sipIsErr = 1;
-    else
-    {
-        wxSizerItemList::iterator iter;
+    else {
         size_t i = 0;
-        for (iter = children.begin(); iter != children.end(); ++iter, ++i)
-        {
+        wxSizerItemList::iterator iter;
+        for (iter = children.begin(); iter != children.end(); ++iter, ++i) {
             wxSizerItem *t = *iter;
-            PyObject *tobj;
+            PyObject *tobj = sipConvertFromInstance(t, sipClass_wxSizerItem, sipSelf);
 
-            if ((tobj = sipConvertFromInstance(t, sipClass_wxSizerItem, sipSelf)) == NULL)
-            {
+            if (!tobj) {
                 // There was an error so garbage collect the Python list.
                 Py_DECREF(sipRes);
                 sipIsErr = 1;
                 break;
             }
-
             PyList_SET_ITEM(sipRes, i, tobj);
         }
     }

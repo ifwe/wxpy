@@ -20,13 +20,10 @@ enum
 
 wxImage ImageFromString(SIP_PYOBJECT);
 %MethodCode
-    if (!PyString_Check(a0))
-    {
+    if (!PyString_Check(a0)) {
         PyErr_SetString(PyExc_TypeError, "str object expected");
         sipIsErr = 1;
-    }
-    else
-    {
+    } else {
         wxMemoryInputStream inpStream(PyString_AS_STRING(a0), PyString_GET_SIZE(a0));
         sipRes = new wxImage(inpStream);
     }
@@ -57,8 +54,7 @@ wxImage ImageFromDataWithAlpha(int width,
     PyObject* rgb = a2;
     PyObject* alpha = a3;
 
-    if (!PyString_Check(rgb) || !PyString_Check(alpha))
-    {
+    if (!PyString_Check(rgb) || !PyString_Check(alpha)) {
         PyErr_SetString(PyExc_TypeError, "rgb and alpha must be a strings with image data");
         goto err;
     }

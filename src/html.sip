@@ -2,6 +2,8 @@
 %Import wx.sip
 %UnitCode
 #include "stdwxpy.h"
+#include <windows.h>
+#define WXPY_ASSERT(x) do { if(!(x)) DebugBreak(); } while (0)
 %End
 
 
@@ -342,20 +344,21 @@ class wxHtmlWinParser
 class wxPyHtmlTagsModule : public wxHtmlTagsModule
 {
 public:
-    wxPyHtmlTagsModule(PyObject* thc) : wxHtmlTagsModule() {
+    wxPyHtmlTagsModule(PyObject* thc) : wxHtmlTagsModule()
+    {
         m_tagHandlerClass = thc;
         Py_INCREF(m_tagHandlerClass);
         RegisterModule(this);
         wxHtmlWinParser::AddModule(this);
     }
 
-    void OnExit() {
+    void OnExit()
+    {
         SIP_BLOCK_THREADS
-        Py_DECREF(m_tagHandlerClass);
-        m_tagHandlerClass = NULL;
-        for (size_t x=0; x < m_objArray.GetCount(); x++)
-        {
+        Py_CLEAR(m_tagHandlerClass);
+        for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
+            WXPY_ASSERT(obj);
             Py_DECREF(obj);
         }
         SIP_UNBLOCK_THREADS
@@ -369,24 +372,33 @@ public:
         PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
 
+        if (!obj) {
+            // There was an exception creating the TagHandler.
+            PyErr_Print();
+            PyErr_Clear();
+            goto done;
+        }
+
         // now figure out where it's C++ object is...
         wxHtmlWinTagHandler* thPtr = 0;
-        int sipIsErr = 0;
 
-        if (sipCanConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, SIP_NOT_NONE))
-        {
+        if (sipCanConvertToInstance(obj, sipClass_wxHtmlWinTagHandler, SIP_NOT_NONE)) {
             // add it,
+            int sipIsErr = 0;
             thPtr = (wxHtmlWinTagHandler*)sipConvertToInstance(obj, sipClass_wxHtmlWinTagHandler,
                                                                NULL, SIP_NOT_NONE, NULL, &sipIsErr);
+            if (sipIsErr)
+                goto done;
+
+            WXPY_ASSERT(thPtr);
             parser->AddTagHandler(thPtr);
 
             // and track it.
             m_objArray.Add(obj);
-
         }
         else
-            sipIsErr = 1;
-
+            fprintf(stderr, "cannot create a tag handler from the object given\n");
+done:
         SIP_UNBLOCK_THREADS
     }
 
