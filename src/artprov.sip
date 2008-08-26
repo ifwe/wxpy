@@ -25,7 +25,15 @@ public:
 #define SetStr(s, obj) PyDict_SetItemString(sipModuleDict, s, obj)
 
 // add 2 to the string constant to strip off the "wx"
-#define ARTCONSTANT(x) SetStr(#x + 2, PyStrFromWChar(x));
+
+PyObject* pystr;
+
+#define ARTCONSTANT(x) \
+    do { \
+        pystr = PyStrFromWChar(x); \
+        SetStr(#x + 2, pystr); \
+        Py_DECREF(pystr); \
+    } while (0);
 
 // artprovider constants are just wchar_ts
 ARTCONSTANT(wxART_TOOLBAR)

@@ -40,10 +40,10 @@ wxPyCallback::~wxPyCallback() {
 // All wxEvtHandler::Connect calls made from Python are routed through
 // here.
 void wxPyCallback::EventThunker(wxEvent& event) {
-    wxPyCallback* cb = (wxPyCallback*)event.m_callbackUserData;
-    PyObject* func = cb->m_func;
 
     SIP_BLOCK_THREADS
+    wxPyCallback* cb = (wxPyCallback*)event.m_callbackUserData;
+    PyObject* func = cb->m_func;
 
     if (!func)
         goto skip_event;
@@ -54,7 +54,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyObject* event_arg = sipConvertFromInstance(&event, sipClass_wxEvent, NULL);
     if (!event_arg) {
         fprintf(stderr, "WARNING: could not convert to sipClass_wxEvent\n");
-        return;
+        goto skip_event;
     }
 
     // Call the event handler, passing the event object
@@ -62,18 +62,13 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyTuple_SET_ITEM(tuple, 0, event_arg); // steals ref to arg
 
     PyObject* result = PyEval_CallObject(func, tuple);
-    if (result) {
-        Py_DECREF(result); // result is ignored, but we still need to decref it
+    Py_DECREF(tuple);
 
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-            PyErr_Clear();
-        }
-    } else if (PyErr_Occurred()) {
+    Py_XDECREF(result);
+    if (PyErr_Occurred()) {
         PyErr_Print();
         PyErr_Clear();
     }
-    Py_DECREF(tuple);
 
 skip_event:
     SIP_UNBLOCK_THREADS

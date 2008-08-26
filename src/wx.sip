@@ -44,13 +44,18 @@ void add_event(PyObject* module_dict, const char* name, ...)
     int i = va_arg(argp, int);
     while (i)
     {
-        PyList_Append(list, PyInt_FromLong(i));
+        PyObject* i_obj = PyInt_FromLong(i);
+        PyList_Append(list, i_obj);
+        Py_DECREF(i_obj);
+
         i = va_arg(argp, int);
     }
 
     PyObject *tuple = PyList_AsTuple(list);
-    PyDict_SetItemString(module_dict, name, tuple);
     Py_DECREF(list);
+
+    PyDict_SetItemString(module_dict, name, tuple);
+    Py_DECREF(tuple);
 }
 %End // ModuleCode
 
@@ -74,13 +79,23 @@ enum
 //
 // define a macro for adding items to the main module dictionary.
 //
+
+wxASSERT(sipModuleDict);
+
 #define AddItem(name, obj, class) \
-    PyDict_SetItemString(sipModuleDict, name, sipConvertFromInstance((void*)obj, class, NULL));
+    do { \
+        PyObject* __pyinstance = sipConvertFromInstance((void*)obj, class, NULL); \
+        wxASSERT(__pyinstance); \
+        PyDict_SetItemString(sipModuleDict, name, __pyinstance); \
+    } while (0)
 
 AddItem("DefaultSize",      &wxDefaultSize,      sipClass_wxSize);
 AddItem("DefaultPosition",  &wxDefaultPosition,  sipClass_wxPoint);
 AddItem("DefaultValidator", &wxDefaultValidator, sipClass_wxValidator);
-PyDict_SetItemString(sipModuleDict, "TextEntryDialogStyle", PyInt_FromLong(wxTextEntryDialogStyle));
+
+PyObject* intObj = PyInt_FromLong(wxTextEntryDialogStyle);
+PyDict_SetItemString(sipModuleDict, "TextEntryDialogStyle", intObj);
+Py_DECREF(intObj);
 
 AddItem("NORMAL_FONT", wxNORMAL_FONT, sipClass_wxFont);
 
@@ -117,11 +132,17 @@ add_event(sipModuleDict, "EVT_WINDOW_DESTROY", wxEVT_DESTROY, 0);
 //
 // for compatibility with wxPython :[
 //
-#define evtconstant(X) PyDict_SetItemString(sipModuleDict, #X, PyInt_FromLong(X));
-evtconstant(wxEVT_RIGHT_DOWN)
-evtconstant(wxEVT_LEFT_DOWN)
-evtconstant(wxEVT_LEFT_UP)
-evtconstant(wxEVT_RIGHT_UP)
+#define evtconstant(X) \
+    do { \
+        PyObject* intObj = PyInt_FromLong(X); \
+        PyDict_SetItemString(sipModuleDict, #X, intObj); \
+        Py_DECREF(intObj); \
+    } while (0)
+
+evtconstant(wxEVT_RIGHT_DOWN);
+evtconstant(wxEVT_LEFT_DOWN);
+evtconstant(wxEVT_LEFT_UP);
+evtconstant(wxEVT_RIGHT_UP);
 
 add_event(sipModuleDict, "EVT_MOUSE_EVENTS", wxEVT_LEFT_DOWN,
                     wxEVT_LEFT_UP,
@@ -240,14 +261,20 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     int wxdebug = 0;
 #endif
 
+    #define SetModuleString(s, obj) \
+        do { \
+            PyDict_SetItemString(sipModuleDict, s, obj); \
+            Py_DECREF(obj); \
+        } while (0)
+
     // Show the SIP version used to build
-    PyDict_SetItemString(sipModuleDict, "SIP_VERSION", PyString_FromString(SIP_VERSION_STR));
+    SetModuleString("SIP_VERSION", PyString_FromString(SIP_VERSION_STR));
 
     // These should be deprecated in favor of the PlatformInfo tuple built below...
-    PyDict_SetItemString(sipModuleDict, "Platform", PyString_FromString(wxPlatform));
-    PyDict_SetItemString(sipModuleDict, "USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
-    PyDict_SetItemString(sipModuleDict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
-    PyDict_SetItemString(sipModuleDict, "ABI_VERSION", PyInt_FromLong(wxABI_VERSION));
+    SetModuleString("Platform", PyString_FromString(wxPlatform));
+    SetModuleString("USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
+    SetModuleString("__WXDEBUG__", PyInt_FromLong(wxdebug));
+    SetModuleString("ABI_VERSION", PyInt_FromLong(wxABI_VERSION));
 
     // Make a tuple of strings that gives more info about the platform.
     PyObject* PlatInfo = PyList_New(0);
@@ -295,8 +322,8 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
 
     PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
     Py_DECREF(PlatInfo);
+
     PyDict_SetItemString(sipModuleDict, "PlatformInfo", PlatInfoTuple);
-
-
+    Py_DECREF(PlatInfoTuple);
 %End
 

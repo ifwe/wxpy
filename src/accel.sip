@@ -37,6 +37,8 @@ class wxAcceleratorTable : wxObject
 PyObject* accel_check(PyObject* item)
 {
     PyObject* fast = PySequence_Fast(item, ACCEL_TYPE_ERROR);
+    if (!fast)
+        return 0;
 
     if (PySequence_Fast_GET_SIZE(fast) == 3 &&
             PyNumber_Check(PySequence_Fast_GET_ITEM(fast, 0)) &&
@@ -45,8 +47,9 @@ PyObject* accel_check(PyObject* item)
         return fast;
 
     // otherwise, throw a type error
-    Py_DECREF(fast);
     PyObject_Print(fast, stderr, 0);
+    Py_DECREF(fast);
+
     PyErr_SetString(PyExc_TypeError, ACCEL_TYPE_ERROR);
     return NULL;
 }
@@ -56,7 +59,7 @@ void accel_from_tuple(PyObject* fast, wxAcceleratorEntry* entry)
     long flags   = PyInt_AS_LONG(PySequence_Fast_GET_ITEM(fast, 0));
     long keycode = PyInt_AS_LONG(PySequence_Fast_GET_ITEM(fast, 1));
 
-    PyObject* pyid = PySequence_Fast_GET_ITEM(fast, 2);
+    PyObject* pyid = PySequence_Fast_GET_ITEM(fast, 2); // borrowed
     long command = PyLong_Check(pyid) ? PyLong_AsLong(pyid) : PyInt_AS_LONG(pyid);
 
     entry->Set(flags, keycode, command);
@@ -75,32 +78,30 @@ public:
 
 wxAcceleratorTable wxAcceleratorTableFromSequence (SIP_PYOBJECT);
 %MethodCode
-PyObject* seq;
-PyObject* fastitem;
+    PyObject* fastitem;
+    PyObject* seq = PySequence_Fast(a0, ACCEL_TYPE_ERROR);
 
-if (!(seq = PySequence_Fast(a0, ACCEL_TYPE_ERROR)))
-    sipIsErr = 1;
-else
-{
-    size_t length = PySequence_Fast_GET_SIZE(seq);
+    if (!seq)
+        sipIsErr = 1;
+    else {
+        size_t length = PySequence_Fast_GET_SIZE(seq);
 
-    wxAcceleratorEntry* entries = new wxAcceleratorEntry[length];
-    for (size_t i = 0; i < length; ++i)
-    {
-        fastitem = accel_check(PySequence_Fast_GET_ITEM(seq, i));
-        if (!fastitem)
-        {
-            sipIsErr = 1;
-            break;
+        wxAcceleratorEntry* entries = new wxAcceleratorEntry[length];
+        for (size_t i = 0; i < length; ++i) {
+            fastitem = accel_check(PySequence_Fast_GET_ITEM(seq, i));
+            if (!fastitem) {
+                sipIsErr = 1;
+                break;
+            }
+            accel_from_tuple(fastitem, &entries[i]);
+            Py_DECREF(fastitem);
         }
-        accel_from_tuple(fastitem, &entries[i]);
-        Py_DECREF(fastitem);
-    }
-    Py_DECREF(seq);
-    if (!sipIsErr)
-        sipRes = new wxAcceleratorTable(length, entries);
 
-    delete [] entries;
-}
+        Py_DECREF(seq);
+        if (!sipIsErr)
+            sipRes = new wxAcceleratorTable(length, entries);
+
+        delete [] entries;
+    }
 %End
 

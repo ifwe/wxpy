@@ -18,16 +18,17 @@ static const sipAPIDef *get_sip_api()
     /* Import the SIP module. */
     sip_module = PyImport_ImportModule("sip");
 
-    if (sip_module == NULL)
-        return NULL;
+    if (!sip_module)
+        return 0;
 
     /* Get the module's dictionary. */
     sip_module_dict = PyModule_GetDict(sip_module);
+    Py_DECREF(sip_module);
 
     /* Get the "_C_API" attribute. */
     c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
 
-    if (c_api == NULL)
+    if (!c_api)
         return NULL;
 
     /* Sanity check that it is the right type. */
@@ -46,12 +47,20 @@ static const sipAPIDef *get_sip_api()
 //
 void SipNewThread();
 %MethodCode
-    get_sip_api()->api_start_thread();
+    const sipAPIDef* api = get_sip_api();
+    if (api)
+        api->api_start_thread();
+    else
+        fprintf(stderr, "SipNewThread: could not obtain SIP api\n");
 %End
 
 void SipEndThread();
 %MethodCode
-    get_sip_api()->api_end_thread();
+    const sipAPIDef* api = get_sip_api();
+    if (api)
+        api->api_end_thread();
+    else
+        fprintf(stderr, "SipNewThread: could not obtain SIP api\n");
 %End
 
 %ModuleHeaderCode
@@ -115,9 +124,6 @@ static void call_crashreport_process(const wxString& cmd)
 {
 #ifdef __WXMSW__
     STARTUPINFO si = { sizeof(STARTUPINFO) };
-    si.dwFlags = STARTF_USESHOWWINDOW;
-    si.wShowWindow = SW_HIDE;
-
     PROCESS_INFORMATION pi;
 
     if (CreateProcessW(NULL, (LPWSTR)cmd.wc_str(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
@@ -175,11 +181,11 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc, const wxChar *cond, const wxChar *szMsg)
 {
     wxString msg;
-    msg.Alloc(2048);
 
     if (m_assertMode & wxPYAPP_ASSERT_SUPPRESS)
         return;
 
+    msg.Alloc(2048);
     msg.Printf(wxT("C++ assertion \"%s\" failed at %s(%d)"), cond, file, line);
 
     // add the function name, if any
@@ -333,6 +339,7 @@ public:
 
     void GILCrash();
 %MethodCode
+    // Intentionally broken!
     Py_BEGIN_ALLOW_THREADS
         static const int N = 100;
         PyObject* o = PyList_New(N);
@@ -346,12 +353,9 @@ public:
     wxString GetCrashFile();
 %MethodCode
     sipRes = new wxString(wxCrashReport::GetFileName());
-
-
 %End
 
 };
-
 
 wxApp* GetApp();
 %MethodCode

@@ -28,27 +28,9 @@ private:
 
 
 %PostInitialisationCode
-PyDict_SetItemString(sipModuleDict, "TheClipboard",
-                     sipConvertFromInstance((void*)wxTheClipboard, sipClass_wxClipboard, NULL));
+PyObject* pyClipboard = sipConvertFromInstance((void*)wxTheClipboard, sipClass_wxClipboard, NULL);
+if (pyClipboard) {
+    PyDict_SetItemString(sipModuleDict, "TheClipboard", pyClipboard);
+    Py_DECREF(pyClipboard);
+}
 %End
-
-/*
-DocStr(wxClipboardLocker,
-"A helpful class for opening the clipboard and automatically
-closing it when the locker is destroyed.", "");
-
-class wxClipboardLocker
-{
-public:
-    wxClipboardLocker(wxClipboard *clipboard = NULL);
-    ~wxClipboardLocker();
-
-    DocStr(__nonzero__,
-           "A ClipboardLocker instance evaluates to True if the clipboard was
-successfully opened.", "");
-    %extend {
-        bool __nonzero__()   { return !!(*self); }
-    }
-};
-
-*/

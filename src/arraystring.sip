@@ -8,14 +8,15 @@
 
 %ConvertToTypeCode
     // See if we are just being asked to check the type of the Python object.
-    if (sipIsErr == NULL) {
+    const sipMappedType* wxStringMappedType = sipFindMappedType("wxString");
+    if (!sipIsErr) {
         if (!PyList_Check(sipPy)) // Check it is a list.
             return 0;
 
         // Now check each element of the list is of the type we expect.
         // The template is for a pointer type so we don't disallow None.
         for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
-            if (!sipCanConvertToMappedType(PyList_GET_ITEM(sipPy, i), sipFindMappedType("wxString"), 0))
+            if (!sipCanConvertToMappedType(PyList_GET_ITEM(sipPy, i), wxStringMappedType, 0))
                 return 0;
 
         return 1;
@@ -30,7 +31,7 @@
         // transfer to the list itself, not the individual elements.
         wxString *t = reinterpret_cast<wxString *>(sipConvertToMappedType(
                                             PyList_GET_ITEM(sipPy, i),
-                                            sipFindMappedType("wxString"), 0, 0, 0,
+                                            wxStringMappedType, 0, 0, 0,
                                             sipIsErr));
 
         if (*sipIsErr) {
@@ -47,30 +48,24 @@
 %End
 
 %ConvertFromTypeCode
-    PyObject *l;
-
-    // Create the Python list of the correct length.
-    if ((l = PyList_New(sipCpp -> Count())) == NULL)
+    PyObject *l = PyList_New(sipCpp->Count());
+    if (!l)
         return NULL;
+
+    const sipMappedType* wxStringMappedType = sipFindMappedType("wxString");
 
     // Go through each element in the C++ instance and convert it to the
     // corresponding Python object.
-    const sipMappedType* wxString_MT = sipFindMappedType("wxString");
-
-    for (size_t i = 0; i < sipCpp->Count(); ++i)
-    {
+    for (size_t i = 0; i < sipCpp->Count(); ++i) {
         wxString s = sipCpp->Item(i);
-        PyObject* tobj;
 
-
-        tobj = sipConvertFromMappedType(&s, wxString_MT, sipTransferObj);
-        if (tobj == NULL)
-        {
+        PyObject* tobj = sipConvertFromMappedType(&s, wxStringMappedType, sipTransferObj);
+        if (!tobj) {
             Py_DECREF(l);
             return NULL;
         }
 
-        PyList_SET_ITEM(l, i, tobj);
+        PyList_SET_ITEM(l, i, tobj); // steals
     }
 
     return l;

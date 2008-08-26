@@ -52,6 +52,7 @@ void CallAfterCallback::EventThunker(wxEvent&)
 
     const Py_ssize_t num_cbs = PyList_GET_SIZE(cbs);
 
+    // Keep this reentrant
     PyObject* temp_list = PyList_New(num_cbs);
     PyList_SetSlice(temp_list, 0, num_cbs, cbs);
     PyList_SetSlice(cbs, 0, num_cbs, NULL);
@@ -63,11 +64,10 @@ void CallAfterCallback::EventThunker(wxEvent&)
         if (result)
             Py_DECREF(result);
         else {
+            // An exception occurred--print it and clear it.
             PyErr_Print();
             PyErr_Clear();
         }
-
-        Py_DECREF(func);
     }
 
     Py_DECREF(temp_list);
@@ -80,6 +80,7 @@ void CallAfter(SIP_PYCALLABLE);
 %MethodCode
     /* append the callable to the end of our list */
     PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+
     Py_INCREF(a0);
     PyList_Append(cbs, a0);
 
