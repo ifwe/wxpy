@@ -13,6 +13,18 @@
 class wxWebView : wxWindow
 {
 public:
+
+%ConvertToSubClassCode
+    wxClassInfo* c = sipCpp->GetClassInfo();
+
+    if(0) ;
+    #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
+        C(wxWebView)
+    else
+        sipClass = NULL;
+    #undef C
+%End
+
     wxWebView(wxWindow* parent /TransferThis/, int id = wxID_ANY,
               const wxPoint& point = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
