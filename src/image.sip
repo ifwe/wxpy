@@ -74,17 +74,15 @@ wxImage ImageFromDataWithAlpha(int width,
     }
 
     // Copy the source data so the wxImage can clean it up later
-    unsigned char* dcopy = (unsigned char*)sipMalloc(DATASIZE);
-    if (dcopy == NULL)
-    {
+    unsigned char* dcopy = (unsigned char*)malloc(DATASIZE);
+    if (!dcopy) {
         PyErr_NoMemory();
         goto err;
     }
     memcpy(dcopy, PyString_AsString(rgb), DATASIZE);
 
     unsigned char* acopy = (unsigned char*)malloc(ALPHASIZE);
-    if (acopy == NULL)
-    {
+    if (!acopy) {
         PyErr_NoMemory();
         goto err;
     }
@@ -100,10 +98,8 @@ done:
 
 class wxImage: wxObject
 {
-private:
-    wxImage(const wxImage& image);
-
 public:
+    wxImage(const wxImage& image);
 
     SIP_PYOBJECT GetData();
 %MethodCode
