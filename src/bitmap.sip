@@ -24,7 +24,7 @@ wxBitmap wxBitmapFromImage(const wxImage& image, int depth = -1);
         sipIsErr = 1;
     }
     else
-        sipRes = new wxBitmap(*a0, a1);
+        sipRes = new wxBitmap(*a0);
 %End
 
 wxBitmap wxTransparentBitmap(int w, int h);
