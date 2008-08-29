@@ -68,6 +68,8 @@ void CallAfterCallback::EventThunker(wxEvent&)
             PyErr_Print();
             PyErr_Clear();
         }
+
+        Py_DECREF(func);
     }
 
     Py_DECREF(temp_list);
