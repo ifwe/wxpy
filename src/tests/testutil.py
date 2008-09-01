@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import gc
 try:
     import sip
@@ -64,6 +65,18 @@ def check_collected(func):
             refs = '\n'.join('    %r' % r for r in gc.get_referrers(weakobj()))
             raise AssertionError('In function %r, %s has %d references:\n%s' %
                                  (func.__name__, repr(weakobj()), sys.getrefcount(weakobj()), refs))
+
+
+@contextmanager
+def check_refcount():
+    gc.collect()
+    before = sys.gettotalrefcount()
+    yield
+    gc.collect()
+    diff = sys.gettotalrefcount() - before
+
+    if diff != 0:
+        raise AssertionError('leaked %d references' % diff)
 
 def main(*funcs):
     import wx

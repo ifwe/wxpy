@@ -6,32 +6,38 @@ from operator import itemgetter
 import sys, time
 ################################################################
 
-class PROCESS_MEMORY_COUNTERS(Structure):
-    _fields_ = [("cb", DWORD),
-                ("PageFaultCount", DWORD),
-                ("PeakWorkingSetSize", c_size_t),
-                ("WorkingSetSize", c_size_t),
-                ("QuotaPeakPagedPoolUsage", c_size_t),
-                ("QuotaPagedPoolUsage", c_size_t),
-                ("QuotaPeakNonPagedPoolUsage", c_size_t),
-                ("QuotaNonPagedPoolUsage", c_size_t),
-                ("PagefileUsage", c_size_t),
-                ("PeakPagefileUsage", c_size_t)]
-    def __init__(self):
-        self.cb = sizeof(self)
+if sys.platform == 'win32':
 
-    def dump(self):
-        for n, _ in self._fields_[2:]:
-            print n, getattr(self, n)/1e6
+    class PROCESS_MEMORY_COUNTERS(Structure):
+        _fields_ = [("cb", DWORD),
+                    ("PageFaultCount", DWORD),
+                    ("PeakWorkingSetSize", c_size_t),
+                    ("WorkingSetSize", c_size_t),
+                    ("QuotaPeakPagedPoolUsage", c_size_t),
+                    ("QuotaPagedPoolUsage", c_size_t),
+                    ("QuotaPeakNonPagedPoolUsage", c_size_t),
+                    ("QuotaNonPagedPoolUsage", c_size_t),
+                    ("PagefileUsage", c_size_t),
+                    ("PeakPagefileUsage", c_size_t)]
+        def __init__(self):
+            self.cb = sizeof(self)
 
-windll.psapi.GetProcessMemoryInfo.argtypes = (HANDLE, POINTER(PROCESS_MEMORY_COUNTERS), DWORD)
+        def dump(self):
+            for n, _ in self._fields_[2:]:
+                print n, getattr(self, n)/1e6
 
-def wss():
-    # Return the working set size (memory used by process)
-    pmi = PROCESS_MEMORY_COUNTERS()
-    if not windll.psapi.GetProcessMemoryInfo(-1, byref(pmi), sizeof(pmi)):
-        raise WinError()
-    return pmi.WorkingSetSize
+    windll.psapi.GetProcessMemoryInfo.argtypes = (HANDLE, POINTER(PROCESS_MEMORY_COUNTERS), DWORD)
+
+    def wss():
+        # Return the working set size (memory used by process)
+        pmi = PROCESS_MEMORY_COUNTERS()
+        if not windll.psapi.GetProcessMemoryInfo(-1, byref(pmi), sizeof(pmi)):
+            raise WinError()
+        return pmi.WorkingSetSize
+
+else:
+    def wss():
+        raise NotImplementedError('implement working set size finder for other platforms')
 
 LOOPS = 1000
 

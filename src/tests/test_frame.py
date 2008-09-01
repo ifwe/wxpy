@@ -1,9 +1,11 @@
+from __future__ import with_statement
 import gc
 import sip
 import weakref
 import wx
 
-from testutil import check_collected
+from testutil import check_collected, check_refcount
+
 
 def check_toplevel(tlw):
     # test changing the title
@@ -41,6 +43,7 @@ def test_FrameDestroy():
     def frame():
         f = wx.Frame(None)
         f.Destroy()
+        wx.GetApp().ProcessIdle() # ensure frame is deleted
         assert sip.isdeleted(f)
         return f
 
@@ -54,17 +57,42 @@ def test_cycle():
     f1.Destroy()
     f2.Destroy()
 
+    wx.GetApp().ProcessIdle()
     del f1, f2
     gc.collect()
 
     assert wf1() is None
     assert wf2() is None
 
+def test_write_to_dead():
+    pidle = wx.GetApp().ProcessIdle
+
+    f = wx.Frame(None)
+    print sip.unwrapinstance(f)
+    f.Destroy()
+    pidle()
+
+
+    for x in xrange(1):
+        others = [wx.Frame(None) for x in xrange(10)]
+
+        print [sip.unwrapinstance(o) for o in others]
+
+        try:
+            f.SetTitle('test')
+        except sip.DeadObjectException:
+            pass
+
+        assert not any(o.Title == 'test' for o in others)
+
+    [f.Destroy() for f in others]
+
 def main():
     a = wx.PySimpleApp()
+    test_write_to_dead()
+    #import memleak
+    #memleak.find(test_cycle, loops=1000)
 
-    import memleak
-    memleak.find(test_FrameDestroy, loops=500)
 
 if __name__ == '__main__':
     main()
