@@ -112,12 +112,12 @@ wxPyApp::wxPyApp()
 wxPyApp::~wxPyApp()
 {
     SIP_BLOCK_THREADS
+    fprintf(stderr, "~wxPyApp(), clearing callAfterCbs\n");
     Py_CLEAR(callAfterCbs);
     SIP_UNBLOCK_THREADS
 }
 
 extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
-
 #include <wx/msw/seh.h>
 
 static void call_crashreport_process(const wxString& cmd)
@@ -268,7 +268,7 @@ class wxPyApp : wxApp
 
 
 public:
-    wxPyApp();
+    wxPyApp() /Transfer/;
     ~wxPyApp();
     virtual bool OnInit();
     virtual bool OnInitGui();
