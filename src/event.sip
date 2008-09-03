@@ -289,7 +289,7 @@ public:
 };
 
 %ModuleHeaderCode
-class wxPyEvent : wxEvent
+class wxPyEvent : public wxEvent
 {
 public:
     virtual wxEvent* Clone() const { return new wxPyEvent(*this); }
