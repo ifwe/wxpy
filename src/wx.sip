@@ -10,7 +10,8 @@ released under the wxWidgets License
 
 // Enable stripping of "wx" from Python names, and auto generation of
 // properties from GetXXX() and SetXXX() methods.
-%SIPOptions (RenameWx, AutoProperties, ThreadChecking)
+//%SIPOptions (RenameWx, AutoProperties, ThreadChecking)
+%SIPOptions (RenameWx, AutoProperties)
 
 %UnitCode
 #include "stdwxpy.h"
