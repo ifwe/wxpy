@@ -1,6 +1,8 @@
 
 %ModuleHeaderCode
 
+void transferBackCppObject(void* cppObject, sipWrapperType* type);
+
 inline bool sequence_2_ints_check(PyObject* obj)
 {
     if (!PySequence_Check(obj) || PySequence_Length(obj) != 2)
@@ -38,6 +40,9 @@ inline bool sequence_2_ints(PyObject* source, int* i1, int* i2)
         Py_DECREF(o1);
         Py_DECREF(o2);
     }
+
+    if ((*i1 == -1 || *i2 == -1) && PyErr_Occurred())
+        return false;
 
     return true;
 }
@@ -108,59 +113,8 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
 %End
 
 
-%ModuleHeaderCode
-void setDeleted(void* cppObject, sipWrapperType* type);
-void setDeletedWrapper(sipWrapper* w);
-void transferBack(void* cppObject, sipWrapperType* type);
-%End
-
-
 %ModuleCode
-
-// TODO: actually use the one from sip.h
-static void removeFromParent(sipWrapper *self)
-{
-    if (self->parent != NULL)
-    {
-        if (self->parent->first_child == self)
-            self->parent->first_child = self->sibling_next;
-
-        if (self->sibling_next != NULL)
-            self->sibling_next->sibling_prev = self->sibling_prev;
-
-        if (self->sibling_prev != NULL)
-            self->sibling_prev->sibling_next = self->sibling_next;
-
-        self->parent = NULL;
-        self->sibling_next = NULL;
-        self->sibling_prev = NULL;
-
-        /*
-         * We must do this last, after all the pointers are correct, because
-         * this is used by the clear slot.
-         */
-        Py_DECREF(self);
-    }
-}
-
-
-void setDeleted(void* cppObject, sipWrapperType* type)
-{
-    sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
-    setDeletedWrapper(w);
-}
-
-void setDeletedWrapper(sipWrapper* w)
-{
-    if (!w)
-        return;
-
-    removeFromParent(w);
-    sipResetPyOwned(w);
-    w->u.cppPtr = NULL;
-}
-
-void transferBack(void* cppObject, sipWrapperType* type)
+void transferBackCppObject(void* cppObject, sipWrapperType* type)
 {
     if (!cppObject)
         return;
@@ -169,7 +123,6 @@ void transferBack(void* cppObject, sipWrapperType* type)
     if (!w)
         return;
 
-    sipTransferBack((PyObject*)w);
+    sipTransferBack((PyObject*)w); // head element of sipWrapper struct is PyObject
 }
-
-%End // %ModuleCode
+%End

@@ -10,8 +10,7 @@ VERSION = (2, 8, 7, 1)
 
 # make sure "wx" is on the syspath
 _wxpy_dir = os.path.split(os.path.abspath(__file__))[0]
-if not _wxpy_dir in sys.path:
-    sys.path.append(_wxpy_dir)
+sys.path.append(_wxpy_dir)
 del _wxpy_dir
 
 # make sure directory with wx DLLs is in os.environ['PATH']

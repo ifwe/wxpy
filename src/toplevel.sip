@@ -132,6 +132,9 @@ class wxFrame : wxTopLevelWindow
 #endif
 %End
 
+private:
+    wxFrame(const wxFrame&);
+
 public:
     wxFrame(wxWindow* parent,
             const wxWindowID id = wxID_ANY,
@@ -154,17 +157,15 @@ public:
 
     void SetToolBar(wxToolBar* toolbar /Transfer/);
 %MethodCode
-    // any old wxToolBar becomes owned by Python
     wxToolBar* oldToolBar = sipCpp->GetToolBar();
     sipCpp->SetToolBar(a0);
-    transferBack(oldToolBar, sipClass_wxToolBar);
+    transferBackCppObject(oldToolBar, sipClass_wxToolBar);
 %End
 
-private:
-    wxFrame(const wxFrame&);
 };
 
-enum {
+enum
+{
    wxDEFAULT_DIALOG_STYLE
 };
 

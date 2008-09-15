@@ -398,42 +398,15 @@ public:
 %MethodCode
     wxSizer* oldSizer = sipCpp->GetSizer();
     sipCpp->SetSizer(a0, a1);
-    if (oldSizer)
-    {
-        SIP_BLOCK_THREADS
-        PyObject* pySizer = sipGetWrapper(oldSizer, sipClass_wxSizer);
-        if (pySizer)
-        {
-            sipTransferBack(pySizer);
-
-            if (a1)
-                setDeleted(oldSizer, sipClass_wxSizer);
-        }
-        SIP_UNBLOCK_THREADS
-    }
+    transferBackCppObject(oldSizer, sipClass_wxSizer);
 %End
 
 
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
 %MethodCode
-    //
-    // WARNING: copy and pasted from above
-    //
     wxSizer* oldSizer = sipCpp->GetSizer();
     sipCpp->SetSizer(a0, a1);
-    if (oldSizer)
-    {
-        SIP_BLOCK_THREADS
-        PyObject* pySizer = sipGetWrapper(oldSizer, sipClass_wxSizer);
-        if (pySizer)
-        {
-            sipTransferBack(pySizer);
-
-            if (a1)
-                setDeleted(oldSizer, sipClass_wxSizer);
-        }
-        SIP_UNBLOCK_THREADS
-    }
+    transferBackCppObject(oldSizer, sipClass_wxSizer);
 %End
 
     wxSizer *GetSizer() const;

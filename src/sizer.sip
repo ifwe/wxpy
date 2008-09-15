@@ -172,6 +172,8 @@ public:
 
             if (width != -1 && height != -1 && !PyErr_Occurred())
                 sipRes = sipCpp->Add(width, height, a1, a2, a3);
+            else
+                sipIsErr = 1;
         }
         Py_DECREF(fast);
     }
@@ -180,19 +182,14 @@ public:
         PyErr_SetString(PyExc_TypeError, AddSpacerMsg);
         sipIsErr = 1;
     }
-
 %End
 
     bool Detach(wxWindow* window);
 %MethodCode
     wxSizerItem* item = sipCpp->GetItem(a0);
     sipRes = sipCpp->Detach(a0);
-    if (0 && sipRes)
-    {
-        SIP_BLOCK_THREADS
-        setDeleted(item, sipClass_wxSizerItem);
-        SIP_UNBLOCK_THREADS
-    }
+    if (sipRes && item)
+        transferBackCppObject(item, sipClass_wxSizerItem);
 %End
 
     bool Detach(wxSizer* sizer);
@@ -203,13 +200,7 @@ public:
     sipRes = sipCpp->Detach(a0);
 
     if (sipRes)
-    {
-        SIP_BLOCK_THREADS
-        transferBack(sizer, sipClass_wxSizer);
-        SIP_UNBLOCK_THREADS
-        //setDeleted(item, sipClass_wxSizerItem);
-    }
-
+        transferBackCppObject(sizer, sipClass_wxSizer);
 %End
 
     bool Detach(size_t index);
@@ -220,13 +211,7 @@ public:
     sipRes = sipCpp->Detach(a0);
 
     if (sipRes)
-    {
-        // the only owned item by a wxSizerItem is a wxSizer
-        SIP_BLOCK_THREADS
-        transferBack(sizer, sipClass_wxSizer);
-        SIP_UNBLOCK_THREADS
-        //setDeleted(item, sipClass_wxSizerItem);
-    }
+        transferBackCppObject(sizer, sipClass_wxSizer);
 %End
 
     wxSizerItem* GetItem(wxWindow* window, bool recursive = false) /Transfer/;

@@ -74,6 +74,8 @@ public:
 
     void SetTransparent(bool transparent);
     bool IsTransparent() const;
+
+    wxBitmap GetBitmap() const;
 };
 
 enum {
