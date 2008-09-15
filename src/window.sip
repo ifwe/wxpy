@@ -66,11 +66,6 @@ public:
     void Lower();
 
     void Destroy();
-%MethodCode
-    wxCriticalSectionLocker locker(wxPendingDeleteCS);
-    if (!wxPendingDelete.Member(sipCpp))
-        wxPendingDelete.Append(sipCpp);
-%End
 
     wxSize GetSize() const;
 

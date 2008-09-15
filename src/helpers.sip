@@ -116,13 +116,23 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
 %ModuleCode
 void transferBackCppObject(void* cppObject, sipWrapperType* type)
 {
-    if (!cppObject)
+    return;
+
+    /*
+    fprintf(stderr, "transferBackCppObject(%p, %p) -> ", cppObject, type);
+    if (!cppObject) {
+        fprintf(stderr, "NO, !cppObject\n");
         return;
+    }
 
     sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
-    if (!w)
+    if (!w) {
+        fprintf(stderr, "NO, sipGetWrapper returned NULL\n");
         return;
+    }
 
+    fprintf(stderr, "YES, calling sipTransferBack\n");
     sipTransferBack((PyObject*)w); // head element of sipWrapper struct is PyObject
+    */
 }
 %End
