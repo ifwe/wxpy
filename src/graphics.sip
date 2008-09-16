@@ -1,9 +1,7 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/graphics.h>
 #include <wx/gdicmn.h>
 #include <wx/geometry.h>
-#endif
 %End
 
 
@@ -293,25 +291,18 @@ public:
 
 };
 
-
-class wxGCDC :  wxDC
+class wxGCDC : wxDC
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/dcgraph.h>
-#endif
 %End
+
 public:
     wxGCDC(const wxWindowDC& dc);
     wxGCDC(wxWindow* window);
-    //wxGCDC();
     virtual ~wxGCDC();
 
     wxGraphicsContext* GetGraphicsContext();
     void SetGraphicsContext(wxGraphicsContext* ctx);
-
-    // flushing the content of this dc immediately onto screen
     void Flush();
-
 };
-

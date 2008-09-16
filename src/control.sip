@@ -6,9 +6,7 @@ class wxControl : wxWindow
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/control.h>
-#endif
 %End
 
 public:
@@ -32,6 +30,9 @@ private:
 
 class wxItemContainer
 {
+private:
+    wxItemContainer();
+
 public:
     void Clear();
     void Delete(/*unsigned*/ int n);
@@ -49,9 +50,6 @@ public:
     void SetSelection(int n) = 0;
 
     void Append(const wxArrayString& strings) /PyName=AppendItems/;
-
-private:
-    wxItemContainer();
 };
 
 

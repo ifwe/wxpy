@@ -6,12 +6,8 @@ class wxPoint
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gdicmn.h>
-#endif
 %End
-
-
 
 public:
     wxPoint(int x = 0, int y = 0);
@@ -36,8 +32,7 @@ public:
 %MethodCode
     if (a0 == 0) sipRes = sipCpp->x;
     else if (a0 == 1) sipRes = sipCpp->y;
-    else
-    {
+    else {
         PyErr_Format(PyExc_IndexError, "index out of range: %d", a0);
         sipIsErr = 1;
     }
@@ -47,8 +42,7 @@ public:
 %MethodCode
     if (a0 == 0) sipCpp->x = a1;
     else if (a0 == 1) sipCpp->y = a1;
-    else
-    {
+    else {
         PyErr_SetString(PyExc_IndexError, "index out of range");
         sipIsErr = 1;
     }
@@ -84,9 +78,7 @@ public:
 class wxSize
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gdicmn.h>
-#endif
 %End
 
 public:
@@ -113,8 +105,7 @@ public:
             || sequence_2_ints_check(sipPy);
 
     int _x, _y;
-    if (sequence_2_ints(sipPy, &_x, &_y))
-    {
+    if (sequence_2_ints(sipPy, &_x, &_y)) {
         *sipCppPtr = new wxSize(_x, _y);
         return sipGetState(sipTransferObj);
     }
@@ -130,8 +121,7 @@ public:
 %MethodCode
     if (a0 == 0) sipRes = sipCpp->x;
     else if (a0 == 1) sipRes = sipCpp->y;
-    else
-    {
+    else {
         PyErr_SetString(PyExc_IndexError, "index out of range");
         sipIsErr = 1;
     }
@@ -166,9 +156,7 @@ class wxRect
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gdicmn.h>
-#endif
 %End
 
 public:
@@ -290,33 +278,31 @@ public:
 
 SIP_PYTUPLE __getitem__(SIP_PYSLICE);
 %MethodCode
-//    int PySlice_GetIndicesEx(	PySliceObject *slice, Py_ssize_t length, Py_ssize_t *start, Py_ssize_t *stop, Py_ssize_t *step, Py_ssize_t *slicelength)
+    Py_ssize_t start, stop, step, length;
+    PySlice_GetIndicesEx((PySliceObject*)a0, 4, &start, &stop, &step, &length);
 
-Py_ssize_t start, stop, step, length;
-PySlice_GetIndicesEx((PySliceObject*)a0, 4, &start, &stop, &step, &length);
+    sipRes = PyTuple_New(length);
+    int c = 0;
+    int val = -1;
+    int i;
 
-sipRes = PyTuple_New(length);
-int c = 0;
-int val = -1;
-int i;
+    for (i = start; (step > 0 ? i < stop : i > stop); i += step) {
+        switch (i) {
+            case 0: val = sipCpp->x; break;
+            case 1: val = sipCpp->y; break;
+            case 2: val = sipCpp->width; break;
+            case 3: val = sipCpp->height; break;
+            default:
+                PyErr_SetString(PyExc_IndexError, "index out of range");
+                sipIsErr = 1;
+        }
 
-for (i = start; (step > 0 ? i < stop : i > stop); i += step) {
-    switch (i) {
-        case 0: val = sipCpp->x; break;
-        case 1: val = sipCpp->y; break;
-        case 2: val = sipCpp->width; break;
-        case 3: val = sipCpp->height; break;
-        default:
-            PyErr_SetString(PyExc_IndexError, "index out of range");
-            sipIsErr = 1;
+        if (sipIsErr) break;
+        PyTuple_SET_ITEM(sipRes, c++, PyInt_FromLong(val));
     }
 
-    if (sipIsErr) break;
-    PyTuple_SET_ITEM(sipRes, c++, PyInt_FromLong(val));
-}
-
-if (sipIsErr)
-    Py_DECREF(sipRes);
+    if (sipIsErr)
+        Py_DECREF(sipRes);
 %End
 
     bool operator==(const wxRect&);
@@ -329,7 +315,7 @@ if (sipIsErr)
 };
 
 
-class wxPen: wxGDIObject
+class wxPen : wxGDIObject
 {
 public:
     wxPen(wxColour& colour, int width = 1, int style = wxSOLID);

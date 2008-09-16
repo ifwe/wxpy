@@ -18,8 +18,7 @@ wxBitmap wxBitmapFromIcon(const wxIcon& icon);
 
 wxBitmap wxBitmapFromImage(const wxImage& image, int depth = -1);
 %MethodCode
-    if (!a0->Ok())
-    {
+    if (!a0->Ok()) {
         PyErr_SetString(PyExc_AssertionError, "wxImage.Ok() must be True");
         sipIsErr = 1;
     }

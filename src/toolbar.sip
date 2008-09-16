@@ -33,16 +33,6 @@ private:
     ~wxToolBarToolBase();
 
 public:
-//      wxToolBarToolBase(wxToolBarBase *tbar = (wxToolBarBase *)NULL,
-//                        int id = wxID_SEPARATOR,
-//                        const wxString& label = wxPyEmptyString,
-//                        const wxBitmap& bmpNormal = wxNullBitmap,
-//                        const wxBitmap& bmpDisabled = wxNullBitmap,
-//                        wxItemKind kind = wxITEM_NORMAL,
-//                        wxObject *clientData = (wxObject *) NULL,
-//                        const wxString& shortHelpString = wxPyEmptyString,
-//                        const wxString& longHelpString = wxPyEmptyString)
-//      ~wxToolBarToolBase();
 
     int GetId();
     wxControl *GetControl();

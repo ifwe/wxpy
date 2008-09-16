@@ -7,9 +7,7 @@
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/string.h>
-#endif
 
 #if !wxUSE_UNICODE
 #error "wxpy currently requires that wxWidgets is built with Unicode support (--enable-unicode or wxUSE_UNICODE=1)"
@@ -45,8 +43,7 @@
 
     // Move Unicode wchar_t bytes into wxString
     size_t len = PyUnicode_GET_SIZE(unicode);
-    if (len)
-    {
+    if (len) {
         PyUnicode_AsWideChar((PyUnicodeObject*)unicode, target->GetWriteBuf(len), len);
         target->UngetWriteBuf();
     }

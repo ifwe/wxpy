@@ -28,22 +28,6 @@ public:
     void SetSelection(int n);
     void SetSelection(long from, long to);
 
-/*
-#ifndef __WXMAC__
-    DocDeclAStrName(
-        void GetSelection(long* OUTPUT, long* OUTPUT),
-        "GetMark(self) -> (from, to)",
-        "Gets the positions of the begining and ending of the selection mark in
-the combobox text field.", "",
-        GetMark);
-#else
-    %pythoncode {
-        def GetMark(self):
-            return (0,0)
-    }
-#endif
-*/
-
     int GetCurrentSelection() const;
     bool SetStringSelection(const wxString& string);
     void SetString(int n, const wxString& string);
@@ -112,7 +96,6 @@ public:
     bool CanPaste() const;
     bool CanUndo() const;
     bool CanRedo() const;
-
 };
 
 %End

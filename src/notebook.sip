@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/notebook.h>
-#endif
 %End
 
 enum {

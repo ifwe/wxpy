@@ -1,5 +1,8 @@
 class wxDC : wxObject /Abstract/
 {
+private:
+    wxDC(const wxDC&);
+
 public:
     wxDC();
     virtual ~wxDC();
@@ -218,9 +221,11 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
         sipCpp->GetPartialTextExtents(*a0, widths);
 
         sipRes = PyList_New(widths.size());
-
-        for (unsigned int i=0; i < widths.size(); ++i)
-            PyList_SET_ITEM(sipRes, i, PyInt_FromLong(widths[i]));
+        if (sipRes)
+            for (unsigned int i=0; i < widths.size(); ++i)
+                PyList_SET_ITEM(sipRes, i, PyInt_FromLong(widths[i]));
+        else
+            sipIsErr = 1;
 %End
 
     wxSize GetSize() const;
@@ -235,49 +240,47 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
     wxCoord LogicalToDeviceXRel(wxCoord x) const;
     wxCoord LogicalToDeviceYRel(wxCoord y) const;
 
-     bool CanDrawBitmap() const;
-     bool CanGetTextExtent() const;
+    bool CanDrawBitmap() const;
+    bool CanGetTextExtent() const;
 
     // colour depth
-     int GetDepth() const;
+    int GetDepth() const;
 
     // Resolution in Pixels per inch
-     wxSize GetPPI() const;
+    wxSize GetPPI() const;
 
-     bool Ok() const;
-     bool IsOk() const;
+    bool Ok() const;
+    bool IsOk() const;
+    int GetBackgroundMode() const;
+    const wxBrush&  GetBackground() const;
+    const wxBrush&  GetBrush() const;
+    const wxFont&   GetFont() const;
+    const wxPen&    GetPen() const;
 
-     int GetBackgroundMode() const;
-     const wxBrush&  GetBackground() const;
-     const wxBrush&  GetBrush() const;
-     const wxFont&   GetFont() const;
-     const wxPen&    GetPen() const;
+    const wxColour& GetTextForeground() const;
+    const wxColour& GetTextBackground() const;
+    void SetTextForeground(const wxColour& colour);
+    void SetTextBackground(const wxColour& colour);
+    int GetMapMode() const;
+    void SetMapMode(int mode);
 
-     const wxColour& GetTextForeground() const;
-     const wxColour& GetTextBackground() const;
-     void SetTextForeground(const wxColour& colour);
-     void SetTextBackground(const wxColour& colour);
-     int GetMapMode() const;
-     void SetMapMode(int mode);
+    void GetUserScale(double *x, double *y) const;
 
-     void GetUserScale(double *x, double *y) const;
-
-     void SetUserScale(double x, double y);
-     void GetLogicalScale(double *x /Out/, double *y /Out/);
-     void SetLogicalScale(double x, double y);
+    void SetUserScale(double x, double y);
+    void GetLogicalScale(double *x /Out/, double *y /Out/);
+    void SetLogicalScale(double x, double y);
     wxPoint GetLogicalOrigin() const;
-     void SetLogicalOrigin(wxCoord x, wxCoord y);
+    void SetLogicalOrigin(wxCoord x, wxCoord y);
     wxPoint GetDeviceOrigin() const;
-     void SetDeviceOrigin(wxCoord x, wxCoord y);
+    void SetDeviceOrigin(wxCoord x, wxCoord y);
 
-     void ComputeScaleAndOrigin();
+    void ComputeScaleAndOrigin();
 
-     void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+    void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
-     int GetLogicalFunction() const;
-     void SetLogicalFunction(int function);
-
-     void CalcBoundingBox(wxCoord x, wxCoord y);
+    int GetLogicalFunction() const;
+    void SetLogicalFunction(int function);
+    void CalcBoundingBox(wxCoord x, wxCoord y);
 
     void ResetBoundingBox();
 
@@ -297,10 +300,6 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
         sipRes = (long)sipCpp->GetHDC();
 %End
 %End
-
-
-private:
-    wxDC(const wxDC&);
 };
 
 class wxScreenDC : wxDC
@@ -383,9 +382,7 @@ public:
 class wxBufferedPaintDC : wxBufferedDC
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/dcbuffer.h>
-#endif
 %End
 
 private:
@@ -405,9 +402,7 @@ public:
 class wxAutoBufferedPaintDC : wxDC
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/dcbuffer.h>
-#endif
 %End
 public:
     wxAutoBufferedPaintDC(wxWindow* win);

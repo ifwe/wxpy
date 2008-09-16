@@ -1,5 +1,4 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/pickerbase.h>
 #if wxUSE_DIRPICKERCTRL
 #include <wx/fontpicker.h>
@@ -10,10 +9,7 @@
 #if wxUSE_COLOURPICKERCTRL
 #include <wx/clrpicker.h>
 #endif
-#endif
 %End
-
-
 
 enum
 {
@@ -108,6 +104,7 @@ public:
                      long style = wxFLP_DEFAULT_STYLE,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxFilePickerCtrlNameStr);
+    virtual ~wxFilePickerCtrl();
 
     wxString GetPath() const;
     void SetPath(const wxString &str);
@@ -151,6 +148,7 @@ public:
                     long style = wxDIRP_DEFAULT_STYLE,
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString& name = wxDirPickerCtrlNameStr);
+    virtual ~wxDirPickerCtrl();
 
     wxString GetPath() const;
     void SetPath(const wxString &str);

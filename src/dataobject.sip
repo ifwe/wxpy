@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/dataobj.h>
-#endif
 %End
 
 enum wxDataFormatId
@@ -162,6 +160,9 @@ private:
 
 class wxDataObjectSimple : wxDataObject
 {
+private:
+    wxDataObjectSimple(const wxDataObjectSimple&);
+
 public:
     wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid);
     virtual ~wxDataObjectSimple();
@@ -218,20 +219,19 @@ derived class if the object supports setting its data.
         }
     }
     */
-private:
-    wxDataObjectSimple(const wxDataObjectSimple&);
 };
 
 class wxDataObjectComposite : wxDataObject
 {
+private:
+    wxDataObjectComposite(const wxDataObjectComposite&);
+
 public:
     wxDataObjectComposite();
     virtual ~wxDataObjectComposite();
 
     void Add(wxDataObjectSimple *dataObject /Transfer/, bool preferred = false);
     wxDataFormat GetReceivedFormat() const;
-private:
-    wxDataObjectComposite(const wxDataObjectComposite&);
 };
 
 class wxTextDataObject : wxDataObjectSimple
@@ -293,7 +293,11 @@ public:
 
 SIP_PYOBJECT GetData();
 %MethodCode
-    sipRes = PyString_FromStringAndSize((char*)sipCpp->GetData(), sipCpp->GetSize());
+    if (!sipCpp->GetData()) {
+        Py_INCREF(Py_None);
+        sipRes = Py_None;
+    } else
+        sipRes = PyString_FromStringAndSize((char*)sipCpp->GetData(), sipCpp->GetSize());
 %End
 
     size_t GetSize();

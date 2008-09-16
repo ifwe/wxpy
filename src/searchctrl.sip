@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/srchctrl.h>
-#endif
 %End
 
 %PostInitialisationCode

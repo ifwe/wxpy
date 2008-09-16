@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/clipbrd.h>
-#endif
 %End
 
 class wxClipboard : wxObject
@@ -15,7 +13,7 @@ public:
     virtual bool SetData(wxDataObject *data /Transfer/);
 
     virtual bool IsSupported(const wxDataFormat& format);
-    virtual bool GetData( wxDataObject& data );
+    virtual bool GetData(wxDataObject& data);
     virtual void Clear();
     virtual bool Flush();
 
@@ -24,13 +22,14 @@ public:
 private:
     wxClipboard();
     ~wxClipboard();
+    wxClipboard(const wxClipboard&);
 };
 
 
 %PostInitialisationCode
-PyObject* pyClipboard = sipConvertFromInstance((void*)wxTheClipboard, sipClass_wxClipboard, NULL);
-if (pyClipboard) {
-    PyDict_SetItemString(sipModuleDict, "TheClipboard", pyClipboard);
-    Py_DECREF(pyClipboard);
-}
+    PyObject* pyClipboard = sipConvertFromInstance((void*)wxTheClipboard, sipClass_wxClipboard, NULL);
+    if (pyClipboard) {
+        PyDict_SetItemString(sipModuleDict, "TheClipboard", pyClipboard);
+        Py_DECREF(pyClipboard);
+    }
 %End

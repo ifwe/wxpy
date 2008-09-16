@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/utils.h>
-#endif
 %End
 
 enum wxKillError

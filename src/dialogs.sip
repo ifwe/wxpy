@@ -1,14 +1,15 @@
 %ModuleHeaderCode
+
 // TODO: use wxUSE flags for these includes
-#ifndef WXPY_PREC
 #include <wx/fontdlg.h>
 #include <wx/colordlg.h>
 #include <wx/fdrepdlg.h>
 #include <wx/progdlg.h>
-#endif
+
 #ifndef wxHIDE_READONLY
 #define wxHIDE_READONLY 0
 #endif
+
 %End
 
 class wxColourData : wxObject
@@ -356,6 +357,7 @@ class wxFindReplaceData : wxObject
 public:
     wxFindReplaceData(int flags=0);
     virtual ~wxFindReplaceData();
+
     const wxString& GetFindString();
     const wxString& GetReplaceString();
     int GetFlags();

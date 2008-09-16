@@ -6,9 +6,7 @@ class wxValidator : wxEvtHandler
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/validate.h>
-#endif
 %End
 
 public:

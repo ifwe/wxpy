@@ -270,9 +270,7 @@ public:
 class wxFontEnumerator
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/fontenum.h>
-#endif
 %End
 
 public:

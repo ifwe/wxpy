@@ -140,10 +140,9 @@ public:
 class wxSystemOptions : wxObject
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/sysopt.h>
-#endif
 %End
+
 public:
     wxSystemOptions();
     static void SetOption(const wxString& name, const wxString& value);

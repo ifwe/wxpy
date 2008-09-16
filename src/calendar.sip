@@ -5,9 +5,7 @@
 %End
 
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/calctrl.h>
-#endif
 %End
 
 enum
@@ -98,8 +96,10 @@ class wxCalendarEvent : wxDateEvent
 private:
     wxCalendarEvent();
     wxCalendarEvent(const wxCalendarEvent&);
+
 public:
     wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
+    virtual ~wxCalendarEvent();
 
     void SetWeekDay(const wxDateTime::WeekDay wd);
     wxDateTime::WeekDay GetWeekDay() const;
@@ -115,6 +115,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                    const wxString& name = wxCalendarNameStr);
+    virtual ~wxCalendarCtrl();
 
     void SetDate(const wxDateTime& date);
     const wxDateTime GetDate() const;
@@ -141,42 +142,7 @@ public:
     void SetAttr(size_t day, wxCalendarDateAttr* attr /Transfer/);
     void SetHoliday(size_t day);
     void ResetAttr(size_t day);
-/*
-    %extend {
-        PyObject* HitTest(const wxPoint& pos) {
-            wxDateTime* date = new wxDateTime;
-            wxDateTime::WeekDay wd;
-            wxCalendarHitTestResult result = self->HitTest(pos, date, &wd);
-            wxPyBlock_t blocked = wxPyBeginBlockThreads();
-            PyObject* tup = PyTuple_New(3);
-            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(result));
-            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(date, wxT("wxDateTime"), 1));
-            PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(wd));
-            wxPyEndBlockThreads(blocked);
-            return tup;
-        }
-    }
-*/
 
     wxControl* GetMonthControl() const;
     wxControl* GetYearControl() const;
 };
-/*
-%pythoncode {
-def _pydate2wxdate(date):
-    import datetime
-    assert isinstance(date, (datetime.datetime, datetime.date))
-    tt = date.timetuple()
-    dmy = (tt[2], tt[1]-1, tt[0])
-    return wx.DateTimeFromDMY(*dmy)
-
-def _wxdate2pydate(date):
-    import datetime
-    assert isinstance(date, wx.DateTime)
-    if date.IsValid():
-        ymd = map(int, date.FormatISODate().split('-'))
-        return datetime.date(*ymd)
-    else:
-        return None
-}
-*/

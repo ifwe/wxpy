@@ -13,6 +13,8 @@ enum wxCheckBoxState
 
 class wxCheckBox: wxControl
 {
+private:
+    wxCheckBox(const wxCheckBox&);
 public:
     wxCheckBox(wxWindow *parent /TransferThis/,
                wxWindowID id,

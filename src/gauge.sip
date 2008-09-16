@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gauge.h>
-#endif
 %End
 
 enum {

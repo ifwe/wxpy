@@ -76,18 +76,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxPanelNameStr);
-        //: wxWindow(parent, id, pos, size, style, name) {}
-//
-//
-//    bool DoEraseBackground(wxDC* dc) {
-//#ifdef __WXMSW__
-//        return wxWindow::DoEraseBackground(dc->GetHDC());
-//#else
-//        dc->SetBackground(wxBrush(GetBackgroundColour()));
-//        dc->Clear();
-//        return true;
-//#endif
-//    }
+    virtual ~wxPyWindow();
 
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
@@ -118,7 +107,6 @@ public:
     virtual void RemoveChild(wxWindowBase* child);
 
     virtual bool ShouldInheritColours() const;
-    //DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
 
     virtual bool HasTransparentBackground();
 
@@ -133,16 +121,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTAB_TRAVERSAL | wxNO_BORDER,
                const wxString& name = wxPanelNameStr);
-
-//    bool DoEraseBackground(wxDC* dc) {
-//#ifdef __WXMSW__
-//        return wxWindow::DoEraseBackground(dc->GetHDC());
-//#else
-//        dc->SetBackground(wxBrush(GetBackgroundColour()));
-//        dc->Clear();
-//        return true;
-//#endif
-//    }
+    virtual ~wxPyPanel();
 
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);

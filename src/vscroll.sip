@@ -3,10 +3,9 @@
 class wxVScrolledWindow : wxPanel
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/vscroll.h>
-#endif
 %End
+
 public:
     wxVScrolledWindow(wxWindow *parent /TransferThis/,
                       wxWindowID id = wxID_ANY,
@@ -48,10 +47,12 @@ protected:
 class wxVListBox : wxVScrolledWindow
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/vlbox.h>
-#endif
 %End
+
+private:
+    wxVListBox();
+    wxVListBox(const wxVListBox&);
 
 public:
     virtual ~wxVListBox();
@@ -96,8 +97,5 @@ protected:
     virtual wxCoord OnMeasureItem(size_t n) const = 0;
 
     virtual wxCoord OnGetLineHeight(size_t line) const; // don't use -- overload OnMeasureItem
-private:
-    wxVListBox();
-    wxVListBox(const wxVListBox&);
 };
 

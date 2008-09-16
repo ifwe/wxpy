@@ -70,10 +70,9 @@ class wxTopLevelWindow : wxWindow
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/toplevel.h>
-#endif
 %End
+
 public:
     virtual ~wxTopLevelWindow();
 
@@ -127,9 +126,7 @@ wxWindowList wxGetTopLevelWindows();
 class wxFrame : wxTopLevelWindow
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/frame.h>
-#endif
 %End
 
 private:
@@ -171,6 +168,8 @@ enum
 
 class wxDialog : wxTopLevelWindow
 {
+private:
+    wxDialog(const wxDialog&);
 public:
     wxDialog(wxWindow* parent,
              const wxWindowID id = -1,
@@ -199,8 +198,7 @@ public:
      bool IsModal() const;
      int ShowModal() /ReleaseGIL/;
      void EndModal(int retCode) /ReleaseGIL/;
-private:
-    wxDialog(const wxDialog&);
+
 };
 
 
@@ -217,9 +215,7 @@ enum  {
 class wxMiniFrame : wxFrame
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/minifram.h>
-#endif
 %End
 
 private:

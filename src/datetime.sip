@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/datetime.h>
-#endif
 
 #define LOCAL_TZ wxDateTime::Local
 

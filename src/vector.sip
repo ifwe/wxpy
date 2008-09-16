@@ -13,9 +13,7 @@ template<TYPE>
 %MappedType std::vector<TYPE>
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <vector>
-#endif
 %End
 
 %ConvertFromTypeCode
@@ -101,9 +99,7 @@ template<TYPE>
 %MappedType std::vector<double>
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <vector>
-#endif
 %End
 
 %ConvertFromTypeCode
@@ -184,9 +180,7 @@ template<TYPE>
 %MappedType std::vector<int>
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <vector>
-#endif
 %End
 
 %ConvertFromTypeCode
@@ -267,9 +261,7 @@ template<TYPE>
 %MappedType std::vector<unsigned int>
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <vector>
-#endif
 %End
 
 %ConvertFromTypeCode

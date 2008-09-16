@@ -1,9 +1,7 @@
 %If (wxUSE_IMAGLIST)
 
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/imaglist.h>
-#endif
 %End
 
 enum {

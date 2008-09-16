@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/dnd.h>
-#endif
 %End
 
 enum
@@ -49,6 +47,8 @@ public:
 
 class wxDropSource
 {
+private:
+    wxDropSource(const wxDropSource&);
 public:
 
 //%If (WXGTK)
@@ -72,8 +72,6 @@ public:
     void SetCursor(wxDragResult res, const wxCursor& cursor);
     virtual bool GiveFeedback(wxDragResult effect);
     wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
-private:
-    wxDropSource(const wxDropSource&);
 };
 
 

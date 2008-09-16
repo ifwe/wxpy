@@ -1,5 +1,6 @@
 %If (WXMSW)
 %If (wxUSE_CRASHREPORT)
+
 enum
 {
     wxCRASH_REPORT_LOCATION,

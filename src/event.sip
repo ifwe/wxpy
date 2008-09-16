@@ -8,11 +8,9 @@
 
 
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <list>
-#endif
 
-class CallAfterCallback: public wxObject
+class CallAfterCallback : public wxObject
 {
 public:
     CallAfterCallback() {}
@@ -33,10 +31,10 @@ void initializeCallAfter()
 {
     static CallAfterCallback* g_callAfterEvent = 0;
 
-    if (!g_callAfterId)
-    {
+    if (!g_callAfterId) {
         g_callAfterEvent = new CallAfterCallback;
         g_callAfterId = wxNewEventType();
+        wxASSERT_MSG(g_callAfterId, wxT("wxNewEventType returned 0"));
         wxASSERT_MSG(wxTheApp, wxT("initializeCallAfter(): wxTheApp is NULL"));
         wxTheApp->Connect(-1, -1, g_callAfterId,
                           (wxObjectEventFunction)&CallAfterCallback::EventThunker,
@@ -54,25 +52,28 @@ void CallAfterCallback::EventThunker(wxEvent&)
 
     // Keep this reentrant
     PyObject* temp_list = PyList_New(num_cbs);
-    PyList_SetSlice(temp_list, 0, num_cbs, cbs);
-    PyList_SetSlice(cbs, 0, num_cbs, NULL);
-
-    for(Py_ssize_t i = 0; i < num_cbs; ++i) {
-        PyObject* func = PyList_GET_ITEM(temp_list, i);
-        PyObject* result = PyObject_CallObject(func, NULL);
-
-        if (result)
-            Py_DECREF(result);
-        else {
-            // An exception occurred--print it and clear it.
+    if (!temp_list) {
+        PyErr_SetString(PyExc_AssertionError, "Could not create temp_list");
+        PyErr_Print();
+    } else {
+        if (-1 == PyList_SetSlice(temp_list, 0, num_cbs, cbs) ||
+            -1 == PyList_SetSlice(cbs, 0, num_cbs, NULL)) {
+            PyErr_SetString(PyExc_AssertionError, "Could not slice call after list");
             PyErr_Print();
-            PyErr_Clear();
-        }
+        } else {
+            for(Py_ssize_t i = 0; i < num_cbs; ++i) {
+                PyObject* func = PyList_GET_ITEM(temp_list, i);
+                PyObject* result = PyObject_CallObject(func, NULL);
 
-        Py_DECREF(func);
+                if (result)
+                    Py_DECREF(result);
+                else
+                    PyErr_Print();
+            }
+        }
+        Py_DECREF(temp_list);
     }
 
-    Py_DECREF(temp_list);
     SIP_UNBLOCK_THREADS
 }
 %End
@@ -83,11 +84,12 @@ void CallAfter(SIP_PYCALLABLE);
     /* append the callable to the end of our list */
     PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
 
-    Py_INCREF(a0);
-    PyList_Append(cbs, a0);
-
-    wxCommandEvent e(g_callAfterId, -1);
-    wxTheApp->AddPendingEvent(e);
+    if (-1 == PyList_Append(cbs, a0))
+        sipIsErr = 1;
+    else {
+        wxCommandEvent e(g_callAfterId, -1);
+        wxTheApp->AddPendingEvent(e);
+    }
 %End
 
 int wxNewEventType();

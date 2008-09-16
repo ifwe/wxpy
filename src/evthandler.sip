@@ -12,7 +12,8 @@ public:
     ~wxPyCallback();
     void EventThunker(wxEvent& event);
 
-    PyObject* callback() const {
+    PyObject* callback() const
+    {
         return m_func;
     }
 
@@ -77,9 +78,7 @@ skip_event:
 %End // TypeCode
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/event.h>
-#endif
 %End
 
 private:
@@ -175,6 +174,8 @@ public:
             sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
     }
 %End
+
+// the following code allows the GC to break cycles involving event callbacks
 
 %GCTraverseCode
     sipRes = 0;

@@ -1,15 +1,11 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
-#endif
 %End
 
 %If (WXMSW)
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/msw/regconf.h>
-#endif
 %End
 %End
 

@@ -24,10 +24,8 @@ wxWindow* WindowBaseDowncast(wxWindowBase* window);
 class wxWindow : wxWindowBase
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/window.h>
 #include <wx/dynlib.h>
-#endif
 %End
 
 %ConvertToSubClassCode
@@ -171,14 +169,6 @@ public:
                                        const wxWindow *parent = NULL );
     static wxWindow *FindWindowByLabel( const wxString& label,
                                         const wxWindow *parent = NULL );
-/*
-%If (WXMSW)
-    static wxWindow *FindWindowByHandle(long hwnd);
-%MethodCode
-    sipRes = wxFindWinFromHandle((WXHWND)a0);
-%End
-%End
-*/
 
     wxEvtHandler *GetEventHandler() const;
     void SetEventHandler(wxEvtHandler *handler /Transfer/);

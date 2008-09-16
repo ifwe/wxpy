@@ -1,14 +1,13 @@
 %Module _wxcombo
 %Import wx.sip
+
 %UnitCode
 #include "stdwxpy.h"
 %End
 
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/combo.h>
 #include <wx/odcombo.h>
-#endif
 %End
 
 enum {
@@ -229,38 +228,10 @@ public:
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxBitmapComboBoxNameStr);
-
-//    %extend {
-//        DocStr(Append,
-//               "Adds the item to the control, associating the given data with the item
-//if not None.  The return value is the index of the newly added item.", "");
-//        int Append(const wxString& item, const wxBitmap& bitmap = wxNullBitmap, PyObject* clientData=NULL) {
-//            if (clientData) {
-//                wxPyClientData* data = new wxPyClientData(clientData);
-//                return self->Append(item, bitmap, data);
-//            } else
-//                return self->Append(item, bitmap);
-//        }
-//    }
-
+    virtual ~wxBitmapComboBox();
 
     wxBitmap GetItemBitmap(/*unsigned*/ int n) const;
-//
-//    %extend {
-//        DocStr(Insert,
-//               "Insert an item into the control before the item at the ``pos`` index,
-//optionally associating some data object with the item.", "");
-//        int Insert(const wxString& item, const wxBitmap& bitmap,
-//                   /*unsigned*/ int pos, PyObject* clientData=NULL) {
-//            if (clientData) {
-//                wxPyClientData* data = new wxPyClientData(clientData);
-//                return self->Insert(item, bitmap, pos, data);
-//            } else
-//                return self->Insert(item, bitmap, pos);
-//        }
-//    }
 
     void SetItemBitmap(/*unsigned*/ int n, const wxBitmap& bitmap);
     wxSize GetBitmapSize() const;
-
 };

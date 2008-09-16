@@ -1,9 +1,7 @@
 class wxGBPosition
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
-#endif
 %End
 public:
     wxGBPosition(int row = 0, int col = 0);
@@ -15,8 +13,7 @@ public:
             || sequence_2_ints_check(sipPy);
 
     int _x, _y;
-    if (sequence_2_ints(sipPy, &_x, &_y))
-    {
+    if (sequence_2_ints(sipPy, &_x, &_y)) {
         *sipCppPtr = new wxGBPosition(_x, _y);
         return sipGetState(sipTransferObj);
     }
@@ -36,9 +33,7 @@ public:
 class wxGBSpan
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
-#endif
 %End
 
 public:
@@ -51,8 +46,7 @@ public:
             || sequence_2_ints_check(sipPy);
 
     int _x, _y;
-    if (sequence_2_ints(sipPy, &_x, &_y))
-    {
+    if (sequence_2_ints(sipPy, &_x, &_y)) {
         *sipCppPtr = new wxGBSpan(_x, _y);
         return sipGetState(sipTransferObj);
     }
@@ -73,9 +67,7 @@ public:
 class wxGBSizerItem: wxSizerItem
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
-#endif
 %End
 
 public:
@@ -97,11 +89,11 @@ public:
 class wxGridBagSizer : wxFlexGridSizer
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/gbsizer.h>
-#endif
 %End
 
+private:
+    wxGridBagSizer(const wxGridBagSizer&);
 public:
     wxGridBagSizer(int vgap = 0, int hgap = 0);
     virtual ~wxGridBagSizer();
@@ -124,13 +116,10 @@ public:
                      int flag = 0,
                      int border = 0) /Transfer/;
 %MethodCode
-    if (PySequence_Fast_GET_SIZE(a0) != 2)
-    {
+    if (PySequence_Fast_GET_SIZE(a0) != 2) {
         PyErr_SetString(PyExc_TypeError, "wx.GridBagSizer.Add (with size argument): first argument must be a sequence of 2 integers");
         sipIsErr = 1;
-    }
-    else
-    {
+    } else {
         int w = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 0));
         int h = PyInt_AsLong(PySequence_Fast_GET_ITEM(a0, 1));
 
@@ -178,7 +167,5 @@ public:
     bool CheckForIntersection(const wxGBPosition& pos, const wxGBSpan& span, wxGBSizerItem* excludeItem = NULL);
 
     void RecalcSizes();
-private:
-    wxGridBagSizer(const wxGridBagSizer&);
 };
 

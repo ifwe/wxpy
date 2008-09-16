@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/intl.h>
-#endif
 %End
 
 enum wxLanguage

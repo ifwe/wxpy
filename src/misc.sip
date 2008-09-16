@@ -1,8 +1,6 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/tooltip.h>
 #include <wx/caret.h>
-#endif
 %End
 
 %Include sound.sip
@@ -71,9 +69,7 @@ private:
 class wxSingleInstanceChecker
 {
 %TypeCode
-#ifndef WXPY_PREC
 #include <wx/snglinst.h>
-#endif
 %End
 
 private:

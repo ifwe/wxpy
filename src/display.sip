@@ -1,8 +1,6 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/display.h>
 #include <wx/vidmode.h>
-#endif
 %End
 
 struct wxVideoMode
@@ -24,6 +22,9 @@ struct wxVideoMode
 
 class wxDisplay
 {
+private:
+    wxDisplay(const wxDisplay&);
+
 public:
     wxDisplay(unsigned index = 0);
     virtual ~wxDisplay();
@@ -40,8 +41,6 @@ public:
 
     bool ChangeMode(const wxVideoMode& mode = wxDefaultVideoMode);
     void ResetMode();
-private:
-    wxDisplay(const wxDisplay&);
 };
 
 //---------------------------------------------------------------------------

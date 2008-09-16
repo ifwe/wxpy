@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/stockitem.h>
-#endif
 %End
 
 void wxWakeUpIdle();
@@ -200,9 +198,6 @@ bool wxIsMainThread();
 
 int Crash();
 %MethodCode
-    int a = 1;
-    int b = 1;
-    b--;
-    int c = a/b;
-    sipRes = c;
+    int* p = 0;
+    int  q = *p;
 %End

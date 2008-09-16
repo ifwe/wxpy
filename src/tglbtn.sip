@@ -1,8 +1,6 @@
 %ModuleHeaderCode
 void add_event(PyObject* module_dict, const char* name, ...);
-#ifndef WXPY_PREC
 #include <wx/tglbtn.h>
-#endif
 %End
 
 enum { wxEVT_COMMAND_TOGGLEBUTTON_CLICKED };

@@ -19,10 +19,11 @@ class wxButton : wxControl
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/button.h>
-#endif
 %End
+
+private:
+    wxButton(const wxButton&);
 
 public:
     wxButton(wxWindow* parent /TransferThis/,
@@ -37,8 +38,4 @@ public:
 
     void SetDefault();
     static wxSize GetDefaultSize();
-
-
-private:
-    wxButton(const wxButton&);
 };

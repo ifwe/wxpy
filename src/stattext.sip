@@ -1,9 +1,7 @@
 class wxStaticText : wxControl
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/stattext.h>
-#endif
 %End
 
 public:
@@ -16,16 +14,13 @@ public:
                  const wxString& name = wxStaticTextNameStr);
     virtual ~wxStaticText();
 
-
     void Wrap(int width);
 };
 
 class wxStaticBox : wxControl
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/statbox.h>
-#endif
 %End
 
 public:
@@ -42,9 +37,7 @@ public:
 class wxStaticLine : wxControl
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/statline.h>
-#endif
 %End
 
 public:
@@ -63,9 +56,7 @@ public:
 class wxStaticBitmap : wxControl
 {
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/statbmp.h>
-#endif
 %End
 
 public:

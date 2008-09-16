@@ -1,7 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/statusbr.h>
-#endif
 %End
 
 enum {
@@ -34,36 +32,10 @@ public:
     void SetStatusWidths(int widths, const int* widths_field);
     void SetStatusStyles(int styles, const int* styles_field);
 
-//
-//    // Get the position and size of the field's internal bounding rectangle
-//    %extend {
-//        wxRect GetFieldRect(int i) {
-//            wxRect r;
-//            self->GetFieldRect(i, r);
-//            return r;
-//        }
-//    }
-
     // sets the minimal vertical size of the status bar
     void SetMinHeight(int height);
 
     // get the dimensions of the horizontal and vertical borders
     int GetBorderX() const;
     int GetBorderY() const;
-
-//
-//    %pythoncode {
-//        def GetFields(self):
-//            """Return a list of field values in the status bar. """
-//            return [self.GetStatusText(i) for i in range(self.GetFieldsCount())]
-//
-//        def SetFields(self, items):
-//            """Set the values of the statusbar fields from a list of strings. """
-//            self.SetFieldsCount(len(items))
-//            for i in range(len(items)):
-//                self.SetStatusText(items[i], i)
-//    }
 };
-
-
-//---------------------------------------------------------------------------

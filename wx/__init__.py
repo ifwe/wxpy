@@ -566,7 +566,9 @@ class PyTimer(Timer):
         self.notify = notify
 
     def Notify(self):
-        self.notify()
+        notify = getattr(self, 'notify', None)
+        if notify is not None:
+            notify()
 
 class CallLater(object):
     """

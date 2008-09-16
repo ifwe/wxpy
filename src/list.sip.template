@@ -10,8 +10,7 @@ INCLUDES
 
 %ConvertToTypeCode
     // See if we are just being asked to check the type of the Python object.
-    if (sipIsErr == NULL)
-    {
+    if (!sipIsErr) {
         if (!PyList_Check(sipPy)) // Check it is a list.
             return 0;
 
@@ -28,8 +27,7 @@ INCLUDES
     // Create the instance on the heap.
     LISTTYPE *ql = new LISTTYPE;
 
-    for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
-    {
+    for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
         // Use the SIP API to convert the Python object to the
         // corresponding C++ instance.  Note that we apply any ownership
         // transfer to the list itself, not the individual elements.
@@ -38,8 +36,7 @@ INCLUDES
                                             sipClass_TYPE, 0, 0, 0,
                                             sipIsErr));
 
-        if (*sipIsErr)
-        {
+        if (*sipIsErr) {
             delete ql;
             return 0; // There is nothing on the heap.
         }
@@ -52,29 +49,28 @@ INCLUDES
 %End
 
 %ConvertFromTypeCode
-    PyObject *l;
+    PyObject *l = PyList_New(sipCpp->size());
 
     // Create the Python list of the correct length.
-    if ((l = PyList_New(sipCpp->size())) == NULL)
+    if (!l)
         return NULL;
 
     // Go through each element in the C++ instance and convert it to the
     // corresponding Python object.
     LISTTYPE::iterator iter;
     size_t i = 0;
-    for (iter = sipCpp->begin(); iter != sipCpp->end(); ++iter, ++i)
-    {
+    for (iter = sipCpp->begin(); iter != sipCpp->end(); ++iter) {
         TYPE *t = *iter;
-        PyObject *tobj;
+        PyObject *tobj = sipConvertFromInstance(t, sipClass_TYPE, sipTransferObj);
 
-        if ((tobj = sipConvertFromInstance(t, sipClass_TYPE, sipTransferObj)) == NULL)
-        {
+        if (!tobj) {
             // There was an error so garbage collect the Python list.
             Py_DECREF(l);
             return NULL;
         }
 
-        PyList_SET_ITEM(l, i, tobj);
+        PyList_SET_ITEM(l, i, tobj); // steals reference
+        ++i;
     }
 
     // Return the Python list.

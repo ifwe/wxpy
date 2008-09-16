@@ -23,10 +23,10 @@ static const sipAPIDef *get_sip_api()
 
     /* Get the module's dictionary. */
     sip_module_dict = PyModule_GetDict(sip_module);
-    Py_DECREF(sip_module);
 
     /* Get the "_C_API" attribute. */
     c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
+    Py_DECREF(sip_module);
 
     if (!c_api)
         return NULL;
@@ -96,18 +96,14 @@ protected:
 %ModuleCode
 
 #ifdef __WXMSW__
-#ifndef WXPY_PREC
 #include <wx/msw/crashrpt.h>
 #include <wx/msw/seh.h>
-#endif
 
 wxPyApp::wxPyApp()
     : crash_report_flags(wxCRASH_REPORT_DEFAULT)
     , m_assertMode(wxPYAPP_ASSERT_EXCEPTION)
 {
-    SIP_BLOCK_THREADS
     callAfterCbs = PyList_New(0);
-    SIP_UNBLOCK_THREADS
 }
 wxPyApp::~wxPyApp()
 {
@@ -117,8 +113,8 @@ wxPyApp::~wxPyApp()
     SIP_UNBLOCK_THREADS
 }
 
+// on an exception, the excp. info is stored in this global
 extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
-#include <wx/msw/seh.h>
 
 static void call_crashreport_process(const wxString& cmd)
 {
@@ -172,8 +168,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 
     wxGlobalSEInformation = NULL;
 
-    // this will execute our handler and terminate the process
-    return EXCEPTION_CONTINUE_SEARCH;//return EXCEPTION_EXECUTE_HANDLER;
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 
 #endif // __WXMSW__
@@ -220,8 +215,7 @@ int EntryStart();
     wxApp* app = wxTheApp;
 
     /* Ensure the wxApp was created already. */
-    if (app == NULL)
-    {
+    if (!app) {
         PyErr_SetString(PyExc_AssertionError, "wxEntryStart called without a wxApp created yet");
         sipIsErr = 1;
     }
@@ -235,6 +229,7 @@ int EntryStart();
 
 class wxApp : wxEvtHandler
 {
+public:
     wxApp();
     ~wxApp();
 };
@@ -336,18 +331,6 @@ public:
 
     static void SetInstance(wxApp* app);
     wxLayoutDirection GetLayoutDirection() const;
-
-    void GILCrash();
-%MethodCode
-    // Intentionally broken!
-    Py_BEGIN_ALLOW_THREADS
-        static const int N = 100;
-        PyObject* o = PyList_New(N);
-        for (int i = 0; i < N; ++i)
-            PyList_SetItem(o, i, PyLong_FromLong(i));
-        Py_DECREF(o);
-    Py_END_ALLOW_THREADS
-%End
 
     SIP_PYLIST callAfterCbs;
     wxString GetCrashFile();

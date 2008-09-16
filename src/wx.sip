@@ -46,8 +46,7 @@ void add_event(PyObject* module_dict, const char* name, ...)
     PyObject* list = PyList_New(0);
 
     int i = va_arg(argp, int);
-    while (i)
-    {
+    while (i) {
         PyObject* i_obj = PyInt_FromLong(i);
         PyList_Append(list, i_obj);
         Py_DECREF(i_obj);
@@ -58,8 +57,10 @@ void add_event(PyObject* module_dict, const char* name, ...)
     PyObject *tuple = PyList_AsTuple(list);
     Py_DECREF(list);
 
-    PyDict_SetItemString(module_dict, name, tuple);
-    Py_DECREF(tuple);
+    if (tuple) {
+        PyDict_SetItemString(module_dict, name, tuple);
+        Py_DECREF(tuple);
+    }
 }
 %End // ModuleCode
 
@@ -91,6 +92,7 @@ wxASSERT(sipModuleDict);
         PyObject* __pyinstance = sipConvertFromInstance((void*)obj, class, NULL); \
         wxASSERT(__pyinstance); \
         PyDict_SetItemString(sipModuleDict, name, __pyinstance); \
+        Py_DECREF(__pyinstance);
     } while (0)
 
 AddItem("DefaultSize",      &wxDefaultSize,      sipClass_wxSize);
@@ -267,6 +269,7 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
 
     #define SetModuleString(s, obj) \
         do { \
+            wxASSERT(s && obj); \
             PyDict_SetItemString(sipModuleDict, s, obj); \
             Py_DECREF(obj); \
         } while (0)
@@ -327,7 +330,9 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
     Py_DECREF(PlatInfo);
 
-    PyDict_SetItemString(sipModuleDict, "PlatformInfo", PlatInfoTuple);
-    Py_DECREF(PlatInfoTuple);
+    if (PlatInfoTuple) {
+        PyDict_SetItemString(sipModuleDict, "PlatformInfo", PlatInfoTuple);
+        Py_DECREF(PlatInfoTuple);
+    }
 %End
 

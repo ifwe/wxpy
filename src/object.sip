@@ -1,15 +1,9 @@
-//
-// object.sip
-//
-
 class wxObject
 {
 
 %TypeHeaderCode
-#ifndef WXPY_PREC
 #include <wx/object.h>
 #include <wx/gbsizer.h>
-#endif
 %End
 
 %ConvertToSubClassCode
@@ -31,8 +25,4 @@ class wxObject
 public:
     virtual ~wxObject();
     bool IsSameAs(const wxObject& p) const;
-//    int __nonzero__();
-//%MethodCode
-//	sipRes = !isDeleted(sipCpp);
-//%End
 };

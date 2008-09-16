@@ -64,25 +64,29 @@ SIP_PYTUPLE __getitem__(SIP_PYSLICE);
     PySlice_GetIndicesEx((PySliceObject*)a0, 4, &start, &stop, &step, &length);
 
     sipRes = PyTuple_New(length);
-    int c = 0;
-    int val = -1;
-    int i;
+    if (!sipRes) {
+        sipIsErr = 1;
+    } else {
+        int c = 0;
+        int val = -1;
+        int i;
 
-    for (i = start; (step > 0 ? i < stop : i > stop); i += step) {
-        switch (i) {
-            case 0: val = sipCpp->Red(); break;
-            case 1: val = sipCpp->Green(); break;
-            case 2: val = sipCpp->Blue(); break;
-            case 3: val = sipCpp->Alpha(); break;
-            default:
-                PyErr_SetString(PyExc_IndexError, "index out of range");
-                sipIsErr = 1;
+        for (i = start; (step > 0 ? i < stop : i > stop); i += step) {
+            switch (i) {
+                case 0: val = sipCpp->Red(); break;
+                case 1: val = sipCpp->Green(); break;
+                case 2: val = sipCpp->Blue(); break;
+                case 3: val = sipCpp->Alpha(); break;
+                default:
+                    PyErr_SetString(PyExc_IndexError, "index out of range");
+                    sipIsErr = 1;
+            }
+
+            if (sipIsErr)
+                break;
+
+            PyTuple_SET_ITEM(sipRes, c++, PyInt_FromLong(val));
         }
-
-        if (sipIsErr)
-            break;
-
-        PyTuple_SET_ITEM(sipRes, c++, PyInt_FromLong(val));
     }
 %End
 
@@ -102,7 +106,6 @@ public:
     // find colour by name or name for the given colour
     wxColour Find(const wxString& name) const;
     wxString FindName(const wxColour& colour) const;
-    //%pythoncode { FindColour = Find }
 
     void AddColour(const wxString& name, const wxColour& colour);
 };
