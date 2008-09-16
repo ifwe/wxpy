@@ -108,13 +108,12 @@ public:
 
     SIP_PYOBJECT GetAlphaData();
 %MethodCode
-        unsigned char* data = sipCpp->GetAlpha();
-        if (data)
-            sipRes = PyString_FromStringAndSize((char*)data, sipCpp->GetWidth() * sipCpp->GetHeight());
-        } else {
-            Py_INCREF(Py_None);
-            sipRes = Py_None;
-        }
+    unsigned char* data = sipCpp->GetAlpha();
+    if (data == NULL)
+        Py_RETURN_NONE;
+
+    int len = sipCpp->GetWidth() * sipCpp->GetHeight();
+    sipRes = PyString_FromStringAndSize((char*)data, len);
 %End
 
     // from file

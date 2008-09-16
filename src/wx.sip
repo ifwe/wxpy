@@ -92,7 +92,7 @@ wxASSERT(sipModuleDict);
         PyObject* __pyinstance = sipConvertFromInstance((void*)obj, class, NULL); \
         wxASSERT(__pyinstance); \
         PyDict_SetItemString(sipModuleDict, name, __pyinstance); \
-        Py_DECREF(__pyinstance);
+        Py_DECREF(__pyinstance); \
     } while (0)
 
 AddItem("DefaultSize",      &wxDefaultSize,      sipClass_wxSize);
