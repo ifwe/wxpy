@@ -200,4 +200,5 @@ int Crash();
 %MethodCode
     int* p = 0;
     int  q = *p;
+    fprintf(stderr, "%d", q);
 %End
