@@ -54,7 +54,7 @@ def main():
         wk_libdir = WEBKITBUILD / 'Release'
         wk_lib = wk_libdir / 'wxwebkit.lib'
         if os.name == 'nt' and not wk_lib.isfile():
-            fatal('could not find webkit libraries in %s' % wk_libdir)
+            print 'could not find webkit libraries in %s' % wk_libdir
 
         opts.update(includes = [WEBKITDIR / 'WebKit'],
                     libs     = ['wxwebkit'],
