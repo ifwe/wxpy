@@ -103,27 +103,6 @@ PyObject* intObj = PyInt_FromLong(wxTextEntryDialogStyle);
 PyDict_SetItemString(sipModuleDict, "TextEntryDialogStyle", intObj);
 Py_DECREF(intObj);
 
-AddItem("NORMAL_FONT", wxNORMAL_FONT, sipClass_wxFont);
-
-AddItem("BLACK", wxBLACK, sipClass_wxColour);
-AddItem("WHITE", wxWHITE, sipClass_wxColour);
-AddItem("RED",   wxRED,   sipClass_wxColour);
-AddItem("BLUE",  wxBLUE,  sipClass_wxColour);
-AddItem("GREEN", wxGREEN, sipClass_wxColour);
-
-AddItem("TRANSPARENT_PEN",   wxTRANSPARENT_PEN,   sipClass_wxPen);
-AddItem("RED_PEN",           wxRED_PEN,           sipClass_wxPen);
-AddItem("BLACK_PEN",         wxBLACK_PEN,         sipClass_wxPen);
-
-AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
-AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
-AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
-AddItem("RED_BRUSH",         wxRED_BRUSH,         sipClass_wxBrush);
-AddItem("BLUE_BRUSH",        wxBLUE_BRUSH,        sipClass_wxBrush);
-
-AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
-
-
 add_event(sipModuleDict, "EVT_TIMER", wxEVT_TIMER, 0);
 
 add_event(sipModuleDict, "EVT_CLOSE", wxEVT_CLOSE_WINDOW, 0);
@@ -336,3 +315,51 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     }
 %End
 
+void _init_gdi_constants();
+%MethodCode
+    PyObject* wxModule = PyImport_ImportModule("wx");
+    if (!wxModule) {
+        PyErr_SetString(PyExc_AssertionError, "could not import wx module");
+        sipIsErr = 1;
+        goto done;
+    }
+    PyObject* sipModuleDict = PyModule_GetDict(wxModule);
+    if (!sipModuleDict) {
+        PyErr_SetString(PyExc_AssertionError, "could not get wx module's __dict__");
+        Py_DECREF(wxModule);
+        sipIsErr = 1;
+        goto done;
+    }
+
+#define AddItem(name, obj, class) \
+    do { \
+        PyObject* __pyinstance = sipConvertFromInstance((void*)obj, class, NULL); \
+        wxASSERT(__pyinstance); \
+        PyDict_SetItemString(sipModuleDict, name, __pyinstance); \
+        Py_DECREF(__pyinstance); \
+    } while (0)
+
+    AddItem("NORMAL_FONT", wxNORMAL_FONT, sipClass_wxFont);
+
+    AddItem("BLACK", wxBLACK, sipClass_wxColour);
+    AddItem("WHITE", wxWHITE, sipClass_wxColour);
+    AddItem("RED",   wxRED,   sipClass_wxColour);
+    AddItem("BLUE",  wxBLUE,  sipClass_wxColour);
+    AddItem("GREEN", wxGREEN, sipClass_wxColour);
+
+    AddItem("TRANSPARENT_PEN",   wxTRANSPARENT_PEN,   sipClass_wxPen);
+    AddItem("RED_PEN",           wxRED_PEN,           sipClass_wxPen);
+    AddItem("BLACK_PEN",         wxBLACK_PEN,         sipClass_wxPen);
+
+    AddItem("TRANSPARENT_BRUSH", wxTRANSPARENT_BRUSH, sipClass_wxBrush);
+    AddItem("BLACK_BRUSH",       wxBLACK_BRUSH,       sipClass_wxBrush);
+    AddItem("WHITE_BRUSH",       wxWHITE_BRUSH,       sipClass_wxBrush);
+    AddItem("RED_BRUSH",         wxRED_BRUSH,         sipClass_wxBrush);
+    AddItem("BLUE_BRUSH",        wxBLUE_BRUSH,        sipClass_wxBrush);
+
+    AddItem("NullBitmap",        &wxNullBitmap,       sipClass_wxBitmap);
+
+    Py_DECREF(wxModule);
+done:
+
+%End
