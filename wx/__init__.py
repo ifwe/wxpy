@@ -689,6 +689,7 @@ _app = wx.PyApp
 _entrystart = wx.EntryStart
 _initallimagehandlers = wx.InitAllImageHandlers
 _getapp = wx.GetApp
+_init_gdi_constants = wx._init_gdi_constants
 
 def _wxpy_init(clearSigInt=True):
     if clearSigInt:
@@ -707,6 +708,7 @@ def _wxpy_init(clearSigInt=True):
 
     _entrystart()
     _initallimagehandlers()
+    _init_gdi_constants()
 
 
 _did_wxpy_init = False
@@ -776,6 +778,7 @@ SystemSettings_GetColour = wx.SystemSettings.GetColour
 # until enum properties work correctly
 _Window.LayoutDirection = property(_Window.GetLayoutDirection, _Window.SetLayoutDirection)
 
+# properties not automatically generated yet.
 wx.Window.Enabled  = property(wx.Window.IsEnabled, wx.Window.Enable)
 wx.Window.Shown    = property(wx.Window.IsShown)
 wx.Window.TopLevel = property(wx.Window.IsTopLevel)
