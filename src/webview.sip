@@ -102,7 +102,7 @@ class wxWebViewDOMElementInfo
 {
 public:
     wxWebViewDOMElementInfo();
-    ~wxWebViewDOMElementInfo();
+    virtual ~wxWebViewDOMElementInfo();
 
     wxString GetTagName() const;
     void SetTagName(const wxString& name);

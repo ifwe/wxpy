@@ -21,6 +21,9 @@ public:
     wxTaskBarIcon() /Transfer/;
     virtual ~wxTaskBarIcon();
     void Destroy();
+%MethodCode
+    delete sipCpp;
+%End
 
     bool IsOk() const;
     bool IsIconInstalled() const;

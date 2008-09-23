@@ -12,7 +12,7 @@ class wxArtProvider
 
 private:
     wxArtProvider();
-    ~wxArtProvider();
+    virtual ~wxArtProvider();
     wxArtProvider(const wxArtProvider&);
 
 public:

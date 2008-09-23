@@ -61,7 +61,7 @@ class wxTreeItemId
 {
 public:
     wxTreeItemId();
-    ~wxTreeItemId();
+    virtual ~wxTreeItemId();
 
     // is this a valid tree item?
     bool IsOk() const;

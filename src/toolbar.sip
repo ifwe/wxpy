@@ -67,7 +67,7 @@ class wxToolBarBase : wxControl
 {
 private:
     wxToolBarBase();
-    ~wxToolBarBase();
+    virtual ~wxToolBarBase();
     wxToolBarBase(const wxToolBarBase&);
 public:
 

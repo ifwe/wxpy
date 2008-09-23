@@ -11,7 +11,7 @@ public:
         m_obj = obj;
     }
 
-    ~wxPyData()
+    virtual ~wxPyData()
     {
         SIP_BLOCK_THREADS
         Py_CLEAR(m_obj);

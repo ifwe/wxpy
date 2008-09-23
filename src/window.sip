@@ -12,7 +12,7 @@ class wxWindowBase : wxEvtHandler
 {
 private:
     wxWindowBase();
-    ~wxWindowBase();
+    virtual ~wxWindowBase();
     wxWindowBase(const wxWindowBase&);
 };
 

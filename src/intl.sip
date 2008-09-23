@@ -280,7 +280,7 @@ private:
     wxLocale(const wxLocale&);
 public:
     wxLocale(int language, int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
-    ~wxLocale();
+    virtual ~wxLocale();
 
     static int GetSystemLanguage();
     static wxFontEncoding GetSystemEncoding();

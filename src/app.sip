@@ -76,7 +76,7 @@ class wxPyApp : public wxApp
 {
 public:
     wxPyApp();
-    ~wxPyApp();
+    virtual ~wxPyApp();
 
     virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg);
 
@@ -231,7 +231,7 @@ class wxApp : wxEvtHandler
 {
 public:
     wxApp();
-    ~wxApp();
+    virtual ~wxApp();
 };
 
 enum {
@@ -264,7 +264,7 @@ class wxPyApp : wxApp
 
 public:
     wxPyApp() /Transfer/;
-    ~wxPyApp();
+    virtual ~wxPyApp();
     virtual bool OnInit();
     virtual bool OnInitGui();
 

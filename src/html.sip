@@ -254,7 +254,7 @@ private:
     wxHtmlCell(const wxHtmlCell&);
 public:
     wxHtmlCell();
-    ~wxHtmlCell();
+    virtual ~wxHtmlCell();
 
     int GetPosX();
     int GetPosY();

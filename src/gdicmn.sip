@@ -320,7 +320,7 @@ class wxPen : wxGDIObject
 public:
     wxPen(wxColour& colour, int width = 1, int style = wxSOLID);
     wxPen(const wxPen&);
-    ~wxPen();
+    virtual ~wxPen();
 
     int GetCap();
     void SetCap(int cap_style);
@@ -346,7 +346,7 @@ public:
     wxBrush();
     wxBrush(const wxColour&);
     wxBrush(const wxBrush&);
-    ~wxBrush();
+    virtual ~wxBrush();
 
     void SetColour(const wxColour& color);
     wxColour& GetColour() const;

@@ -1763,7 +1763,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxSTCNameStr);
-    ~wxStyledTextCtrl();
+    virtual ~wxStyledTextCtrl();
 
 
     // Add text to the document at current position.

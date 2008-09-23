@@ -9,7 +9,7 @@ class wxPyCallback: public wxObject
 {
 public:
     wxPyCallback(PyObject* func);
-    ~wxPyCallback();
+    virtual ~wxPyCallback();
     void EventThunker(wxEvent& event);
 
     PyObject* callback() const

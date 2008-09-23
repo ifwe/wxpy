@@ -257,7 +257,7 @@ private:
 
 public:
     // wxGraphicsRenderer();  This is an ABC, use GetDefaultRenderer
-     ~wxGraphicsRenderer();
+     virtual ~wxGraphicsRenderer();
 
 
     static wxGraphicsRenderer* GetDefaultRenderer();

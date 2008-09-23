@@ -22,7 +22,7 @@ private:
     wxImageList(const wxImageList&);
 public:
     wxImageList(int width, int height, int mask=true, int initialCount=1);
-    ~wxImageList();
+    virtual ~wxImageList();
 
     int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
     int Add(const wxBitmap& bitmap, const wxColour& maskColour) /PyName=AddWithColourMask/;
