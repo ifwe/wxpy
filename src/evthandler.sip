@@ -60,16 +60,18 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
     // Call the event handler, passing the event object
     PyObject* tuple = PyTuple_New(1);
-    PyTuple_SET_ITEM(tuple, 0, event_arg); // steals ref to arg
+    if (tuple) {
+        PyTuple_SET_ITEM(tuple, 0, event_arg); // steals ref to arg
 
-    PyObject* result = PyEval_CallObject(func, tuple);
-    Py_DECREF(tuple);
+        PyObject* result = PyEval_CallObject(func, tuple);
+        Py_DECREF(tuple);
 
-    Py_XDECREF(result);
-    if (PyErr_Occurred()) {
+        Py_XDECREF(result);
+    } else
+        Py_DECREF(event_arg);
+
+    if (PyErr_Occurred())
         PyErr_Print();
-        PyErr_Clear();
-    }
 
 skip_event:
     SIP_UNBLOCK_THREADS
