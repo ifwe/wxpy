@@ -13,14 +13,20 @@ class wxWebView : wxWindow
 public:
 
 %ConvertToSubClassCode
-    wxClassInfo* c = sipCpp->GetClassInfo();
+wxClassInfo* c = sipCpp->GetClassInfo();
 
-    if(0) ;
-    #define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
-        C(wxWebView)
-    else
-        sipClass = NULL;
-    #undef C
+if(0) {}
+#define C(clz) else if (c == CLASSINFO(clz)) { sipClass = sipClass_ ## clz; }
+    C(wxWebView)
+    C(wxWebViewBeforeLoadEvent)
+    C(wxWebViewLoadEvent)
+    C(wxWebViewNewWindowEvent)
+    C(wxWebViewRightClickEvent)
+    C(wxWebViewConsoleMessageEvent)
+    C(wxWebViewReceivedTitleEvent)
+else
+    sipClass = NULL;
+#undef C
 %End
 
     wxWebView(wxWindow* parent /TransferThis/, int id = wxID_ANY,
@@ -122,21 +128,6 @@ public:
 
 class wxWebViewBeforeLoadEvent : wxCommandEvent
 {
-%ConvertToSubClassCode
-wxClassInfo* c = sipCpp->GetClassInfo();
-
-if(0) ;
-#define C(clz) else if (c == CLASSINFO(clz)) sipClass = sipClass_ ## clz;
-    C(wxWebViewBeforeLoadEvent)
-    C(wxWebViewLoadEvent)
-    C(wxWebViewNewWindowEvent)
-    C(wxWebViewRightClickEvent)
-    C(wxWebViewConsoleMessageEvent)
-    C(wxWebViewReceivedTitleEvent)
-else
-    sipClass = NULL;
-#undef C
-%End
 
 public:
     bool IsCancelled() const;
@@ -146,7 +137,8 @@ public:
     void SetNavigationType(int navType);
     int GetNavigationType() const;
 
-    wxWebViewBeforeLoadEvent( wxWindow* win = NULL );
+    wxWebViewBeforeLoadEvent(wxWindow* win = NULL);
+    virtual ~wxWebViewBeforeLoadEvent();
 };
 
 class wxWebViewLoadEvent : wxCommandEvent
@@ -157,7 +149,8 @@ public:
     wxString GetURL() const;
     void SetURL(const wxString& url);
 
-    wxWebViewLoadEvent( wxWindow* win = NULL );
+    wxWebViewLoadEvent(wxWindow* win = NULL);
+    virtual ~wxWebViewLoadEvent();
 };
 
 class wxWebViewNewWindowEvent : wxCommandEvent
@@ -168,13 +161,15 @@ public:
     wxString GetTargetName() const;
     void SetTargetName(const wxString& name);
 
-    wxWebViewNewWindowEvent( wxWindow* win = NULL);
+    wxWebViewNewWindowEvent(wxWindow* win = NULL);
+    virtual ~wxWebViewNewWindowEvent();
 };
 
 class wxWebViewRightClickEvent : wxCommandEvent
 {
 public:
     wxWebViewRightClickEvent(wxWindow* win = NULL);
+    virtual ~wxWebViewRightClickEvent();
 
     wxWebViewDOMElementInfo GetInfo() const;
     void SetInfo(wxWebViewDOMElementInfo info);
@@ -187,6 +182,7 @@ class wxWebViewConsoleMessageEvent : wxCommandEvent
 {
 public:
     wxWebViewConsoleMessageEvent(wxWindow* win = NULL);
+    virtual ~wxWebViewConsoleMessageEvent();
 
     wxString GetMessage() const;
     void SetMessage(const wxString& message);
@@ -204,7 +200,8 @@ public:
     wxString GetTitle() const;
     void SetTitle(const wxString& title);
 
-    wxWebViewReceivedTitleEvent( wxWindow* win = static_cast<wxWindow*>(NULL));
+    wxWebViewReceivedTitleEvent(wxWindow* win = static_cast<wxWindow*>(NULL));
+    virtual ~wxWebViewReceivedTitleEvent();
 };
 
 
