@@ -47,10 +47,10 @@
         <cxx-rtti>on</cxx-rtti>
         <cxx-exceptions>off</cxx-exceptions>
 
-        <!-- NDEBUG and __WXDEBUG__ is a mess -->
+        <!-- NDEBUG and __WXDEBUG__ is a mess 
         <if cond="WX_DEBUG=='1'">
             <cxxflags>/UNDEBUG</cxxflags>
-        </if>
+        </if> -->
 
         <define>$(substituteFromDict(DEBUG, {'1':'_DEBUG','0':'NDEBUG'}))</define>
 
