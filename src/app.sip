@@ -381,24 +381,35 @@ public:
 %End
 
 %ModuleCode
-void wxpy_add_pending_delete(sipTypeDef *type, void *sipCppV, int state)
+
+static void wxpy_do_pending_delete(int add, sipTypeDef *type, void *sipCppV, int state)
 {
     wxPyApp* app = (wxPyApp*)wxTheApp;
-    PyObject* to_delete = Py_BuildValue("NNi", PyCObject_FromVoidPtr(type, NULL), PyCObject_FromVoidPtr(sipCppV, NULL), state);
+
+    PyObject* type_vp = PyCObject_FromVoidPtr(type, NULL);
+    PyObject* cpp_vp = PyCObject_FromVoidPtr(sipCppV, NULL);
+    PyObject* to_delete = Py_BuildValue("OOi", type_vp, cpp_vp, state);
+
     if (to_delete) {
-        PySet_Add(app->pendingDelete, to_delete);
+        if (add)
+            PySet_Add(app->pendingDelete, to_delete);
+        else
+            PySet_Discard(app->pendingDelete, to_delete);
         Py_DECREF(to_delete);
     }
+
+    Py_DECREF(type_vp);
+    Py_DECREF(cpp_vp);
+}
+
+void wxpy_add_pending_delete(sipTypeDef *type, void *sipCppV, int state)
+{
+    wxpy_do_pending_delete(1, type, sipCppV, state);
 }
 
 void wxpy_remove_pending_delete(sipTypeDef *type, void *sipCppV, int state)
 {
-    wxPyApp* app = (wxPyApp*)wxTheApp;
-    PyObject* to_delete = Py_BuildValue("NNi", PyCObject_FromVoidPtr(type, NULL), PyCObject_FromVoidPtr(sipCppV, NULL), state);
-    if (to_delete) {
-        PySet_Discard(app->pendingDelete, to_delete);
-        Py_DECREF(to_delete);
-    }
+    wxpy_do_pending_delete(0, type, sipCppV, state);
 }
 
 // call destructors on all objects pending deletion and clear the list
@@ -406,18 +417,17 @@ static void wxpy_flush_pending_delete()
 {
     SIP_BLOCK_THREADS
     PyObject* pendingDelete = ((wxPyApp*)wxTheApp)->pendingDelete;
+
     while (PySet_GET_SIZE(pendingDelete)) {
-        // TODO: elements are popped off the set in an arbitrary order. is this
-        // ok?
+        // TODO: elements are popped off the set in an arbitrary order. is this ok?
         PyObject* to_delete = PySet_Pop(pendingDelete);
         if (!to_delete)
             return;
 
         // parse (sipTypeDef*, sipWrapper*, and int) out of the tuple
-        PyObject* type_cobj;
-        PyObject* cpp_cobj;
-        int state;
-        PyArg_Parse(to_delete, "OOi", &type_cobj, &cpp_cobj, state);
+        PyObject* type_cobj = PyTuple_GET_ITEM(to_delete, 0);
+        PyObject* cpp_cobj  = PyTuple_GET_ITEM(to_delete, 1);
+        int state = PyInt_AsLong(PyTuple_GET_ITEM(to_delete, 2));
 
         // convert PyCObject void pointer objects to actual void*s
         sipTypeDef* type = (sipTypeDef*)PyCObject_AsVoidPtr(type_cobj);
