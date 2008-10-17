@@ -157,30 +157,30 @@ public:
     wxMouseState();
     ~wxMouseState();
 
-    wxCoord     GetX();
-    wxCoord     GetY();
+    wxCoord GetX();
+    wxCoord GetY();
 
-    bool        LeftDown();
-    bool        MiddleDown();
-    bool        RightDown();
+    bool LeftDown();
+    bool MiddleDown();
+    bool RightDown();
 
-    bool        ControlDown();
-    bool        ShiftDown();
-    bool        AltDown();
-    bool        MetaDown();
-    bool        CmdDown();
+    bool ControlDown();
+    bool ShiftDown();
+    bool AltDown();
+    bool MetaDown();
+    bool CmdDown();
 
-    void        SetX(wxCoord x);
-    void        SetY(wxCoord y);
+    void SetX(wxCoord x);
+    void SetY(wxCoord y);
 
-    void        SetLeftDown(bool down);
-    void        SetMiddleDown(bool down);
-    void        SetRightDown(bool down);
+    void SetLeftDown(bool down);
+    void SetMiddleDown(bool down);
+    void SetRightDown(bool down);
 
-    void        SetControlDown(bool down);
-    void        SetShiftDown(bool down);
-    void        SetAltDown(bool down);
-    void        SetMetaDown(bool down);
+    void SetControlDown(bool down);
+    void SetShiftDown(bool down);
+    void SetAltDown(bool down);
+    void SetMetaDown(bool down);
 };
 
 
@@ -195,6 +195,17 @@ bool wxHandleFatalExceptions();
 bool wxYieldIfNeeded();
 
 bool wxIsMainThread();
+
+
+void wxLogError(const wxString& msg);
+%MethodCode
+    wxLogError(*a0);
+%End
+
+void wxFAIL_MSG(const wxString& msg);
+%MethodCode
+    wxFAIL_MSG(*a0);
+%End
 
 int Crash();
 %MethodCode
