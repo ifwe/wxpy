@@ -7,6 +7,9 @@ build/
 *.obj
 *.swp
 
+.siptemp.tmp
+inputgperf.tmp
+
 # windows binaries/project files
 Thumbs.db
 *.pdb
