@@ -84,6 +84,7 @@ public:
     void SetAssertMode(int mode) { m_assertMode = mode; }
 
     PyObject* callAfterCbs;
+    PyObject* pendingDelete;
 
     wxString crash_cmd;
     int crash_report_flags;
@@ -104,12 +105,13 @@ wxPyApp::wxPyApp()
     , m_assertMode(wxPYAPP_ASSERT_EXCEPTION)
 {
     callAfterCbs = PyList_New(0);
+    pendingDelete = PySet_New(NULL);
 }
 wxPyApp::~wxPyApp()
 {
     SIP_BLOCK_THREADS
-    fprintf(stderr, "~wxPyApp(), clearing callAfterCbs\n");
     Py_CLEAR(callAfterCbs);
+    Py_CLEAR(pendingDelete);
     SIP_UNBLOCK_THREADS
 }
 
@@ -196,6 +198,7 @@ void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc
     if (m_assertMode & wxPYAPP_ASSERT_EXCEPTION) {
         SIP_BLOCK_THREADS
         PyErr_SetString(PyExc_AssertionError, msg.ToAscii());
+        PyErr_Print();
         SIP_UNBLOCK_THREADS
     }
 
@@ -248,20 +251,6 @@ class wxPyApp : wxApp
 #include <wx/msw/seh.h>
 %End
 
-
-// expose the CallAfter list to the cyclic garbage collector
-
-//%GCTraverseCode
-//    PyObject *obj = sipCpp->callAfterCbs;
-//    sipRes = obj ? sipVisit(obj, sipArg) : 0;
-//%End
-//
-//%GCClearCode
-//    Py_CLEAR(sipCpp->callAfterCbs);
-//    sipRes = 0;
-//%End
-
-
 public:
     wxPyApp() /Transfer/;
     virtual ~wxPyApp();
@@ -280,8 +269,15 @@ public:
 
     int crash_report_flags;
 
+/*
+    Surrounds wxApp::MainLoop with wxSEH_TRY and wxSEH_HANDLE.
+*/
     int MainLoop();
 %MethodCode
+
+    wxTimer* timer = new PendingDeleteTimer();
+    timer->Start(1000);
+
     Py_BEGIN_ALLOW_THREADS
 #if __WXMSW__
     wxSEH_TRY
@@ -333,6 +329,8 @@ public:
     wxLayoutDirection GetLayoutDirection() const;
 
     SIP_PYLIST callAfterCbs;
+    SIP_PYLIST pendingDelete;
+
     wxString GetCrashFile();
 %MethodCode
     sipRes = new wxString(wxCrashReport::GetFileName());
@@ -345,6 +343,9 @@ wxApp* GetApp();
     sipRes = wxTheApp;
 %End
 
+/*
+    Surrounds a Python callable with wxSEH_TRY and wxSEH_HANDLE.
+*/
 %If (WXMSW)
     SIP_PYOBJECT SEHGuard(SIP_PYCALLABLE cb);
 %MethodCode
@@ -356,4 +357,93 @@ wxApp* GetApp();
     }
     wxSEH_HANDLE(-1)
 %End
+%End
+
+/*
+   When the garbage collector cleans up cycles on subthreads, it may involve
+   the dealloc functions for wx objects, whose destructors are not thread-
+   safe.
+  
+   These functions schedule objects for deletion later on the main thread.
+*/
+
+%ModuleHeaderCode
+void wxpy_add_pending_delete(sipTypeDef *type, void *sipCppV, int state);
+void wxpy_remove_pending_delete(sipTypeDef *type, void *sipCppV, int state);
+
+class PendingDeleteTimer : public wxTimer
+{
+public:
+    PendingDeleteTimer();
+    virtual void Notify();
+};
+
+%End
+
+%ModuleCode
+void wxpy_add_pending_delete(sipTypeDef *type, void *sipCppV, int state)
+{
+    wxPyApp* app = (wxPyApp*)wxTheApp;
+    PyObject* to_delete = Py_BuildValue("NNi", PyCObject_FromVoidPtr(type, NULL), PyCObject_FromVoidPtr(sipCppV, NULL), state);
+    if (to_delete) {
+        PySet_Add(app->pendingDelete, to_delete);
+        Py_DECREF(to_delete);
+    }
+}
+
+void wxpy_remove_pending_delete(sipTypeDef *type, void *sipCppV, int state)
+{
+    wxPyApp* app = (wxPyApp*)wxTheApp;
+    PyObject* to_delete = Py_BuildValue("NNi", PyCObject_FromVoidPtr(type, NULL), PyCObject_FromVoidPtr(sipCppV, NULL), state);
+    if (to_delete) {
+        PySet_Discard(app->pendingDelete, to_delete);
+        Py_DECREF(to_delete);
+    }
+}
+
+// call destructors on all objects pending deletion and clear the list
+static void wxpy_flush_pending_delete()
+{
+    SIP_BLOCK_THREADS
+    PyObject* pendingDelete = ((wxPyApp*)wxTheApp)->pendingDelete;
+    while (PySet_GET_SIZE(pendingDelete)) {
+        // TODO: elements are popped off the set in an arbitrary order. is this
+        // ok?
+        PyObject* to_delete = PySet_Pop(pendingDelete);
+        if (!to_delete)
+            return;
+
+        // parse (sipTypeDef*, sipWrapper*, and int) out of the tuple
+        PyObject* type_cobj;
+        PyObject* cpp_cobj;
+        int state;
+        PyArg_Parse(to_delete, "OOi", &type_cobj, &cpp_cobj, state);
+
+        // convert PyCObject void pointer objects to actual void*s
+        sipTypeDef* type = (sipTypeDef*)PyCObject_AsVoidPtr(type_cobj);
+        void* sipCppV = PyCObject_AsVoidPtr(cpp_cobj);
+
+        // invoke the destructor
+        type->td_release(sipCppV, state);
+
+        Py_DECREF(to_delete);
+    }
+    SIP_UNBLOCK_THREADS
+}
+
+PendingDeleteTimer::PendingDeleteTimer() {}
+
+void PendingDeleteTimer::Notify()
+{
+    wxpy_flush_pending_delete();
+}
+%End
+
+%PostInitialisationCode
+// Export functions for other modules to use.
+#define EXPORT_WXPY_SYMBOL(name, func) do { if (0 != sipExportSymbol(name, (void *)&func)) fprintf(stderr, "error exporting '" #name "' symbol\n"); } while(0)
+
+EXPORT_WXPY_SYMBOL("wxpy_add_event", add_event);
+EXPORT_WXPY_SYMBOL("wxpy_add_pending_delete", wxpy_add_pending_delete);
+EXPORT_WXPY_SYMBOL("wxpy_remove_pending_delete", wxpy_remove_pending_delete);
 %End
