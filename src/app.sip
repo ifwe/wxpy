@@ -1,8 +1,5 @@
 %ModuleHeaderCode
-#ifndef WXPY_PREC
 #include <wx/app.h>
-#endif
-
 #include <sip.h>
 
 static const sipAPIDef *get_sip_api();
@@ -135,12 +132,12 @@ static void call_crashreport_process(const wxString& cmd)
 }
 
 static bool did_crash_report = false;
+static wxString seh_cmd;
 
 unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 {
     // store the pointer to exception info
     wxGlobalSEInformation = pExcPtrs;
-    wxString cmd;
 
     wxSEH_TRY
     {
@@ -159,11 +156,11 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
             // Turn a "%s" in the crash command string into the filename
             // of the dump file.
             if (app->crash_cmd.Find(wxT("%s")) != wxNOT_FOUND)
-                cmd.Printf(app->crash_cmd, wxCrashReport::GetFileName());
+                seh_cmd.Printf(app->crash_cmd, wxCrashReport::GetFileName());
             else
-                cmd = app->crash_cmd;
+                seh_cmd = app->crash_cmd;
 
-            call_crashreport_process(cmd);
+            call_crashreport_process(seh_cmd);
         }
     }
     wxSEH_IGNORE
@@ -319,7 +316,7 @@ public:
     void SetExitOnFrameDelete(bool flag);
     bool GetExitOnFrameDelete() const;
 
-    void SetUseBestVisual( bool flag, bool forceTrueColour = false  );
+    void SetUseBestVisual(bool flag, bool forceTrueColour = false);
     bool GetUseBestVisual() const;
 
     void SetPrintMode(int mode);
@@ -451,7 +448,11 @@ void PendingDeleteTimer::Notify()
 
 %PostInitialisationCode
 // Export functions for other modules to use.
-#define EXPORT_WXPY_SYMBOL(name, func) do { if (0 != sipExportSymbol(name, (void *)&func)) fprintf(stderr, "error exporting '" #name "' symbol\n"); } while(0)
+#define EXPORT_WXPY_SYMBOL(name, func) do { \
+ int err = sipExportSymbol(name, (void *)&func); \
+ if (err != 0) \
+     fprintf(stderr, "error exporting '" #name "' symbol: %d\n", err); \
+ } while(0)
 
 EXPORT_WXPY_SYMBOL("wxpy_add_event", add_event);
 EXPORT_WXPY_SYMBOL("wxpy_add_pending_delete", wxpy_add_pending_delete);

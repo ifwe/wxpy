@@ -9,6 +9,9 @@ typedef wxString wxArtARTCONSTANT;
 
 class wxArtProvider
 {
+%TypeHeaderCode
+typedef wxString wxArtARTCONSTANT;
+%End
 
 private:
     wxArtProvider();

@@ -17,8 +17,12 @@ public:
         return m_func;
     }
 
+    int errorIncrement() { return ++m_error_count; }
+    int errorCount() const { return m_error_count; }
+
 protected:
     PyObject* m_func;
+    int m_error_count;
 };
 
 %End // TypeHeaderCode
@@ -26,9 +30,11 @@ protected:
 
 %TypeCode
 
-wxPyCallback::wxPyCallback(PyObject* func) {
+wxPyCallback::wxPyCallback(PyObject* func)
+    : m_func(func)
+    , m_error_count(0)
+{
     Py_INCREF(func);
-    m_func = func;
 }
 
 wxPyCallback::~wxPyCallback() {
@@ -70,8 +76,9 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     } else
         Py_DECREF(event_arg);
 
-    if (PyErr_Occurred())
+    if (PyErr_Occurred()) {
         PyErr_Print();
+    }
 
 skip_event:
     SIP_UNBLOCK_THREADS

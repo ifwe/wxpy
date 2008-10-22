@@ -22,7 +22,6 @@ typedef unsigned long   wxUIntPtr;
 typedef double          wxDouble;
 typedef int             wxWindowID;
 typedef int   wxCoord;
-typedef int   byte;
 typedef int   wxByte;
 /*
 %ModuleHeaderCode

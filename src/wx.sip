@@ -64,16 +64,6 @@ void add_event(PyObject* module_dict, const char* name, ...)
 }
 %End // ModuleCode
 
-%PostInitialisationCode
-
-//
-// Export add_event for other modules to use.
-//
-if (0 != sipExportSymbol("wxpy_add_event", (void *)&add_event))
-    fprintf(stderr, "error exporting 'wxpy_add_event' symbol\n");
-
-%End
-
 enum
 {
     wxEVT_ACTIVATE

@@ -169,6 +169,8 @@ class VListBox(_VListBox):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = 0, name = 'VListBox'):
         _VListBox.__init__(self, parent, id, pos, size, style, name)
 
+    Selection = property(_VListBox.GetSelection, _VListBox.SetSelection)
+
 _SearchCtrl = SearchCtrl
 class SearchCtrl(_SearchCtrl):
     def __init__(self, parent, id = -1, value = '', pos = DefaultPosition, size = DefaultSize, style = 0, validator = DefaultValidator, name = 'SearchCtrl'):

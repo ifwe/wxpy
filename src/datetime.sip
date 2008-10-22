@@ -2,7 +2,7 @@
 #include <wx/datetime.h>
 
 #define LOCAL_TZ wxDateTime::Local
-
+typedef int wxDateTime_t;
 %End
 
 typedef int wxDateTime_t;

@@ -17,7 +17,7 @@ wxColour NamedColour(const wxString& name);
 class wxColour : wxGDIObject
 {
 public:
-    wxColour(byte red = 0, byte green = 0, byte blue = 0, byte alpha = wxALPHA_OPAQUE);
+    wxColour(int red = 0, int green = 0, int blue = 0, int alpha = wxALPHA_OPAQUE);
     virtual ~wxColour();
 
     wxString GetAsString(int flags);
