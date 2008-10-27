@@ -782,7 +782,6 @@ _Window.LayoutDirection = property(_Window.GetLayoutDirection, _Window.SetLayout
 
 # properties not automatically generated yet.
 wx.Window.Enabled  = property(wx.Window.IsEnabled, wx.Window.Enable)
-wx.Window.Shown    = property(wx.Window.IsShown)
 wx.Window.TopLevel = property(wx.Window.IsTopLevel)
 
 BusyCursor = lambda: 'WXPYHACK'

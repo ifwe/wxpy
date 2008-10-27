@@ -112,6 +112,13 @@ public:
     bool Disable();
 
     bool IsShown() const;
+    bool Shown;
+%GetCode
+    sipPy = PyBool_FromLong(sipCpp->IsShown());
+%End
+%SetCode
+    sipCpp->Show(PyObject_IsTrue(sipPy));
+%End
 
     bool IsEnabled() const;
 

@@ -241,6 +241,7 @@ public:
     bool Contains(const wxRect& rect) const /PyName=ContainsRect/;
 
     bool Intersects(const wxRect &rect) const;
+    wxRect Intersect(const wxRect& rect) const;
     wxRect Union(const wxRect &otherRect);
 
     SIP_PYOBJECT __repr__();

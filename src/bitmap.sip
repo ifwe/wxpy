@@ -28,7 +28,7 @@ wxBitmap wxBitmapFromImage(const wxImage& image, int depth = -1);
 
 wxBitmap wxTransparentBitmap(int w, int h);
 %MethodCode
-    sipRes = new wxBitmap(a0, a1, 32);
+    sipRes = new wxBitmap(a0, a1);
     sipRes->UseAlpha();
 %End
 
