@@ -16,23 +16,17 @@
     <set var="WX_MONOLITHIC">0</set>
     <set var="WX_DEBUG">1</set>
 
-    <!-- debug
-    <set var="WX_PYTHON">0</set>
-    <set var="DEBUG">1</set>
-    -->
-
-    <set var="WX_PYTHON">1</set>
-    <set var="DEBUG">0</set>
+    <set var="DEBUG">$(WXPY_PYDEBUG)</set>
+    <set var="WX_PYTHON">$(substituteFromDict(DEBUG, {'1': '0', '0': '1'}))</set>
 
     <include file="presets/wx.bkl"/>
 
     <!-- add _d to the build directory with DEBUG=='1' -->
-
     <set var="WXPY_DEBUG_POSTFIX">
         $(substituteFromDict(DEBUG, {'1':'_d','0':''}))
     </set>
 
-    <set var="WX3RDPARTYLIBPOSTFIX">h</set>
+    <set var="WX3RDPARTYLIBPOSTFIX">$(substituteFromDict(DEBUG, {'0': 'h', '1':'d'}))</set>
     <set var="BUILDDIR">obj-$(FORMAT)$(WXPY_DEBUG_POSTFIX)</set>
 
     <template id="wxpy_build_settings">
@@ -57,7 +51,7 @@
         <optimize>$(substituteFromDict(DEBUG, {'1':'off','0':'speed'}))</optimize>
         <debug-info>$(substituteFromDict(DEBUG, {'1':'on','0':'off'}))</debug-info>
 
-        <if cond="FORMAT in ('msvc', 'msvs2005prj')">
+        <if cond="FORMAT in ('msvc', 'msvs2005prj', 'msvs2008prj')">
             <debug-runtime-libs>
             $(substituteFromDict(DEBUG, {'1':'on','0':'off'}))
             </debug-runtime-libs>
@@ -66,7 +60,7 @@
 
     <template id="wxpy_extension" template="wxpy_build_settings,wx">
         <!-- create .PYDs instead of .DLLs on windows -->
-        <if cond="FORMAT in ('msvc', 'msvs2005prj')">
+        <if cond="FORMAT in ('msvc', 'msvs2005prj', 'msvs2008prj')">
             <set var="DLLEXT">.pyd</set>
         </if>
 
@@ -96,12 +90,15 @@
 
         <runtime-libs>dynamic</runtime-libs>
 
-        <if cond="FORMAT in ('msvc', 'msvs2005prj')">
-            <cxxflags>/GL /Zi /Ob2 /GS- /Ox</cxxflags>
-            <ldflags>/LTCG</ldflags>
+        <if cond="FORMAT in ('msvc', 'msvs2005prj', 'msvs2008prj')">
+            <set var="OPTIMIZE_CFLAGS">$(substituteFromDict(DEBUG, {'1':'','0':'/GL /Ob2 /GS- /Ox'}))</set>
+            <cxxflags>/Zi $(OPTIMIZE_CFLAGS)</cxxflags>
             <ldflags>/DEBUG</ldflags>   <!-- always link debugging information -->
-            <ldflags>/OPT:REF</ldflags> <!-- remove unused functions -->
-            <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
+            <if cond="DEBUG=='0'">
+                <ldflags>/LTCG</ldflags>
+                <ldflags>/OPT:REF</ldflags> <!-- remove unused functions -->
+                <ldflags>/OPT:ICF</ldflags> <!-- enable COMDAT folding -->
+            </if>
         </if>
 
         <!-- profile guided optimization flags -->

@@ -139,3 +139,14 @@ public:
     wxLogNull();
     virtual ~wxLogNull();
 };
+
+void wxLogError(const wxString& msg);
+%MethodCode
+    wxLogError(*a0);
+%End
+
+void wxLogMessage(const wxString& msg);
+%MethodCode
+    wxLogMessage(*a0);
+%End
+

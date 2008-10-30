@@ -117,7 +117,7 @@ public:
     sipPy = PyBool_FromLong(sipCpp->IsShown());
 %End
 %SetCode
-    sipCpp->Show(PyObject_IsTrue(sipPy));
+    sipCpp->Show(0 != PyObject_IsTrue(sipPy));
 %End
 
     bool IsEnabled() const;

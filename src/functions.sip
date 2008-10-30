@@ -197,11 +197,6 @@ bool wxYieldIfNeeded();
 bool wxIsMainThread();
 
 
-void wxLogError(const wxString& msg);
-%MethodCode
-    wxLogError(*a0);
-%End
-
 void wxFAIL_MSG(const wxString& msg);
 %MethodCode
     wxFAIL_MSG(*a0);
@@ -212,4 +207,35 @@ int Crash();
     int* p = 0;
     int  q = *p;
     fprintf(stderr, "%d", q);
+%End
+
+//
+// a set of functions to induce python memory corruption
+//
+
+SIP_PYOBJECT negativeRefCount();
+%MethodCode
+    const wchar_t* test_string = L"negative refcount crash";
+    PyObject* obj = PyUnicode_FromWideChar(test_string, wcslen(test_string));
+    Py_DECREF(obj); // this decref is invalid; the object's refcount is now zero but we're returning it
+    sipRes = obj;
+%End
+
+SIP_PYOBJECT junkData(int value = 32, int num = 10);
+%MethodCode
+    PyObject* obj = PyList_New(0);
+    memset(obj, a0, a1);
+    sipRes = obj;
+%End
+
+// Redirects wxLogXXX statements to also go to the specified file. 
+bool SetLogFile(const wxString& logfileName);
+%MethodCode
+    FILE* fp = _wfopen(a0->c_str(), L"w");
+    sipRes = false;
+
+    if (fp) {
+        new wxLogChain(new wxLogStderr(fp));
+        sipRes = true;
+    }
 %End

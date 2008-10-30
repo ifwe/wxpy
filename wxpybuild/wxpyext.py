@@ -42,7 +42,9 @@ BAKEFILES_VERBOSE = False
 OUTPUT_DIR        = path('build')
 SRC_DIR           = path('src')
 GENERATED_SRC_DIR = SRC_DIR / 'generated'
-DEBUG = os.path.splitext(sys.executable)[0].endswith('_d')
+
+# find out if we're running with a debug build of python
+DEBUG = hasattr(sys, 'gettotalrefcount')
 
 try:
     import sipconfig
@@ -74,6 +76,7 @@ def build_extension(project_name, modules,
                     libs = None,
                     libdirs = None,
                     outputdir = None):
+
     features = emit_features_file(WXWIN, 'src/generated/features.sip')
     feature_args = list(chain(*(('-x', feature)
                         for feature, enabled in features.iteritems() if not enabled)))
@@ -84,15 +87,11 @@ def build_extension(project_name, modules,
 
         includes = [path(i).abspath() for i in includes]
 
-    sources = runsip(modules, feature_args, includes, libs, libdirs, outputdir)
+    bakefile_xml = runsip(modules, feature_args, includes, libs, libdirs, outputdir)
     manage_cache(GENERATED_SRC_DIR)
 
-    # The files we create below go in OUTPUT_DIR
-    if not OUTPUT_DIR.exists():
-        OUTPUT_DIR.makedirs()
-
-    with cd(OUTPUT_DIR):
-        output = bakefile(project_name, sources)
+    with cd(OUTPUT_DIR, make = True):
+        output = bakefile(project_name, bakefile_xml)
         globals()['build_' + os.name](output)
 
 def build_nt(solution_name):
@@ -140,7 +139,11 @@ def runsip(modules, features,
             path('./src/generated').abspath(),
             path(__file__).parent.parent / 'src',
         ]
-        sip_sources = sipgen.generate_sources(module_name, sources, sip_includes)
+
+        sip_interfaces = [s for s in sources if s.endswith('.sip')]
+        other_sources  = [s for s in sources if not s.endswith('.sip')]
+
+        sip_sources = sipgen.generate_sources(module_name, sip_interfaces, sip_includes)
 
         # TODO: remove this awful hack
         if module_name == '_wxcore':
@@ -148,7 +151,7 @@ def runsip(modules, features,
         else:
             template = 'wxpy_extension'
 
-        add_wxpy_module(makefile, module_name, sip_sources,
+        add_wxpy_module(makefile, module_name, sip_sources + other_sources,
                         includes, template, libs, libdirs, outputdir)
 
     return makefile
@@ -174,7 +177,7 @@ def bakefile(project_name, makefile, outputdir = None):
     ElementTree(makefile).write(bkl, 'utf-8')
 
     # TODO: support more formats here
-    formats = [('msvs2005prj', '%s.sln' % project_name)]
+    formats = [('msvs2008prj', '%s.sln' % project_name)]
 
     # create Bakefiles.bkgen
     ElementTree(bakefile_gen(bkl, formats)).write('Bakefiles.bkgen', 'utf-8')
@@ -189,13 +192,20 @@ def bakefile(project_name, makefile, outputdir = None):
     os.environ.update(WXWIN = WXWIN,
                       BAKEFILE_PATHS = os.pathsep.join(bakefile_paths))
 
+    # define extra variables that are passed to bakefile_gen with -D
+    bakefile_vars = dict(
+        WXPY_PYDEBUG = '1' if DEBUG else '0', # link against python25_d.dll
+    )
+
+    bakefile_vars_str = ' '.join('-D %s=%s' % (key, value)
+        for key, value in bakefile_vars.iteritems())
 
     # This results in Makefile (autotools), SLN (Visual Studio), or other
     # platform specific files.
-    run('bakefile_gen' + (' -V' if BAKEFILES_VERBOSE else ''))
+    run('bakefile_gen' + (' -V' if BAKEFILES_VERBOSE else '') + ' ' + bakefile_vars_str)
 
     if len(formats) > 1:
-        raise AssertionError('figure out a better way to return the name of the sln')
+        raise AssertionError('figure out a better way to8return the name of the sln')
     return formats[0][1]
 
 
@@ -219,7 +229,8 @@ def add_wxpy_module(makefile, module_name, sources,
                      id = module_name,
                      template = 'wxpy_extension' if template is None else template)
 
-    if DEBUG: module_name += '_d'
+    if DEBUG:
+        module_name += '_d'
 
     dllname = xmlnode(module, 'dllname', '%s' % module_name)
 
@@ -253,6 +264,14 @@ def add_wxpy_module(makefile, module_name, sources,
         xmlnode(module, 'dirname', outputdir)
 
     source_elem = xmlnode(module, 'sources', '\n'.join(build_path(s) for s in sources))
+
+    # In Visual Studio, .c files do not mix with precompiled headers made for .cpp files.
+    # see http://support.microsoft.com/kb/126717
+    #
+    # This places all .c files passed into sources into a <precom-headers-exclude> tag,
+    # which tells Bakefile to mark them as excluded from precompiled headers use.
+    exclude_precompiled = xmlnode(module, 'precomp-headers-exclude',
+        '\n'.join(build_path(s) for s in sources if s.endswith('.c')))
 
     return module
 
@@ -345,16 +364,26 @@ def manage_cache(gendir, show_diffs = True):
                      (changed_count, 's' if changed_count != 1 else ''))
 
 @contextmanager
-def cd(*path):
+def cd(*path, **kwargs):
     '''
     chdirs to path, always restoring the cwd
 
     >>> with cd('mydir'):
     >>>     do_stuff()
+
+    Optionally specify "make = True" to create the directory if it doesn't exist.
     '''
+    path = os.path.join(*path)
+
+    if kwargs.get('make'):
+        if os.path.isfile(path):
+            raise AssertionError('cannot create directory %r, there is a file with that name' % path)
+        elif not os.path.isdir(path):
+            os.makedirs(path)
+
     original_cwd = os.getcwd()
     try:
-        os.chdir(os.path.join(*path))
+        os.chdir(path)
         yield
     finally:
         os.chdir(original_cwd)

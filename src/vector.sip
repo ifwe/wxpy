@@ -187,7 +187,7 @@ template<TYPE>
     PyObject *l;
 
     // Create the Python list of the correct length.
-    if ((l = PyList_New(sipCpp -> size())) == NULL)
+    if ((l = PyList_New((SIP_SSIZE_T)sipCpp -> size())) == NULL)
         return NULL;
 
     // Go through each element in the C++ instance and convert it to a
