@@ -1,6 +1,7 @@
 %ModuleHeaderCode
 #include <wx/app.h>
 #include <sip.h>
+#include "PythonUtils.h"
 
 static const sipAPIDef *get_sip_api();
 %End
@@ -104,6 +105,7 @@ wxPyApp::wxPyApp()
     callAfterCbs = PyList_New(0);
     pendingDelete = PySet_New(NULL);
 }
+
 wxPyApp::~wxPyApp()
 {
     SIP_BLOCK_THREADS
@@ -134,6 +136,7 @@ static void call_crashreport_process(const wxString& cmd)
 static bool did_crash_report = false;
 static wxString seh_cmd;
 
+
 unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 {
     // store the pointer to exception info
@@ -142,6 +145,13 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
     wxSEH_TRY
     {
         wxTheApp->OnFatalException();
+    }
+    wxSEH_IGNORE
+
+    wxSEH_TRY
+    {
+        wxLogError(wxT("Digsby crashed"));
+        print_python_stack();
     }
     wxSEH_IGNORE
 

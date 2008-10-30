@@ -5,8 +5,12 @@ import sys
 import genlisttypes
 from wxpybuild.wxpyext import build_extension, WXWIN
 
+wxpy_extra_sources = '''\
+  src/PythonUtils.cpp
+'''.split()
+
 wxpy_modules = [
-    ('_wxcore',     ['src/wx.sip']),
+    ('_wxcore',     ['src/wx.sip'] + wxpy_extra_sources),
 
     # TODO: use wxUSE_XXX flags
     ('_wxhtml',     ['src/html.sip']),
@@ -68,7 +72,7 @@ def main():
     build_extension('wxpy', wxpy_modules, **opts)
 
 def windows_install_pyds():
-    srcdir  = 'build/obj-msvs2005prj'
+    srcdir  = 'build/obj-msvs2008prj'
     srcdir += '_d/' if DEBUG else '/'
 
     destdir = 'wx/'
