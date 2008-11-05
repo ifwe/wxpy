@@ -189,11 +189,9 @@ unsigned long wxGetProcessId();
 wxString wxGetOsDescription();
 bool wxIsPlatformLittleEndian();
 bool wxIsPlatform64Bit();
-
 bool wxHandleFatalExceptions();
-
 bool wxYieldIfNeeded();
-
+bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
 bool wxIsMainThread();
 
 
