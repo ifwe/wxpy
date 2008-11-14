@@ -27,9 +27,9 @@ class wxSizerItem: wxObject
 private:
     wxSizerItem(const wxSizerItem&);
     wxSizerItem();
+    virtual ~wxSizerItem();
 
 public:
-    virtual ~wxSizerItem();
 /*
     wxSizerItem(wxWindow *window,
                 int proportion,
@@ -63,7 +63,7 @@ public:
 
     wxSize GetSize() const;
     wxSize CalcMin();
-    void SetDimension( const wxPoint& pos, const wxSize& size );
+    void SetDimension(const wxPoint& pos, const wxSize& size);
 
     wxSize GetMinSize() const;
     wxSize GetMinSizeWithBorder() const;

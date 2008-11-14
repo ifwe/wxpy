@@ -299,7 +299,13 @@ template<TYPE>
     PyObject *item;
 
     // Maximum number of elements
-    unsigned int len = PyObject_Size(sipPy);
+    Py_ssize_t size = PyObject_Size(sipPy);
+    if (size == -1) {
+        Py_DECREF(iterator);
+        return 0;
+    }
+
+    unsigned int len = size;
     std::vector<unsigned int> *V = new std::vector<unsigned int>();
     V->reserve(len);
 

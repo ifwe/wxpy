@@ -12,19 +12,7 @@ class wxMenu : wxEvtHandler
 {
 public:
     wxMenu(const wxString& title = wxEmptyString, long style = 0) /Transfer/;
-
     virtual ~wxMenu();
-%MethodCode
-    wxMenuItemList items = sipCpp->GetMenuItems();
-    wxMenuItemList::iterator iter;
-
-    SIP_BLOCK_THREADS
-    for (iter = items.begin(); iter != items.end(); ++iter)
-        transferBackCppObject(*iter, sipClass_wxMenuItem);
-    SIP_UNBLOCK_THREADS
-
-    delete sipCpp;
-%End
 
     wxMenuItem* Append(int id, const wxString& text = wxEmptyString, const wxString& help = wxEmptyString, wxItemKind kind = wxITEM_NORMAL) /Transfer/;
     wxMenuItem* AppendSeparator() /Transfer/;
@@ -205,6 +193,7 @@ class wxMenuItem : wxObject /NoDefaultCtors/
 {
 private:
     wxMenuItem(const wxMenuItem&);
+    virtual ~wxMenuItem();
 
 public:
     wxMenuItem(wxMenu* parentMenu /TransferThis/ = NULL,
@@ -213,7 +202,6 @@ public:
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu* subMenu = NULL);
-    virtual ~wxMenuItem();
 
     wxMenu *GetMenu() const;
     void SetMenu(wxMenu* menu);

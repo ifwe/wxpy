@@ -88,7 +88,7 @@ public:
     //void SetHtmlCell(const wxHtmlCell * e);
 };
 
-class wxHtmlWindow : wxWindow
+class wxHtmlWindow : wxScrolledWindow
 {
 private:
     wxHtmlWindow(const wxHtmlWindow&);
