@@ -379,7 +379,6 @@ public:
     int GetStyle() const;
 };
 
-%If (WXMAC)
 class wxBufferedPaintDC : wxBufferedDC
 {
 %TypeHeaderCode
