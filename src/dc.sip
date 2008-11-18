@@ -379,6 +379,7 @@ public:
     int GetStyle() const;
 };
 
+%If (WXMAC)
 class wxBufferedPaintDC : wxBufferedDC
 {
 %TypeHeaderCode
@@ -399,7 +400,7 @@ public:
 };
 
 
-class wxAutoBufferedPaintDC : wxDC
+class wxAutoBufferedPaintDC : wxBufferedDC
 {
 %TypeHeaderCode
 #include <wx/dcbuffer.h>

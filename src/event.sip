@@ -264,6 +264,7 @@ private:
         C(wxContextMenuEvent)
         C(wxCloseEvent)
         C(wxWindowDestroyEvent)
+        C(wxFocusEvent)
         C(wxEvent)
     else
         sipClass = NULL;
@@ -638,3 +639,14 @@ public:
     const wxDateTime& GetDate() const;
     void SetDate(const wxDateTime &date);
 };
+
+class wxFocusEvent : wxEvent
+{
+public:
+    wxFocusEvent(int eventType = 0, int id = 0);
+    virtual ~wxFocusEvent();
+
+    wxWindow* GetWindow();
+};
+
+
