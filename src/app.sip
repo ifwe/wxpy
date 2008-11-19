@@ -205,7 +205,6 @@ void wxPyApp::OnAssertFailure(const wxChar *file, int line, const wxChar *szFunc
     if (m_assertMode & wxPYAPP_ASSERT_EXCEPTION) {
         SIP_BLOCK_THREADS
         PyErr_SetString(PyExc_AssertionError, msg.ToAscii());
-        PyErr_Print();
         SIP_UNBLOCK_THREADS
     }
 
