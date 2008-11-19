@@ -79,6 +79,8 @@ else
     void SetTransparent(bool transparent);
     bool IsTransparent() const;
 
+    wxWebViewDOMElementInfo HitTest(const wxPoint& pos) const;
+
     //wxBitmap GetBitmap() const;
 };
 
