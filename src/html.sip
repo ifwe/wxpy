@@ -148,7 +148,7 @@ public:
     bool HistoryCanForward();
     void HistoryClear();
 
-    // wxHtmlContainerCell* GetInternalRepresentation();
+    wxHtmlContainerCell* GetInternalRepresentation();
     //wxHtmlWinParser* GetParser();
 
 //    bool ScrollToAnchor(const wxString& anchor);
@@ -268,7 +268,7 @@ public:
     void SetId(const wxString& id);
     wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
     wxHtmlCell* GetNext();
-    //wxHtmlContainerCell* GetParent();
+    wxHtmlContainerCell* GetParent();
     wxHtmlCell* GetFirstChild() const;
 
     virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const;
