@@ -81,7 +81,7 @@ def sip(module_name, sipfiles, build_dir, include_dirs, platform = None, feature
         sipargs.append('-r')          # generate trace statements
     if SIP_RELEASE_GIL:
         print 'SIP: always releasing GIL'
-        sip_args.append('-g')
+        sipargs.append('-g')
 
     run(sipargs + sipfiles)
 
