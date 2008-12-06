@@ -266,6 +266,7 @@ private:
         C(wxWindowDestroyEvent)
         C(wxFocusEvent)
         C(wxEvent)
+        C(wxClipboardTextEvent)
     else
         sipClass = NULL;
 #undef C
@@ -649,4 +650,9 @@ public:
     wxWindow* GetWindow();
 };
 
+class wxClipboardTextEvent : wxCommandEvent
+{
+private:
+    wxClipboardTextEvent();
+}; 
 
