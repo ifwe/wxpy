@@ -273,6 +273,9 @@ public:
     sipRes = new wxString(sipCpp->crash_cmd);
 %End
 
+    int  GetAssertMode();
+    void SetAssertMode(int mode);
+
     int crash_report_flags;
 
 /*
