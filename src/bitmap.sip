@@ -34,10 +34,11 @@ wxBitmap wxTransparentBitmap(int w, int h);
 
 
 
-wxBitmap wxEmptyBitmap(int width, int height);
+wxBitmap wxEmptyBitmap(int width, int height, bool useAlpha = true);
 %MethodCode
     sipRes = new wxBitmap(a0, a1);
-    sipRes->UseAlpha();
+    if (a2)
+        sipRes->UseAlpha();
 %End
 
 class wxBitmap : wxGDIObject
@@ -85,8 +86,8 @@ public:
 %End
 
     wxBitmap GetSubBitmap(const wxRect& rect) const;
-//  bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
-//  bool LoadFile(const wxString& name, wxBitmapType type);
+    bool SaveFile(const wxString& name, wxBitmapType type);
+    bool LoadFile(const wxString& name, wxBitmapType type);
 
     wxPalette* GetPalette() const;
 
