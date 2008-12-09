@@ -192,7 +192,6 @@ bool wxIsPlatform64Bit();
 bool wxHandleFatalExceptions();
 bool wxYieldIfNeeded();
 bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
-bool wxIsMainThread();
 
 
 void wxFAIL_MSG(const wxString& msg);
