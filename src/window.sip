@@ -462,7 +462,7 @@ public:
     void SetClientSize(int width, int height) /PyName=SetClientSizeWH/;
     void SetClientSize(const wxRect& rect) /PyName=SetClientRect/;
 
-    void Close(bool force = false);
+    bool Close(bool force = false);
 
 %If (WXMSW)
     int GetHandle();
