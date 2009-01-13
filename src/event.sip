@@ -442,17 +442,63 @@ public:
 
 class wxCommandEvent : wxEvent
 {
+%TypeHeaderCode
+#include <wx/clntdata.h>
+    class PyClientData : public wxClientData
+    {
+    public:
+        PyClientData(PyObject* object)
+            : m_obj(object)
+        {
+            Py_XINCREF(m_obj);
+        }
+
+        virtual ~PyClientData()
+        {
+            SIP_BLOCK_THREADS
+            Py_CLEAR(m_obj);
+            SIP_UNBLOCK_THREADS
+        }
+
+        operator PyObject*() const { return m_obj; }
+        PyObject* pyobject() const { return m_obj; }
+
+    protected:
+        PyObject* m_obj;
+
+    private:
+        PyClientData(const PyClientData&);
+    };
+%End
 public:
     wxCommandEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
     virtual ~wxCommandEvent();
 
     int GetSelection() const;
     wxString GetString() const;
+    void SetString(const wxString& string);
     bool IsChecked() const;
     bool IsSelection() const;
     long GetExtraLong() const;
     void SetInt(int i);
     int GetInt() const;
+
+    void SetClientData(SIP_PYOBJECT);
+%MethodCode
+        sipCpp->SetClientObject(new PyClientData(a0));
+%End
+
+    SIP_PYOBJECT GetClientData();
+%MethodCode
+        PyClientData* data = dynamic_cast<PyClientData*>(sipCpp->GetClientObject());
+
+        if (data)
+            sipRes = data->pyobject();
+        else
+            sipRes = Py_None;
+
+        Py_INCREF(sipRes);
+%End
 };
 
 class wxNotifyEvent : wxCommandEvent
