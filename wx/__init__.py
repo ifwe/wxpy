@@ -565,10 +565,10 @@ class PyTimer(Timer):
     def __init__(self, notify):
         Timer.__init__(self)
         assert callable(notify)
-        self.notify = notify
+        self._pytimer_notify_callback = notify
 
     def Notify(self):
-        notify = getattr(self, 'notify', None)
+        notify = getattr(self, '_pytimer_notify_callback', None)
         if notify is not None:
             notify()
 
