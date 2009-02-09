@@ -57,19 +57,9 @@ except ImportError:
     else:
         raise ImportError('Make sure SIP is on the PYTHONPATH, or set SIP_DIR in the enviro0ent.')
 
-
 from wxpybuild.runsip import SIPGenerator, run
 
-import sipconfig
 sip_cfg = sipconfig.Configuration()
-
-class wxpyext(object):
-    def __init__(name, sources, includes = None, libs = None, libdirs = None):
-        self.name = name
-        self.sources = sources
-        self.includes = includes if includes is not None else []
-        self.libs = libs if libs is not None else []
-        self.libdirs = libdirs if libdirs is not None else []
 
 def build_extension(project_name, modules,
                     includes = None,
@@ -316,13 +306,7 @@ def different(file1, file2, start = 0):
         return True
 
     if file1.size != file2.size or file1.bytes() != file2.bytes():
-        if False and not diff_is_trivial(file1, file2):
-            # ignore minor changes to header files only involving
-            # diff that are "#line" numbers
-            sipconfig.inform('!!! ignoring: %s' % newfile.name)
-            return False
-        else:
-            return True
+        return True
 
 
 def manage_cache(gendir, show_diffs = True):
@@ -387,27 +371,4 @@ def cd(*path, **kwargs):
         yield
     finally:
         os.chdir(original_cwd)
-
-def diff_tool(f1, f2):
-    process = subprocess.Popen(['c:\\cygwin\\bin\\diff.exe', '-d', '-u',
-                                f1, f2], stdout = subprocess.PIPE)
-
-    stdout, stderr = process.communicate()
-    return stdout
-
-def diff_is_trivial(old, new):
-    for line in diff_tool(old, new).split('\n'):
-        if line.startswith('--- '):
-            in_header = False
-            filename = line[4:].split()[0]
-            ext = filename.rsplit('.', 1)
-            if len(ext) == 2 and ext[1] == 'h':
-                if ext[1] == 'h':
-                    in_header = True
-        elif line and not line.startswith('+++ '):
-            if line[0] in ('-', '+'):
-                if not in_header or not line[1:].startswith('#line'):
-                    return True
-
-    return False
 
