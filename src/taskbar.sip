@@ -18,7 +18,7 @@ add_event(sipModuleDict, "EVT_TASKBAR_CLICK",        wxEVT_TASKBAR_CLICK, 0);
 class wxTaskBarIcon : wxEvtHandler
 {
 public:
-    wxTaskBarIcon() /Transfer/;
+    wxTaskBarIcon(int id = 99) /Transfer/;
     virtual ~wxTaskBarIcon();
     void Destroy();
 %MethodCode
@@ -30,6 +30,7 @@ public:
     bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
     bool RemoveIcon();
     bool PopupMenu(wxMenu *menu);
+    int  GetId() const;
 
 %If (wxUSE_TASKBARICON_BALLOONS)
     bool ShowBalloon(const wxString& title,
