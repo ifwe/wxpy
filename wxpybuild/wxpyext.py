@@ -55,7 +55,7 @@ except ImportError:
         sys.path.append(sip_dir)
         import sipconfig
     else:
-        raise ImportError('Make sure SIP is on the PYTHONPATH, or set SIP_DIR in the enviro0ent.')
+        raise ImportError('Make sure SIP is on the PYTHONPATH, or set SIP_DIR in the environment.')
 
 from wxpybuild.runsip import SIPGenerator, run
 
@@ -164,14 +164,13 @@ def bakefile(project_name, makefile, outputdir = None):
     # First, create the BKL file which will tell bakefile how to create platform
     # specific makefiles.
     bkl = project_name + '.bkl'
-    ElementTree(makefile).write(bkl, 'utf-8')
+    write_xml(makefile, bkl)
 
     # TODO: support more formats here
     formats = [('msvs2008prj', '%s.sln' % project_name)]
 
     # create Bakefiles.bkgen
-    ElementTree(bakefile_gen(bkl, formats)).write('Bakefiles.bkgen', 'utf-8')
-
+    write_xml(bakefile_gen(bkl, formats), 'Bakefiles.bkgen')
 
     # Bakefile needs to be told the locations of some .bkl files we need--
     # 1) wx.bkl (and related files)
@@ -300,6 +299,24 @@ def xmlnode(root, name, text = '', **attrs):
 
     return elem
 
+def write_xml(node, filename, encoding = 'utf-8'):
+    _indent_xml(node) # pretty print xml
+    ElementTree(node).write(filename, encoding)
+
+def _indent_xml(elem, level=0):
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        for e in elem:
+            _indent_xml(e, level+1)
+            if not e.tail or not e.tail.strip():
+                e.tail = i + "  "
+        if not e.tail or not e.tail.strip():
+            e.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
 
 def different(file1, file2, start = 0):
     if not file1.exists() or not file2.exists():
