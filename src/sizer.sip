@@ -72,10 +72,12 @@ public:
 
     // if either of dimensions is zero, ratio is assumed to be 1
     // to avoid "divide by zero" errors
+    /*
     void SetRatio(int width, int height);
     void SetRatio(const wxSize& size);
     void SetRatio(float ratio);
     float GetRatio() const;
+    */
 
     wxRect GetRect();
 

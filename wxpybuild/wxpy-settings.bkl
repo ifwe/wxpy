@@ -91,7 +91,7 @@
         <runtime-libs>dynamic</runtime-libs>
 
         <if cond="FORMAT in ('msvc', 'msvs2005prj', 'msvs2008prj')">
-            <set var="OPTIMIZE_CFLAGS">$(substituteFromDict(DEBUG, {'1':'','0':'/GL /Ob2 /GS- /Ox'}))</set>
+            <set var="OPTIMIZE_CFLAGS">$(substituteFromDict(DEBUG, {'1':'','0':'/Ob2 /GS- /O2'}))</set>
             <cxxflags>/Zi $(OPTIMIZE_CFLAGS)</cxxflags>
             <ldflags>/DEBUG</ldflags>   <!-- always link debugging information -->
             <if cond="DEBUG=='0'">

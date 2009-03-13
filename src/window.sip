@@ -185,8 +185,8 @@ public:
     bool RemoveEventHandler(wxEvtHandler *handler);
 
 %If (wxUSE_VALIDATORS)
-    void SetValidator( const wxValidator &validator );
-    wxValidator *GetValidator();
+    //void SetValidator( const wxValidator &validator );
+    //wxValidator *GetValidator();
 %End
     bool Validate();
 
@@ -197,7 +197,7 @@ public:
 
 %If (wxUSE_ACCEL)
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
-    wxAcceleratorTable *GetAcceleratorTable();
+    //wxAcceleratorTable *GetAcceleratorTable();
 %End
 
 %If (wxUSE_HOTKEY)
@@ -342,9 +342,9 @@ public:
 %End
 
 %If (wxUSE_TOOLTIPS)
-    void SetToolTip(const wxString &tip) /PyName=SetToolTipString/;
-    void SetToolTip( wxToolTip *tip );
-    wxToolTip* GetToolTip() const;
+    //void SetToolTip(const wxString &tip) /PyName=SetToolTipString/;
+    //void SetToolTip( wxToolTip *tip );
+    //wxToolTip* GetToolTip() const;
     //wxString GetToolTipText() const;
 %End
 %If (!wxUSE_TOOLTIPS)

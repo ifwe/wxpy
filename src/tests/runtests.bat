@@ -1,1 +1,5 @@
-@dpy -c "import sys; sys.path.append(r'c:\dev\nose'); import nose; nose.main()"
+@echo off
+setlocal
+
+set python=dpy
+%python% -c "import nose; nose.main()" %*

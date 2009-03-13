@@ -377,8 +377,8 @@ wxApp* GetApp();
 */
 
 %ModuleHeaderCode
-void wxpy_add_pending_delete(sipTypeDef *type, void *sipCppV, int state);
-void wxpy_remove_pending_delete(sipTypeDef *type, void *sipCppV, int state);
+void wxpy_add_pending_delete(sipClassTypeDef *type, void *sipCppV, int state);
+void wxpy_remove_pending_delete(sipClassTypeDef *type, void *sipCppV, int state);
 
 class PendingDeleteTimer : public wxTimer
 {
@@ -391,7 +391,7 @@ public:
 
 %ModuleCode
 
-static void wxpy_do_pending_delete(int add, sipTypeDef *type, void *sipCppV, int state)
+static void wxpy_do_pending_delete(int add, sipClassTypeDef *type, void *sipCppV, int state)
 {
     wxPyApp* app = (wxPyApp*)wxTheApp;
 
@@ -411,12 +411,12 @@ static void wxpy_do_pending_delete(int add, sipTypeDef *type, void *sipCppV, int
     Py_DECREF(cpp_vp);
 }
 
-void wxpy_add_pending_delete(sipTypeDef *type, void *sipCppV, int state)
+void wxpy_add_pending_delete(sipClassTypeDef *type, void *sipCppV, int state)
 {
     wxpy_do_pending_delete(1, type, sipCppV, state);
 }
 
-void wxpy_remove_pending_delete(sipTypeDef *type, void *sipCppV, int state)
+void wxpy_remove_pending_delete(sipClassTypeDef *type, void *sipCppV, int state)
 {
     wxpy_do_pending_delete(0, type, sipCppV, state);
 }
@@ -439,11 +439,11 @@ static void wxpy_flush_pending_delete()
         int state = PyInt_AsLong(PyTuple_GET_ITEM(to_delete, 2));
 
         // convert PyCObject void pointer objects to actual void*s
-        sipTypeDef* type = (sipTypeDef*)PyCObject_AsVoidPtr(type_cobj);
+        sipClassTypeDef* type = (sipClassTypeDef*)PyCObject_AsVoidPtr(type_cobj);
         void* sipCppV = PyCObject_AsVoidPtr(cpp_cobj);
 
         // invoke the destructor
-        type->td_release(sipCppV, state);
+        type->ctd_release(sipCppV, state);
 
         Py_DECREF(to_delete);
     }

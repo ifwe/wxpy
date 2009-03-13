@@ -1,4 +1,4 @@
-class wxObject
+class wxObject /Supertype=sip.wrapper/
 {
 
 %TypeHeaderCode

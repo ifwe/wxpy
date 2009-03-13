@@ -81,6 +81,8 @@ else
 
     wxWebViewDOMElementInfo HitTest(const wxPoint& pos) const;
 
+    // wxSize GetContentSize() const;
+
     //wxBitmap GetBitmap() const;
 };
 
