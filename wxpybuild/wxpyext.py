@@ -271,7 +271,7 @@ def get_pylibdir():
         from distutils import sysconfig
 
         try:
-            projbase = path(sysconfig.project_base)
+            projbase = path(sysconfig.project_base) / 'PCBuild'
         except AttributeError:
             projbase = path(sysconfig.get_python_inc()).parent / 'pcbuild'
 
