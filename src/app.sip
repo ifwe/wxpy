@@ -170,7 +170,9 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
             else
                 seh_cmd = app->crash_cmd;
 
-            call_crashreport_process(seh_cmd);
+            if (!IsDebuggerPresent())
+                // don't spawn the crash reporter process if we're already under a debugger.
+                call_crashreport_process(seh_cmd);
         }
     }
     wxSEH_IGNORE
