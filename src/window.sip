@@ -265,10 +265,11 @@ public:
 
     bool HasTransparentBackground();
 
-    bool SetFont(const wxFont& font);
     void SetOwnFont(const wxFont& font);
 
     wxFont GetFont() const;
+    void SetFont(const wxFont& font);
+
     bool SetCursor(const wxCursor &cursor);
     const wxCursor& GetCursor() const;
 
@@ -387,21 +388,9 @@ public:
     bool Layout();
 
     void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true);
-%MethodCode
-    wxSizer* oldSizer = sipCpp->GetSizer();
-    sipCpp->SetSizer(a0, a1);
-    transferBackCppObject(oldSizer, sipClass_wxSizer);
-%End
-
+    wxSizer *GetSizer() const;
 
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
-%MethodCode
-    wxSizer* oldSizer = sipCpp->GetSizer();
-    sipCpp->SetSizer(a0, a1);
-    transferBackCppObject(oldSizer, sipClass_wxSizer);
-%End
-
-    wxSizer *GetSizer() const;
 
     //void SetContainingSizer(wxSizer* sizer /Transfer/);
     wxSizer *GetContainingSizer() const /Transfer/;
@@ -469,6 +458,17 @@ public:
 %MethodCode
     sipRes = (int)sipCpp->GetHWND();
 %End
+%End
+
+    long Handle;
+%GetCode
+    sipPy = PyLong_FromLong((long)(sipCpp->GetHWND()));
+%End
+%SetCode
+    (void)sipPy;
+    (void)sipCpp;
+    PyErr_SetString(PyExc_AssertionError, "Handle is read only");
+    sipErr = 1;
 %End
 
     virtual wxLayoutDirection GetLayoutDirection() const;

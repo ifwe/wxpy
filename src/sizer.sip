@@ -66,8 +66,9 @@ public:
     void SetDimension(const wxPoint& pos, const wxSize& size);
 
     wxSize GetMinSize() const;
-    wxSize GetMinSizeWithBorder() const;
     void SetMinSize(const wxSize& size);
+
+    wxSize GetMinSizeWithBorder() const;
     void SetInitSize(int x, int y);
 
     // if either of dimensions is zero, ratio is assumed to be 1
@@ -187,34 +188,8 @@ public:
 %End
 
     bool Detach(wxWindow* window);
-%MethodCode
-    wxSizerItem* item = sipCpp->GetItem(a0);
-    sipRes = sipCpp->Detach(a0);
-    if (sipRes && item)
-        transferBackCppObject(item, sipClass_wxSizerItem);
-%End
-
     bool Detach(wxSizer* sizer);
-%MethodCode
-    wxSizerItem* item = sipCpp->GetItem(a0);
-    wxSizer* sizer = item ? item->GetSizer() : 0;
-
-    sipRes = sipCpp->Detach(a0);
-
-    if (sipRes)
-        transferBackCppObject(sizer, sipClass_wxSizer);
-%End
-
     bool Detach(size_t index);
-%MethodCode
-    wxSizerItem* item = sipCpp->GetItem(a0);
-    wxSizer* sizer = item ? item->GetSizer() : 0;
-
-    sipRes = sipCpp->Detach(a0);
-
-    if (sipRes)
-        transferBackCppObject(sizer, sipClass_wxSizer);
-%End
 
     wxSizerItem* GetItem(wxWindow* window, bool recursive = false) /Transfer/;
     wxSizerItem* GetItem(wxSizer* sizer, bool recursive = false) /Transfer/;

@@ -55,6 +55,9 @@
             <debug-runtime-libs>
             $(substituteFromDict(DEBUG, {'1':'on','0':'off'}))
             </debug-runtime-libs>
+
+            <!-- to squash warnings about localtime -->
+            <define>_CRT_SECURE_NO_WARNINGS</define>
         </if>
     </template>
 

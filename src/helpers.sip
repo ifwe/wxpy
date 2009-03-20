@@ -1,8 +1,6 @@
 
 %ModuleHeaderCode
 
-void transferBackCppObject(void* cppObject, sipWrapperType* type);
-
 inline bool sequence_2_ints_check(PyObject* obj)
 {
     if (!PySequence_Check(obj) || PySequence_Length(obj) != 2)
@@ -113,26 +111,3 @@ inline bool sequence_4_ints(PyObject* source, int* i1, int* i2, int* i3, int* i4
 %End
 
 
-%ModuleCode
-void transferBackCppObject(void* /*cppObject*/, sipWrapperType* /*type*/)
-{
-    return;
-
-    /*
-    fprintf(stderr, "transferBackCppObject(%p, %p) -> ", cppObject, type);
-    if (!cppObject) {
-        fprintf(stderr, "NO, !cppObject\n");
-        return;
-    }
-
-    sipWrapper* w = (sipWrapper*)sipGetWrapper(cppObject, type);
-    if (!w) {
-        fprintf(stderr, "NO, sipGetWrapper returned NULL\n");
-        return;
-    }
-
-    fprintf(stderr, "YES, calling sipTransferBack\n");
-    sipTransferBack((PyObject*)w); // head element of sipWrapper struct is PyObject
-    */
-}
-%End

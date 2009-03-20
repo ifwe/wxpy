@@ -2,6 +2,7 @@
 %Import wx.sip
 %UnitCode
 #include "stdwxpy.h"
+#include <windows.h>
 %End
 
 %ModuleHeaderCode

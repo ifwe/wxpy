@@ -33,3 +33,4 @@ public:
     void Popup(wxWindow *focus = NULL);
     void Dismiss();
 };
+
