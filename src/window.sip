@@ -344,8 +344,8 @@ public:
 
 %If (wxUSE_TOOLTIPS)
     //void SetToolTip(const wxString &tip) /PyName=SetToolTipString/;
-    //void SetToolTip( wxToolTip *tip );
-    //wxToolTip* GetToolTip() const;
+    void SetToolTip(wxToolTip *tip /Transfer/);
+    wxToolTip* GetToolTip() const;
     //wxString GetToolTipText() const;
 %End
 %If (!wxUSE_TOOLTIPS)
@@ -353,7 +353,7 @@ public:
 %End
 
 %If (wxUSE_DRAG_AND_DROP)
-    void SetDropTarget(wxDropTarget *dropTarget);
+    void SetDropTarget(wxDropTarget *dropTarget /Transfer/);
     wxDropTarget *GetDropTarget() const;
 %End
 

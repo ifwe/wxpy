@@ -33,7 +33,7 @@ enum
 #define wxTraceOleCalls 0x0100  // OLE interface calls
 */
 
-class wxLog
+class wxLog /Supertype=sip.wrapper/
 {
 public:
     wxLog();

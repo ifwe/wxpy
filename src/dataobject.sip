@@ -55,7 +55,7 @@ public:
     void SetId(const wxString& format);
 };
 
-class wxDataObject
+class wxDataObject /Supertype=sip.wrapper/
 {
 public:
     enum Direction {
