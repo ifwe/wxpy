@@ -393,6 +393,21 @@ public:
 
 %ModuleCode
 
+/**
+ * wxObject subclasses do reference counting with copy on write semantics.
+ * Unfortunately, the reference counting is not threadsafe.
+ *
+ * Since these bindings allow some wxObject subclasses to be owned by Python,
+ * and destroyed by Python when their Python objects' reference count hits
+ * zero, we need to watch out for the case when a cycle is broken by the
+ * garbage collector on a thread other than the main thread.
+ *
+ * Normally this would result in the wxObject destructor running on a
+ * subthread--which we don't want. So we make the generated code call this
+ * method instead, which adds the object (via PyCObject_FromVoidPtr) to the set
+ * at app->pendingDelete. Then periodically we call wxpy_flush_pending_delete
+ * to empty the set and delete its members.
+ */
 static void wxpy_do_pending_delete(int add, sipClassTypeDef *type, void *sipCppV, int state)
 {
     wxPyApp* app = (wxPyApp*)wxTheApp;
