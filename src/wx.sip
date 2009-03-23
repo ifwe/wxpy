@@ -6,12 +6,14 @@ copyright 2008 Kevin Watters
 released under the wxWidgets License
 %End
 
+%DefaultSupertype sip.simplewrapper
+
 %Platforms {WXMSW WXCOCOA WXMAC WXGTK}
 
 // Enable stripping of "wx" from Python names, and auto generation of
 // properties from GetXXX() and SetXXX() methods.
 //%SIPOptions (RenameWx, AutoProperties, ThreadChecking)
-%SIPOptions (RenameWx, AutoProperties)
+//%SIPOptions (RenameWx, AutoProperties)
 
 %UnitCode
 #include "stdwxpy.h"

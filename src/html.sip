@@ -275,7 +275,7 @@ public:
 
     //wxCursor GetCursor() const;
     bool IsFormattingCell() const;
-    void SetLink(const wxHtmlLinkInfo& link);
+    //void SetLink(const wxHtmlLinkInfo& link);
     void SetNext(wxHtmlCell *cell /Transfer/);
 //  void SetParent(wxHtmlContainerCell *p);
     void SetPos(int x, int y);

@@ -15,6 +15,7 @@ def check_toplevel(tlw):
     tlw.SetTitle('set via method')
     assert tlw.Title == tlw.GetTitle() == 'set via method'
 
+'''
 def test_frame():
     title = 'test frame'
     pos = (40, 40)
@@ -36,6 +37,7 @@ def test_frame():
 
     check_toplevel(f)
     return f
+'''
 
 
 def test_FrameDestroy():

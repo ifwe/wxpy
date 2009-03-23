@@ -55,7 +55,7 @@ public:
     void SetId(const wxString& format);
 };
 
-class wxDataObject
+class wxDataObject /Supertype=sip.wrapper/
 {
 public:
     enum Direction {
@@ -279,10 +279,10 @@ public:
     wxCustomDataObject();
     virtual ~wxCustomDataObject();
 
-    bool SetData(SIP_PYOBJECT data);
+    void SetData(SIP_PYOBJECT data);
 %MethodCode
     if (PyString_Check(a0))
-        sipRes = sipCpp->SetData(PyString_Size(a0), PyString_AsString(a0));
+        sipCpp->SetData(PyString_Size(a0), PyString_AsString(a0));
     else
     {
         PyErr_SetString(PyExc_TypeError, "SetData requires a single string argument");

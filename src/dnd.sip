@@ -22,7 +22,7 @@ enum wxDragResult
 
 bool wxIsDragResultOk(wxDragResult res);
 
-class wxDropTarget
+class wxDropTarget /Supertype=sip.wrapper/
 {
 private:
     wxDropTarget(const wxDropTarget&);
@@ -45,7 +45,7 @@ public:
     wxDragResult GetDefaultAction();
 };
 
-class wxDropSource
+class wxDropSource /Supertype=sip.wrapper/
 {
 private:
     wxDropSource(const wxDropSource&);

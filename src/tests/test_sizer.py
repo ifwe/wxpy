@@ -88,12 +88,13 @@ def test_Children():
         gc.collect()
         assert not sip.isdeleted(p)
 
-
         assert 1 == len(s.Children)
         s.Detach(0)
         assert 0 == len(p.Children)
 
         f.Destroy()
+
+        wx.GetApp().ProcessIdle()
         return f, s, p
 
 
@@ -189,6 +190,8 @@ def test_WindowSetSizer():
     assert not sip.isdeleted(b)
     assert sip.isdeleted(s1)
     f.Destroy()
+
+    wx.GetApp().ProcessIdle()
     assert sip.isdeleted(f)
 
 

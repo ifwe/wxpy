@@ -185,8 +185,8 @@ public:
     bool RemoveEventHandler(wxEvtHandler *handler);
 
 %If (wxUSE_VALIDATORS)
-    void SetValidator( const wxValidator &validator );
-    wxValidator *GetValidator();
+    //void SetValidator( const wxValidator &validator );
+    //wxValidator *GetValidator();
 %End
     bool Validate();
 
@@ -197,7 +197,7 @@ public:
 
 %If (wxUSE_ACCEL)
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
-    wxAcceleratorTable *GetAcceleratorTable();
+    //wxAcceleratorTable *GetAcceleratorTable();
 %End
 
 %If (wxUSE_HOTKEY)
@@ -265,10 +265,11 @@ public:
 
     bool HasTransparentBackground();
 
-    bool SetFont(const wxFont& font);
     void SetOwnFont(const wxFont& font);
 
     wxFont GetFont() const;
+    void SetFont(const wxFont& font);
+
     bool SetCursor(const wxCursor &cursor);
     const wxCursor& GetCursor() const;
 
@@ -342,8 +343,8 @@ public:
 %End
 
 %If (wxUSE_TOOLTIPS)
-    void SetToolTip(const wxString &tip) /PyName=SetToolTipString/;
-    void SetToolTip( wxToolTip *tip );
+    //void SetToolTip(const wxString &tip) /PyName=SetToolTipString/;
+    void SetToolTip(wxToolTip *tip /Transfer/);
     wxToolTip* GetToolTip() const;
     //wxString GetToolTipText() const;
 %End
@@ -352,7 +353,7 @@ public:
 %End
 
 %If (wxUSE_DRAG_AND_DROP)
-    void SetDropTarget(wxDropTarget *dropTarget);
+    void SetDropTarget(wxDropTarget *dropTarget /Transfer/);
     wxDropTarget *GetDropTarget() const;
 %End
 
@@ -387,21 +388,9 @@ public:
     bool Layout();
 
     void SetSizer(wxSizer *sizer /Transfer/, bool deleteOld = true);
-%MethodCode
-    wxSizer* oldSizer = sipCpp->GetSizer();
-    sipCpp->SetSizer(a0, a1);
-    transferBackCppObject(oldSizer, sipClass_wxSizer);
-%End
-
+    wxSizer *GetSizer() const;
 
     void SetSizerAndFit(wxSizer *sizer /Transfer/, bool deleteOld = true);
-%MethodCode
-    wxSizer* oldSizer = sipCpp->GetSizer();
-    sipCpp->SetSizer(a0, a1);
-    transferBackCppObject(oldSizer, sipClass_wxSizer);
-%End
-
-    wxSizer *GetSizer() const;
 
     //void SetContainingSizer(wxSizer* sizer /Transfer/);
     wxSizer *GetContainingSizer() const /Transfer/;
@@ -469,6 +458,17 @@ public:
 %MethodCode
     sipRes = (int)sipCpp->GetHWND();
 %End
+%End
+
+    long Handle;
+%GetCode
+    sipPy = PyLong_FromLong((long)(sipCpp->GetHWND()));
+%End
+%SetCode
+    (void)sipPy;
+    (void)sipCpp;
+    PyErr_SetString(PyExc_AssertionError, "Handle is read only");
+    sipErr = 1;
 %End
 
     virtual wxLayoutDirection GetLayoutDirection() const;

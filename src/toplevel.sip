@@ -153,12 +153,6 @@ public:
     wxToolBar* GetToolBar();
 
     void SetToolBar(wxToolBar* toolbar /Transfer/);
-%MethodCode
-    wxToolBar* oldToolBar = sipCpp->GetToolBar();
-    sipCpp->SetToolBar(a0);
-    transferBackCppObject(oldToolBar, sipClass_wxToolBar);
-%End
-
 };
 
 enum

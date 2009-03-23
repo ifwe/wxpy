@@ -300,7 +300,7 @@ public:
     static bool IsLeapYear(int year = Inv_Year, Calendar cal = Gregorian);
 
     // get the century (19 for 1999, 20 for 2000 and -5 for 492 BC)
-    static int GetCentury(int year = Inv_Year);
+    //static int GetCentury(int year = Inv_Year);
 
     // returns the number of days in this year (356 or 355 for Gregorian
     // calendar usually :-)
