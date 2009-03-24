@@ -55,7 +55,7 @@ public:
     void SetThumbLength(int lenPixels);
     int GetThumbLength() const;
 
-    //void SetTickFreq(int n, int pos=1);
+    void SetTickFreq(int n, int pos);
     int GetTickFreq() const;
     void ClearTicks();
     void SetTick(int tickPos);
