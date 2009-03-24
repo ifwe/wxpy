@@ -144,7 +144,11 @@ class Control(_Control):
 
 PyControl = Control
 
+_ToolTip = wx.ToolTip
+
 _Window = wx.Window
+_Window.SetToolTipString = new.instancemethod(lambda self, tip: self.SetToolTip(_ToolTip(tip)), None, _Window)
+
 class Window(wx.Window):
     def __init__(self, parent, id = -1, pos = DefaultPosition, size = DefaultSize, style = 0, name = 'Window'):
         _Window.__init__(self, parent, id, Point(*pos), Size(*size), style, name)
