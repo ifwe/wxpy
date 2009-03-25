@@ -37,7 +37,7 @@ enum wxCalendarDateBorder
     wxCAL_BORDER_ROUND          // a round border
 };
 
-class wxCalendarDateAttr
+class wxCalendarDateAttr /Supertype=sip.wrapper/
 {
 public:
     wxCalendarDateAttr(const wxColour& colText = wxNullColour,
