@@ -132,7 +132,7 @@ protected:
 };
 %End
 
-class wxPyTreeItemData
+class wxPyTreeItemData /Supertype=sip.wrapper/
 {
 private:
     wxPyTreeItemData(const wxPyTreeItemData&);

@@ -157,7 +157,7 @@ protected:
     virtual bool AnimateShow( const wxRect& rect, int flags );
 };
 
-class wxComboPopup
+class wxComboPopup /Supertype=sip.wrapper/
 {
 public:
     wxComboPopup();

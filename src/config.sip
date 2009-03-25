@@ -17,7 +17,8 @@ enum
     wxCONFIG_USE_NO_ESCAPE_CHARACTERS
 };
 
-class wxConfigBase {
+class wxConfigBase /Supertype=sip.wrapper/
+{
 private:
     wxConfigBase();
     virtual ~wxConfigBase();
