@@ -64,6 +64,7 @@ public:
     void Lower();
 
     void Destroy();
+    void DestroyChildren();
 
     wxSize GetSize() const;
 
