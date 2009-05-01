@@ -314,6 +314,7 @@ public:
     void SetVendorName(const wxString& name);
 
     bool Yield(bool onlyIfNeeded = false) /ReleaseGIL/;
+    void Dispatch() /ReleaseGIL/;
     void WakeUpIdle() /ReleaseGIL/;
     static bool IsMainLoopRunning() const /ReleaseGIL/;
 
@@ -439,8 +440,10 @@ void wxpy_remove_pending_delete(sipClassTypeDef *type, void *sipCppV, int state)
 }
 
 // call destructors on all objects pending deletion and clear the list
-static void wxpy_flush_pending_delete()
+static int wxpy_flush_pending_delete()
 {
+    int count = 0;
+
     SIP_BLOCK_THREADS
     PyObject* pendingDelete = ((wxPyApp*)wxTheApp)->pendingDelete;
 
@@ -448,7 +451,7 @@ static void wxpy_flush_pending_delete()
         // TODO: elements are popped off the set in an arbitrary order. is this ok?
         PyObject* to_delete = PySet_Pop(pendingDelete);
         if (!to_delete)
-            return;
+            return count;
 
         // parse (sipTypeDef*, sipWrapper*, and int) out of the tuple
         PyObject* type_cobj = PyTuple_GET_ITEM(to_delete, 0);
@@ -461,10 +464,13 @@ static void wxpy_flush_pending_delete()
 
         // invoke the destructor
         type->ctd_release(sipCppV, state);
+        ++count;
 
         Py_DECREF(to_delete);
     }
     SIP_UNBLOCK_THREADS
+
+    return count;
 }
 
 PendingDeleteTimer::PendingDeleteTimer() {}
@@ -486,4 +492,9 @@ void PendingDeleteTimer::Notify()
 EXPORT_WXPY_SYMBOL("wxpy_add_event", add_event);
 EXPORT_WXPY_SYMBOL("wxpy_add_pending_delete", wxpy_add_pending_delete);
 EXPORT_WXPY_SYMBOL("wxpy_remove_pending_delete", wxpy_remove_pending_delete);
+%End
+
+int flush_pending_delete();
+%MethodCode
+    sipRes = wxpy_flush_pending_delete();
 %End
