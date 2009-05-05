@@ -8,6 +8,9 @@ import os.path, sys
 
 VERSION = (2, 8, 7, 1)
 
+# TODO: make configurable at build time
+USE_HTML = 0
+
 # make sure "wx" is on the syspath
 _wxpy_dir = os.path.split(os.path.abspath(__file__))[0]
 sys.path.append(_wxpy_dir)
@@ -710,11 +713,12 @@ def _wxpy_init(clearSigInt=True):
         except Exception:
             pass
 
-    try:
-        # make sure HTML tag modules get loaded
-        import lib.wxpTag
-    except Exception:
-        from traceback import print_exc; print_exc()
+    if USE_HTML:
+        try:
+            # make sure HTML tag modules get loaded
+            import lib.wxpTag
+        except Exception:
+            from traceback import print_exc; print_exc()
 
     _entrystart()
     _initallimagehandlers()

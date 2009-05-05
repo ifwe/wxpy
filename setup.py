@@ -13,7 +13,7 @@ wxpy_modules = [
     ('_wxcore',     ['src/wx.sip'] + wxpy_extra_sources),
 
     # TODO: use wxUSE_XXX flags
-    ('_wxhtml',     ['src/html.sip']),
+#   ('_wxhtml',     ['src/html.sip']),
     ('_wxcalendar', ['src/calendar.sip']),
 #   ('_wxcombo',    ['src/combo.sip']),
     ('_wxstc',      ['contrib/stc/stc.sip']),

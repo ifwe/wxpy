@@ -77,7 +77,7 @@
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <wx-lib>adv</wx-lib>
-        <wx-lib>html</wx-lib>
+        <!--<wx-lib>html</wx-lib>-->
         <wx-lib>stc</wx-lib>
 
         <if cond="PLATFORM_WIN32=='1'">

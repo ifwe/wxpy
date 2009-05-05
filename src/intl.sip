@@ -317,6 +317,9 @@ public:
     const wxString& GetName() const;
 
 };
+
+
+/*
 enum
 {
     wxCONVERT_STRICT,
@@ -333,6 +336,7 @@ enum
     wxPLATFORM_OS2,
     wxPLATFORM_MAC
 };
+*/
 
 wxString wxGetTranslation(const wxString& str);
 wxString wxGetTranslation(const wxString& str, const wxString& domain);
