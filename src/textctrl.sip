@@ -223,7 +223,7 @@ public:
 
      bool CanCopy() const;
      bool CanCut() const;
-     bool CanPaste() const;
+     virtual bool CanPaste() const;
 
     // Undo/redo
      void Undo();
