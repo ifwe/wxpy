@@ -81,6 +81,15 @@ public:
     int  GetAssertMode() { return m_assertMode; }
     void SetAssertMode(int mode) { m_assertMode = mode; }
 
+    unsigned long long GetMainLoopCount() const { return m_mainLoopCount; }
+
+    virtual bool ProcessIdle()
+    {
+        // maintain a counter approximating main loop iterations
+        ++m_mainLoopCount;
+        return wxApp::ProcessIdle();
+    }
+
     PyObject* callAfterCbs;
     PyObject* pendingDelete;
 
@@ -88,6 +97,7 @@ public:
     int crash_report_flags;
 protected:
     int m_assertMode;
+    unsigned long long m_mainLoopCount;
 };
 
 %End // TypeHeaderCode
@@ -101,6 +111,7 @@ protected:
 wxPyApp::wxPyApp()
     : crash_report_flags(wxCRASH_REPORT_DEFAULT)
     , m_assertMode(wxPYAPP_ASSERT_EXCEPTION)
+    , m_mainLoopCount(0)
 {
     callAfterCbs = PyList_New(0);
     pendingDelete = PySet_New(NULL);
@@ -336,6 +347,8 @@ public:
 
     void SetPrintMode(int mode);
     int GetPrintMode() const;
+
+    unsigned long long GetMainLoopCount() const;
 
     static void SetInstance(wxApp* app);
     wxLayoutDirection GetLayoutDirection() const;
