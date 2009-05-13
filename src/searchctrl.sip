@@ -21,6 +21,7 @@ public:
 
     void SetMenu(wxMenu* menu);
     wxMenu* GetMenu();
+    virtual bool CanPaste() const;
     void ShowSearchButton( bool show );
     bool IsSearchButtonVisible() const;
     void ShowCancelButton( bool show );
