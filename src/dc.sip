@@ -72,8 +72,15 @@ public:
     void DrawEllipse(const wxRect& rect);
     void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     void DrawIcon(const wxIcon& icon, const wxPoint& pt);
+%If (WXMSW)
+    void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = false, unsigned char alpha = 255);
+    void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = false, unsigned char alpha = 255) /PyName=DrawBitmapPoint/;
+%End
+%If (!WXMSW)
     void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = false);
     void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = false) /PyName=DrawBitmapPoint/;
+%End
+
 
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
     void DrawText(const wxString& text, const wxPoint& pt);

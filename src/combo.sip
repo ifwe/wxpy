@@ -1,4 +1,7 @@
 %Module _wxcombo
+
+%DefaultSupertype sip.simplewrapper
+
 %Import wx.sip
 
 %UnitCode

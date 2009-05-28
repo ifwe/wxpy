@@ -3,6 +3,9 @@
 //
 
 %Module wx._wxstc
+
+%DefaultSupertype sip.simplewrapper
+
 %Import wx.sip
 
 %UnitCode

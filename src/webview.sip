@@ -7,6 +7,24 @@
 #include "wx/webview.h"
 %End
 
+class wxWebViewCachePolicy
+{
+public:
+    wxWebViewCachePolicy(unsigned minDead = 0, 
+                         unsigned maxDead = 8388608,
+                         unsigned totalCapacity = 8388608);
+    ~wxWebViewCachePolicy();
+
+    unsigned GetCapacity() const;
+    void SetCapacity(int capacity);
+
+    unsigned GetMinDeadCapacity() const;
+    void SetMinDeadCapacity(unsigned minDeadCapacity);
+
+    unsigned GetMaxDeadCapacity() const;
+    void SetMaxDeadCapacity(unsigned maxDeadCapacity);
+};
+
 
 class wxWebView : wxWindow
 {
@@ -80,10 +98,15 @@ else
     bool IsTransparent() const;
 
     wxWebViewDOMElementInfo HitTest(const wxPoint& pos) const;
+    int GetParseMode() const;
 
-    // wxSize GetContentSize() const;
+    static void SetDatabaseDirectory(const wxString& databaseDirectory);
+    static wxString GetDatabaseDirectory();
 
-    //wxBitmap GetBitmap() const;
+    static void SetCachePolicy(const wxWebViewCachePolicy& cachePolicy);
+    static wxWebViewCachePolicy GetCachePolicy();
+
+    static wxString GetStatistics();
 };
 
 enum {

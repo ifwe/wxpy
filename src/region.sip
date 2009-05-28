@@ -16,6 +16,7 @@ private:
     wxRegion(const wxRegion&);
 public:
     wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
+    wxRegion(const wxRect& rect) /PyName=RegionFromRect/;
     virtual ~wxRegion();
 
     bool Ok() const;

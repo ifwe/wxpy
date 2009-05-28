@@ -1,4 +1,7 @@
 %Module wx._wxhtml
+
+%DefaultSupertype sip.simplewrapper
+
 %Import wx.sip
 %UnitCode
 #include "stdwxpy.h"
