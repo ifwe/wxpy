@@ -36,7 +36,7 @@ wxBitmap wxTransparentBitmap(int w, int h);
 
 wxBitmap wxEmptyBitmap(int width, int height, bool useAlpha = true);
 %MethodCode
-    sipRes = new wxBitmap(a0, a1);
+    sipRes = new wxBitmap(a0, a1, 32);
     if (a2)
         sipRes->UseAlpha();
 %End
