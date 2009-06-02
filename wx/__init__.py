@@ -71,7 +71,7 @@ def PyEventBinder(evttype, n = None):
 _callafter = wx.CallAfter
 from traceback import print_exc
 def CallAfter(func, *a, **k):
-    assert callable(func), (repr(func) % '%s is not callable')
+    assert callable(func), ('%r is not callable' % func)
 
     def CallAfterCallback():
         try:
