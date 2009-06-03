@@ -82,6 +82,14 @@ def test_EventObject():
     t.SetValue('test')
     return f
 
+def test_EventVeto():
+    e = wx.CloseEvent()
+    e.Veto(True)
+    assert e.GetVeto()
+    e.Veto(False)
+    assert not e.GetVeto()
+    assert callable(e.Veto)
+
 if __name__ == '__main__':
     a=wx.PySimpleApp()
     test_EventObject().Show()

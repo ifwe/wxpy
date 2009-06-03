@@ -551,7 +551,15 @@ public:
     void SetLoggingOff(bool logOff);
     bool GetLoggingOff() const;
     void Veto(bool veto = true);
-    bool GetVeto() const;
+
+    // GetVeto is disabled here because automatic property generation turns .Veto
+    // into a variable.
+    //
+    // either a) make autoprops smart enough to ignore b/c of Veto
+    // or b) make a /NoProperty/ annotation
+    //
+    // bool GetVeto() const;
+    
     void SetCanVeto(bool canVeto);
     bool CanVeto() const;
 };
