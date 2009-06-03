@@ -65,7 +65,9 @@ def build_extension(project_name, modules,
                     includes = None,
                     libs = None,
                     libdirs = None,
-                    outputdir = None):
+                    outputdir = None,
+                    defines = None,
+                    ldflags = None):
 
     features = emit_features_file(WXWIN, 'src/generated/features.sip')
     feature_args = list(chain(*(('-x', feature)
@@ -77,7 +79,7 @@ def build_extension(project_name, modules,
 
         includes = [path(i).abspath() for i in includes]
 
-    bakefile_xml = runsip(modules, feature_args, includes, libs, libdirs, outputdir)
+    bakefile_xml = runsip(modules, feature_args, includes, libs, libdirs, outputdir, defines, ldflags)
     manage_cache(GENERATED_SRC_DIR)
 
     with cd(OUTPUT_DIR, make = True):
@@ -113,7 +115,9 @@ def runsip(modules, features,
            includes = None,
            libs = None,
            libdirs = None,
-           outputdir = None):
+           outputdir = None,
+           defines = None,
+           ldflags = None):
 
     sipgen = SIPGenerator(GENERATED_SRC_DIR, 'WXMSW', features)
     makefile = Element('makefile')
@@ -142,7 +146,7 @@ def runsip(modules, features,
             template = 'wxpy_extension'
 
         add_wxpy_module(makefile, module_name, sip_sources + other_sources,
-                        includes, template, libs, libdirs, outputdir)
+                        includes, template, libs, libdirs, outputdir, defines, ldflags)
 
     return makefile
 
@@ -207,12 +211,20 @@ def build_path(p):
 def add_includes(module, inc_paths):
     return [xmlnode(module, 'include', p) for p in inc_paths]
 
+def add_defines(module, defines):
+    return [xmlnode(module, 'define', d) for d in defines]
+
+def add_ldflags(module, ldflags):
+    return [xmlnode(module, 'ldflags', l) for l in ldflags]
+
 def add_wxpy_module(makefile, module_name, sources,
                     include_paths = None,
                     template = None,
                     libs = None,
                     libdirs = None,
-                    outputdir = None):
+                    outputdir = None,
+                    defines = None,
+                    ldflags = None):
 
     module = xmlnode(makefile, 'module',
                      id = module_name,
@@ -234,7 +246,13 @@ def add_wxpy_module(makefile, module_name, sources,
         assert not isinstance(include_paths, basestring)
         includes.extend(include_paths)
 
+    if defines is not None:
+        add_defines(module, defines)
+
     add_includes(module, includes)
+
+    if ldflags is not None:
+        add_ldflags(module, ldflags)
 
     if libs is not None:
         for lib in libs:
