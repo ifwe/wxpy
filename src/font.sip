@@ -223,6 +223,7 @@ public:
 class wxFont : wxGDIObject
 {
 public:
+    wxFont();
     wxFont( int pointSize, int family, int style, int weight,
             bool underline=false, const wxString& face = wxEmptyString,
             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
