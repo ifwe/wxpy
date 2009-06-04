@@ -102,6 +102,7 @@ class wxTextAttr
 {
 public:
 
+    wxTextAttr();
     wxTextAttr(const wxColour& colText,
                const wxColour& colBack = wxNullColour,
                const wxFont& font = wxNullFont,
