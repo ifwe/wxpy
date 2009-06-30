@@ -400,6 +400,7 @@ class PendingDeleteTimer : public wxTimer
 {
 public:
     PendingDeleteTimer();
+    virtual ~PendingDeleteTimer();
     virtual void Notify();
 };
 
@@ -476,6 +477,7 @@ static int wxpy_flush_pending_delete()
         void* sipCppV = PyCObject_AsVoidPtr(cpp_cobj);
 
         // invoke the destructor
+        wxLogMessage(wxT("wxpy_flush_pending_delete is destroying %p (%s)"), sipCppV, ((wxObject*)sipCppV)->GetClassInfo()->GetClassName());
         type->ctd_release(sipCppV, state);
         ++count;
 
@@ -487,6 +489,7 @@ static int wxpy_flush_pending_delete()
 }
 
 PendingDeleteTimer::PendingDeleteTimer() {}
+PendingDeleteTimer::~PendingDeleteTimer() {}
 
 void PendingDeleteTimer::Notify()
 {
