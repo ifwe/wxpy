@@ -55,7 +55,7 @@ def main():
         WEBKITDIR = get_webkit_dir()
         WEBKITBUILD = WEBKITDIR / 'WebKitBuild'
 
-        wk_libdir = WEBKITBUILD / 'Release'
+        wk_libdir = WEBKITBUILD / ('Release' if not DEBUG else 'Debug')
         wk_lib = wk_libdir / 'wxwebkit.lib'
         if os.name == 'nt' and not wk_lib.isfile():
             print 'could not find webkit libraries in %s' % wk_libdir
