@@ -947,9 +947,13 @@ Platform: %s""" % \
         """Display text in the shell.
 
         Replace line endings with OS-specific endings."""
-        text = self.fixLineEndings(text)
-        self.AddText(text)
-        self.EnsureCaretVisible()
+
+        if wx.IsMainThread():
+            text = self.fixLineEndings(text)
+            self.AddText(text)
+            self.EnsureCaretVisible()
+        else:
+            self.stderr.write(text)
 
     def fixLineEndings(self, text):
         """Return text with line endings replaced by OS-specific endings."""
