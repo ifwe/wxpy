@@ -265,8 +265,9 @@ private:
         C(wxCloseEvent)
         C(wxWindowDestroyEvent)
         C(wxFocusEvent)
-        C(wxEvent)
         C(wxClipboardTextEvent)
+        C(wxNavigationKeyEvent)
+        C(wxEvent)
     else
         sipClass = NULL;
 #undef C
@@ -288,6 +289,10 @@ public:
     bool IsCommandEvent() const;
     void Skip(bool skip = true);
     bool GetSkipped() const;
+
+    bool ShouldPropagate() const;
+    int StopPropagation();
+    void ResumePropagation(int propogationLevel);
 
     virtual ~wxEvent();
 };
