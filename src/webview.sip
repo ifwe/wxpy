@@ -107,6 +107,8 @@ else
     static wxWebViewCachePolicy GetCachePolicy();
 
     static wxString GetStatistics();
+
+    virtual wxWebView* CreateWindow(bool menubar, bool statusbar, bool toolbar, bool locationbar);
 };
 
 enum {

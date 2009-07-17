@@ -704,6 +704,23 @@ public:
     wxWindow* GetWindow();
 };
 
+class wxNavigationKeyEvent : wxEvent
+{
+    wxNavigationKeyEvent();
+
+    bool GetDirection() const;
+    void SetDirection();
+
+    bool IsWindowChange() const;
+    void SetWindowChange(bool);
+
+    bool IsFromTab() const;
+    void SetFromTab(bool);
+
+    wxWindow* GetCurrentFocus() const;
+    void SetCurrentFocus(wxWindow*);
+};
+
 class wxClipboardTextEvent : wxCommandEvent
 {
 private:
