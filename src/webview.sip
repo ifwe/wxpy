@@ -25,6 +25,13 @@ public:
     void SetMaxDeadCapacity(unsigned maxDeadCapacity);
 };
 
+enum wxProxyType {
+    HTTP,
+    Socks4,
+    Socks4A,
+    Socks5,
+    Socks5Hostname
+};
 
 class wxWebView : wxWindow
 {
@@ -112,6 +119,12 @@ else
     static wxBitmap GetCachedBitmap(const wxString& url);
 
     static void InvalidateFontCache();
+
+    static void SetProxyInfo(const wxString& host = wxEmptyString,
+                             unsigned long port = 0,
+                             wxProxyType type = HTTP,
+                             const wxString& username = wxEmptyString,
+                             const wxString& password = wxEmptyString);
 };
 
 enum {
