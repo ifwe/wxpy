@@ -292,7 +292,7 @@ public:
 
     bool ShouldPropagate() const;
     int StopPropagation();
-    void ResumePropagation(int propogationLevel);
+    void ResumePropagation(int propagationLevel);
 
     virtual ~wxEvent();
 };
