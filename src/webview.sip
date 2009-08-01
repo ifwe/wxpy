@@ -116,6 +116,9 @@ else
     static wxString GetStatistics();
 
     virtual wxWebView* CreateWindow(bool menubar, bool statusbar, bool toolbar, bool locationbar);
+
+    void GarbageCollect();
+
     static wxBitmap GetCachedBitmap(const wxString& url);
 
     static void InvalidateFontCache();
