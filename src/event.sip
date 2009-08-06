@@ -711,10 +711,11 @@ public:
 
 class wxNavigationKeyEvent : wxEvent
 {
+public:
     wxNavigationKeyEvent();
 
     bool GetDirection() const;
-    void SetDirection();
+    void SetDirection(bool direction);
 
     bool IsWindowChange() const;
     void SetWindowChange(bool);
