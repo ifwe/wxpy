@@ -24,10 +24,16 @@ import comtypes.client as cc
 import comtypes.hresult as hr
 
 import sys, os
-if not hasattr(sys, 'frozen'):
-    f = os.path.join(os.path.dirname(__file__), 'myole4ax.tlb')
-    cc.GetModule(f)
-from comtypes.gen import myole4ax
+
+try:
+    if not hasattr(sys, 'frozen'):
+        f = os.path.join(os.path.dirname(__file__), 'myole4ax.tlb')
+        cc.GetModule(f)
+    from comtypes.gen import myole4ax
+except Exception:
+    import traceback
+    traceback.print_exc()
+    myole4ax = None
 
 
 kernel32 = ct.windll.kernel32
@@ -91,7 +97,11 @@ class ActiveXCtrl(wx.AxBaseWindow):
         # Fetch the interface for IOleInPlaceActiveObject. We'll use this
         # later to call its TranslateAccelerator method so the AX Control can
         # deal with things like tab traversal and such within itself.
-        self.ipao = self._ax.QueryInterface(myole4ax.IOleInPlaceActiveObject)
+        IOleInPlaceActiveObject = getattr(myole4ax, 'IOleInPlaceActiveObject', None)
+        if IOleInPlaceActiveObject is not None:
+            self.ipao = self._ax.QueryInterface(myole4ax.IOleInPlaceActiveObject)
+        else:
+            self.ipao = None
 
         # Use this object as the event sink for the ActiveX events
         self._evt_connections = []
@@ -133,7 +143,7 @@ class ActiveXCtrl(wx.AxBaseWindow):
         #  by the AX control.  MSWTranslateMessage is called before
         #  wxWidgets handles and eats the navigation keys itself.
         m = wt.MSG.from_address(msg)
-        if m.message == WM_KEYDOWN:
+        if self.ipao is not None and m.message == WM_KEYDOWN:
             # This should take the MSG object, but the COM interface I used
             # was hacked to just use a long...
             res = self.ipao.TranslateAccelerator(msg)
@@ -143,10 +153,12 @@ class ActiveXCtrl(wx.AxBaseWindow):
 
     # TBD: Are the focus handlers needed?
     def OnSetFocus(self, evt):
-        self.ipao.OnFrameWindowActivate(True)
+        if self.ipao is not None:
+            self.ipao.OnFrameWindowActivate(True)
 
     def OnKillFocus(self, evt):
-        self.ipao.OnFrameWindowActivate(False)
+        if self.ipao is not None:
+            self.ipao.OnFrameWindowActivate(False)
 
     def OnDestroyWindow(self, evt):
         # release our event sinks while the window still exists
