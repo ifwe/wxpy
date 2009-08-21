@@ -128,6 +128,9 @@ else
                              wxProxyType type = HTTP,
                              const wxString& username = wxEmptyString,
                              const wxString& password = wxEmptyString);
+
+    bool GetMouseWheelZooms() const;
+    void SetMouseWheelZooms(bool mouseWheelZooms);
 };
 
 enum {
