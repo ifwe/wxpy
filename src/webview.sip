@@ -229,6 +229,13 @@ public:
     void SetPosition(wxPoint pos);
 };
 
+enum wxWebViewConsoleMessageLevel {
+    TipMessageLevel,
+    LogMessageLevel,
+    WarningMessageLevel,
+    ErrorMessageLevel
+};
+
 class wxWebViewConsoleMessageEvent : wxCommandEvent
 {
 public:
@@ -243,6 +250,9 @@ public:
 
     wxString GetSourceID() const;
     void SetSourceID(const wxString& sourceID);
+
+    wxWebViewConsoleMessageLevel GetLevel() const;
+    void SetLevel(wxWebViewConsoleMessageLevel level);
 };
 
 class wxWebViewReceivedTitleEvent : wxCommandEvent
