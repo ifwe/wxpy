@@ -309,13 +309,15 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
 
 void _init_gdi_constants();
 %MethodCode
-    PyObject* wxModule = PyImport_ImportModule("wx");
+    PyObject* wxModule = NULL;
+    PyObject* sipModuleDict = NULL;
+    wxModule = PyImport_ImportModule("wx");
     if (!wxModule) {
         PyErr_SetString(PyExc_AssertionError, "could not import wx module");
         sipIsErr = 1;
         goto done;
     }
-    PyObject* sipModuleDict = PyModule_GetDict(wxModule);
+    sipModuleDict = PyModule_GetDict(wxModule);
     if (!sipModuleDict) {
         PyErr_SetString(PyExc_AssertionError, "could not get wx module's __dict__");
         Py_DECREF(wxModule);
