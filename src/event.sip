@@ -265,8 +265,9 @@ private:
         C(wxCloseEvent)
         C(wxWindowDestroyEvent)
         C(wxFocusEvent)
-        C(wxEvent)
         C(wxClipboardTextEvent)
+        C(wxNavigationKeyEvent)
+        C(wxEvent)
     else
         sipClass = NULL;
 #undef C
@@ -288,6 +289,10 @@ public:
     bool IsCommandEvent() const;
     void Skip(bool skip = true);
     bool GetSkipped() const;
+
+    bool ShouldPropagate() const;
+    int StopPropagation();
+    void ResumePropagation(int propagationLevel);
 
     virtual ~wxEvent();
 };
@@ -702,6 +707,24 @@ public:
     virtual ~wxFocusEvent();
 
     wxWindow* GetWindow();
+};
+
+class wxNavigationKeyEvent : wxEvent
+{
+public:
+    wxNavigationKeyEvent();
+
+    bool GetDirection() const;
+    void SetDirection(bool direction);
+
+    bool IsWindowChange() const;
+    void SetWindowChange(bool);
+
+    bool IsFromTab() const;
+    void SetFromTab(bool);
+
+    wxWindow* GetCurrentFocus() const;
+    void SetCurrentFocus(wxWindow*);
 };
 
 class wxClipboardTextEvent : wxCommandEvent

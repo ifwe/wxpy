@@ -25,6 +25,13 @@ public:
     void SetMaxDeadCapacity(unsigned maxDeadCapacity);
 };
 
+enum wxProxyType {
+    HTTP,
+    Socks4,
+    Socks4A,
+    Socks5,
+    Socks5Hostname
+};
 
 class wxWebView : wxWindow
 {
@@ -80,6 +87,13 @@ else
     wxString GetExternalRepresentation();
 
     wxString RunScript(const wxString& javascript);
+%MethodCode
+    if (!wxIsMainThread()) {
+        PyErr_SetString(PyExc_AssertionError, "wx.WebView.RunScript called from subthread");
+        sipIsErr = 1;
+    } else
+        sipRes = new wxString(sipCpp->RunScript(*a0));
+%End
 
     bool FindString(const wxString& string, bool forward, bool caseSensitive, bool wrapSelection, bool startInSelection);
 
@@ -107,6 +121,23 @@ else
     static wxWebViewCachePolicy GetCachePolicy();
 
     static wxString GetStatistics();
+
+    virtual wxWebView* CreateWindow(bool menubar, bool statusbar, bool toolbar, bool locationbar);
+
+    void GarbageCollect();
+
+    static wxBitmap GetCachedBitmap(const wxString& url);
+
+    static void InvalidateFontCache();
+
+    static void SetProxyInfo(const wxString& host = wxEmptyString,
+                             unsigned long port = 0,
+                             wxProxyType type = HTTP,
+                             const wxString& username = wxEmptyString,
+                             const wxString& password = wxEmptyString);
+
+    bool GetMouseWheelZooms() const;
+    void SetMouseWheelZooms(bool mouseWheelZooms);
 };
 
 enum {
@@ -205,6 +236,13 @@ public:
     void SetPosition(wxPoint pos);
 };
 
+enum wxWebViewConsoleMessageLevel {
+    TipMessageLevel,
+    LogMessageLevel,
+    WarningMessageLevel,
+    ErrorMessageLevel
+};
+
 class wxWebViewConsoleMessageEvent : wxCommandEvent
 {
 public:
@@ -219,6 +257,9 @@ public:
 
     wxString GetSourceID() const;
     void SetSourceID(const wxString& sourceID);
+
+    wxWebViewConsoleMessageLevel GetLevel() const;
+    void SetLevel(wxWebViewConsoleMessageLevel level);
 };
 
 class wxWebViewReceivedTitleEvent : wxCommandEvent

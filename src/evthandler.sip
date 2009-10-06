@@ -184,12 +184,45 @@ public:
     }
 %End
 
+// TODO: the following methods could greatly benefit from a macro to iterate over event handlers
+
+    SIP_PYLIST GetPythonHandlers();
+%MethodCode
+        if (!(sipRes = PyList_New(0)))
+            sipIsErr = 1;
+        else {
+            if (wxList *dynamicEvents = sipCpp->GetDynamicEventTable()) {
+                wxList eventList(*dynamicEvents);
+                wxList::compatibility_iterator node = eventList.GetFirst();
+                while (node) {
+                    wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+                    node = node->GetNext();
+                    if (entry->m_fn == &wxPyCallback::EventThunker && entry->m_callbackUserData) {
+                        if (PyObject* func = (reinterpret_cast<wxPyCallback*>(entry->m_callbackUserData))->callback()) {
+                            PyObject* tuple = Py_BuildValue("(iiiO)",
+                                entry->m_eventType, entry->m_id, entry->m_lastId, func);
+                            if (!tuple || -1 == PyList_Append(sipRes, tuple)) {
+                                Py_DECREF(sipRes);
+                                sipRes = NULL;
+                                sipIsErr = 1;
+                                if (tuple)
+                                    Py_DECREF(tuple);
+                                break;
+                            }
+                            Py_DECREF(tuple);
+                        }
+                    }
+                }
+            }
+        }
+%End
+
 // the following code allows the GC to break cycles involving event callbacks
 
 %GCTraverseCode
     sipRes = 0;
 
-    wxList *dynamicEvents = sipCpp->GetDynamicEventTable() ;
+    wxList *dynamicEvents = sipCpp->GetDynamicEventTable();
     if (dynamicEvents) {
         wxList list(*dynamicEvents);
         wxList::compatibility_iterator node = list.GetFirst();

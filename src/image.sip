@@ -52,13 +52,19 @@ wxImage ImageFromDataWithAlpha(int width,
     PyObject* rgb = a2;
     PyObject* alpha = a3;
 
+    unsigned char* dcopy = 0;
+    unsigned char* acopy = 0;
+
+    int DATASIZE  = 0;
+    int ALPHASIZE = 0;
+
     if (!PyString_Check(rgb) || !PyString_Check(alpha)) {
         PyErr_SetString(PyExc_TypeError, "rgb and alpha must be a strings with image data");
         goto err;
     }
 
-    int DATASIZE  = PyString_GET_SIZE(rgb);
-    int ALPHASIZE = PyString_GET_SIZE(alpha);
+    DATASIZE  = PyString_GET_SIZE(rgb);
+    ALPHASIZE = PyString_GET_SIZE(alpha);
 
     if (DATASIZE != width * height * 3)
     {
@@ -72,14 +78,14 @@ wxImage ImageFromDataWithAlpha(int width,
     }
 
     // Copy the source data so the wxImage can clean it up later
-    unsigned char* dcopy = (unsigned char*)malloc(DATASIZE);
+    dcopy = (unsigned char*)malloc(DATASIZE);
     if (!dcopy) {
         PyErr_NoMemory();
         goto err;
     }
     memcpy(dcopy, PyString_AsString(rgb), DATASIZE);
 
-    unsigned char* acopy = (unsigned char*)malloc(ALPHASIZE);
+    acopy = (unsigned char*)malloc(ALPHASIZE);
     if (!acopy) {
         PyErr_NoMemory();
         goto err;
