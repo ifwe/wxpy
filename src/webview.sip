@@ -87,6 +87,13 @@ else
     wxString GetExternalRepresentation();
 
     wxString RunScript(const wxString& javascript);
+%MethodCode
+    if (!wxIsMainThread()) {
+        PyErr_SetString(PyExc_AssertionError, "wx.WebView.RunScript called from subthread");
+        sipIsErr = 1;
+    } else
+        sipRes = new wxString(sipCpp->RunScript(*a0));
+%End
 
     bool FindString(const wxString& string, bool forward, bool caseSensitive, bool wrapSelection, bool startInSelection);
 
