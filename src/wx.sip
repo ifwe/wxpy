@@ -41,7 +41,6 @@ void add_event(PyObject* module_dict, const char* name, ...);
 %ModuleCode
 void add_event(PyObject* module_dict, const char* name, ...)
 {
-    // todo: build tuples, not lists
     va_list argp;
     va_start(argp, name);
 
