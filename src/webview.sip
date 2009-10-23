@@ -95,6 +95,8 @@ else
         sipRes = new wxString(sipCpp->RunScript(*a0));
 %End
 
+    void PaintOnDC(wxMemoryDC& dc, bool useUpdateRegion);
+
     bool FindString(const wxString& string, bool forward, bool caseSensitive, bool wrapSelection, bool startInSelection);
 
     bool CanIncreaseTextSize() const;

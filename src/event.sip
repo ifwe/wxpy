@@ -46,34 +46,23 @@ void initializeCallAfter()
 void CallAfterCallback::EventThunker(wxEvent&)
 {
     SIP_BLOCK_THREADS
-    PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+    static bool inEventThunker = false;
+    if (!inEventThunker) {
+        inEventThunker = true;
+        PyObject* cbs = ((wxPyApp*)wxTheApp)->callAfterCbs;
+        for (Py_ssize_t i = 0; i < PyList_GET_SIZE(cbs); ++i) {
+            PyObject* func = PyList_GET_ITEM(cbs, i);
+            PyObject* result = PyObject_CallObject(func, NULL);
 
-    const Py_ssize_t num_cbs = PyList_GET_SIZE(cbs);
-
-    // Keep this reentrant
-    PyObject* temp_list = PyList_New(num_cbs);
-    if (!temp_list) {
-        PyErr_SetString(PyExc_AssertionError, "Could not create temp_list");
-        PyErr_Print();
-    } else {
-        if (-1 == PyList_SetSlice(temp_list, 0, num_cbs, cbs) ||
-            -1 == PyList_SetSlice(cbs, 0, num_cbs, NULL)) {
-            PyErr_SetString(PyExc_AssertionError, "Could not slice call after list");
-            PyErr_Print();
-        } else {
-            for(Py_ssize_t i = 0; i < num_cbs; ++i) {
-                PyObject* func = PyList_GET_ITEM(temp_list, i);
-                PyObject* result = PyObject_CallObject(func, NULL);
-
-                if (result)
-                    Py_DECREF(result);
-                else
-                    PyErr_Print();
-            }
+            if (result)
+                Py_DECREF(result);
+            else
+                PyErr_Print();
         }
-        Py_DECREF(temp_list);
-    }
 
+        PyList_SetSlice(cbs, 0, PyList_GET_SIZE(cbs), NULL);
+        inEventThunker = false;
+    }
     SIP_UNBLOCK_THREADS
 }
 %End
