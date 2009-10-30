@@ -116,6 +116,7 @@ else
     wxWebViewDOMElementInfo HitTest(const wxPoint& pos) const;
     int GetParseMode() const;
 
+    wxString GetDatabasePath(const wxString& name);
     static void SetDatabaseDirectory(const wxString& databaseDirectory);
     static wxString GetDatabaseDirectory();
 
