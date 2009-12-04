@@ -28,6 +28,8 @@ public:
     bool IsCancelButtonVisible() const;
     void SetDescriptiveText(const wxString& text);
     wxString GetDescriptiveText() const;
+
+    void SetSearchBitmap(const wxBitmap&);
 /*
 #ifdef __WXMAC__
     %extend {

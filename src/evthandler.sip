@@ -17,12 +17,8 @@ public:
         return m_func;
     }
 
-    int errorIncrement() { return ++m_error_count; }
-    int errorCount() const { return m_error_count; }
-
 protected:
     PyObject* m_func;
-    int m_error_count;
 };
 
 %End // TypeHeaderCode
@@ -32,7 +28,6 @@ protected:
 
 wxPyCallback::wxPyCallback(PyObject* func)
     : m_func(func)
-    , m_error_count(0)
 {
     Py_INCREF(func);
 }
