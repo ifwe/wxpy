@@ -149,15 +149,54 @@ public:
     }
 %End
 
-    void Disconnect(int id, int id2, int eventType);
+    bool Disconnect(int id, int id2 = -1, int eventType = wxEVT_NULL, SIP_PYOBJECT func = NULL);
 %MethodCode
-        sipCpp->Disconnect(a0, a1, a2);
+        PyObject* func = a3;
+        if (!func || func == Py_None)
+            sipRes = sipCpp->Disconnect(a0, a1, a2);
+        else {
+            int id = a0;
+            int lastId = a1;
+            int eventType = a2;
+
+            // Find the current matching binder that has this function
+            // pointer and dissconnect that one.  Unfortuneatly since we
+            // wrapped the PyObject function pointer in another object we
+            // have to do the searching ourselves...
+            wxList::compatibility_iterator node = sipCpp->GetDynamicEventTable()->GetFirst();
+            while (node) {
+                wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+                if ((entry->m_id == id) &&
+                    ((entry->m_lastId == lastId) || (lastId == wxID_ANY)) &&
+                    ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
+                    ((entry->m_fn == (wxObjectEventFunction)&wxPyCallback::EventThunker)) &&
+                    (entry->m_callbackUserData != NULL))
+                {
+                    wxPyCallback *cb = (wxPyCallback*)entry->m_callbackUserData;
+                    int result = PyObject_Compare(cb->callback(), func);
+                    if (result == 0) {
+                        delete cb;
+                        sipCpp->GetDynamicEventTable()->Erase(node);
+                        delete entry;
+                        sipRes = true;
+                        goto done;
+                    }
+                }
+                node = node->GetNext();
+            }
+            sipRes = false;
+        }
+    done:
 %End
 
-    void Unbind(SIP_PYOBJECT event, int id = wxID_ANY, int id2 = wxID_ANY);
+    bool Unbind(SIP_PYOBJECT event, int id = wxID_ANY, int id2 = wxID_ANY, SIP_PYOBJECT handler = NULL);
 %MethodCode
     PyObject* events = a0;
+    PyObject* handler = a3 ? a3 : Py_None;
+    PyObject* result;
     int event;
+
+    sipRes = false;
 
     if (PyTuple_Check(events)) {
         // Event types is a tuple of multiple types
@@ -166,16 +205,31 @@ public:
             if (event == -1 && PyErr_Occurred()) {
                 sipIsErr = 1;
                 break;
-            } else
-                sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
+            } else {
+                result = PyObject_CallMethod(sipSelf, "Disconnect", "(iiiO)", a1, a2, event, handler);
+                if (!result) {
+                    sipIsErr = 1;
+                    break;
+                } else {
+                    sipRes = sipRes || PyObject_IsTrue(result);
+                    Py_DECREF(result);
+                }
+            }
         }
     } else {
         // Event type is a single integer
         event = PyInt_AsLong(events);
         if (event == -1 && PyErr_Occurred())
             sipIsErr = 1;
-        else
-            sipCpp->Disconnect(a1, a2, event, (wxObjectEventFunction)&wxPyCallback::EventThunker);
+        else {
+            result = PyObject_CallMethod(sipSelf, "Disconnect", "(iiiO)", a1, a2, event, handler);
+            if (!result)
+                sipIsErr = 1;
+            else {
+                sipRes = 0 != PyObject_IsTrue(result);
+                Py_DECREF(result);
+            }
+        }
     }
 %End
 
