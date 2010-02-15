@@ -460,6 +460,8 @@ del GridBagSizer_Add
 #
 _sizer_add = Sizer.Add
 def Sizer_Add(self, item, proportion = 0, flag = 0, border = 0):
+    if item is None:
+        raise TypeError
     try:
         return _sizer_add(self, item, proportion, flag, border)
     except TypeError:
