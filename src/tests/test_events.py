@@ -50,19 +50,45 @@ def test_unbind():
         global count
         count = count + 1
 
+    def push(): b.Command(button_event())
+
     b.Bind(wx.EVT_BUTTON, foo)
-    b.Command(button_event())
+    push()
     assert count == 1
 
-    b.Unbind(wx.EVT_BUTTON)
-    b.Command(button_event())
-    assert count == 1
-
-    # make sure the event handler doesn't hold a reference to foo still
     weakfoo = ref(foo)
     del foo
     gc.collect()
+    assert weakfoo() is not None
+
+
+    b.Unbind(wx.EVT_BUTTON)
+    push()
+    assert count == 1
+
+    # make sure the event handler doesn't hold a reference to foo still
+    gc.collect()
     assert weakfoo() is None
+
+    def handler1(e): f.last = 1
+    def handler2(e): f.last = 2
+    b.Bind(wx.EVT_BUTTON, handler1)
+    b.Bind(wx.EVT_BUTTON, handler2)
+
+    push()
+    assert f.last == 2
+
+    f.last = None
+
+    b.Unbind(wx.EVT_BUTTON, -1, -1, handler2)
+    push()
+    assert f.last == 1
+
+    # make sure Unbind doesn't leak refs
+    weak = ref(handler2)
+    del handler2
+    gc.collect()
+    assert weak() is None
 
     return f
 
@@ -83,14 +109,17 @@ def test_EventObject():
     return f
 
 def test_EventVeto():
-    e = wx.CloseEvent()
-    e.Veto(True)
-    assert e.GetVeto()
-    e.Veto(False)
-    assert not e.GetVeto()
-    assert callable(e.Veto)
+    if False: # see note about GetVeto being disabled
+        e = wx.CloseEvent()
+        e.Veto(True)
+        assert e.GetVeto()
+        e.Veto(False)
+        assert not e.GetVeto()
+        assert callable(e.Veto)
 
 if __name__ == '__main__':
     a=wx.PySimpleApp()
-    test_EventObject().Show()
-    a.MainLoop()
+    test_unbind()
+    #test_EventObject().Show()
+    #a.MainLoop()
+

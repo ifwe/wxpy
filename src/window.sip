@@ -455,6 +455,7 @@ public:
     bool Close(bool force = false);
 
 %If (WXMSW)
+    // TODO: on 64bit compiles this is definitely not a 32bit int!
     int GetHandle();
 %MethodCode
     sipRes = (int)sipCpp->GetHWND();

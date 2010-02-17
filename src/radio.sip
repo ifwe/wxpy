@@ -1,11 +1,11 @@
 class wxRadioBox : wxControl
 {
 public:
-    wxRadioBox(wxWindow* parent /TransferThis/, wxWindowID id=-1,
-               const wxString& label = wxEmptyString,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               const wxArrayString& choices = NULL,
+    wxRadioBox(wxWindow* parent /TransferThis/, wxWindowID id,
+               const wxString& label,
+               const wxPoint& pos,
+               const wxSize& size,
+               const wxArrayString& choices,
                int majorDimension = 0,
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxDefaultValidator,

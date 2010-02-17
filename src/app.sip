@@ -477,7 +477,6 @@ static int wxpy_flush_pending_delete()
         void* sipCppV = PyCObject_AsVoidPtr(cpp_cobj);
 
         // invoke the destructor
-        wxLogMessage(wxT("wxpy_flush_pending_delete is destroying %p (%s)"), sipCppV, ((wxObject*)sipCppV)->GetClassInfo()->GetClassName());
         type->ctd_release(sipCppV, state);
         ++count;
 

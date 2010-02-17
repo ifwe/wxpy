@@ -44,10 +44,10 @@ wxBitmap wxEmptyBitmap(int width, int height, bool useAlpha = true);
 class wxBitmap : wxGDIObject
 {
 private:
-    wxBitmap();
     wxBitmap(const wxBitmap&);
 
 public:
+    wxBitmap();
     wxBitmap(const wxString& filename, long type = wxBITMAP_TYPE_ANY);
 
     virtual ~wxBitmap();
