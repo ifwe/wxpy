@@ -63,8 +63,15 @@ public:
     bool IsCurrent(size_t item) const;
     bool IsSelected(size_t item) const;
     size_t GetSelectedCount() const;
-//  int GetFirstSelected(unsigned long& cookie) const;
-//  int GetNextSelected(unsigned long& cookie) const;
+
+    int GetFirstSelected(unsigned long& cookie /Out/) const;
+    SIP_PYOBJECT GetNextSelected(unsigned long cookie) const;
+%MethodCode
+    unsigned long cookie = a0;
+    int index = sipCpp->GetNextSelected(cookie);
+    sipRes = Py_BuildValue("(ik)", index, cookie);
+%End
+
     wxPoint GetMargins() const;
     const wxColour& GetSelectionBackground() const;
 
