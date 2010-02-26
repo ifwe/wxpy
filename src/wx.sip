@@ -237,11 +237,12 @@ add_event(sipModuleDict, "EVT_TEXT_MAXLEN", wxEVT_COMMAND_TEXT_MAXLEN, 0);
     int wxdebug = 0;
 #endif
 
-    #define SetModuleString(s, obj) \
+    #define SetModuleString(s, _obj) \
         do { \
-            wxASSERT(s && obj); \
-            PyDict_SetItemString(sipModuleDict, s, obj); \
-            Py_DECREF(obj); \
+            PyObject* o = _obj; \
+            wxASSERT(s && o); \
+            PyDict_SetItemString(sipModuleDict, s, o); \
+            Py_DECREF(o); \
         } while (0)
 
     // Show the SIP version used to build
