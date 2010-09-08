@@ -130,11 +130,15 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
             for (int i = 0; i < n; ++i) {
                 PyObject* elem = *elems++;
                 wxPoint* p = reinterpret_cast<wxPoint *>(sipConvertToType(elem, wxPointType, 0, SIP_NOT_NONE, 0, &sipIsErr));
-                if (sipIsErr || !p) {
-                    break; // There is nothing on the heap.
+                if (p) {
+                    points[i] = *p; //copy
+                    delete p;
+                } else {
+                    sipIsErr = 1;
                 }
-                points[i] = *p;
-                delete p;
+                if (sipIsErr) {
+                    break;
+                }
             }
             if (!sipIsErr) {
                 sipCpp->DrawSpline(n, points);
