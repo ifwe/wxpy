@@ -44,6 +44,38 @@ public:
     void DrawLines(const wxList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0);
                    */
+    void DrawLines(SIP_PYOBJECT, wxCoord xoffset = 0, wxCoord yoffset = 0);
+%MethodCode
+    static const sipTypeDef* wxPointType = sipFindType("wxPoint");
+    PyObject* seq = PySequence_Fast(a0, "DrawLines takes a sequence of wxPoint and/or 2-element sequences");
+    if (!seq)
+        sipIsErr = 1;
+    else {
+        const int n = PySequence_Fast_GET_SIZE(seq);
+        if (n > 0) {
+            PyObject** elems = PySequence_Fast_ITEMS(seq);
+            wxPoint* points = new wxPoint[n];
+            for (int i = 0; i < n; ++i) {
+                PyObject* elem = *elems++;
+                wxPoint* p = reinterpret_cast<wxPoint *>(sipConvertToType(elem, wxPointType, 0, SIP_NOT_NONE, 0, &sipIsErr));
+                if (p) {
+                    points[i] = *p; //copy
+                    delete p;
+                } else {
+                    sipIsErr = 1;
+                }
+                if (sipIsErr) {
+                    break;
+                }
+            }
+            if (!sipIsErr) {
+                sipCpp->DrawLines(n, points);
+            }
+            delete[] points;
+        }
+        Py_DECREF(seq);
+    }
+%End
 //    void DrawPolygon(SIP_PYLIST points, wxCoord xoffset = 0, wxCoord yoffset = 0,
 //                     int fillStyle = wxODDEVEN_RULE);
 //    %MethodCode
