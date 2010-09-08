@@ -107,17 +107,46 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
               int rop = wxCOPY, bool useMask = false, const wxPoint& srcPtMask = wxDefaultPosition);
 
     wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
-/*
 %If (wxUSE_SPLINES)
     // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
     void DrawSpline(wxCoord x1, wxCoord y1,
                     wxCoord x2, wxCoord y2,
                     wxCoord x3, wxCoord y3);
+/*
     void DrawSpline(int n, wxPoint points[]);
-
-    void DrawSpline(wxList *points) { DoDrawSpline(points); }
-#endif // wxUSE_SPLINES
+    void DrawSpline(wxList *points); { DoDrawSpline(points); }
 */
+    void DrawSplines(SIP_PYOBJECT);
+%MethodCode
+    static const sipTypeDef* wxPointType = sipFindType("wxPoint");
+    PyObject* seq = PySequence_Fast(a0, "DrawSplines takes a sequence of wxPoint and/or 2-element sequences");
+    if (!seq)
+        sipIsErr = 1;
+    else {
+        const int n = PySequence_Fast_GET_SIZE(seq);
+        if (n > 0) {
+            PyObject** elems = PySequence_Fast_ITEMS(seq);
+            wxPoint* points = new wxPoint[n];
+            for (int i = 0; i < n; ++i) {
+                PyObject* elem = *elems++;
+                wxPoint* p = reinterpret_cast<wxPoint *>(sipConvertToType(elem, wxPointType, 0, SIP_NOT_NONE, 0, &sipIsErr));
+                if (sipIsErr || !p) {
+                    break; // There is nothing on the heap.
+                }
+                points[i] = *p;
+                delete p;
+            }
+            if (!sipIsErr) {
+                sipCpp->DrawSpline(n, points);
+            }
+            delete[] points;
+        }
+        Py_DECREF(seq);
+    }
+%End
+
+
+%End // wxUSE_SPLINES
 
 
     // Eventually we will have wxUSE_GENERIC_DRAWELLIPSE
