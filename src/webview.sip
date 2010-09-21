@@ -95,7 +95,7 @@ else
         sipRes = new wxString(sipCpp->RunScript(*a0));
 %End
 
-    void PaintOnDC(wxMemoryDC& dc, bool useUpdateRegion);
+    //void PaintOnDC(wxMemoryDC& dc, bool useUpdateRegion);
 
     bool FindString(const wxString& string, bool forward, bool caseSensitive, bool wrapSelection, bool startInSelection);
 
@@ -104,6 +104,7 @@ else
     bool CanDecreaseTextSize() const;
     void DecreaseTextSize();
     void ResetTextSize();
+    void SetPageZoom(float percent);
     void MakeEditable(bool enable);
     bool IsEditable() const;
 
@@ -129,7 +130,7 @@ else
 
     void GarbageCollect();
 
-    static wxBitmap GetCachedBitmap(const wxString& url);
+    wxBitmap GetCachedBitmap(const wxString& url);
 
     static void InvalidateFontCache();
 
@@ -214,6 +215,21 @@ public:
     virtual ~wxWebViewLoadEvent();
 };
 
+class wxWebKitWindowFeatures
+{
+public:
+    wxWebKitWindowFeatures();
+
+    bool menuBarVisible;
+    bool statusBarVisible;
+    bool toolBarVisible;
+    bool locationBarVisible;
+    bool scrollbarsVisible;
+    bool resizable;
+    bool fullscreen;
+    bool dialog;
+};
+
 class wxWebViewNewWindowEvent : wxCommandEvent
 {
 public:
@@ -221,6 +237,10 @@ public:
     void SetURL(const wxString& url);
     wxString GetTargetName() const;
     void SetTargetName(const wxString& name);
+    wxWebView* GetWebView();
+    void SetWebView(wxWebView* webView);
+    wxWebKitWindowFeatures GetWindowFeatures();
+    void SetWindowFeatures(wxWebKitWindowFeatures features);
 
     wxWebViewNewWindowEvent(wxWindow* win = NULL);
     virtual ~wxWebViewNewWindowEvent();
