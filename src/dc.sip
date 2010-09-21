@@ -1,3 +1,44 @@
+%ModuleHeaderCode
+    wxPoint* pyObjectToPointArray(PyObject* obj, int& n);
+%End
+%ModuleCode
+    wxPoint* pyObjectToPointArray(PyObject* obj, int& n) {
+        int err = 0;
+        n = -1;
+        static const sipTypeDef* wxPointType = sipFindType("wxPoint");
+        PyObject* seq = PySequence_Fast(obj, "function takes a sequence of wxPoint and/or 2-element sequences");
+        wxPoint* points = NULL;
+        if (!seq)
+            err = 1;
+        else {
+            n = PySequence_Fast_GET_SIZE(seq);
+            if (n > 0) {
+                PyObject** elems = PySequence_Fast_ITEMS(seq);
+                points = new wxPoint[n];
+                for (int i = 0; i < n; ++i) {
+                    PyObject* elem = *elems++;
+                    wxPoint* p = reinterpret_cast<wxPoint *>(sipConvertToType(elem, wxPointType, 0, SIP_NOT_NONE, 0, &err));
+                    if (p) {
+                        points[i] = *p; //copy
+                        delete p;
+                    } else {
+                        err = 1;
+                    }
+                    if (err) {
+                        break;
+                    }
+                }
+                if (err) {
+                    delete[] points;
+                    points = NULL;
+                    n = -1;
+                }
+            }
+        }
+        Py_DECREF(seq);
+        return points;
+    }
+%End
 class wxDC : wxObject /Abstract/
 {
 private:
@@ -44,12 +85,34 @@ public:
     void DrawLines(const wxList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0);
                    */
-//    void DrawPolygon(SIP_PYLIST points, wxCoord xoffset = 0, wxCoord yoffset = 0,
-//                     int fillStyle = wxODDEVEN_RULE);
-//    %MethodCode
-//        a0
-//    %End
+    void DrawLines(SIP_PYOBJECT, wxCoord xoffset = 0, wxCoord yoffset = 0);
+%MethodCode
+        int n;
+        wxPoint* points = pyObjectToPointArray(a0, n);
+        if (n > 0) {
+            sipCpp->DrawLines(n, points, a1 /*xoffset*/, a2 /*yoffset*/);
+            delete[] points;
+        } else if (n < 0) {
+            sipIsErr = 1;
+        } else {/* no points */}
+%End
+    void DrawPolygon(SIP_PYOBJECT, wxCoord xoffset = 0, wxCoord yoffset = 0,
+                     int fillStyle = wxODDEVEN_RULE);
+%MethodCode
+        int n;
+        wxPoint* points = pyObjectToPointArray(a0, n);
+        if (n > 0) {
+            sipCpp->DrawPolygon(n, points, a1 /*xoffset*/, a2 /*yoffset*/,
+                                a3 /*fillStyle*/);
+            delete[] points;
+        } else if (n < 0) {
+            sipIsErr = 1;
+        } else {/* no points */}
+%End
     /*
+    void DrawPolygon(int n, wxPoint points[],
+                     wxCoord xoffset = 0, wxCoord yoffset = 0,
+                     int fillStyle = wxODDEVEN_RULE)
     void DrawPolygon(const wxList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE);
@@ -107,17 +170,28 @@ void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle);
               int rop = wxCOPY, bool useMask = false, const wxPoint& srcPtMask = wxDefaultPosition);
 
     wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
-/*
 %If (wxUSE_SPLINES)
     // TODO: this API needs fixing (wxPointList, why (!const) "wxList *"?)
     void DrawSpline(wxCoord x1, wxCoord y1,
                     wxCoord x2, wxCoord y2,
                     wxCoord x3, wxCoord y3);
+/*
     void DrawSpline(int n, wxPoint points[]);
-
-    void DrawSpline(wxList *points) { DoDrawSpline(points); }
-#endif // wxUSE_SPLINES
+    void DrawSpline(wxList *points); { DoDrawSpline(points); }
 */
+    void DrawSplines(SIP_PYOBJECT);
+%MethodCode
+        int n;
+        wxPoint* points = pyObjectToPointArray(a0, n);
+        if (n > 0) {
+            sipCpp->DrawSpline(n, points);
+            delete[] points;
+        } else if (n < 0) {
+            sipIsErr = 1;
+        } else {/* no points */}
+%End
+
+%End // wxUSE_SPLINES
 
 
     // Eventually we will have wxUSE_GENERIC_DRAWELLIPSE
