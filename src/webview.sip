@@ -43,12 +43,6 @@ wxClassInfo* c = sipCpp->GetClassInfo();
 if(0) {}
 #define C(clz) else if (c == CLASSINFO(clz)) { sipClass = sipClass_ ## clz; }
     C(wxWebView)
-    C(wxWebViewBeforeLoadEvent)
-    C(wxWebViewLoadEvent)
-    C(wxWebViewNewWindowEvent)
-    C(wxWebViewRightClickEvent)
-    C(wxWebViewConsoleMessageEvent)
-    C(wxWebViewReceivedTitleEvent)
 else
     sipClass = NULL;
 #undef C
@@ -233,6 +227,24 @@ public:
 class wxWebViewNewWindowEvent : wxCommandEvent
 {
 public:
+
+%ConvertToSubClassCode
+wxClassInfo* c = sipCpp->GetClassInfo();
+
+if(0) {}
+#define C(clz) else if (c == CLASSINFO(clz)) { sipClass = sipClass_ ## clz; }
+    C(wxWebViewNewWindowEvent)
+    C(wxWebViewBeforeLoadEvent)
+    C(wxWebViewLoadEvent)
+    C(wxWebViewNewWindowEvent)
+    C(wxWebViewRightClickEvent)
+    C(wxWebViewConsoleMessageEvent)
+    C(wxWebViewReceivedTitleEvent)
+else
+    sipClass = NULL;
+#undef C
+%End
+
     wxString GetURL() const;
     void SetURL(const wxString& url);
     wxString GetTargetName() const;
