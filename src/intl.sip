@@ -252,6 +252,9 @@ struct wxLanguageInfo
     int Language;
     wxString CanonicalName;
     wxString Description;
+
+private:
+    ~wxLanguageInfo();
 };
 
 enum wxLocaleCategory
@@ -305,7 +308,7 @@ public:
 
     bool IsLoaded(const wxString& szDomain) const;
 
-//    static const wxLanguageInfo *GetLanguageInfo(int lang);
+    static const wxLanguageInfo *GetLanguageInfo(int lang);
     static wxString GetLanguageName(int lang);
 
 //    static const wxLanguageInfo *FindLanguageInfo(const wxString& locale);
