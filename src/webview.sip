@@ -136,6 +136,9 @@ else
 
     bool GetMouseWheelZooms() const;
     void SetMouseWheelZooms(bool mouseWheelZooms);
+
+    void SetMinimumFontSize(int minimumFontSize);
+    int GetMinimumFontSize() const;
 };
 
 enum {
