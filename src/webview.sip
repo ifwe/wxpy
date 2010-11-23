@@ -69,8 +69,8 @@ public:
     void SetPluginsEnabled(bool enabled);
     bool ArePluginsEnabled() const;
 
-    void SetPrivateBrowsingEnabled(bool enabled);
-    void GetPrivateBrowsingEnabled() const;
+    //void SetPrivateBrowsingEnabled(bool enabled);
+    //void GetPrivateBrowsingEnabled() const;
 };
 
 class wxWebView : wxWindow
@@ -181,6 +181,8 @@ else
     int GetMinimumFontSize() const;
 
     wxWebSettings GetWebSettings();
+
+    void ClearCookies();
 };
 
 enum {
