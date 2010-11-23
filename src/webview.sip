@@ -33,6 +33,14 @@ enum wxProxyType {
     Socks5Hostname
 };
 
+enum wxEditableLinkBehavior {
+    wxEditableLinkDefaultBehavior,
+    wxEditableLinkAlwaysLive,
+    wxEditableLinkOnlyLiveWithShiftKey,
+    wxEditableLinkLiveWhenNotFocused,
+    wxEditableLinkNeverLive
+};
+
 class wxWebSettings {
 public:
     ~wxWebSettings();
