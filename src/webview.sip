@@ -33,6 +33,38 @@ enum wxProxyType {
     Socks5Hostname
 };
 
+class wxWebSettings {
+public:
+    ~wxWebSettings();
+
+    void SetDefaultFixedFontSize(int size);
+    int GetDefaultFixedFontSize() const;
+    
+    void SetDefaultFontSize(int size);
+    int GetDefaultFontSize() const;
+    
+    void SetMinimumFontSize(int size);
+    int GetMinimumFontSize() const;
+    
+    void SetLoadsImagesAutomatically(bool loadAutomatically);
+    bool LoadsImagesAutomatically() const;
+    
+    void SetJavaScriptEnabled(bool enabled);
+    bool IsJavaScriptEnabled() const;
+    
+    void SetLocalStoragePath(const wxString& path);
+    wxString GetLocalStoragePath() const;
+    
+    void SetEditableLinkBehavior(wxEditableLinkBehavior behavior);
+    wxEditableLinkBehavior GetEditableLinkBehavior() const;
+    
+    void SetPluginsEnabled(bool enabled);
+    bool ArePluginsEnabled() const;
+
+    void SetPrivateBrowsingEnabled(bool enabled);
+    void GetPrivateBrowsingEnabled() const;
+};
+
 class wxWebView : wxWindow
 {
 public:
@@ -139,6 +171,8 @@ else
 
     void SetMinimumFontSize(int minimumFontSize);
     int GetMinimumFontSize() const;
+
+    wxWebSettings GetWebSettings();
 };
 
 enum {
