@@ -183,6 +183,8 @@ else
     wxWebSettings GetWebSettings();
 
     void ClearCookies();
+
+    static void ReloadPlugins();
 };
 
 enum {
