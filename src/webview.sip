@@ -69,8 +69,8 @@ public:
     void SetPluginsEnabled(bool enabled);
     bool ArePluginsEnabled() const;
 
-    //void SetPrivateBrowsingEnabled(bool enabled);
-    //void GetPrivateBrowsingEnabled() const;
+    void SetAllowUniversalAccessFromFileURLs(bool allow);
+    bool GetAllowUniversalAccessFromFileURLs() const;
 };
 
 class wxWebView : wxWindow
@@ -187,6 +187,12 @@ else
     static void ReloadPlugins();
 
     void GrantUniversalAccess();
+
+    static void AddOriginAccessWhitelistEntry(
+            const wxString& sourceOrigin,
+            const wxString& destinationProtocol,
+            const wxString& destinationHost,
+            bool allowDestinationSubdomains);
 };
 
 enum {
