@@ -185,6 +185,8 @@ else
     void ClearCookies();
 
     static void ReloadPlugins();
+
+    void GrantUniversalAccess();
 };
 
 enum {
