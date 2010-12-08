@@ -193,6 +193,9 @@ else
             const wxString& destinationProtocol,
             const wxString& destinationHost,
             bool allowDestinationSubdomains);
+
+    void SetFineGrainedResourceEvents(bool enabled);
+    void GetFineGrainedResourceEvents() const;
 };
 
 enum {
@@ -214,7 +217,8 @@ enum {
     wxWEBVIEW_NAV_FORM_SUBMITTED = 4,
     wxWEBVIEW_NAV_RELOAD = 8,
     wxWEBVIEW_NAV_FORM_RESUBMITTED = 16,
-    wxWEBVIEW_NAV_OTHER = 32
+    wxWEBVIEW_NAV_OTHER = 32,
+    wxWEBVIEW_NAV_REQUEST = 64
 };
 
 class wxWebViewDOMElementInfo
