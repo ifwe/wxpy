@@ -162,6 +162,8 @@ else
 
     virtual wxWebView* CreateWindow(bool menubar, bool statusbar, bool toolbar, bool locationbar);
 
+    static void InitializeThreading();
+
     void GarbageCollect();
 
     wxBitmap GetCachedBitmap(const wxString& url);
