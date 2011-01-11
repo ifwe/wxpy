@@ -462,6 +462,13 @@ _sizer_add = Sizer.Add
 def Sizer_Add(self, item, proportion = 0, flag = 0, border = 0):
     if item is None:
         raise TypeError
+
+    # prevent dangling pointers when adding windows to two or more different sizers
+    if isinstance(item, _Window):
+        containing_sizer = item.ContainingSizer
+        if containing_sizer is not None and containing_sizer != self:
+            raise Exception('attempting to add window %r but it is already added to sizer %r' % (item, containing_sizer))
+
     try:
         return _sizer_add(self, item, proportion, flag, border)
     except TypeError:
@@ -488,6 +495,7 @@ def Sizer_AddMany(self, seq):
             raise
 
 Sizer.AddMany = Sizer_AddMany
+
 
 #
 # EvtHandler
