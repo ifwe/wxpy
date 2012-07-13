@@ -289,9 +289,9 @@ def get_pylibdir():
         from distutils import sysconfig
 
         try:
-            projbase = path(sysconfig.project_base) / 'PCBuild'
+            projbase = path(sysconfig.project_base) / 'libs'
         except AttributeError:
-            projbase = path(sysconfig.get_python_inc()).parent / 'pcbuild'
+            projbase = path(sysconfig.get_python_inc()).parent / 'libs'
 
         if projbase.endswith('-pgo'):
             # PGO builds have pythonXX.lib one directory up from the
