@@ -62,7 +62,7 @@ def main():
 
         opts.update(includes = [WEBKITDIR / 'WebKit'],
                     libs     = ['wxwebkit'],
-                    libdirs  = [wk_libdir])
+                    libdirs  = [wk_libdir] + os.environ.get('LIB', '').split(os.pathsep))
 
         from path import path
         outputdir = path('wx').abspath()
